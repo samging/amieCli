@@ -1,5 +1,3 @@
-# Amie Interpreter
-
 <img width="1756" height="662" alt="gitImg" src="https://github.com/user-attachments/assets/eba3d2c0-9d15-42f0-9058-6af7adf9d311" />
 
 An interpreter for Kotlin scripts that train, ask, group and serve intent models, at a terminal. It is the
