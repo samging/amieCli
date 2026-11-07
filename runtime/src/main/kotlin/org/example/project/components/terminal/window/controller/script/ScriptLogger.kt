@@ -179,7 +179,7 @@ interface ScriptLogger {
      * part. A private or gated repo needs HF_TOKEN in the app's environment. A repo that can't be read, has nothing
      * that runs here or doesn't fit on the disk is refused with the reason in the message
      */
-    fun huggingFace(repo: String, name: String = ""): String = HfImports.ensure(repo, name) { log(it) }
+    fun huggingFace(repo: String, name: String = ""): String = HfImports.ensure(repo, name, say = { log(it) })
     /**
      * The Hub searched for models initMod opens: huggingFace.search("bert", format = "onnx") the repo ids, the most
      * downloaded first, each printed with its task, downloads and formats; format is onnx, torchscript, tensorflow,

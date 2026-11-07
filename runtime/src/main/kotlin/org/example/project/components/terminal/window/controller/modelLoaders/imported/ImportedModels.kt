@@ -147,6 +147,12 @@ object ImportedModels {
             else -> throw IllegalArgumentException("a name or a path is needed")
         }
         val scan = if (name != null) ModelFormats.scan(target) else scanPath(target)
+        // An encoder and decoder pair: both sessions, for a script to wire
+        EncoderDecoderModel.of(scan)?.let { (encoder, decoder, withPast) ->
+            val pairHomes = homesOf(encoder, folderRoot)
+            logInternal("initMod: $what is an encoder and decoder pair; .encoder and .decoder are its sessions, .tokens(text) its tokenizer")
+            return EncoderDecoderModel(name ?: encoder.parentFile.name, openOnnxModel(encoder.toPath(), pairHomes), openOnnxModel(decoder.toPath(), pairHomes), withPast?.let { openOnnxModel(it.toPath(), pairHomes) }, pairHomes)
+        }
         val chosen = when (val resolution = resolve(scan, what)) {
             is Resolution.Refused -> throw IllegalStateException(resolution.message)
             is Resolution.Chosen -> resolution.also { r -> r.note?.let { logInternal("initMod: $it") } }.candidate
@@ -165,6 +171,7 @@ object ImportedModels {
      * that script, and closed with the ortClosable block around the call or kept by a static, timed or limited one
      */
     internal fun held(model: InteractionModel): InteractionModel = when (model) {
+        is EncoderDecoderModel -> model.also { pair -> listOfNotNull(pair.encoder, pair.decoder, pair.decoderWithPast).forEach { held(it) } }
         is DjlModel -> OrtScopes.opened(model).also { ScriptRuns.opened("djl:${it.id}") }
         is onnxModel -> {
             model.ortSession?.let { ScriptRuns.opened("ort:${it.id}") }

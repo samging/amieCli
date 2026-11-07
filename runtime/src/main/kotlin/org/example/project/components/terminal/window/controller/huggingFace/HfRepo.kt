@@ -11,7 +11,7 @@ import kotlinx.serialization.json.longOrNull
 import org.example.project.components.terminal.window.controller.util.bytes
 
 /** What went wrong bringing a model in, so the page and a script can say it and a test can tell the cases apart */
-enum class HfProblem { BAD_INPUT, NOT_FOUND, OFFLINE, GATED, NOTHING_RUNNABLE, DISK, INCOMPLETE, SERVER, TAKEN }
+enum class HfProblem { BAD_INPUT, NOT_FOUND, OFFLINE, GATED, NOTHING_RUNNABLE, DISK, INCOMPLETE, SERVER, TAKEN, DECLINED }
 
 /** A failure with its [problem] and a message in the app's words, ready for a notice or a console line; it never holds the token */
 class HfException(val problem: HfProblem, message: String, cause: Throwable? = null) : Exception(message, cause)
@@ -87,13 +87,24 @@ data class HfWeights(val label: String, val files: List<HfFile>, val reason: Str
  * which lands flat in `AMP/models/text`; [speech] a Piper voice (an ONNX with its `.onnx.json` beside it, or a
  * `tokens.txt` or `espeak-ng-data/`), which lands flat in `AMP/models/speech`, made ready for the speech package
  */
-data class HfPick(val candidate: HfCandidate, val companions: List<HfFile>, val text: Boolean = false, val speech: Boolean = false) {
-    val files: List<HfFile> get() = (candidate.files + companions).distinctBy { it.path }
+data class HfPick(val candidate: HfCandidate, val companions: List<HfFile>, val text: Boolean = false, val speech: Boolean = false, val also: List<HfCandidate> = emptyList()) {
+    /** The model's files, the other models that go with it (a pair's decoders) and the companions */
+    val files: List<HfFile> get() = (candidate.files + also.flatMap { it.files } + companions).distinctBy { it.path }
     val size: Long get() = files.sumOf { it.size ?: 0 }
     val format: HfFormat get() = candidate.format
 
-    /** "onnx/model.onnx and 4 more, 90.4 MB" */
-    fun describe(): String = candidate.main.path + (if (files.size > 1) " and ${files.size - 1} more" else "") + ", " + bytes(size)
+    /** "onnx/model.onnx and 4 more, 90.4 MB"; a pair: "onnx/encoder_model.onnx with onnx/decoder_model.onnx and 4 more, 223.8 MB" */
+    fun describe(): String = candidate.main.path + (if (also.isEmpty()) "" else " with " + also.joinToString { it.main.path }) +
+        (if (files.size > 1 + also.size) " and ${files.size - 1 - also.size} more" else "") + ", " + bytes(size)
+}
+
+/**
+ * An encoder and decoder pair in one folder, as optimum exports a sequence-to-sequence model: `encoder_model.onnx`
+ * with `decoder_model.onnx` and, when there, `decoder_with_past_model.onnx` or `decoder_model_merged.onnx`. One of
+ * them alone runs nothing a text can fill, so an import takes the pair whole and initMod opens both sessions.
+ */
+data class HfPair(val encoders: List<HfCandidate>, val decoders: List<HfCandidate>) {
+    val all: List<HfCandidate> get() = encoders + decoders
 }
 
 /**
@@ -112,8 +123,25 @@ data class HfListing(val candidates: List<HfCandidate>, val weights: List<HfWeig
         return companions.filter { home(it) in dirs }
     }
 
+    /** The pair [candidate] belongs to: the ONNX files of its folder and variant named encoder_model and decoder_*; null when it is no pair */
+    fun pairOf(candidate: HfCandidate): HfPair? {
+        if (candidate.format != HfFormat.ONNX) return null
+        val same = candidates.filter { it.format == HfFormat.ONNX && it.main.dir == candidate.main.dir && it.variant == candidate.variant }
+        val encoders = same.filter { it.main.name.lowercase().startsWith("encoder_model") }
+        val everyDecoder = same.filter { it.main.name.lowercase().startsWith("decoder_") }
+        // decoder_model_merged is the plain decoder and the with-past one in one file: left out when both are there
+        val merged = everyDecoder.filter { it.main.name.lowercase().contains("merged") }
+        val decoders = if (merged.size < everyDecoder.size - 1) everyDecoder - merged.toSet() else everyDecoder
+        return if (encoders.isNotEmpty() && decoders.isNotEmpty() && candidate in encoders + everyDecoder) HfPair(encoders, decoders) else null
+    }
+
     fun pick(candidate: HfCandidate): HfPick {
         val dir = candidate.main.dir
+        // A pair comes whole, the encoder as its main file
+        pairOf(candidate)?.let { pair ->
+            val main = if (candidate in pair.encoders) candidate else pair.encoders.first()
+            return HfPick(main, companionsOf(main), also = pair.all.filter { it != main })
+        }
         val text = candidate.format == HfFormat.ONNX && companions.any { it.dir == dir && it.name == GENAI_CONFIG }
         if (text) return HfPick(candidate, companions.filter { it.dir == dir && it.name in TEXT_COMPANIONS }, text = true)
         val own = companionsOf(candidate)

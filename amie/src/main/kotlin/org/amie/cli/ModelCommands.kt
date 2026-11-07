@@ -295,16 +295,18 @@ object HfCommand : Command("hf", "Hugging Face: models of the Hub that run here,
                     val repo = runBlocking { HfImports.lookUp(input) }
                     val listing = repo.listing
                     println("${repo.id} (${repo.sha.take(8)})" + (repo.task?.let { ", ${HfSearchKind.describe(it)}" } ?: "") + if (repo.gated) ", gated" else "")
-                    val pick = listing.defaultPick(repo.asked)
-                    listing.candidates.forEach { c -> println("  ${c.format.label}: ${c.main.path}" + (c.main.size?.let { " (${it shr 20} MB)" } ?: "") + if (c == pick) "  <- what import takes" else "") }
+                    val pick = listing.defaultPick(repo.asked)?.let(listing::pick)
+                    listing.candidates.forEach { c ->
+                        val mark = when (c) { pick?.candidate -> "  <- what import takes"; in pick?.also.orEmpty() -> "  <- with it, as its pair"; else -> "" }
+                        println("  ${c.format.label}: ${c.main.path}" + (c.main.size?.let { " (${it shr 20} MB)" } ?: "") + mark)
+                    }
                     if (listing.candidates.isEmpty()) println("  nothing that runs here among its ${repo.files.size} files")
                     repo.config?.describeLabels()?.let { println("  labels: $it") }
                     Amie.EXIT_OK
                 }
                 "import" -> {
                     val input = flags.requireWord(0, "the repo, owner/name or its address") ?: return Amie.EXIT_USAGE
-                    val name = Output.withInternalShown { HfImports.ensure(input, flags.valueOf("--model-name").orEmpty()) { println(it) } }
-                    println("initMod(\"$name\") opens it")
+                    Output.withInternalShown { HfImports.ensure(input, flags.valueOf("--model-name").orEmpty(), say = { println(it) }, confirm = ::askAtTerminal) }
                     Amie.EXIT_OK
                 }
                 else -> null
@@ -313,4 +315,12 @@ object HfCommand : Command("hf", "Hugging Face: models of the Hub that run here,
             fail(e.message ?: e.problem.name)
         }
     }
+}
+
+
+/** A yes or no asked at the terminal, yes by default; yes without asking when there is no terminal (a pipe, a script) */
+private fun askAtTerminal(question: String): Boolean {
+    val console = System.console() ?: return true
+    val answer = console.readLine("%s [Y/n] ", question)?.trim()?.lowercase() ?: return false
+    return answer.isEmpty() || answer.startsWith("y")
 }

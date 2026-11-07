@@ -188,7 +188,7 @@ signatures, and [docs/sandbox-scripting.md](../../docs/sandbox-scripting.md) in 
 | `modelBuilder("name", data)`, `modelBuilder("name", data, buildOptions(...))` | Trains and exports an intent model to `AMP/models/intents/<name>` |
 | `fineTune("name", data)`, `calibrate("name", data)`, `versions("name")`, `rollback("name", 2)` | Teaches a model more, makes its scores honest, the heads it had |
 | `validateMetrics("name")`, `metricsChart`, `metricsHistory`, `confusionMatrix`, `mistakes`, `suspects` | The stored validation as tables and ASCII charts |
-| `initMod("name")` | A session of a model: `.predict(text)`, `.scores(text)`, `.answer(text)`; a package jar when the name ends in `.jar`; a text, speech or imported model by its name |
+| `initMod("name")` | A session of a model: `.predict(text)`, `.scores(text)`, `.answer(text)`; a package jar when the name ends in `.jar`; a text, speech or imported model by its name; an encoder and decoder pair as `.encoder` and `.decoder`, two sessions a script wires, with `.tokens(text)` and `.text(ids)` |
 | `sessionMod("name") { predict("hi") }` | A model to ask for one block |
 | `group("name")` | The models of a group asked together: `.each(text)`, `.vote(text)`, `.combined(text)` |
 | `huggingFace("owner/repo")`, `huggingFace.search("bert", format = "onnx")` | A model of the Hub imported into `AMP/models/imported`, and the search |

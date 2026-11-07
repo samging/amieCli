@@ -196,6 +196,7 @@ class HfHub(private val http: HttpClient, val base: String = BASE, private val t
 
     /** The labels of the `config.json` that came with [pick], the nearest to its model: what the imported model answers with */
     private fun labelsOf(staging: File, pick: HfPick): List<String> {
+        if (pick.also.isNotEmpty()) return emptyList() // an encoder and decoder pair answers tokens, not labels, whatever its config.json's defaults say
         val config = pick.companions.filter { it.name == "config.json" }.maxByOrNull { it.path.count { c -> c == '/' } } ?: return emptyList()
         return runCatching { HfJson.config(File(staging, config.path).readText()).labels }.getOrDefault(emptyList())
     }

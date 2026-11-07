@@ -62,14 +62,14 @@ object TextModels {
 class TextModel internal constructor(val name: String, dir: File) : InteractionModel {
     private val config = Json.parseToJsonElement(File(dir, "genai_config.json").readText()).jsonObject
     private val model = config.getValue("model").jsonObject
-    private val decoder = model.getValue("decoder").jsonObject
+    private val decoderConfig = model.getValue("decoder").jsonObject
     private val family = model["type"]?.jsonPrimitive?.contentOrNull.orEmpty()
     private val stops: Set<Long> = model["eos_token_id"].let { id ->
         (id as? JsonArray)?.map { it.jsonPrimitive.int.toLong() } ?: listOfNotNull(id?.jsonPrimitive?.intOrNull?.toLong())
     }.toSet()
 
     // What the export's graph says of itself: the size of a layer's kept keys and values, and if it wants positions
-    private val session: ManagedSession = OrtSessions.open("module:$name", File(dir, decoder.getValue("filename").jsonPrimitive.content).path)
+    private val session: ManagedSession = OrtSessions.open("module:$name", File(dir, decoderConfig.getValue("filename").jsonPrimitive.content).path)
     private val layers = session.inputNames.filter { it.startsWith("past_key_values.") }
     private val wantsPositions = "position_ids" in session.inputNames
     private val tokenizer = HuggingFaceTokenizer.newInstance(

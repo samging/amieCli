@@ -4,6 +4,9 @@ import ai.djl.huggingface.tokenizers.Encoding
 import ai.djl.huggingface.tokenizers.HuggingFaceTokenizer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonNull
+import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.longOrNull
@@ -30,9 +33,30 @@ internal object ModelText {
     fun find(homes: List<File>, name: String): File? = homes.map { File(it, name) }.firstOrNull { it.isFile }
 
     /** The tokenizer of the nearest `tokenizer.json`, null when there is none */
-    fun tokenizer(homes: List<File>): HuggingFaceTokenizer? = find(homes, "tokenizer.json")?.let {
+    fun tokenizer(homes: List<File>): HuggingFaceTokenizer? = find(homes, "tokenizer.json")?.let { file ->
         DjlTelemetry.optOut()
-        HuggingFaceTokenizer.newInstance(it.toPath())
+        val text = file.readText()
+        // A "Precompiled" normalizer without its charsmap (some converted SentencePiece tokenizers, Marian's among them)
+        // aborts the native tokenizer, and the process with it; it normalizes nothing, so it goes before the load
+        val cleaned = runCatching { withoutEmptyPrecompiled(Json.parseToJsonElement(text).jsonObject) }.getOrNull()
+        if (cleaned == null) HuggingFaceTokenizer.newInstance(file.toPath())
+        else HuggingFaceTokenizer.newInstance(cleaned.toString().byteInputStream(), emptyMap())
+    }
+
+    /** [tokenizer] without a `Precompiled` normalizer whose `precompiled_charsmap` is null; null when there is none to drop */
+    private fun withoutEmptyPrecompiled(tokenizer: JsonObject): JsonObject? {
+        fun empty(n: JsonElement?) = (n as? JsonObject)?.let { it["type"]?.jsonPrimitive?.contentOrNull == "Precompiled" && it["precompiled_charsmap"].let { c -> c == null || c is JsonNull } } == true
+        val normalizer = tokenizer["normalizer"] as? JsonObject ?: return null
+        val replacement: JsonElement = when {
+            empty(normalizer) -> JsonNull
+            normalizer["type"]?.jsonPrimitive?.contentOrNull == "Sequence" -> {
+                val steps = normalizer["normalizers"] as? JsonArray ?: return null
+                if (steps.none(::empty)) return null
+                JsonObject(normalizer + ("normalizers" to JsonArray(steps.filterNot(::empty))))
+            }
+            else -> return null
+        }
+        return JsonObject(tokenizer + ("normalizer" to replacement))
     }
 
     /** The labels of the nearest `config.json` (id2label), empty when there are none */

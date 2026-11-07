@@ -58,3 +58,4 @@ nav:
       - Troubleshooting: troubleshooting.md
       - Raspberry Pi 5: pi5.md
       - Where the code is: source-layout.md
+      - The code of amie, what is where and why: codebase.md

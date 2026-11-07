@@ -95,4 +95,25 @@ interface InteractionModel : ModelAnswers, AutoCloseable {
      * declares, or a [Tensor] with a shape of its own. Every output by name
      */
     fun run(feeds: Map<String, Any>): Map<String, Tensor> = throw UnsupportedOperationException("this model takes text, not tensors; run(text) asks it")
+
+    /** The encoder of an encoder and decoder pair, a model that takes tensors; every other model refuses */
+    val encoder: InteractionModel get() = throw UnsupportedOperationException("this model is one session, not an encoder and decoder pair")
+
+    /** The decoder of the pair: the encoder's hidden states and the ids so far in, the next token's logits out */
+    val decoder: InteractionModel get() = throw UnsupportedOperationException("this model is one session, not an encoder and decoder pair")
+
+    /** The pair's decoder that takes the past attention state back, when its export has one */
+    val decoderWithPast: InteractionModel? get() = null
+
+    /** The ids of [text] and their attention mask, from the tokenizer beside the model; refused without one */
+    fun tokens(text: String): Tokens = throw UnsupportedOperationException("this model has no tokenizer beside it")
+
+    /** The words of [ids], from the same tokenizer */
+    fun text(ids: LongArray): String = throw UnsupportedOperationException("this model has no tokenizer beside it")
+}
+
+/** A text as a model takes it: the token ids and the attention mask of the same length, both as `[1, n]` tensors when run */
+class Tokens(val ids: LongArray, val mask: LongArray) {
+    val size: Int get() = ids.size
+    override fun toString(): String = "Tokens(${ids.joinToString()})"
 }
