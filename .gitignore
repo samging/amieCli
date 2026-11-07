@@ -1,0 +1,9 @@
+build/docs-site/
+.claude/worktrees/
+build/
+.gradle/
+.kotlin/
+.idea/
+local.properties
+*.iml
+.DS_Store

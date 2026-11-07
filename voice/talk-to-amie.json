@@ -1,0 +1,25 @@
+{
+  "id": "talk-to-amie",
+  "name": "Talk to Amie",
+  "description": "Type talk, then speak to your companion: email, the browser, apps, calendar, reminders, what it remembers of you, weather, files, terminal, vim, brew or chat, on Whisper, Supertonic, a BERT intent model and Llama.",
+  "tags": [
+    "voice"
+  ],
+  "env": null,
+  "createdAt": "2026-11-01T13:14:09.967133Z",
+  "updatedAt": "2026-11-01T13:14:09.967133Z",
+  "lines": 122,
+  "uses": [
+    "microphone.jar",
+    "speech.jar",
+    "mail.jar",
+    "browser.jar",
+    "mac.jar",
+    "spotify.jar",
+    "memory.jar",
+    "face.jar",
+    "files.jar"
+  ],
+  "loads": 1,
+  "lastLoadedAt": "2026-11-01T15:51:58.175637Z"
+}

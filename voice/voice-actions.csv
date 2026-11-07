@@ -1,0 +1,1207 @@
+text,label
+what's the weather,weather
+what is the weather like today,weather
+what's the weather in London,weather
+how is the weather in Prague,weather
+tell me the weather,weather
+weather forecast please,weather
+is it raining outside,weather
+will it rain today,weather
+how hot is it outside,weather
+how cold is it in Berlin,weather
+what's the temperature outside,weather
+do I need an umbrella today,weather
+is it sunny today,weather
+what's it like outside,weather
+check the weather for me,weather
+what is the weather in New York,weather
+is it going to snow,weather
+how windy is it today,weather
+weather in Paris,weather
+give me today's forecast,weather
+can you look up the weather,weather
+what's the temperature in Tokyo,weather
+list files,list_files
+list my files,list_files
+list the files in my downloads,list_files
+show me my files,list_files
+what's in my documents folder,list_files
+show the files on my desktop,list_files
+what files do I have,list_files
+what is in my downloads,list_files
+open my downloads and list them,list_files
+list everything in the documents folder,list_files
+show me what's on the desktop,list_files
+which files are in this folder,list_files
+show my home folder,list_files
+list the folder pictures,list_files
+what do I have in my music folder,list_files
+give me a list of my files,list_files
+list my desktop,list_files
+run the list files script,list_files
+can you list the directory,list_files
+show the contents of my documents,list_files
+what's inside my downloads folder,list_files
+read out my folder,list_files
+find a file,find_file
+find the file called notes,find_file
+find my file named budget,find_file
+find my resume,find_file
+where is my tax report,find_file
+where's the file called invoice,find_file
+search for the file holiday photos,find_file
+look for a file named report,find_file
+locate my passport scan,find_file
+can you find the document thesis,find_file
+find the presentation,find_file
+where did I save my notes,find_file
+search my computer for budget,find_file
+find file readme,find_file
+look for my cv,find_file
+locate the file called contract,find_file
+run the find file script for notes,find_file
+find me the pdf called manual,find_file
+where is the file main,find_file
+search for a file called todo,find_file
+find my photos of the beach,find_file
+is there a file called backup,find_file
+search the web for electric cars,web_search
+look up the population of Canada,web_search
+google the height of Mount Everest,web_search
+search online for pizza recipes,web_search
+look up who invented the telephone,web_search
+google what time it is in Sydney,web_search
+find out online how tall the Eiffel tower is,web_search
+search the internet for the latest iPhone,web_search
+look up Albert Einstein,web_search
+who is the president of France,web_search
+google black holes,web_search
+search for news about space,web_search
+what does Wikipedia say about penguins,web_search
+look this up online how far is the moon,web_search
+search google for the best laptops,web_search
+find information online about solar panels,web_search
+when was the Eiffel tower built,web_search
+what is the population of Japan,web_search
+who wrote Hamlet,web_search
+search the web,web_search
+look it up online,web_search
+google it,web_search
+hello,chat
+hi there,chat
+how are you,chat
+who are you,chat
+what's your name,chat
+tell me a joke,chat
+thank you,chat
+thanks a lot,chat
+good morning,chat
+good night,chat
+what can you do,chat
+tell me a story,chat
+I'm bored,chat
+how was your day,chat
+do you like music,chat
+give me some advice,chat
+write me a short poem,chat
+I feel tired today,chat
+what should I cook for dinner,chat
+explain gravity simply,chat
+what do you think about cats,chat
+can we just talk,chat
+give me a tip for sleeping better,chat
+why is the sky blue,chat
+open a terminal,open_terminal
+open terminal,open_terminal
+open the terminal,open_terminal
+start a new terminal,open_terminal
+give me a terminal window,open_terminal
+launch the terminal app,open_terminal
+new terminal window please,open_terminal
+open a shell,open_terminal
+open a terminal in downloads,open_terminal
+open a terminal in documents,open_terminal
+can you open the terminal,open_terminal
+bring up a terminal,open_terminal
+show me a terminal,open_terminal
+i need a terminal,open_terminal
+start the terminal,open_terminal
+edit the file notes,edit_file
+edit my notes,edit_file
+edit the readme,edit_file
+open the file todo in the editor,edit_file
+open notes in the text editor,edit_file
+i want to edit the report,edit_file
+change the file called budget,edit_file
+edit file config,edit_file
+open my todo list for editing,edit_file
+edit the document called letter,edit_file
+open the readme so i can edit it,edit_file
+let me edit the file called plan,edit_file
+modify the file notes,edit_file
+edit the shopping list,edit_file
+open the config file in an editor,edit_file
+open notes in vim,open_vim
+open the readme in vim,open_vim
+edit the config with vim,open_vim
+vim the file notes,open_vim
+open in vim,open_vim
+open this in vim,open_vim
+use vim to open the todo file,open_vim
+start vim on the report,open_vim
+open the file called plan in vim,open_vim
+open budget with vim,open_vim
+vim readme,open_vim
+launch vim on my notes,open_vim
+run vim on the config,open_vim
+i want to use vim on the letter,open_vim
+show the readme in vim,open_vim
+brew install ripgrep,brew_install
+brew install wget,brew_install
+install wget with brew,brew_install
+install ripgrep with homebrew,brew_install
+use brew to install node,brew_install
+brew install python,brew_install
+install the package jq,brew_install
+install jq with brew,brew_install
+homebrew install ffmpeg,brew_install
+run brew install git,brew_install
+please brew install htop,brew_install
+install htop using brew,brew_install
+install tree from homebrew,brew_install
+get me wget from brew,brew_install
+brew install tmux,brew_install
+close all terminals,close_terminals
+close all the terminals,close_terminals
+close the terminals,close_terminals
+close every terminal window,close_terminals
+close all terminal windows,close_terminals
+close my terminals,close_terminals
+shut all the terminals,close_terminals
+get rid of all terminals,close_terminals
+close the terminal,close_terminals
+close the terminal window,close_terminals
+kill all terminal windows,close_terminals
+please close all terminals,close_terminals
+close everything in terminal,close_terminals
+exit all terminals,close_terminals
+quit all the terminal windows,close_terminals
+check my email,check_email
+do I have any new email,check_email
+any new mail,check_email
+what's in my inbox,check_email
+do I have unread messages,check_email
+did anyone email me,check_email
+what emails did I get,check_email
+check my inbox please,check_email
+any new messages in my mail,check_email
+who emailed me today,check_email
+show me my unread email,check_email
+have I got mail,check_email
+is there anything in my inbox,check_email
+look at my email,check_email
+read my email,read_email
+read me the first email,read_email
+read the second email,read_email
+what does that email say,read_email
+read the latest email,read_email
+open the first email and read it,read_email
+read that message to me,read_email
+what does the third email say,read_email
+tell me what the email says,read_email
+read me my newest mail,read_email
+read the newest message,read_email
+can you read me the email,read_email
+read out the email,read_email
+read the last email I got,read_email
+reply to the first email,reply_email
+reply to that email,reply_email
+answer that email,reply_email
+write back to them,reply_email
+reply to the latest email and say thanks,reply_email
+reply saying I'll be there,reply_email
+respond to the second email,reply_email
+send a reply to that message,reply_email
+reply and tell them yes,reply_email
+answer the email and say I'm busy,reply_email
+write a reply to the email,reply_email
+email them back,reply_email
+reply to the last message,reply_email
+respond to that mail,reply_email
+open the browser,open_website
+open youtube,open_website
+go to github.com,open_website
+open safari,open_website
+open a website,open_website
+go to google,open_website
+show me reddit,open_website
+visit wikipedia,open_website
+take me to the news website,open_website
+open the website,open_website
+open netflix in the browser,open_website
+open gmail,open_website
+go to amazon,open_website
+open twitter,open_website
+open the web browser,open_website
+open notes,open_app
+open the calendar app,open_app
+start spotify,open_app
+launch music,open_app
+open the mail app,open_app
+open finder,open_app
+launch xcode,open_app
+start the notes app,open_app
+open the messages app,open_app
+open photos,open_app
+launch the calculator,open_app
+open slack,open_app
+start zoom,open_app
+open system settings,open_app
+quit spotify,quit_app
+close the notes app,quit_app
+quit music,quit_app
+close safari,quit_app
+shut down the mail app,quit_app
+quit xcode,quit_app
+close slack,quit_app
+quit the calculator,quit_app
+exit the music app,quit_app
+quit zoom,quit_app
+close that app,quit_app
+quit the messages app,quit_app
+close the finder app,quit_app
+quit the browser app,quit_app
+set the volume to 50,set_volume
+turn the volume to 20,set_volume
+mute the sound,set_volume
+mute it,set_volume
+volume 30,set_volume
+change the volume to 70,set_volume
+make it silent,set_volume
+set volume to 10 percent,set_volume
+mute my mac,set_volume
+sound at 40 percent,set_volume
+turn the sound off,set_volume
+put the volume at 80,set_volume
+silence the speakers,set_volume
+volume to 60,set_volume
+how's my battery,battery
+how much battery is left,battery
+battery level,battery
+what's my battery at,battery
+is my laptop charging,battery
+how much charge do I have,battery
+am I running out of battery,battery
+check the battery,battery
+is the battery low,battery
+battery status please,battery
+how full is the battery,battery
+do I need to plug in,battery
+tell me the battery,battery
+how long will my battery last,battery
+what's on my calendar today,calendar_today
+what do I have today,calendar_today
+do I have any meetings today,calendar_today
+what's my schedule,calendar_today
+what's on today,calendar_today
+am I free today,calendar_today
+any events today,calendar_today
+check my calendar,calendar_today
+what's my day look like,calendar_today
+what meetings do I have,calendar_today
+what's next on my calendar,calendar_today
+is anything planned today,calendar_today
+tell me my schedule,calendar_today
+read my calendar,calendar_today
+remind me to call mum,remind_me
+remind me to buy milk,remind_me
+set a reminder to pay rent,remind_me
+add a reminder to water the plants,remind_me
+remind me about the dentist,remind_me
+create a reminder,remind_me
+don't let me forget to call dad,remind_me
+add to my reminders,remind_me
+make a reminder for the meeting,remind_me
+remind me to take out the trash,remind_me
+remind me to stretch,remind_me
+new reminder to book flights,remind_me
+put that in my reminders,remind_me
+remind me to send the invoice,remind_me
+remember that I like green tea,remember_this
+remember my name is Sam,remember_this
+remember that my sister is called Anna,remember_this
+please remember I work from home,remember_this
+don't forget that I love hiking,remember_this
+remember this,remember_this
+remember I'm allergic to nuts,remember_this
+keep in mind that I'm vegetarian,remember_this
+note that I wake up at seven,remember_this
+remember my favourite colour is blue,remember_this
+remember that my birthday is in May,remember_this
+remember I play the guitar,remember_this
+you should remember that I have a dog,remember_this
+save that I like jazz,remember_this
+catch me up,catch_up
+what did I miss,catch_up
+give me a summary of my day,catch_up
+brief me,catch_up
+what's going on today,catch_up
+morning briefing,catch_up
+fill me in,catch_up
+anything I should know,catch_up
+what's new with me,catch_up
+give me a quick update,catch_up
+get me up to speed,catch_up
+how's my day shaping up,catch_up
+update me on everything,catch_up
+give me my daily briefing,catch_up
+write an email to Anna,write_email
+send an email to Tom saying I'm late,write_email
+email Sarah and say thanks,write_email
+write to Peter about the meeting,write_email
+new email to my boss,write_email
+compose an email to John,write_email
+send Anna an email,write_email
+email Tom,write_email
+write a mail to Sarah,write_email
+draft an email to Peter,write_email
+send a message to Anna by email,write_email
+write an email to the team,write_email
+email David and ask about Friday,write_email
+start an email to Maria,write_email
+search the web for pizza near me,browser_search
+search in the browser for hotels in Rome,browser_search
+look up flights to Paris online,browser_search
+find cheap laptops online,browser_search
+google best running shoes,browser_search
+search the internet for cat videos,browser_search
+show me pictures of mountains,browser_search
+search the browser for vegan recipes,browser_search
+look up train times in the browser,browser_search
+google the news,browser_search
+find restaurants near me online,browser_search
+search online for guitar lessons,browser_search
+google how to tie a tie,browser_search
+search safari for used bikes,browser_search
+play some music,music
+play music,music
+pause the music,music
+stop the music,music
+next song,music
+skip this song,music
+put some music on,music
+pause,music
+resume the music,music
+play the next track,music
+skip,music
+start the music,music
+turn on some tunes,music
+stop playing,music
+make a note to buy coffee,add_note
+take a note,add_note
+write down that the wifi password changed,add_note
+add a note saying call the bank,add_note
+jot down this idea,add_note
+note down the meeting room,add_note
+new note,add_note
+add this to my notes,add_note
+put a note in my notes,add_note
+make a note about the holiday,add_note
+write that down in notes,add_note
+create a note,add_note
+add a note to buy milk,add_note
+jot down buy eggs,add_note
+set a timer for five minutes,set_timer
+set a timer for 10 minutes,set_timer
+timer for 30 seconds,set_timer
+start a timer,set_timer
+start a 20 minute timer,set_timer
+time 5 minutes,set_timer
+set a 1 hour timer,set_timer
+countdown for two minutes,set_timer
+give me a timer for 15 minutes,set_timer
+timer five minutes,set_timer
+tell me when 10 minutes are up,set_timer
+set timer,set_timer
+three minute timer,set_timer
+set a timer for an hour,set_timer
+what is a note,chat
+how long is a minute,chat
+what's a timer,chat
+how many seconds are in an hour,chat
+what does an email look like,chat
+open pizza.com,open_website
+Amie open pizza.com,open_website
+please open pizza.com,open_website
+open the pizza.com website,open_website
+I want you to open the pizza.com website,open_website
+open the pizza.com website for me,open_website
+open pizza dot com,open_website
+can you open pizza dot com,open_website
+could you open pizza dot com,open_website
+go to pizza.com,open_website
+I want to go to pizza.com,open_website
+would you go to pizza.com,open_website
+could you open youtube,open_website
+Amie open youtube,open_website
+open youtube.com,open_website
+I need you to open youtube.com,open_website
+can you open youtube.com,open_website
+open the youtube website,open_website
+would you open the youtube website,open_website
+open the youtube website please,open_website
+can you go to github.com,open_website
+could you go to github.com,open_website
+I want you to open the browser,open_website
+I want to open the browser,open_website
+open my browser,open_website
+could you open my browser,open_website
+open my browser please,open_website
+could you open safari,open_website
+would you open safari,open_website
+open a browser,open_website
+I want you to open a browser,open_website
+can you open a browser,open_website
+I want to open a website,open_website
+I need you to open a website,open_website
+visit bbc.co.uk,open_website
+could you visit bbc.co.uk,open_website
+visit bbc.co.uk please,open_website
+go to wikipedia,open_website
+go to wikipedia for me,open_website
+I want to go to wikipedia,open_website
+take me to reddit,open_website
+I need you to take me to reddit,open_website
+can you take me to reddit,open_website
+pull up amazon.com,open_website
+I need you to pull up amazon.com,open_website
+I want to pull up amazon.com,open_website
+show me the netflix website,open_website
+I want you to show me the netflix website,open_website
+can you show me the netflix website,open_website
+open gmail please,open_website
+can you open gmail,open_website
+would you open twitter,open_website
+please open twitter,open_website
+open the website nytimes.com,open_website
+hey Amie open the website nytimes.com,open_website
+I want you to open the website nytimes.com,open_website
+load the page apple.com,open_website
+please load the page apple.com,open_website
+would you load the page apple.com,open_website
+go to the website of the bbc,open_website
+could you go to the website of the bbc,open_website
+I need you to go to the website of the bbc,open_website
+open facebook in the browser,open_website
+hey Amie open facebook in the browser,open_website
+would you open facebook in the browser,open_website
+open google.com,open_website
+I want to open google.com,open_website
+open google.com for me,open_website
+bring up stackoverflow,open_website
+please bring up stackoverflow,open_website
+could you bring up stackoverflow,open_website
+navigate to ebay.com,open_website
+I need you to navigate to ebay.com,open_website
+I want to navigate to ebay.com,open_website
+go on instagram,open_website
+go on instagram for me,open_website
+go on instagram please,open_website
+open onet.pl,open_website
+Amie open onet.pl,open_website
+could you open onet.pl,open_website
+open allegro.pl,open_website
+would you open allegro.pl,open_website
+yeah open allegro.pl,open_website
+search in the browser for what's happening in Poland,browser_search
+could you search in the browser for what's happening in Poland,browser_search
+I need you to search in the browser for what's happening in Poland,browser_search
+search in browser for hotels in Rome,browser_search
+can you search in browser for hotels in Rome,browser_search
+I need you to search in browser for hotels in Rome,browser_search
+google what's happening in Poland,browser_search
+google what's happening in Poland please,browser_search
+can you please google what's happening in Poland,browser_search
+google pizza near me,browser_search
+google pizza near me for me,browser_search
+would you google pizza near me,browser_search
+I want you to google best running shoes,browser_search
+okay google best running shoes,browser_search
+search google for cheap flights,browser_search
+Amie search google for cheap flights,browser_search
+can you please search google for cheap flights,browser_search
+I need you to look up train times in the browser,browser_search
+can you please look up train times in the browser,browser_search
+show me results for vegan recipes in the browser,browser_search
+Amie show me results for vegan recipes in the browser,browser_search
+hey Amie show me results for vegan recipes in the browser,browser_search
+search youtube for guitar lessons,browser_search
+search youtube for guitar lessons please,browser_search
+okay search youtube for guitar lessons,browser_search
+open a search for used bikes,browser_search
+please open a search for used bikes,browser_search
+yeah open a search for used bikes,browser_search
+search the browser for the news,browser_search
+okay search the browser for the news,browser_search
+search the browser for the news please,browser_search
+google the weather in Warsaw,browser_search
+could you google the weather in Warsaw,browser_search
+I need you to google the weather in Warsaw,browser_search
+browse for new laptops,browser_search
+hey Amie browse for new laptops,browser_search
+would you browse for new laptops,browser_search
+do a google search for tax forms,browser_search
+okay do a google search for tax forms,browser_search
+find me a pizza place in the browser,browser_search
+Amie find me a pizza place in the browser,browser_search
+yeah find me a pizza place in the browser,browser_search
+what's happening in Poland,web_search
+okay what's happening in Poland,web_search
+what's going on in the world,web_search
+Amie what's going on in the world,web_search
+what is the latest news,web_search
+yeah what is the latest news,web_search
+when are the midterm elections,web_search
+can you tell me when are the midterm elections,web_search
+when is the midterm election,web_search
+can you tell me when is the midterm election,web_search
+yeah who is the president of France,web_search
+how tall is Mount Everest,web_search
+okay how tall is Mount Everest,web_search
+what is the capital of Australia,web_search
+hey Amie what is the capital of Australia,web_search
+who won the world cup,web_search
+Amie who won the world cup,web_search
+what is bitcoin worth,web_search
+hey Amie what is bitcoin worth,web_search
+tell me about black holes,web_search
+okay tell me about black holes,web_search
+tell me something about the midterm elections,web_search
+okay tell me something about the midterm elections,web_search
+how does a jet engine work,web_search
+can you tell me how does a jet engine work,web_search
+what does inflation mean,web_search
+can you tell me what does inflation mean,web_search
+look up the population of Japan,web_search
+okay look up the population of Japan,web_search
+would you look up the population of Japan,web_search
+find out when the next eclipse is,web_search
+I need you to find out when the next eclipse is,web_search
+okay find out when the next eclipse is,web_search
+search the web for the election results,web_search
+I want to search the web for the election results,web_search
+Amie search the web for the election results,web_search
+search for news about Ukraine,web_search
+Amie search for news about Ukraine,web_search
+yeah search for news about Ukraine,web_search
+search what happened today,web_search
+Amie search what happened today,web_search
+I need you to search what happened today,web_search
+any news about the economy,web_search
+okay any news about the economy,web_search
+open man.webp,open_file
+I need you to open man.webp,open_file
+okay open man.webp,open_file
+open a file man.webp,open_file
+can you please open a file man.webp,open_file
+could you open a file man.webp,open_file
+open the file report.pdf,open_file
+I want to open the file report.pdf,open_file
+could you open the file report.pdf,open_file
+open main.py,open_file
+hey Amie open main.py,open_file
+can you please open main.py,open_file
+open my resume,open_file
+yeah open my resume,open_file
+open my resume for me,open_file
+open the document budget.xlsx,open_file
+could you open the document budget.xlsx,open_file
+can you open the document budget.xlsx,open_file
+open a file,open_file
+yeah open a file,open_file
+I want to open a file,open_file
+open a file called notes.txt,open_file
+hey Amie open a file called notes.txt,open_file
+open a file called notes.txt for me,open_file
+open the photo holiday.jpg,open_file
+I need you to open the photo holiday.jpg,open_file
+open the photo holiday.jpg for me,open_file
+open the picture man.png,open_file
+I want to open the picture man.png,open_file
+can you please open the picture man.png,open_file
+show me the file report.pdf,open_file
+hey Amie show me the file report.pdf,open_file
+yeah show me the file report.pdf,open_file
+open that pdf invoice,open_file
+I want you to open that pdf invoice,open_file
+open that pdf invoice for me,open_file
+open the file named todo.md,open_file
+Amie open the file named todo.md,open_file
+can you open the file named todo.md,open_file
+play the video trip.mp4,open_file
+can you please play the video trip.mp4,open_file
+Amie play the video trip.mp4,open_file
+open up slides.pptx,open_file
+please open up slides.pptx,open_file
+I need you to open up slides.pptx,open_file
+create a new file main.py,create_file
+could you create a new file main.py,create_file
+can you please create a new file main.py,create_file
+create a file called notes.txt,create_file
+can you create a file called notes.txt,create_file
+create a file called notes.txt please,create_file
+make a new file todo.md,create_file
+okay make a new file todo.md,create_file
+hey Amie make a new file todo.md,create_file
+make a file named report.txt,create_file
+please make a file named report.txt,create_file
+yeah make a file named report.txt,create_file
+new file main.py,create_file
+new file main.py please,create_file
+I want you to new file main.py,create_file
+create a python file app.py,create_file
+I want you to create a python file app.py,create_file
+can you please create a python file app.py,create_file
+create a text file,create_file
+could you create a text file,create_file
+please create a text file,create_file
+write a new file called ideas.txt,create_file
+can you please write a new file called ideas.txt,create_file
+I want you to write a new file called ideas.txt,create_file
+start a new file readme.md,create_file
+would you start a new file readme.md,create_file
+hey Amie start a new file readme.md,create_file
+create file index.html,create_file
+please create file index.html,create_file
+I want you to create file index.html,create_file
+make me a file called plan.txt,create_file
+I want to make me a file called plan.txt,create_file
+would you make me a file called plan.txt,create_file
+add a new file test.py,create_file
+hey Amie add a new file test.py,create_file
+yeah add a new file test.py,create_file
+read the file notes.txt,read_file
+I want you to read the file notes.txt,read_file
+Amie read the file notes.txt,read_file
+read me main.py,read_file
+read me main.py for me,read_file
+I want you to read me main.py,read_file
+what's in the file report.txt,read_file
+hey Amie what's in the file report.txt,read_file
+what does todo.md say,read_file
+hey Amie what does todo.md say,read_file
+read my notes file,read_file
+could you read my notes file,read_file
+please read my notes file,read_file
+tell me what's in ideas.txt,read_file
+hey Amie tell me what's in ideas.txt,read_file
+read out the file plan.txt,read_file
+read out the file plan.txt please,read_file
+read out the file plan.txt for me,read_file
+show me what's inside readme.md,read_file
+show me what's inside readme.md please,read_file
+can you show me what's inside readme.md,read_file
+summarise the file report.txt,read_file
+can you please summarise the file report.txt,read_file
+I need you to summarise the file report.txt,read_file
+read the text file,read_file
+please read the text file,read_file
+hey Amie read the text file,read_file
+where is my resume,find_file
+Amie where is my resume,find_file
+find the file report.pdf,find_file
+can you find the file report.pdf,find_file
+please find the file report.pdf,find_file
+find main.py,find_file
+I want you to find main.py,find_file
+would you find main.py,find_file
+where did I put budget.xlsx,find_file
+Amie where did I put budget.xlsx,find_file
+locate my tax forms,find_file
+I need you to locate my tax forms,find_file
+I want to locate my tax forms,find_file
+look for a file called notes,find_file
+Amie look for a file called notes,find_file
+please look for a file called notes,find_file
+search my files for invoice,find_file
+yeah search my files for invoice,find_file
+would you search my files for invoice,find_file
+find my photos of Rome,find_file
+I need you to find my photos of Rome,find_file
+find my photos of Rome for me,find_file
+do I have a file called plan,find_file
+can you tell me do I have a file called plan,find_file
+where's that pdf,find_file
+can you please where's that pdf,find_file
+okay where's that pdf,find_file
+what's on my desktop,list_files
+yeah what's on my desktop,list_files
+list my documents,list_files
+I want you to list my documents,list_files
+I want to list my documents,list_files
+okay what files do I have,list_files
+show my downloads,list_files
+I want you to show my downloads,list_files
+could you show my downloads,list_files
+list the files in my home folder,list_files
+can you please list the files in my home folder,list_files
+list the files in my home folder for me,list_files
+what's in my downloads folder,list_files
+okay what's in my downloads folder,list_files
+what's in documents,list_files
+can you tell me what's in documents,list_files
+list everything on the desktop,list_files
+list everything on the desktop please,list_files
+could you list everything on the desktop,list_files
+open spotify,open_app
+open spotify please,open_app
+can you please open spotify,open_app
+open the spotify app,open_app
+please open the spotify app,open_app
+could you open the spotify app,open_app
+Amie open notes,open_app
+I need you to open notes,open_app
+open the calculator,open_app
+can you open the calculator,open_app
+could you open the calculator,open_app
+open xcode,open_app
+can you open xcode,open_app
+I need you to open xcode,open_app
+launch pycharm,open_app
+please launch pycharm,open_app
+would you launch pycharm,open_app
+could you start zoom,open_app
+Amie start zoom,open_app
+launch the music app,open_app
+I need you to launch the music app,open_app
+can you launch the music app,open_app
+could you open finder,open_app
+open finder please,open_app
+I need you to open system settings,open_app
+I want you to open system settings,open_app
+please open slack,open_app
+open slack for me,open_app
+start the photos app,open_app
+hey Amie start the photos app,open_app
+Amie start the photos app,open_app
+run discord,open_app
+I need you to run discord,open_app
+Amie run discord,open_app
+open the app called obsidian,open_app
+can you please open the app called obsidian,open_app
+could you open the app called obsidian,open_app
+fire up visual studio code,open_app
+could you fire up visual studio code,open_app
+can you please fire up visual studio code,open_app
+open word,open_app
+can you please open word,open_app
+I want to open word,open_app
+open excel,open_app
+can you please open excel,open_app
+hey Amie open excel,open_app
+find the email from Anna,search_email
+could you find the email from Anna,search_email
+please find the email from Anna,search_email
+search my mail for invoice,search_email
+could you search my mail for invoice,search_email
+yeah search my mail for invoice,search_email
+look for the email about the trip,search_email
+Amie look for the email about the trip,search_email
+yeah look for the email about the trip,search_email
+any emails from my boss,search_email
+Amie any emails from my boss,search_email
+did Tom email me,search_email
+okay did Tom email me,search_email
+find the message about the meeting,search_email
+I want to find the message about the meeting,search_email
+yeah find the message about the meeting,search_email
+search my inbox for flight tickets,search_email
+please search my inbox for flight tickets,search_email
+would you search my inbox for flight tickets,search_email
+where's the email from the bank,search_email
+can you where's the email from the bank,search_email
+where's the email from the bank please,search_email
+look in my mail for receipts,search_email
+would you look in my mail for receipts,search_email
+Amie look in my mail for receipts,search_email
+show emails from Sarah,search_email
+please show emails from Sarah,search_email
+yeah show emails from Sarah,search_email
+add lunch with Anna to my calendar tomorrow at noon,add_event
+would you add lunch with Anna to my calendar tomorrow at noon,add_event
+can you add lunch with Anna to my calendar tomorrow at noon,add_event
+put dentist on my calendar on Friday at 3 pm,add_event
+okay put dentist on my calendar on Friday at 3 pm,add_event
+would you put dentist on my calendar on Friday at 3 pm,add_event
+schedule a meeting tomorrow at 10,add_event
+hey Amie schedule a meeting tomorrow at 10,add_event
+schedule a meeting tomorrow at 10 for me,add_event
+add an event on Monday at 9,add_event
+I want to add an event on Monday at 9,add_event
+could you add an event on Monday at 9,add_event
+create a calendar event for Friday,add_event
+yeah create a calendar event for Friday,add_event
+hey Amie create a calendar event for Friday,add_event
+book gym on Tuesday at 18:00,add_event
+would you book gym on Tuesday at 18:00,add_event
+Amie book gym on Tuesday at 18:00,add_event
+put call with Tom in my calendar today at 4,add_event
+please put call with Tom in my calendar today at 4,add_event
+Amie put call with Tom in my calendar today at 4,add_event
+add dinner on Saturday at 7 pm to the calendar,add_event
+okay add dinner on Saturday at 7 pm to the calendar,add_event
+add dinner on Saturday at 7 pm to the calendar please,add_event
+add a meeting to my calendar,add_event
+would you add a meeting to my calendar,add_event
+I want to add a meeting to my calendar,add_event
+schedule a call for Wednesday at 2 pm,add_event
+okay schedule a call for Wednesday at 2 pm,add_event
+would you schedule a call for Wednesday at 2 pm,add_event
+what's on my calendar tomorrow,calendar_today
+Amie what's on my calendar tomorrow,calendar_today
+what do I have tomorrow,calendar_today
+hey Amie what do I have tomorrow,calendar_today
+what's in my calendar this week,calendar_today
+yeah what's in my calendar this week,calendar_today
+what's on my calendar on Friday,calendar_today
+hey Amie what's on my calendar on Friday,calendar_today
+do I have anything on Monday,calendar_today
+hey Amie do I have anything on Monday,calendar_today
+what's in calendars today,calendar_today
+okay what's in calendars today,calendar_today
+what's in calendar tomorrow,calendar_today
+hey Amie what's in calendar tomorrow,calendar_today
+would I have any calendar events,calendar_today
+would I have any calendar events please,calendar_today
+would you would I have any calendar events,calendar_today
+what's my week look like,calendar_today
+okay what's my week look like,calendar_today
+am I busy on Thursday,calendar_today
+Amie am I busy on Thursday,calendar_today
+what do I have in my calendar,calendar_today
+can you tell me what do I have in my calendar,calendar_today
+forget that,forget_this
+can you forget that,forget_this
+okay forget that,forget_this
+forget what I just said,forget_this
+hey Amie forget what I just said,forget_this
+can you please forget what I just said,forget_this
+forget it,forget_this
+hey Amie forget it,forget_this
+forget it please,forget_this
+forget that I like tea,forget_this
+yeah forget that I like tea,forget_this
+I need you to forget that I like tea,forget_this
+delete that memory,forget_this
+Amie delete that memory,forget_this
+can you please delete that memory,forget_this
+don't remember that,forget_this
+okay don't remember that,forget_this
+yeah don't remember that,forget_this
+remove that from your memory,forget_this
+Amie remove that from your memory,forget_this
+I want to remove that from your memory,forget_this
+that's wrong forget it,forget_this
+could you that's wrong forget it,forget_this
+that's wrong forget it please,forget_this
+forget my birthday,forget_this
+could you forget my birthday,forget_this
+forget my birthday please,forget_this
+goodbye,goodbye
+can you please goodbye,goodbye
+goodbye please,goodbye
+bye Amie,goodbye
+Amie bye Amie,goodbye
+bye Amie please,goodbye
+bye,goodbye
+can you please bye,goodbye
+I need you to bye,goodbye
+see you later,goodbye
+I need you to see you later,goodbye
+can you see you later,goodbye
+that's all,goodbye
+can you please that's all,goodbye
+that's all for me,goodbye
+stop listening,goodbye
+Amie stop listening,goodbye
+okay stop listening,goodbye
+we're done,goodbye
+we're done for me,goodbye
+could you we're done,goodbye
+I want to good night,goodbye
+good night for me,goodbye
+thanks that's all,goodbye
+could you thanks that's all,goodbye
+I want you to thanks that's all,goodbye
+talk to you later,goodbye
+okay talk to you later,goodbye
+yeah talk to you later,goodbye
+you can go now,goodbye
+okay you can go now,goodbye
+you can go now please,goodbye
+stop talking,goodbye
+can you please stop talking,goodbye
+please stop talking,goodbye
+with a conga in months,unclear
+I can enclose all termals,unclear
+open the turn,unclear
+can't tell me what I have in color,unclear
+when to the mid-time,unclear
+brows when a,unclear
+the the and,unclear
+um,unclear
+uh huh so,unclear
+can you open a man where p,unclear
+blue sideways the running of,unclear
+it was the one that,unclear
+and then we went,unclear
+maybe in the,unclear
+if the so,unclear
+what the of,unclear
+okay so,unclear
+hmm,unclear
+thank you for watching,unclear
+the fish of Tuesday,unclear
+in a little of the,unclear
+you're an eye,unclear
+a b c,unclear
+let's,unclear
+search,unclear
+right so like,unclear
+yeah I mean,unclear
+no no no the,unclear
+okay how are you,chat
+what are you,chat
+Amie what are you,chat
+can you tell me who are you,chat
+okay tell me a joke,chat
+tell me something about you,chat
+okay tell me something about you,chat
+okay what can you do,chat
+can you tell me what's your name,chat
+are you an AI,chat
+hey Amie are you an AI,chat
+I'm tired today,chat
+please I'm tired today,chat
+I want to I'm tired today,chat
+I had a great day,chat
+can you I had a great day,chat
+please I had a great day,chat
+what do you think about music,chat
+yeah what do you think about music,chat
+let's chat,chat
+can you please let's chat,chat
+okay let's chat,chat
+do you like coffee,chat
+hey Amie do you like coffee,chat
+yeah tell me a story,chat
+I want to good morning,chat
+I need you to good morning,chat
+hi Amie,chat
+can you please hi Amie,chat
+hi Amie for me,chat
+Amie thank you,chat
+please thank you,chat
+you're funny,chat
+would you you're funny,chat
+I want to you're funny,chat
+please I'm bored,chat
+can you I'm bored,chat
+what should I cook tonight,chat
+can you tell me what should I cook tonight,chat
+okay give me some advice,chat
+yeah give me some advice,chat
+can you tell me how was your day,chat
+yeah what is a note,chat
+hey Amie how long is a minute,chat
+I want you to open the terminal,open_terminal
+open the terminal please,open_terminal
+I want to open a terminal,open_terminal
+open a terminal please,open_terminal
+can you can you open the terminal,open_terminal
+hey Amie can you open the terminal,open_terminal
+open terminal in my documents,open_terminal
+open terminal in my documents please,open_terminal
+hey Amie open terminal in my documents,open_terminal
+new terminal window,open_terminal
+would you new terminal window,open_terminal
+okay close all terminals,close_terminals
+I need you to close all terminals,close_terminals
+no close all terminals,close_terminals
+Amie no close all terminals,close_terminals
+hey Amie no close all terminals,close_terminals
+would you close the terminals,close_terminals
+I want you to close the terminals,close_terminals
+I want to close every terminal window,close_terminals
+please close every terminal window,close_terminals
+can you shut all the terminals,close_terminals
+yeah shut all the terminals,close_terminals
+do I have any email,check_email
+Amie do I have any email,check_email
+any new email,check_email
+okay any new email,check_email
+check my mail,check_email
+check my mail for me,check_email
+I need you to check my mail,check_email
+have I got any messages,check_email
+yeah have I got any messages,check_email
+what's new in my inbox,check_email
+okay what's new in my inbox,check_email
+set a timer for 30 seconds,set_timer
+I want to set a timer for 30 seconds,set_timer
+would you set a timer for 30 seconds,set_timer
+timer for five minutes,set_timer
+please timer for five minutes,set_timer
+would you timer for five minutes,set_timer
+please set a timer for 10 minutes,set_timer
+would you set a timer for 10 minutes,set_timer
+would you remember that I like green tea,remember_this
+can you remember that I like green tea,remember_this
+I want to remember my name is Sam,remember_this
+can you please remember my name is Sam,remember_this
+please remember that I work from home,remember_this
+okay please remember that I work from home,remember_this
+please please remember that I work from home,remember_this
+I need you to remember I play the guitar,remember_this
+can you remember I play the guitar,remember_this
+you suck,chat
+you're useless,chat
+you're dumb,chat
+I hate you,chat
+that was terrible,chat
+you're stupid,chat
+that was great,chat
+well done,chat
+you are annoying,chat
+you're wrong,chat
+that's not right,chat
+nice job,chat
+turn on dark mode,dark_mode
+okay turn on dark mode,dark_mode
+switch to dark mode,dark_mode
+okay switch to dark mode,dark_mode
+turn off dark mode,dark_mode
+okay turn off dark mode,dark_mode
+go to light mode,dark_mode
+hey Amie go to light mode,dark_mode
+switch to light mode,dark_mode
+please switch to light mode,dark_mode
+toggle dark mode,dark_mode
+okay toggle dark mode,dark_mode
+make the screen dark,dark_mode
+please make the screen dark,dark_mode
+dark mode please,dark_mode
+could you dark mode please,dark_mode
+use the light theme,dark_mode
+okay use the light theme,dark_mode
+change the appearance to dark,dark_mode
+Amie change the appearance to dark,dark_mode
+take a screenshot,screenshot
+please take a screenshot,screenshot
+grab a screenshot,screenshot
+could you grab a screenshot,screenshot
+screenshot this,screenshot
+can you screenshot this,screenshot
+capture my screen,screenshot
+capture my screen for me,screenshot
+take a picture of my screen,screenshot
+okay take a picture of my screen,screenshot
+save a screenshot,screenshot
+please save a screenshot,screenshot
+screen capture please,screenshot
+can you screen capture please,screenshot
+snap the screen,screenshot
+could you snap the screen,screenshot
+how much disk space do I have,disk_space
+can you how much disk space do I have,disk_space
+how much space is left,disk_space
+can you how much space is left,disk_space
+is my disk full,disk_space
+hey Amie is my disk full,disk_space
+how much storage is free,disk_space
+hey Amie how much storage is free,disk_space
+check my disk space,disk_space
+can you check my disk space,disk_space
+am I running out of space,disk_space
+okay am I running out of space,disk_space
+how full is my hard drive,disk_space
+I want you to how full is my hard drive,disk_space
+how much free space is there,disk_space
+okay how much free space is there,disk_space
+close this tab,close_tab
+hey Amie close this tab,close_tab
+close the tab,close_tab
+hey Amie close the tab,close_tab
+close that browser tab,close_tab
+Amie close that browser tab,close_tab
+shut this tab,close_tab
+okay shut this tab,close_tab
+get rid of this tab,close_tab
+can you get rid of this tab,close_tab
+close the page,close_tab
+could you close the page,close_tab
+close the current tab,close_tab
+okay close the current tab,close_tab
+close the website tab,close_tab
+Amie close the website tab,close_tab
+what are my newest files,recent_files
+what are my newest files for me,recent_files
+show my recent files,recent_files
+could you show my recent files,recent_files
+what did I download lately,recent_files
+Amie what did I download lately,recent_files
+what's the latest file,recent_files
+I want you to what's the latest file,recent_files
+which files are new,recent_files
+hey Amie which files are new,recent_files
+list my recent files,recent_files
+Amie list my recent files,recent_files
+what was the last file I saved,recent_files
+can you what was the last file I saved,recent_files
+newest files please,recent_files
+could you newest files please,recent_files
+turn it up,set_volume
+could you turn it up,set_volume
+turn the volume up,set_volume
+turn the volume up for me,set_volume
+make it louder,set_volume
+could you make it louder,set_volume
+louder please,set_volume
+Amie louder please,set_volume
+turn it down,set_volume
+turn it down for me,set_volume
+make it quieter,set_volume
+could you make it quieter,set_volume
+lower the volume,set_volume
+can you lower the volume,set_volume
+raise the volume,set_volume
+can you raise the volume,set_volume
+unmute,set_volume
+hey Amie unmute,set_volume
+unmute the sound,set_volume
+hey Amie unmute the sound,set_volume
+volume up,set_volume
+can you volume up,set_volume
+volume down,set_volume
+okay volume down,set_volume
+play daft punk,music
+play bohemian rhapsody,music
+play the beatles,music
+play some jazz,music
+play jazz on spotify,music
+put on some radiohead,music
+listen to taylor swift,music
+play my favorite song,music
+play something relaxing,music
+what song is this,music
+what's playing,music
+what is this song,music
+who sings this,music
+previous song,music
+go back a song,music
+play the last song again,music
+can you play drake on spotify,music
+hey can you play drake,music
+play taylor swift on spotify,music
+could you play some rock on spotify,music
+put on god's plan,music

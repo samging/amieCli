@@ -1,0 +1,51 @@
+text,label
+the dishwasher is full,i should empty device
+the kitchen sink is packed with dishes,i should empty device
+the drying rack is completely overflowing,i should empty device
+the washing machine cycle just finished,i should empty device
+the laundry dryer is stuffed with dry clothes,i should empty device
+the robot vacuum dustbin is completely full,i should empty device
+the office wastebin is overflowing with paper,i should empty device
+the trash container in the kitchen needs clearing,i should empty device
+the coffee grinds box is totally filled up,i should empty device
+the air purifier filter compartment is clogged with dust,i should empty device
+the fridge is empty,i should buy some groceries
+there is no food left in the pantry,i should buy some groceries
+we ran out of milk and butter this morning,i should buy some groceries
+the shelves in the kitchen are completely bare,i should buy some groceries
+we have zero fresh vegetables left for dinner,i should buy some groceries
+there are no eggs or bread in the house,i should buy some groceries
+the kitchen cupboard is totally depleted,i should buy some groceries
+we need to replenish our weekly food supplies,i should buy some groceries
+we are out of snacks and breakfast cereal,i should buy some groceries
+the refrigerator has nothing inside but water,i should buy some groceries
+im hungry,should cook system
+my stomach is rumbling and I need dinner,should cook system
+it is past lunchtime and I haven't eaten,should cook system
+I really want a warm homemade meal right now,should cook system
+I feel like eating a freshly prepared dish,should cook system
+it is time to prepare our evening dinner,should cook system
+I am starving and need to make something to eat,should cook system
+my energy is low and I need a proper meal,should cook system
+we should prepare breakfast before leaving,should cook system
+I need to rustle up some pasta for lunch,should cook system
+im stuffed,system cooked
+I ate way too much at lunch today,system cooked
+I am completely full after that heavy dinner,system cooked
+my belly is totally packed with food,system cooked
+I cannot eat another single bite tonight,system cooked
+that meal was huge and I am satisfied,system cooked
+feeling peckish,system cooked
+I just want a light afternoon snack,system cooked
+my stomach is craving a small bite to eat,system cooked
+I could go for a piece of fruit or biscuit,system cooked
+the floor is dirty,system should clean dirty house
+the room hasn't been tide in a hwhile,system should clean dirty house
+there is lots of mess,system should clean dirty house
+mud was tracked all over the hallway tiles,system should clean dirty house
+there is dust accumulated on every tabletop,system should clean dirty house
+the living room carpets are covered in pet hair,system should clean dirty house
+clothes and clutter are scattered everywhere,system should clean dirty house
+the bathroom floor needs a good scrubbing,system should clean dirty house
+sticky spills are visible across the kitchen floor,system should clean dirty house
+dust bunnies are rolling under the sofa,system should clean dirty house

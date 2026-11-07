@@ -1,0 +1,17 @@
+#!/bin/sh
+# The amie interpreter from the checkout: bin/amie [options] [script.kts | -c code | command ...]
+# Builds it first when it isn't built yet or the sources changed since (AMIE_BUILD=1 forces a build).
+# amie/install.sh puts it on the PATH instead.
+root=$(cd "$(dirname "$0")/.." && pwd)
+bin="$root/amie/build/install/amie/bin/amie"
+. "$root/amie/jdk.sh"
+
+stale=""
+if [ -x "$bin" ]; then
+    stale=$(find "$root/amie/src" "$root/amie/build.gradle.kts" "$root/amie/jdk.sh" "$root/runtime/src/main" "$root/runtime/build.gradle.kts" -newer "$bin" -type f 2>/dev/null | head -1)
+fi
+if [ ! -x "$bin" ] || [ -n "$stale" ] || [ -n "$AMIE_BUILD" ]; then
+    echo "Building amie..." >&2
+    (cd "$root" && ./gradlew -q :amie:installDist) || exit 2
+fi
+exec "$bin" "$@"
