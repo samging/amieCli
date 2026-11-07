@@ -21,6 +21,8 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import org.example.project.amp.ModelFolders
+import org.example.project.components.terminal.window.controller.LogLevel
+import org.example.project.components.terminal.window.controller.console.logInternal
 import org.example.project.components.terminal.window.controller.util.bytes
 import java.io.File
 import java.io.FileOutputStream
@@ -135,7 +137,7 @@ class HfHub(private val http: HttpClient, val base: String = BASE, private val t
     ): File {
         val target = targetOf(folders, pick, name)
         if (target.exists()) throw HfException(HfProblem.TAKEN, "${ampPath(pick, name)} is there already: give this one another name")
-        val at: (HfFile) -> String = { f -> if (pick.text) f.name else f.path }
+        val at: (HfFile) -> String = { f -> if (pick.text) f.name else if (pick.speech) speechPath(f) else f.path }
         val staging = ImportedList.stagingOf(folders, name)
         val mark = File(staging, PENDING)
         val commit = "${repo.id}@${repo.sha}"
@@ -166,6 +168,10 @@ class HfHub(private val http: HttpClient, val base: String = BASE, private val t
             before += f.size ?: File(staging, at(f)).length()
         }
 
+        if (pick.speech) {
+            val lacking = disk(name) { PiperVoice.prepare(staging, File(staging, at(pick.candidate.main)), folders.speech) }
+            lacking.forEach { logInternal("huggingFace: $name: $it", LogLevel.ERROR) }
+        }
         val source = ImportedSource(
             repo = repo.id,
             revision = repo.sha,
@@ -341,11 +347,18 @@ class HfHub(private val http: HttpClient, val base: String = BASE, private val t
     }
 
     companion object {
-        /** Where [pick] lands as [name]: a text model in `AMP/models/text`, anything else in `AMP/models/imported` */
-        fun targetOf(folders: ModelFolders, pick: HfPick, name: String): File = File(if (pick.text) folders.text else folders.imported, name)
+        /** Where [pick] lands as [name]: a text model in `AMP/models/text`, a voice in `AMP/models/speech`, anything else in `AMP/models/imported` */
+        fun targetOf(folders: ModelFolders, pick: HfPick, name: String): File = File(if (pick.text) folders.text else if (pick.speech) folders.speech else folders.imported, name)
 
         /** "AMP/models/text/qwen3" or "AMP/models/imported/bert": the folder [targetOf] names, as the log and notices say it */
-        fun ampPath(pick: HfPick, name: String): String = "AMP/models/${if (pick.text) "text" else "imported"}/$name"
+        fun ampPath(pick: HfPick, name: String): String = "AMP/models/${if (pick.text) "text" else if (pick.speech) "speech" else "imported"}/$name"
+
+        /** A voice's file in its folder: by name, but a file of `espeak-ng-data/` or `voices/` keeps its place in that folder */
+        fun speechPath(f: HfFile): String {
+            val parts = f.path.split('/')
+            val at = parts.indexOfFirst { it in HfListing.COMPANION_DIRS }
+            return if (at >= 0) parts.drop(at).joinToString("/") else f.name
+        }
 
         const val BASE = "https://huggingface.co"
         /** The suffix of a file still coming in; it takes its own name only once its size checks */

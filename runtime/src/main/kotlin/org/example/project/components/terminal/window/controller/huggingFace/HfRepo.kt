@@ -82,7 +82,12 @@ data class HfWeights(val label: String, val files: List<HfFile>, val reason: Str
  * What will be downloaded: the chosen model and the config and tokenizer files that go with it. A [text] pick is an
  * ONNX Runtime GenAI export (a `genai_config.json` beside its main file): it lands in AMP/models/text, files flat
  */
-data class HfPick(val candidate: HfCandidate, val companions: List<HfFile>, val text: Boolean = false) {
+/**
+ * What to download: the model's files and the companions that go with it. [text] is an ONNX Runtime GenAI chat model,
+ * which lands flat in `AMP/models/text`; [speech] a Piper voice (an ONNX with its `.onnx.json` beside it, or a
+ * `tokens.txt` or `espeak-ng-data/`), which lands flat in `AMP/models/speech`, made ready for the speech package
+ */
+data class HfPick(val candidate: HfCandidate, val companions: List<HfFile>, val text: Boolean = false, val speech: Boolean = false) {
     val files: List<HfFile> get() = (candidate.files + companions).distinctBy { it.path }
     val size: Long get() = files.sumOf { it.size ?: 0 }
     val format: HfFormat get() = candidate.format
@@ -110,12 +115,18 @@ data class HfListing(val candidates: List<HfCandidate>, val weights: List<HfWeig
     fun pick(candidate: HfCandidate): HfPick {
         val dir = candidate.main.dir
         val text = candidate.format == HfFormat.ONNX && companions.any { it.dir == dir && it.name == GENAI_CONFIG }
-        return if (text) HfPick(candidate, companions.filter { it.dir == dir && it.name in TEXT_COMPANIONS }, text = true)
-        else HfPick(candidate, companionsOf(candidate))
+        if (text) return HfPick(candidate, companions.filter { it.dir == dir && it.name in TEXT_COMPANIONS }, text = true)
+        val own = companionsOf(candidate)
+        val speech = candidate.format == HfFormat.ONNX && (candidate.parts.any { it.path == "${candidate.main.path}.json" } ||
+            own.any { (it.dir == dir && it.name == "tokens.txt") || it.path.split('/').contains("espeak-ng-data") })
+        // A voice takes what sits beside it and the phoneme data, not a repo's index of every voice above it
+        return if (speech) HfPick(candidate, own.filter { it.dir == dir || it.path.split('/').any { part -> part in COMPANION_DIRS } }, speech = true)
+        else HfPick(candidate, own)
     }
 
     /**
-     * The model to download when nobody chose: the file an address named, else one in the folder it named, else ONNX
+     * The model to download when nobody chose: the file an address named, else one in the folder it named (null when
+     * nothing runs there), else ONNX
      * first, a plain `model.onnx` before any other (the root's before `onnx/`'s), a full one before a variant and an
      * 8-bit variant before fp16 or 4-bit ones ([VARIANTS]), then the other formats; the shallowest and shortest path
      * breaks a tie.
@@ -126,7 +137,9 @@ data class HfListing(val candidates: List<HfCandidate>, val weights: List<HfWeig
             path == null -> candidates
             ref.file -> candidates.filter { c -> c.files.any { it.path == path } }
             else -> candidates.filter { it.main.path.startsWith("$path/") }
-        }.ifEmpty { candidates }
+        }
+        // An address that names a file or a folder means that one: with nothing runnable there, nothing is picked in its place
+        if (pool.isEmpty()) return null
         return pool.minWithOrNull(
             compareBy<HfCandidate> { it.format.ordinal }
                 .thenBy { if (it.main.name == "model.onnx" || it.main.name == "saved_model.pb") 0 else 1 + VARIANTS.indexOf(it.variant).let { i -> if (i < 0) VARIANTS.size else i } }

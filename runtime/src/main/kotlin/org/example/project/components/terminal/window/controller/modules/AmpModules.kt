@@ -13,6 +13,8 @@ import org.example.project.components.terminal.window.controller.metrics.ModelCa
 import org.example.project.components.terminal.window.controller.runtime.ModelServer
 import org.example.project.components.terminal.window.controller.runtime.ModelSessions
 import org.example.project.components.terminal.window.controller.runtime.TextModels
+import org.example.project.components.terminal.window.controller.modelLoaders.imported.ImportedModels
+import org.example.project.components.terminal.window.controller.runtime.SpeechModels
 import org.example.project.components.terminal.window.controller.runtime.readServing
 import org.example.project.components.terminal.window.controller.runtime.writeServing
 import org.example.project.components.terminal.window.controller.util.bytes
@@ -373,7 +375,8 @@ fun readModule(name: String): Pair<File, ModuleManifest>? {
     val dir = registeredDir(name)
     val manifestFile = File(dir, "module.json")
     if (!manifestFile.exists()) {
-        if (!TextModels.has(name)) logInternal("module '$name' not found in ${modulesDir.absolutePath}", LogLevel.ERROR)
+        // A text, speech or imported model of that name is not a module and not an error: initMod opens it on its own path
+        if (!TextModels.has(name) && !SpeechModels.has(name) && !ImportedModels.has(name)) logInternal("module '$name' not found in ${modulesDir.absolutePath}", LogLevel.ERROR)
         return null
     }
     val manifest = moduleJson.decodeFromString<ModuleManifest>(manifestFile.readText())

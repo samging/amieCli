@@ -104,8 +104,8 @@ object ModelFormats {
         }
     }
 
-    /** Every model in [dir] and its subfolders, a few levels down, as a Hugging Face repo lays them out */
-    fun scan(dir: File, depth: Int = 3): FolderScan {
+    /** Every model in [dir] and its subfolders, six levels down: as deep as a Hub repo of many models lays them out (a Piper voice is four down) */
+    fun scan(dir: File, depth: Int = 6): FolderScan {
         val candidates = ArrayList<ModelCandidate>()
         val refused = ArrayList<RefusedFile>()
         val weights = ArrayList<File>()

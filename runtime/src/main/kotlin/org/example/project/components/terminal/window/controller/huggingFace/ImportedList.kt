@@ -201,7 +201,7 @@ object HfImports {
 
     /**
      * For a script: the local name of [input]'s model, downloaded first (its default pick, as the page would choose)
-     * when `AMP/models/imported/<name>` (a text model's `AMP/models/text/<name>`) isn't there yet. [name] is the folder's name, blank for the repo's last part.
+     * when `AMP/models/imported/<name>` (a text model's `AMP/models/text/<name>`, a voice's `AMP/models/speech/<name>`) isn't there yet. [name] is the folder's name, blank for the repo's last part.
      * Blocking; [say] hears the start and the end, the console's internal level each quarter of a big download.
      */
     fun ensure(input: String, name: String = "", say: (String) -> Unit = {}): String {
@@ -209,7 +209,8 @@ object HfImports {
         val local = if (name.isBlank()) ref.defaultName else HfRef.localName(name)
         val folders = folders()
         val text = File(folders.text, local)
-        val dir = if (File(text, HfListing.GENAI_CONFIG).isFile) text else File(folders.imported, local)
+        val speech = File(folders.speech, local)
+        val dir = if (File(text, HfListing.GENAI_CONFIG).isFile) text else if (File(speech, ImportedList.SOURCE).isFile) speech else File(folders.imported, local)
         if (dir.isDirectory) {
             val had = ImportedList.read(dir) ?: return local
             val same = had.repo.equals(ref.repo, ignoreCase = true) || ('/' !in ref.repo && had.repo.substringAfterLast('/').equals(ref.repo, ignoreCase = true))
@@ -222,7 +223,9 @@ object HfImports {
                 val hub = hub()
                 val repo = hub.look(ref)
                 val listing = repo.listing
-                val pick = listing.defaultPick(ref)?.let(listing::pick) ?: throw listing.nothingRunnable(repo.id)
+                val pick = listing.defaultPick(ref)?.let(listing::pick)
+                    ?: throw if (ref.path != null && listing.candidates.isNotEmpty()) HfException(HfProblem.NOTHING_RUNNABLE, "${repo.id} has nothing that runs here under ${ref.path}: no such ${if (ref.file) "file" else "folder"}, or no ONNX, TorchScript, SavedModel or TFLite file in it; the address's path should name one")
+                    else listing.nothingRunnable(repo.id)
                 say("huggingFace: downloading ${repo.id} (${pick.describe()}) into ${HfHub.ampPath(pick, local)}")
                 var quarter = 0
                 hub.download(repo, pick, local, folders, onProgress = { p ->
