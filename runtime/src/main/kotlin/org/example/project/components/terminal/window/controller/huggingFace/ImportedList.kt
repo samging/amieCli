@@ -248,7 +248,7 @@ object HfImports {
         say("$repo is an encoder and decoder pair, imported whole:\n" +
             section("encoder", pair.encoders) + "\n" + section("decoder", pair.decoders) + "\n" +
             "  with: " + pick.companions.joinToString { it.path }.ifEmpty { "nothing else" } + "\n" +
-            "  initMod(\"$local\") opens both sessions: .encoder and .decoder take tensors (.inputs names them), .tokens(text) gives the ids and .text(ids) the words; a script wires the two")
+            "  initMod(\"$local\") opens both sessions: .encoder and .decoder take tensors (.inputs names them), .tokens(text) gives the ids and .text(ids) the words, .startToken and .endToken bound the decoding; a script wires the two")
         if (confirm != null && !confirm("Import both, ${bytes(pick.size)}?")) throw HfException(HfProblem.DECLINED, "$repo not imported")
     }
 

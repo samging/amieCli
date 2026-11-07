@@ -274,7 +274,7 @@ class InitMod(private val moduleName: String? = null) {
     }
 
     private fun moduleModel(name: String): InteractionModel {
-        val (dir, manifest) = readModule(name) ?: throw IllegalArgumentException("Module '$name' not found in ${modulesDir.absolutePath}")
+        val (dir, manifest) = readModule(name) ?: throw IllegalArgumentException("no model '$name' in ${modulesDir.parentFile.absolutePath}: not an intent, text, speech or imported model; amie models list shows what is there, amie hf import <repo> brings one from Hugging Face")
         require(manifest.format == "onnx") { "Module '$name' has unsupported format ${manifest.format}" }
         val missing = ModelRequirements.blockers(dir, manifest)
         check(missing.isEmpty()) { "Module '$name' can't run: ${missing.joinToString("; ") { "${it.name}: ${it.detail}" }}" }

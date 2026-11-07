@@ -105,6 +105,12 @@ interface InteractionModel : ModelAnswers, AutoCloseable {
     /** The pair's decoder that takes the past attention state back, when its export has one */
     val decoderWithPast: InteractionModel? get() = null
 
+    /** The id a pair's decoder starts from (decoder_start_token_id of its config); null on every other model, or when the config lacks it */
+    val startToken: Long? get() = null
+
+    /** The id that ends a pair's decoding (eos_token_id of its config); null on every other model, or when the config lacks it */
+    val endToken: Long? get() = null
+
     /** The ids of [text] and their attention mask, from the tokenizer beside the model; refused without one */
     fun tokens(text: String): Tokens = throw UnsupportedOperationException("this model has no tokenizer beside it")
 

@@ -140,6 +140,8 @@ class Repl(private val options: Options, private val banner: Boolean = !options.
         val terminal = TerminalBuilder.builder().system(true).build().also { this.terminal = it }
         val reader = LineReaderBuilder.builder().terminal(terminal)
             .variable(LineReader.HISTORY_FILE, File(System.getProperty("user.home"), ".amie_history").path)
+            // No shell-style history expansion: "!!" is Kotlin's non-null assertion, not the last command
+            .option(LineReader.Option.DISABLE_EVENT_EXPANSION, true)
             .build()
         try {
             while (true) {
