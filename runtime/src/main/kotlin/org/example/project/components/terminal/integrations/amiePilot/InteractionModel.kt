@@ -1,5 +1,8 @@
 package org.example.project.components.terminal.integrations.amiePilot
 
+import kotlinx.serialization.json.JsonObject
+import java.io.File
+
 import org.example.project.components.terminal.window.controller.modules.ModelJob
 import org.example.project.components.terminal.window.controller.modules.ModelJobs
 
@@ -111,11 +114,40 @@ interface InteractionModel : ModelAnswers, AutoCloseable {
     /** The id that ends a pair's decoding (eos_token_id of its config); null on every other model, or when the config lacks it */
     val endToken: Long? get() = null
 
+    /**
+     * The ids the decoder starts from: [startToken] and the forced ids after it, as the config files have them. Each of
+     * [tokens] names one to put in their place, by the names the config knows: a language (`"de"`, Whisper's
+     * `lang_to_id`), a task (`"translate"`, `"transcribe"`, its `task_to_id`), `"timestamps"` or `"notimestamps"`.
+     * A language left open and not named is detected from [encoded] with one decoder step, else English. Empty
+     * without a config; refused with the names known when one is not.
+     */
+    fun startTokens(encoded: Encoded? = null, vararg tokens: String): LongArray = emptyLongArray
+
+    /** A pair's `preprocessor_config.json`, which says how audio or an image becomes the encoder's input; null for a text pair or any other model */
+    val preprocessor: JsonObject? get() = null
+
+    /** The encoder run on [text] through the tokenizer, or, when [preprocessor] takes audio or an image, on the file [text] names */
+    fun encode(text: String): Encoded = throw UnsupportedOperationException("this model is one session, not an encoder and decoder pair")
+
+    /** The encoder run on an audio file (wav, aiff) as log-mel features, or on an image file as pixels, as [preprocessor] says */
+    fun encode(file: File): Encoded = throw UnsupportedOperationException("this model is one session, not an encoder and decoder pair")
+
+    /** The decoder's inputs for one step: [ids] so far, the hidden states of [encoded], and its mask when the decoder names one */
+    fun decoderFeeds(encoded: Encoded, ids: LongArray): Map<String, Any> = throw UnsupportedOperationException("this model is one session, not an encoder and decoder pair")
+
     /** The ids of [text] and their attention mask, from the tokenizer beside the model; refused without one */
     fun tokens(text: String): Tokens = throw UnsupportedOperationException("this model has no tokenizer beside it")
 
     /** The words of [ids], from the same tokenizer */
     fun text(ids: LongArray): String = throw UnsupportedOperationException("this model has no tokenizer beside it")
+}
+
+private val emptyLongArray = LongArray(0)
+
+/** What an encoder gave: its outputs by name, [hidden] the states a decoder takes, [mask] the attention mask of what went in, when there was one */
+class Encoded(val outputs: Map<String, Tensor>, val mask: LongArray? = null) {
+    val hidden: Tensor get() = outputs["last_hidden_state"] ?: outputs.values.first()
+    override fun toString(): String = "Encoded(${hidden.shape.joinToString(", ", "[", "]")}${if (mask != null) ", ${mask.size} tokens" else ""})"
 }
 
 /** A text as a model takes it: the token ids and the attention mask of the same length, both as `[1, n]` tensors when run */

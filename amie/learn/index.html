@@ -293,6 +293,8 @@ weather	is it raining</pre>
   <tr><td><code>amie -e prod label.kts</code></td><td>In the env <code>prod</code>, over the one the script names</td></tr>
   <tr><td><code>amie -v label.kts</code></td><td>With the internal lines: the env sourcing, a build's phases, what the run used</td></tr>
   <tr><td><code>amie run label.kts</code></td><td>The same as the bare file</td></tr>
+  <tr><td><code>amie new reader</code></td><td>A project: <code>AMP/projects/reader/main.kts</code> to start from, in an env named <code>reader</code></td></tr>
+  <tr><td><code>amie run reader</code></td><td>Runs the project by its name, as a starter or a template by its title</td></tr>
 </table>
 <p>Standard output carries the console, standard error the errors, with the script's line in front:</p>
 <pre>$ amie bad.kts
@@ -404,6 +406,9 @@ Serve a model and call it          serving, starter
 $ amie templates show "Train a model from a csv"
 $ amie templates run "Train a model from a csv"</pre>
 <p><code>export</code> turns a template into a bundle that runs on its own, a folder with a <code>run.jar</code>:</p>
+<pre>$ amie templates save reader ~/reader.kts     keeps the file as the template "reader"; a name taken is saved again
+$ amie templates edit reader                  opens it in $VISUAL or $EDITOR, or prints the path when neither is set
+$ amie templates delete reader                removes it</pre>
 <pre>$ amie templates export talk --out ~/bundles/talk
 $ java -jar ~/bundles/talk/run.jar</pre>
 <h3>A template in the background</h3>
@@ -448,7 +453,58 @@ $ amie hf import onnx-community/whisper-tiny.en --model-name whisper-tiny</pre>
 <pre>&gt;&gt;&gt; val whisper = initMod("whisper-tiny")
 &gt;&gt;&gt; huggingFace.search("bert", format = "onnx")
 &gt;&gt;&gt; val m = huggingFace("owner/repo")</pre>
-<p>The tasks narrow a search: text-classification, ner, tts, asr, embeddings and more; <code>info</code> says which files run here and which one an import takes. A gated repo needs <code>HF_TOKEN</code> in the environment. An ONNX, TorchScript or TensorFlow model already on disk is opened by its path with <code>importModel("/path/model.onnx")</code>.</p>
+<p>The tasks narrow a search: text-classification, ner, tts, asr, embeddings and more; <code>info</code> says which files run here and which one an import takes. A repo with several files that run here (a full <code>model.onnx</code> beside quantized and fp16 ones, say) is picked at the terminal with the arrow keys: the same list, the one import takes under the cursor, up and down move it, Enter imports, <code>n</code> leaves. <code>--take 3</code> picks for a pipe or a script. A gated repo needs <code>HF_TOKEN</code> in the environment. An ONNX, TorchScript or TensorFlow model already on disk is opened by its path with <code>importModel("/path/model.onnx")</code>.</p>
+<h3 id="pairs">Encoder and decoder pairs</h3>
+<p>A sequence-to-sequence export (T5, BART, Marian translation, Whisper) is two ONNX files in one folder, <code>encoder_model.onnx</code> with <code>decoder_model.onnx</code> and often <code>decoder_with_past_model.onnx</code>. Neither answers a text alone: the encoder turns the input into hidden states, the decoder takes those with the ids written so far and gives the next token's scores, one step at a time. The import offers every encoder and decoder of the folder as a numbered menu, the companion files beneath, and at a terminal waits for the choice:</p>
+<pre>$ amie hf import google-t5/t5-small
+google-t5/t5-small is an encoder and decoder pair; the import takes the files marked:
+  encoders
+  [x]  1  onnx/encoder_model.onnx (134.9 MB)
+> [ ]  2  onnx/encoder_model_quantized.onnx (33.9 MB)
+  decoders
+  [x]  3  onnx/decoder_model.onnx (221.7 MB)
+  [ ]  4  onnx/decoder_model_merged.onnx (221.9 MB)
+  [ ]  5  onnx/decoder_model_merged_quantized.onnx (56.0 MB)
+  [ ]  6  onnx/decoder_model_quantized.onnx (55.7 MB)
+  [x]  7  onnx/decoder_with_past_model.onnx (209.7 MB)
+  [ ]  8  onnx/decoder_with_past_model_quantized.onnx (52.7 MB)
+  with: config.json, generation_config.json, spiece.model, tokenizer.json, tokenizer_config.json
+Take 1 3 7, 568.3 MB
+up and down move, space takes or leaves a file, Enter imports, n leaves</pre>
+<p>The marked files are the default: the full variant, with the merged decoder left out when the plain and the with-past ones are there. Space takes or leaves the file under the cursor, the quantized ones here, at least one encoder and one decoder; the size line follows. <code>--take "2 6 8"</code> picks for a pipe or a script's <code>huggingFace("…")</code>, which otherwise take the marked files without asking.</p>
+<p><code>initMod("opus-mt-en-de")</code> then opens both sessions, and the script wires them. <code>.inference</code>, <code>.predict</code> and <code>.answer</code> refuse on a pair, saying how.</p>
+<table>
+  <tr><th>Member</th><th>What it is</th><th>Comes from</th></tr>
+  <tr><td><code>m.encoder</code></td><td>The encoder session, run with tensors: <code>.inputs</code>, <code>.outputs</code>, <code>.run(mapOf(…))</code></td><td><code>encoder_model.onnx</code></td></tr>
+  <tr><td><code>m.decoder</code></td><td>The decoder session, the same way</td><td><code>decoder_model.onnx</code></td></tr>
+  <tr><td><code>m.decoderWithPast</code></td><td>The decoder that takes the past attention state back, or null when the export has none</td><td><code>decoder_with_past_model.onnx</code></td></tr>
+  <tr><td><code>m.tokens(text)</code></td><td>The token ids and the attention mask of a text, as <code>.ids</code> and <code>.mask</code></td><td><code>tokenizer.json</code> beside the models</td></tr>
+  <tr><td><code>m.text(ids)</code></td><td>The words of a list of ids</td><td>The same tokenizer</td></tr>
+  <tr><td><code>m.startToken</code></td><td>The id the decoder starts from, or null when no config names one</td><td><code>decoder_start_token_id</code>, else <code>bos_token_id</code>, of <code>generation_config.json</code>, then <code>config.json</code></td></tr>
+  <tr><td><code>m.endToken</code></td><td>The id that ends the decoding, or null</td><td><code>eos_token_id</code> of the same files</td></tr>
+  <tr><td><code>m.encode(text)</code>, <code>m.encode(file)</code></td><td>The encoder run: a text through the tokenizer, or an audio or image file through the preprocessor; <code>.hidden</code> the states, <code>.mask</code> the text's mask</td><td><code>tokenizer.json</code>, or <code>preprocessor_config.json</code></td></tr>
+  <tr><td><code>m.decoderFeeds(encoded, ids)</code></td><td>The decoder's inputs for one step: the ids so far, the hidden states, and the encoder's mask when the decoder names one</td><td><code>m.decoder.inputs</code></td></tr>
+  <tr><td><code>m.startTokens(encoded?, vararg tokens)</code></td><td>The ids the decoder starts from: the start id and the forced ones after it, each replaceable by a name the config knows: a language (<code>"de"</code>), a task (<code>"translate"</code>, <code>"transcribe"</code>), <code>"timestamps"</code> or <code>"notimestamps"</code>. A language left open and not named is detected from the encoding, else English</td><td><code>forced_decoder_ids</code>, <code>lang_to_id</code>, <code>task_to_id</code>, <code>no_timestamps_token_id</code> of the config files</td></tr>
+  <tr><td><code>m.preprocessor</code></td><td>The <code>preprocessor_config.json</code> as JSON: sampling rate, mel bins, image size, mean and std</td><td>That file</td></tr>
+  <tr><td><code>m.abilities</code></td><td><code>encoder</code>, <code>decoder</code>, and <code>decoderWithPast</code>, <code>tokens</code>, <code>startToken</code> when the folder has them; <code>text</code>, <code>audio</code> or <code>image</code> for what the encoder takes</td><td>The folder</td></tr>
+  <tr><td><code>m.getStatus()</code>, <code>m.close()</code></td><td>Each session's status by name; every session closed</td><td>Both sessions</td></tr>
+</table>
+<p>What the encoder takes is read off the folder: a text pair has no <code>preprocessor_config.json</code> and takes text through its tokenizer; one whose file names a feature extractor (Whisper) takes an audio file, wav or aiff at any rate, turned into the log-mel spectrogram that file describes; one naming an image processor (TrOCR, Donut, Nougat) takes an image file, resized and normalized as it says. <code>encode</code> does whichever applies, and <code>decoderFeeds</code> fills the decoder's inputs by their names, Marian's <code>encoder_attention_mask</code> among them. The same greedy loop then translates or transcribes:</p>
+<pre>&gt;&gt;&gt; val m = initMod("t5-small")                 // or "whisper-tiny", with a wav in place of the text
+&gt;&gt;&gt; val e = m.encode("translate English to German: The house is wonderful.")
+&gt;&gt;&gt; val starts = m.startTokens(e)               // Whisper: start, language (detected, or startTokens(e, "de")), transcribe, no timestamps
+&gt;&gt;&gt; val ids = starts.toMutableList()
+&gt;&gt;&gt; for (i in 1..40) {
+...     val logits = m.decoder.run(m.decoderFeeds(e, ids.toLongArray())).getValue("logits")   // [1, ids so far, vocabulary]
+...     val vocab = logits.shape.last().toInt()
+...     val last = logits.floats().takeLast(vocab)                 // the scores at the last place
+...     val best = last.indices.maxBy { last[it] }
+...     if (best.toLong() == m.endToken) break
+...     ids.add(best.toLong())
+... }
+&gt;&gt;&gt; log(m.text(ids.drop(starts.size).toLongArray()))
+Das Haus ist wunderbar.</pre>
+<p>The sessions are still there raw: <code>m.tokens(text)</code> and <code>m.encoder.run(mapOf("input_ids" to t.ids, "attention_mask" to t.mask))</code> are what <code>encode(text)</code> does, and <code>m.encoder.inputs</code> names what a file becomes (<code>input_ids</code>, <code>input_features</code>, <code>pixel_values</code>). Running the whole id list each step is simple, not fast. A faster loop runs <code>m.decoder</code> once, then <code>m.decoderWithPast</code> with each step's <code>present.*</code> outputs fed back as its <code>past_key_values.*</code> inputs, which its <code>.inputs</code> name.</p>
 
 <h2 id="housekeeping">Sessions and housekeeping</h2>
 <p>Whatever a script opens is a session: a model, a group, a package, a template in the background. Sessions stay open after the line that opened them, which is what makes the second <code>predict</code> fast.</p>
@@ -526,7 +582,7 @@ $ amie hf import onnx-community/whisper-tiny.en --model-name whisper-tiny</pre>
   <tr><td><code>validateMetrics</code>, <code>confusionMatrix</code>, <code>mistakes</code>, <code>suspects</code></td><td>The stored validation as tables</td></tr>
   <tr><td><code>initMod</code>, <code>sessionMod</code></td><td>A session of a model, a package or an imported model; one for a block</td></tr>
   <tr><td><code>group</code></td><td>The models of a group asked together</td></tr>
-  <tr><td><code>huggingFace</code>, <code>importModel</code></td><td>A model of the Hub; one by its path</td></tr>
+  <tr><td><code>huggingFace</code>, <code>importModel</code></td><td>A model of the Hub; one by its path. An encoder and decoder pair opens as <code>.encoder</code> and <code>.decoder</code> (<a href="#pairs">pairs</a>)</td></tr>
   <tr><td><code>serve</code>, <code>stopServing</code></td><td>A model over HTTP</td></tr>
   <tr><td><code>ortClosable</code>, <code>ortStatic</code>, <code>ortTimed</code>, <code>ortLimited</code>, <code>ortAsync</code></td><td>How long what a block opens lives</td></tr>
   <tr><td><code>database</code>, <code>shell</code>, <code>shellScript</code></td><td>Postgres; the login shell</td></tr>

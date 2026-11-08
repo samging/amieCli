@@ -59,3 +59,28 @@ object Output {
         }
     }
 }
+
+/** The terminal's width in columns: the prompt's terminal when amie runs at it, else COLUMNS, else 100 */
+fun terminalWidth(): Int = Repl.terminalWidth ?: System.getenv("COLUMNS")?.toIntOrNull()?.takeIf { it > 20 } ?: 100
+
+/**
+ * [text] in lines no longer than [width], broken at spaces: the first line opens with [first], every other with
+ * [indent]; a word longer than a line stands alone. Lines [text] already has are kept.
+ */
+fun wrap(text: String, width: Int, indent: String = "", first: String = indent): String = text.lines().joinToString("\n") { paragraph ->
+    val lines = mutableListOf<String>()
+    var line = StringBuilder(first)
+    var empty = true
+    paragraph.split(' ').filter { it.isNotEmpty() }.forEach { word ->
+        if (!empty && line.length + 1 + word.length > width) {
+            lines += line.toString()
+            line = StringBuilder(indent)
+            empty = true
+        }
+        if (!empty) line.append(' ')
+        line.append(word)
+        empty = false
+    }
+    lines += line.toString()
+    lines.joinToString("\n")
+}

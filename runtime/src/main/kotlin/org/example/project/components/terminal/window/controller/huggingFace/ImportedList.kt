@@ -202,10 +202,11 @@ object HfImports {
     /**
      * For a script: the local name of [input]'s model, downloaded first (its default pick, as the page would choose)
      * when `AMP/models/imported/<name>` (a text model's `AMP/models/text/<name>`, a voice's `AMP/models/speech/<name>`) isn't there yet. [name] is the folder's name, blank for the repo's last part.
-     * Blocking; [say] hears the start and the end, the console's internal level each quarter of a big download. An encoder
-     * and decoder pair is said section by section first and, with [confirm] given, waits for its yes before the download.
+     * Blocking; [say] hears the start and the end, the console's internal level each quarter of a big download. A repo with
+     * several files that run here is said first as a numbered menu with the default marked (a pair: its encoders and
+     * decoders); [choose] then answers the pick (HfMenu.choose reads an answer), or null to decline, before the download.
      */
-    fun ensure(input: String, name: String = "", say: (String) -> Unit = {}, confirm: ((String) -> Boolean)? = null): String {
+    fun ensure(input: String, name: String = "", say: (String) -> Unit = {}, choose: ((HfMenu) -> HfPick?)? = null): String {
         val ref = HfRef.parse(input)
         val local = if (name.isBlank()) ref.defaultName else HfRef.localName(name)
         val folders = folders()
@@ -225,7 +226,7 @@ object HfImports {
                 val repo = hub.look(ref)
                 val listing = repo.listing
                 val pick = listing.defaultPick(ref)?.let(listing::pick)
-                    ?.also { pick -> listing.pairOf(pick.candidate)?.let { pair -> pairSections(repo.id, local, pick, pair, say, confirm) } }
+                    ?.let { pick -> listing.menu(ref, pick, repo.id, local)?.let { menu -> menuPick(pick, menu, say, choose) } ?: pick }
                     ?: throw if (ref.path != null && listing.candidates.isNotEmpty()) HfException(HfProblem.NOTHING_RUNNABLE, "${repo.id} has nothing that runs here under ${ref.path}: no such ${if (ref.file) "file" else "folder"}, or no ONNX, TorchScript, SavedModel or TFLite file in it; the address's path should name one")
                     else listing.nothingRunnable(repo.id)
                 say("huggingFace: downloading ${repo.id} (${pick.describe()}) into ${HfHub.ampPath(pick, local)}")
@@ -242,14 +243,13 @@ object HfImports {
         }
     }
 
-    /** A pair's two sections and what opens them, said before the download; with [confirm], the download waits for a yes */
-    private fun pairSections(repo: String, local: String, pick: HfPick, pair: HfPair, say: (String) -> Unit, confirm: ((String) -> Boolean)?) {
-        fun section(name: String, models: List<HfCandidate>) = "  $name: " + models.joinToString { "${it.main.path} (${bytes(it.size)})" }
-        say("$repo is an encoder and decoder pair, imported whole:\n" +
-            section("encoder", pair.encoders) + "\n" + section("decoder", pair.decoders) + "\n" +
-            "  with: " + pick.companions.joinToString { it.path }.ifEmpty { "nothing else" } + "\n" +
-            "  initMod(\"$local\") opens both sessions: .encoder and .decoder take tensors (.inputs names them), .tokens(text) gives the ids and .text(ids) the words, .startToken and .endToken bound the decoding; a script wires the two")
-        if (confirm != null && !confirm("Import both, ${bytes(pick.size)}?")) throw HfException(HfProblem.DECLINED, "$repo not imported")
+    /** [choose]'s pick over the menu; without a chooser the menu is said and the default [pick] taken; DECLINED on a null */
+    private fun menuPick(pick: HfPick, menu: HfMenu, say: (String) -> Unit, choose: ((HfMenu) -> HfPick?)?): HfPick {
+        if (choose == null) {
+            say(menu.text())
+            return pick
+        }
+        return choose(menu) ?: throw HfException(HfProblem.DECLINED, "${menu.repo} not imported")
     }
 
     private fun claim(name: String) = synchronized(busy) { busy.add(name) }

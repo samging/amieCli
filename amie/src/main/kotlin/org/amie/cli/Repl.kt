@@ -109,6 +109,17 @@ class Repl(private val options: Options, private val banner: Boolean = !options.
 
     private val input = ReplInput()
     private var terminal: Terminal? = null
+        set(value) { field = value; currentTerminal = value; terminalWidth = value?.width?.takeIf { it > 20 } }
+
+    companion object {
+        /** The prompt's terminal while one is open, for a pick made at it */
+        @Volatile var currentTerminal: Terminal? = null
+            private set
+
+        /** The width of the prompt's terminal while one is open, for help laid out to it */
+        @Volatile var terminalWidth: Int? = null
+            private set
+    }
 
     /** The prompt's commands, each with what it does; the command lines of amie after them */
     val help: List<String> = (listOf(
@@ -124,7 +135,7 @@ class Repl(private val options: Options, private val banner: Boolean = !options.
         ":clear"              to "clears the screen",
         ":quit"               to "leaves; Ctrl-D does too, Ctrl-C stops the line running or drops the block being typed",
         "help, help(x), quit" to "the same without the colon, as python has them: help(group) is :api group",
-        "amie models list"    to "a command line of amie, run here as the shell would; amie --help for the options. The commands, each with its actions:",
+        "amie <command>"      to "a command line of amie, run here as the shell would (amie --help for its options), one of:",
     ) + Commands.all.map { "amie ${it.name}" + (if (it.actions.size > 1) " --help" else "") to it.summary }).map { (command, what) -> command.padEnd(HELP_COLUMN) + what }
 
     /** Reads lines until :quit or the end of input; the exit code */
@@ -184,7 +195,10 @@ class Repl(private val options: Options, private val banner: Boolean = !options.
     fun runCommand(name: String, rest: String): Boolean {
         when (name) {
             "quit", "exit", "q" -> return false
-            "help", "h", "?" -> help.forEach { println(Style.accent(it.take(HELP_COLUMN)) + it.drop(HELP_COLUMN)) }
+            "help", "h", "?" -> help.forEach { line ->
+                val column = " ".repeat(HELP_COLUMN)
+                println(Style.accent(line.take(HELP_COLUMN)) + wrap(line.drop(HELP_COLUMN), terminalWidth() - 1, column, column).removePrefix(column))
+            }
             "api" -> describeApi(rest).forEach(::println)
             "env" -> if (rest.isEmpty()) println("env '${ScriptEnvironments.current?.name ?: "default"}'" + (ScriptEnvironments.current?.let { "\n" + it.print().joinToString("\n") } ?: "")) else useEnv(rest)
             "load" -> ScriptRun.readScript(rest)?.let { runCode(it) }

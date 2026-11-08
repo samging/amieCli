@@ -379,12 +379,16 @@ it has one (read for the model's kind and its labels). The panel then shows:
   reason, shards counted as one row;
 - the default pick, already chosen. That is the file an address named, or else a plain `model.onnx` (the root's before
   `onnx/`'s), a full model before an 8-bit variant and an 8-bit variant before fp16, then the other formats. Click another
-  file to change it;
+  file to change it. An encoder and decoder pair (`encoder_model.onnx` with `decoder_model.onnx`, a T5, BART, Marian or
+  Whisper export) is taken whole, the full variant of each; `amie hf import` offers every encoder and decoder of the
+  folder numbered and takes the numbers you give, and `initMod` opens the pair as two sessions (see [Encoder and decoder
+  pairs](sandbox-scripting.md#encoder-and-decoder-pairs));
 - **Comes with**: the config and tokenizer files that go along with the pick (`config.json`, `tokenizer.json`,
   `tokenizer_config.json`, `special_tokens_map.json`, vocab and merges files, `generation_config.json`), from its folder
   and the folders above it, and what a speech or an image model needs besides: a `voices/` folder (a Kokoro export's
   voices), the `.onnx.json` of a Piper voice, `tokens.txt`, `lexicon.txt` and `espeak-ng-data/` of a VITS export, a
-  `labels.txt` or `classes.txt`;
+  `labels.txt` or `classes.txt`, and a pair's `preprocessor_config.json`, which says how a sound or an image becomes its
+  encoder's input;
 - **Name**: the folder under `AMP/models/imported`, which defaults to the repo's last part, made a folder name.
 
 **Download** runs in the background, apart from the page, so leaving the page leaves it running. A line at the top of the

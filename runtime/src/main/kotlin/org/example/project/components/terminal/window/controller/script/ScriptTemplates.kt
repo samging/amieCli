@@ -63,6 +63,9 @@ object ScriptTemplates {
 
     fun code(id: String): String? = codeFile(id).takeIf { it.isFile }?.readText()
 
+    /** The template's code file, AMP/templates/<id>.kts, for an editor */
+    fun file(id: String): File = codeFile(id)
+
     /** What a script opens: "model x", "group x" and "package x.jar", in the order it first does; comments don't count */
     fun uses(code: String): List<String> = opens.findAll(code.lineSequence().map { it.substringBefore("//") }.joinToString("\n")).map { m ->
         val (call, name) = m.destructured

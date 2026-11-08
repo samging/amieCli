@@ -19,6 +19,9 @@ import org.example.project.components.terminal.window.controller.envBuilder.DEFA
 import org.example.project.components.terminal.window.controller.envBuilder.ScriptEnvironments
 import org.example.project.components.terminal.window.controller.huggingFace.HfException
 import org.example.project.components.terminal.window.controller.huggingFace.HfImports
+import org.example.project.components.terminal.window.controller.huggingFace.HfMenu
+import org.example.project.components.terminal.window.controller.huggingFace.HfPick
+import org.example.project.components.terminal.window.controller.util.bytes
 import org.example.project.components.terminal.window.controller.huggingFace.HfSearchFormat
 import org.example.project.components.terminal.window.controller.huggingFace.HfSearchKind
 import org.example.project.components.terminal.window.controller.huggingFace.ImportedList
@@ -271,9 +274,9 @@ object HfCommand : Command("hf", "Hugging Face: models of the Hub that run here,
     override val actions = listOf(
         "hf search <query> [--format f] [--task t] [--limit n]" to "the Hub's models matching the query with a file that runs here: onnx, torchscript, tensorflow (the tf-keras tag) or tflite; the task narrows (text-classification, tts, ner...)",
         "hf info <repo>" to "what a repo holds: its files that run here, the one import takes, its labels",
-        "hf import <repo> [--model-name <name>]" to "downloads the repo's model into AMP/models/imported/<name>; initMod(name) opens it. HF_TOKEN in the environment for a gated repo",
+        "hf import <repo> [--model-name <name>] [--take <number or file>]" to "downloads the repo's model into AMP/models/imported/<name>; initMod(name) opens it. A repo with several files that run here is picked at the terminal with the arrow keys, the one import takes marked (a pair: its encoders and decoders, space takes or leaves one), Enter imports, n leaves; --take picks by number or file name for a pipe or a script. HF_TOKEN in the environment for a gated repo",
     )
-    override val valued = setOf("--format", "--task", "--limit", "--model-name")
+    override val valued = setOf("--format", "--task", "--limit", "--model-name", "--take")
 
     override fun perform(action: String, flags: Flags, options: Options): Int? {
         return try {
@@ -306,7 +309,9 @@ object HfCommand : Command("hf", "Hugging Face: models of the Hub that run here,
                 }
                 "import" -> {
                     val input = flags.requireWord(0, "the repo, owner/name or its address") ?: return Amie.EXIT_USAGE
-                    Output.withInternalShown { HfImports.ensure(input, flags.valueOf("--model-name").orEmpty(), say = { println(it) }, confirm = ::askAtTerminal) }
+                    val take = flags.valueOf("--take")
+                    val choose: (HfMenu) -> HfPick? = { menu -> if (take != null) menu.choose(take) else chooseAtTerminal(menu) }
+                    Output.withInternalShown { HfImports.ensure(input, flags.valueOf("--model-name").orEmpty(), say = { println(it) }, choose = choose) }
                     Amie.EXIT_OK
                 }
                 else -> null
@@ -318,9 +323,30 @@ object HfCommand : Command("hf", "Hugging Face: models of the Hub that run here,
 }
 
 
-/** A yes or no asked at the terminal, yes by default; yes without asking when there is no terminal (a pipe, a script) */
-private fun askAtTerminal(question: String): Boolean {
-    val console = System.console() ?: return true
-    val answer = console.readLine("%s [Y/n] ", question)?.trim()?.lowercase() ?: return false
-    return answer.isEmpty() || answer.startsWith("y")
+/**
+ * The file, or a pair's files, to take, picked with the arrow keys at the terminal: the marked ones are taken by
+ * default, Enter imports, n leaves (null). Without a terminal (a pipe, a script) the menu is printed and the marked
+ * ones are taken without asking.
+ */
+private fun chooseAtTerminal(menu: HfMenu): HfPick? {
+    if (System.console() == null) {
+        println(menu.text())
+        return menu.choose("")
+    }
+    val pair = menu.pair
+    val lines = buildList {
+        if (pair != null) {
+            add(Picker.Line.Header("encoders"))
+            pair.encoders.forEach { add(Picker.Line.Row(menu.items.indexOf(it), menu.label(it))) }
+            add(Picker.Line.Header("decoders"))
+            pair.decoders.forEach { add(Picker.Line.Row(menu.items.indexOf(it), menu.label(it))) }
+        } else menu.items.forEachIndexed { i, c -> add(Picker.Line.Row(i, menu.label(c))) }
+    }
+    fun numbers(rows: Set<Int>) = rows.sorted().joinToString(" ") { "${it + 1}" }
+    val chosen = Picker.pick(
+        menu.title(), lines, menu.taken.map { menu.items.indexOf(it) }.toSet(), several = pair != null,
+        status = { rows -> runCatching { "Take ${numbers(rows)}, ${bytes(menu.choose(numbers(rows)).size)}" }.getOrElse { Style.error(it.message ?: "not a choice") } },
+        footer = menu.footer(),
+    ) ?: return null
+    return menu.choose(numbers(chosen))
 }

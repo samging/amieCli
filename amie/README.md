@@ -188,7 +188,7 @@ signatures, and [docs/sandbox-scripting.md](../../docs/sandbox-scripting.md) in 
 | `modelBuilder("name", data)`, `modelBuilder("name", data, buildOptions(...))` | Trains and exports an intent model to `AMP/models/intents/<name>` |
 | `fineTune("name", data)`, `calibrate("name", data)`, `versions("name")`, `rollback("name", 2)` | Teaches a model more, makes its scores honest, the heads it had |
 | `validateMetrics("name")`, `metricsChart`, `metricsHistory`, `confusionMatrix`, `mistakes`, `suspects` | The stored validation as tables and ASCII charts |
-| `initMod("name")` | A session of a model: `.predict(text)`, `.scores(text)`, `.answer(text)`; a package jar when the name ends in `.jar`; a text, speech or imported model by its name; an encoder and decoder pair as `.encoder` and `.decoder`, two sessions a script wires, with `.tokens(text)`, `.text(ids)`, `.startToken` and `.endToken` |
+| `initMod("name")` | A session of a model: `.predict(text)`, `.scores(text)`, `.answer(text)`; a package jar when the name ends in `.jar`; a text, speech or imported model by its name; an encoder and decoder pair as `.encoder` and `.decoder`, two sessions a script wires, with `.encode(text or file)` (audio and images through its `preprocessor_config.json`), `.decoderFeeds(encoded, ids)`, `.startTokens(encoded)`, `.endToken`, `.tokens(text)` and `.text(ids)` |
 | `sessionMod("name") { predict("hi") }` | A model to ask for one block |
 | `group("name")` | The models of a group asked together: `.each(text)`, `.vote(text)`, `.combined(text)` |
 | `huggingFace("owner/repo")`, `huggingFace.search("bert", format = "onnx")` | A model of the Hub imported into `AMP/models/imported`, and the search |
@@ -252,6 +252,9 @@ Every command prints its help with `--help`. `-e`, `--amp` and `-v` go before th
 ./amie templates show "Build a model"              its code
 ./amie templates run "Build a model"               runs it as main.kts
 ./amie templates export talk --out ~/bundles/talk  a bundle that runs on its own: java -jar run.jar
+./amie templates save reader ~/reader.kts          keeps the file as the template "reader" (a name taken is saved again)
+./amie templates edit reader                       opens it in $VISUAL or $EDITOR; prints the path when neither is set
+./amie templates delete reader                     removes it
 ```
 
 ### sessions
@@ -269,7 +272,9 @@ Every command prints its help with `--help`. `-e`, `--amp` and `-v` go before th
 ./amie hf search whisper --task asr --limit 5      narrowed to a task: text-classification, ner, tts, asr, embeddings, ...
 ./amie hf info onnx-community/whisper-tiny.en      its files that run here, the one import takes, its labels
 ./amie hf import onnx-community/whisper-tiny.en --model-name whisper-tiny
-                                                   downloads it into AMP/models/imported/whisper-tiny; initMod("whisper-tiny") opens it
+                                                   downloads it into AMP/models/imported; several files that run here are
+                                                   picked with the arrow keys, the one taken marked (a pair: its encoders and
+                                                   decoders, space takes or leaves one); --take 3 picks for a pipe or a script/whisper-tiny; initMod("whisper-tiny") opens it
 ```
 
 TensorFlow repos are found under the Hub's `tf-keras` tag (a SavedModel), since `tf` mostly means Keras weights that
@@ -281,6 +286,13 @@ Runtime GenAI chat model: it lands in `AMP/models/text/<name>`, where `initMod("
 ```
 ./amie run train.kts                               the same as ./amie train.kts
 ./amie run "Ask the dummy model"                   a starter or a template by its title
+./amie run reader                                  a project of AMP/projects (its main.kts) by its name
+```
+
+### new
+
+```
+./amie new reader                                  a project: AMP/projects/reader/main.kts to start from, in an env named reader
 ```
 
 ### examples

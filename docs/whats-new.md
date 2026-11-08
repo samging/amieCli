@@ -1,5 +1,36 @@
 # What's new
 
+## Encoders and decoders, projects, and the templates' three verbs
+
+- **Encoder and decoder pairs.** A sequence-to-sequence export (T5, BART, Marian translation, Whisper) is two ONNX
+  files, `encoder_model.onnx` with `decoder_model.onnx`, which no single run answers. `amie hf import` now takes the pair
+  whole: it lists every encoder and decoder of the folder, numbered, the full variant marked, and at a terminal waits for
+  Enter or the numbers you want (`--take` names them for a pipe or a script), with the config, tokenizer and preprocessor
+  files alongside. `hf info` marks the pair's files. `initMod("<name>")` opens both sessions as `.encoder` and
+  `.decoder` (`.decoderWithPast` when exported), with `.tokens(text)`, `.text(ids)`, `.startToken` and `.endToken` from
+  the files beside them. See [Encoder and decoder pairs](sandbox-scripting.md#encoder-and-decoder-pairs).
+- **The encoder's input made for you.** `m.encode(text)` runs the tokenizer and the encoder; `m.encode(file)` reads the
+  model's `preprocessor_config.json` and turns a wav or aiff into Whisper's log-mel spectrogram, or an image into
+  normalized pixels, then runs the encoder. `m.decoderFeeds(encoded, ids)` fills the decoder's inputs by name, and
+  `m.startTokens(encoded, "de", "translate")` gives the decoder's first ids from the config's forced tokens, each
+  replaceable by a name the config knows, Whisper's language detected when none is given. A script's own part is the
+  twelve-line greedy loop. Whisper tiny transcribes a spoken wav exactly, and a quantized T5 translates.
+- **Projects.** `amie new <name>` makes `AMP/projects/<name>/main.kts` to start from, in an env of the same name;
+  `amie run <name>` runs it.
+- **Templates: save, edit, delete.** `amie templates save <name> <file>` keeps a script file, a project or a starter as a
+  template (a name taken is saved again, its id kept); `amie templates edit <name>` opens its file in `$VISUAL` or
+  `$EDITOR` and takes the edit, or prints the path when neither is set; `amie templates delete <name>` removes it.
+- **Piper voices import ready to speak.** A Piper voice from the Hub (`rhasspy/piper-voices`, a path to one voice) lands
+  in `AMP/models/speech`, laid out as sherpa-onnx wants it, its ONNX metadata added when the export lacks it. A path
+  that names no voice is refused instead of another voice being taken in its place.
+- **Installing on a machine without Java.** `install.sh` finds a JDK 21 or installs one: Homebrew's on a Mac, apt's on
+  Debian and Ubuntu, else a Temurin build from Adoptium into `~/.local/lib/jdk-21`; `--no-jdk` leaves that out.
+- **Fixes at the prompt.** `:help` lists every command line of amie, each as `amie <command> --help` when it has more
+  than one action, with no example line repeated. The line editor no longer expands `!!` as shell history, which broke
+  Kotlin's non-null assertion in a pasted block. A name `initMod` can't find says every folder it looked in and names
+  `amie models list` and `amie hf import`. A tokenizer with an empty "Precompiled" normalizer (Marian's) no longer
+  aborts the process. `amie models list` wraps a model's labels instead of running off the row, and a pair shows none.
+
 ## Less said twice
 
 - **System usage on the Sessions tab.** The line over the sessions says what the process holds of the machine's RAM

@@ -38,8 +38,13 @@ abstract class Command(val name: String, val summary: String) {
     /** The first line of the help, what the command line looks like */
     open val usage: String get() = "amie $name <action> [args]"
 
-    val help: String get() = "usage: $usage\n\n$summary\n\n" +
-        actions.joinToString("\n") { (usage, what) -> "  ${usage.padEnd(34)} $what" } + "\n\n  --help on any action prints this."
+    /** The usage, the summary, then each action on a line of its own with what it does wrapped beneath it */
+    val help: String get() {
+        val width = terminalWidth() - 1
+        return "usage: $usage\n\n" + wrap(summary, width) + "\n\n" +
+            actions.joinToString("\n\n") { (usage, what) -> "  $usage\n" + wrap(what, width, "      ") } +
+            "\n\n  --help on any action prints this."
+    }
 
     fun run(args: List<String>, options: Options): Int {
         defaultAction?.let { if (args.isEmpty()) return run(listOf(it), options) }
@@ -235,8 +240,11 @@ object TemplatesCommand : Command("templates", "The script templates of AMP/temp
         "templates show <name or id>" to "prints the template's code",
         "templates run <name or id> [args]" to "runs the template as main.kts",
         "templates export <name or id> --out <folder>" to "exports it as a bundle that runs on its own (java -jar run.jar)",
+        "templates save <name> <file> [--description <text>]" to "keeps a script file (or a project or starter by its name) as the template <name>; a name taken is saved again, its id kept",
+        "templates edit <name or id>" to "opens its file in \$VISUAL or \$EDITOR and takes the edit; prints the file's path when neither is set",
+        "templates delete <name or id>" to "removes the template, its code and its entry",
     )
-    override val valued = setOf("--out")
+    override val valued = setOf("--out", "--description")
 
     override fun perform(action: String, flags: Flags, options: Options): Int? {
         return when (action) {
@@ -259,9 +267,46 @@ object TemplatesCommand : Command("templates", "The script templates of AMP/temp
                 ExportCommand.main(arrayOf(t.id, "--out", out))
                 Amie.EXIT_OK
             }
+            "save" -> {
+                val name = flags.requireWord(0, "the template's name") ?: return Amie.EXIT_ERROR
+                val file = flags.requireWord(1, "the script file to keep") ?: return Amie.EXIT_ERROR
+                val code = ScriptRun.readScript(file) ?: return Amie.EXIT_ERROR
+                val before = Starters.template(name)
+                val t = try {
+                    ScriptTemplates.save(name, code, flags.valueOf("--description") ?: before?.description.orEmpty(), before?.tags.orEmpty(), File(file).name)
+                } catch (e: IllegalArgumentException) {
+                    return fail(e.message ?: "The template can't be saved")
+                }
+                println("'${t.name}' ${if (before == null) "saved" else "saved again, its id kept"} as ${ScriptTemplates.file(t.id).path} (${lines(t.lines)}); templates run \"${t.name}\" runs it")
+                Amie.EXIT_OK
+            }
+            "edit" -> {
+                val t = findTemplate(flags) ?: return Amie.EXIT_ERROR
+                val file = ScriptTemplates.file(t.id)
+                if (!file.isFile) return fail("The code of template '${t.name}' is gone from AMP/templates")
+                val editor = (System.getenv("VISUAL") ?: System.getenv("EDITOR"))?.takeIf { it.isNotBlank() }
+                if (editor == null || System.console() == null) {
+                    println(file.path)
+                    return Amie.EXIT_OK
+                }
+                val code = ProcessBuilder(editor.split(' ').filter { it.isNotEmpty() } + file.path).inheritIO().start().waitFor()
+                if (code != 0) return fail("$editor left with $code; '${t.name}' is as it was")
+                // The entry follows the edit: its line count, what it opens and its env
+                ScriptTemplates.save(t.name, file.readText(), t.description, t.tags, t.source)
+                println("'${t.name}' edited: ${lines(file.readText().trimEnd().lines().size)}")
+                Amie.EXIT_OK
+            }
+            "delete" -> {
+                val t = findTemplate(flags) ?: return Amie.EXIT_ERROR
+                if (!ScriptTemplates.delete(t.id)) return fail("'${t.name}' is already gone from AMP/templates")
+                println("'${t.name}' deleted: ${t.id}.kts and ${t.id}.json left AMP/templates")
+                Amie.EXIT_OK
+            }
             else -> null
         }
     }
+
+    private fun lines(n: Int) = if (n == 1) "1 line" else "$n lines"
 
     private fun findTemplate(flags: Flags): ScriptTemplate? {
         val wanted = flags.requireWord(0, "the template's name or id") ?: return null

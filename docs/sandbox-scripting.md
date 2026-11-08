@@ -67,13 +67,13 @@ Defined in `ScriptLogger.kt`. The most used calls (prefix `amie.` optional):
 | `regradeQueue("name")` | What the model answers now to every text of its queue, as the Models page grades it after a fine-tune, rollback or calibration: each row's guess, score and runner-up written again, the labels kept; returns the rows. The console says how many labeled texts it answers right |
 | `embeddingCache.print()`, `embeddingCache.clear()`, `embeddingCache.sizeOnDisk()` | The sentence vectors kept in `AMP/cache/embeddings`, so a text is embedded once, and the bytes they take |
 | `checkData(data)` | The preprocessor alone, without training: what it would clean, drop and refuse, and whether a build could start (returns true then) |
-| `initMod("name")` | The session of an exported model: the one already open, else a new one (listed on the Models page, terminable there); `.predict("text")` returns the predicted label, `.scores("text")` every label with its score (best first), `.inference("text")` the raw `label:probability` lines sorted best first; `.close()`. `initMod("dummy")` works on a fresh checkout. An encoder and decoder pair (a T5 or BART export, `encoder_model.onnx` with `decoder_model.onnx`) opens as two sessions a script wires itself: `.encoder.run(mapOf("input_ids" to t.ids, "attention_mask" to t.mask))` gives the hidden states, `.decoder.run(...)` the next token's logits for the ids so far (`.decoder.inputs` names its tensors), `.decoderWithPast` the decoder that takes the past state back when the export has one, `.tokens(text)` the ids and mask, `.text(ids)` the words, `.startToken` and `.endToken` the ids the decoding starts from and stops at (from the config files). A model that lacks something it needs is refused before anything opens, with all of it [in the message](sessions.md#when-something-is-off). How sessions live and die: [Running sessions](sessions.md) |
+| `initMod("name")` | The session of an exported model: the one already open, else a new one (listed on the Models page, terminable there); `.predict("text")` returns the predicted label, `.scores("text")` every label with its score (best first), `.inference("text")` the raw `label:probability` lines sorted best first; `.close()`. `initMod("dummy")` works on a fresh checkout. An encoder and decoder pair (a T5 or BART export, `encoder_model.onnx` with `decoder_model.onnx`) opens as two sessions a script wires itself: `.encoder.run(mapOf("input_ids" to t.ids, "attention_mask" to t.mask))` gives the hidden states, `.decoder.run(...)` the next token's logits for the ids so far (`.decoder.inputs` names its tensors), `.decoderWithPast` the decoder that takes the past state back when the export has one, `.tokens(text)` the ids and mask, `.text(ids)` the words, `.startToken` and `.endToken` the ids the decoding starts from and stops at (from the config files). See [Encoder and decoder pairs](#encoder-and-decoder-pairs). A model that lacks something it needs is refused before anything opens, with all of it [in the message](sessions.md#when-something-is-off). How sessions live and die: [Running sessions](sessions.md) |
 | `sessionMod("name")` | A model to ask and nothing more: a snapshot of the head it has now, in memory. `.predict`, `.scores`, `.predictions`, `.run`, `.answer`, `.inference`, and `.version`, `.labels`, `.name`. It can't train or change the model, writes nothing to its `sessions.log`, needs nothing else open and stays on that head through a fine-tune or a rollback. Everything that asks for the same head shares one snapshot. It goes when the run ends, or with `.close()`; `val m by sessionMod("name")` works too. A jar is refused. See [Running sessions](sessions.md#ask-without-touching-the-model-sessionmod) |
 | `sessionMod("name") { ... }` | The same for one block, the model's functions at hand: `sessionMod("name") { predict("text") }`. It goes when the block ends and the call returns the block's value |
 | `model.inBackground("text")` | Asks any model a script holds on a thread of its own and returns at once with a job: `job.await()` is every raw answer, `job.await(millis)` waits that long at most and gives null if it isn't done, `job.done`, `job.state` (queued, running, finished, cancelled or failed), `job.cancel()`. At most `-Damie.model.jobs=N` run at once, half the cores by default, the rest wait first in, first out; calls made directly never wait. A job ends with the script that started it, however it ends, with the `ortClosable` block it was started in, which waits for it, and with its model; `await` throws when it was cancelled or failed. It is on the Sessions tab, queued or running, with Terminate; the tab lists the first 100 |
 | `initMod()` | The bundled BERT NER model, kept open: `.inference("text")` is one tag per token |
 | `group("name")` | The swarm of a model group of the env: the models asked together as one session (the one already open on the group, else a new one, listed on the Models page as a *model group* session). `.predict("text")` is the label with the best score across the models, `.scores("text")` each label's best score, `.vote("text")` the label most models give, `.each("text")` every model's own label, `.ask("text")` every model's raw lines, `.combined("text")` all of it from one asking (`.each` every model's labels and scores, `.merged` the labels with their best scores, `.vote`, as the page's Try line shows them); `.close()` closes the sessions it opened. When one of its models was terminated meanwhile (on the page, or a script's `.close()`), `group("name")` opens a new swarm in its place rather than handing out one that lacks that model. Groups are made on the Models page (a model's ⋯ menu) or with `groups` |
-| `huggingFace("owner/name")` | A model of the Hugging Face Hub as `AMP/models/imported/<name>`, by its repo id or its huggingface.co address. It returns the local name, so `initMod(huggingFace("onnx-community/all-MiniLM-L6-v2"))` opens it. The first call downloads what the Models page would pick, a plain `model.onnx` when there is one, with the config and tokenizer files beside it; an encoder and decoder pair comes whole, both sections said first, and `amie hf import` at a terminal waits for a yes before the download. Once the folder is there, a call asks nothing of the network. `huggingFace("owner/name", "my-name")` picks the folder's name, which is the repo's last part by default. A private or gated repo needs `HF_TOKEN` in the app's environment. A repo that can't be read, has nothing that runs here or doesn't fit on the disk is refused with the reason. See [From Hugging Face](models-page.md#from-hugging-face) |
+| `huggingFace("owner/name")` | A model of the Hugging Face Hub as `AMP/models/imported/<name>`, by its repo id or its huggingface.co address. It returns the local name, so `initMod(huggingFace("onnx-community/all-MiniLM-L6-v2"))` opens it. The first call downloads what the Models page would pick, a plain `model.onnx` when there is one, with the config and tokenizer files beside it (`amie hf import` at a terminal offers every file that runs here as a list picked with the arrow keys, that one under the cursor; `--take 3` picks for a pipe); an encoder and decoder pair takes its marked encoder and decoders, the menu `amie hf import` offers at a terminal said first. Once the folder is there, a call asks nothing of the network. `huggingFace("owner/name", "my-name")` picks the folder's name, which is the repo's last part by default. A private or gated repo needs `HF_TOKEN` in the app's environment. A repo that can't be read, has nothing that runs here or doesn't fit on the disk is refused with the reason. See [From Hugging Face](models-page.md#from-hugging-face) |
 | `huggingFace.search("bert", format = "onnx", task = "any")` | Searches the Hub for models in a format `initMod` opens and returns their repo ids, the most downloaded first, printing each with its task, downloads and formats. `format` is `onnx`, `torchscript`, `tensorflow`, `tflite` or `all` (the default), `task` a Hugging Face task (`text-to-speech`, `automatic-speech-recognition`, `text-classification`, `token-classification`, `feature-extraction`, `text-generation`, `audio-classification`, `image-classification`, or a word for one: `tts`, `asr`, `ner`, `embeddings`, `labels`) or `any` (the default), and `limit` sets how many (20). Blank text with a task lists the most downloaded of that task. Formats are read off each repo's files, so weights-only repos are left out. Pass an id to `huggingFace("…")` |
 | `groups` | The model groups of the envs: `groups.print()`, `groups.names()`, `groups.create("name", listOf("a", "b"))` (in the env the script is sourced in), `groups.add("name", "model")`, `groups.remove("name", "model")`, `groups.delete("name")`, `groups.closeAll()`. A group belongs to an env: it is kept in `AMP/env/<env>/groups.json`, `group("name")` looks in the script's env first, and `internalEnv()` lists them with the packages |
 | `initAmie("text")` | Named entities in one text with the same NER model, opened and closed for the call: the tags are printed and returned. For many texts use `initMod()` |
@@ -181,6 +181,66 @@ log(tf.run(mapOf("input_1" to floatArrayOf(0.1f, 0.2f, 0.3f, 0.4f))))
   around the call, kept by a static, timed or limited one, listed on the Sessions tab (an *Imported model* row for
   PyTorch and TensorFlow, an *ONNX session* row for ONNX) with Terminate, and `.close()` gives its natives back once the
   runs in flight are done. `importModelTensorflow(path)` is `importModel` under its old name.
+
+### Encoder and decoder pairs
+
+A sequence-to-sequence export (T5, BART, Marian translation, Whisper) is two ONNX files in one folder,
+`encoder_model.onnx` with `decoder_model.onnx` and often `decoder_with_past_model.onnx`. Neither answers a text alone:
+the encoder turns the input into hidden states, the decoder takes those with the ids written so far and gives the
+next token's scores, one step at a time. `amie hf import` offers every encoder and decoder of the folder at the terminal, picked with the arrow keys, the
+default marked (the full variant, the merged decoder left out when the plain and the with-past ones are there): space
+takes or leaves the file under the cursor (the quantized ones, say), Enter imports, `n` leaves; `--take "2 6 8"` picks
+for a pipe. `huggingFace("…")` in a script takes the marked files.
+`initMod("<name>")` then opens both sessions, and a script wires them. `.inference(text)`, `.predict` and `.answer`
+refuse on a pair, saying how.
+
+| Member | What it is | Comes from |
+|---|---|---|
+| `m.encoder` | The encoder session, run with tensors: `.inputs`, `.outputs`, `.run(mapOf(…))` | `encoder_model.onnx` |
+| `m.decoder` | The decoder session, the same way | `decoder_model.onnx` |
+| `m.decoderWithPast` | The decoder that takes the past attention state back, or null when the export has none | `decoder_with_past_model.onnx` |
+| `m.tokens(text)` | The token ids and the attention mask of a text, as `.ids` and `.mask` | `tokenizer.json` beside the models |
+| `m.text(ids)` | The words of a list of ids | The same tokenizer |
+| `m.startToken` | The id the decoder starts from, or null when no config names one | `decoder_start_token_id`, else `bos_token_id`, of `generation_config.json`, then `config.json` |
+| `m.endToken` | The id that ends the decoding, or null | `eos_token_id` of the same files |
+| `m.encode(text)`, `m.encode(file)` | The encoder run: a text through the tokenizer, or an audio or image file through the preprocessor; `.hidden` the states, `.mask` the text's mask | `tokenizer.json`, or `preprocessor_config.json` |
+| `m.decoderFeeds(encoded, ids)` | The decoder's inputs for one step: the ids so far, the hidden states, and the encoder's mask when the decoder names one | `m.decoder.inputs` |
+| `m.startTokens(encoded?, vararg tokens)` | The ids the decoder starts from: the start id and the forced ones after it, each replaceable by a name the config knows: a language (`"de"`), a task (`"translate"`, `"transcribe"`), `"timestamps"` or `"notimestamps"`. A language left open and not named is detected from the encoding, else English | `forced_decoder_ids`, `lang_to_id`, `task_to_id`, `no_timestamps_token_id` of the config files |
+| `m.preprocessor` | The `preprocessor_config.json` as JSON: sampling rate, mel bins, image size, mean and std | That file |
+| `m.abilities` | `encoder`, `decoder`, and `decoderWithPast`, `tokens`, `startToken` when the folder has them; `text`, `audio` or `image` for what the encoder takes | The folder |
+| `m.getStatus()` | Each session's status, by name | Both sessions |
+| `m.close()` | Closes every session of the pair | |
+
+What the encoder takes is read off the folder: a text pair has no `preprocessor_config.json` and takes text through its
+tokenizer; one whose file names a feature extractor (Whisper) takes an audio file, wav or aiff at any rate, turned into
+the log-mel spectrogram that file describes (80 bins, 16 kHz, 30 seconds, padded with silence or cut); one naming an
+image processor (TrOCR, Donut, Nougat) takes an image file, resized to `size`, rescaled and normalized by `image_mean`
+and `image_std`. `encode` does whichever applies, and `decoderFeeds` fills the decoder's inputs by their names, Marian's
+`encoder_attention_mask` among them. The same greedy loop then translates or transcribes:
+
+```kotlin
+val m = initMod("t5-small")                                   // or "whisper-tiny", with a wav in place of the text
+val e = m.encode("translate English to German: The house is wonderful.")
+val starts = m.startTokens(e)                                 // Whisper: start, language (detected, or startTokens(e, "de")), transcribe, no timestamps
+val ids = starts.toMutableList()
+for (i in 1..40) {
+    val logits = m.decoder.run(m.decoderFeeds(e, ids.toLongArray())).getValue("logits")   // [1, ids so far, vocabulary]
+    val vocab = logits.shape.last().toInt()
+    val last = logits.floats().takeLast(vocab)                 // the scores at the last place
+    val best = last.indices.maxBy { last[it] }
+    if (best.toLong() == m.endToken) break
+    ids.add(best.toLong())
+}
+log(m.text(ids.drop(starts.size).toLongArray()))              // Das Haus ist wunderbar.
+m.close()
+```
+
+Under `encode`, the sessions are still there for a script that wants them raw: `m.tokens(text)` and
+`m.encoder.run(mapOf("input_ids" to t.ids, "attention_mask" to t.mask))` are what `encode(text)` does, and
+`m.encoder.inputs` names what a file becomes (`input_ids`, `input_features`, `pixel_values`).
+
+Running the whole id list each step is simple, not fast. A faster loop runs `m.decoder` once, then `m.decoderWithPast`
+with each step's `present.*` outputs fed back as its `past_key_values.*` inputs, which its `.inputs` name.
 
 ## Reading a prediction
 

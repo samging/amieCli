@@ -103,8 +103,58 @@ data class HfPick(val candidate: HfCandidate, val companions: List<HfFile>, val 
  * with `decoder_model.onnx` and, when there, `decoder_with_past_model.onnx` or `decoder_model_merged.onnx`. One of
  * them alone runs nothing a text can fill, so an import takes the pair whole and initMod opens both sessions.
  */
-data class HfPair(val encoders: List<HfCandidate>, val decoders: List<HfCandidate>) {
+data class HfPair(val encoders: List<HfCandidate>, val decoders: List<HfCandidate>, val taken: List<HfCandidate>) {
+    /** Every file of the pair, the encoders first */
     val all: List<HfCandidate> get() = encoders + decoders
+}
+
+/**
+ * The choice an import offers when a repo has more than one file that runs here: every candidate numbered, as `hf info`
+ * lists them, with what the import takes by default marked. A pair's menu is its encoders and decoders, several taken;
+ * any other takes one. [choose] reads an answer into the pick.
+ */
+class HfMenu(private val listing: HfListing, val items: List<HfCandidate>, val taken: List<HfCandidate>, val pair: HfPair?, val repo: String, val local: String, val companions: List<HfFile>) {
+    /** The numbers of [taken], "1 3 7" */
+    val takenNumbers: String get() = taken.joinToString(" ") { "${items.indexOf(it) + 1}" }
+
+    /** The menu's first line: what the repo is and what the import takes */
+    fun title(): String = if (pair != null) "$repo is an encoder and decoder pair; the import takes the files marked:"
+        else "$repo has ${items.size} files that run here; the import takes the one marked:"
+
+    /** A row's text: the format (not in a pair, where every file is ONNX), the path and the size */
+    fun label(c: HfCandidate): String = "${if (pair == null) c.format.label + ": " else ""}${c.main.path} (${bytes(c.size)})"
+
+    /** The lines beneath the rows: the companions and, for a pair, what initMod gives */
+    fun footer(): List<String> = listOf("  with: " + companions.joinToString { it.path }.ifEmpty { "nothing else" }) +
+        listOfNotNull(if (pair != null) "  initMod(\"$local\") opens both sessions: .encoder and .decoder take tensors (.inputs names them), .tokens(text) gives the ids and .text(ids) the words, .startToken and .endToken bound the decoding; a script wires the two" else null)
+
+    /** The whole menu as text, for a pipe or a script's log: the files numbered with the default marked */
+    fun text(): String {
+        fun rows(models: List<HfCandidate>) = models.joinToString("\n") { c -> "    ${(items.indexOf(c) + 1).toString().padStart(2)}  ${label(c)}" + if (c in taken) "  <- taken" else "" }
+        val body = if (pair != null) "  encoders\n" + rows(pair.encoders) + "\n  decoders\n" + rows(pair.decoders) else rows(items)
+        return title() + "\n" + body + "\n" + footer().joinToString("\n")
+    }
+
+    /**
+     * The pick [answer] names: the numbers of [items] from 1, file names or paths, apart by spaces or commas; blank is
+     * [taken]. Refused (IllegalArgumentException) when a word names nothing, when a pair's answer has no encoder or no
+     * decoder, or when any other has more than one file.
+     */
+    fun choose(answer: String): HfPick {
+        val words = answer.split(' ', ',', ';').map { it.trim() }.filter { it.isNotEmpty() }
+        val chosen = if (words.isEmpty()) taken else words.map { word ->
+            word.toIntOrNull()?.let { items.getOrNull(it - 1) ?: throw IllegalArgumentException("$word: the files go from 1 to ${items.size}") }
+                ?: items.firstOrNull { it.main.path.equals(word, ignoreCase = true) || it.main.name.equals(word, ignoreCase = true) }
+                ?: throw IllegalArgumentException("'$word' names no file of the list; a number from 1 to ${items.size} or a file's name does")
+        }.distinct()
+        if (pair != null) {
+            if (chosen.none { it in pair.encoders }) throw IllegalArgumentException("an encoder is needed too (${pair.encoders.joinToString { "${items.indexOf(it) + 1}" }})")
+            if (chosen.none { it in pair.decoders }) throw IllegalArgumentException("a decoder is needed too (${pair.decoders.joinToString { "${items.indexOf(it) + 1}" }})")
+            return listing.pick(pair, items.filter { it in chosen })
+        }
+        if (chosen.size != 1) throw IllegalArgumentException("one file: the import takes one model, the numbers name ${chosen.size}")
+        return listing.pick(chosen.single())
+    }
 }
 
 /**
@@ -126,22 +176,39 @@ data class HfListing(val candidates: List<HfCandidate>, val weights: List<HfWeig
     /** The pair [candidate] belongs to: the ONNX files of its folder and variant named encoder_model and decoder_*; null when it is no pair */
     fun pairOf(candidate: HfCandidate): HfPair? {
         if (candidate.format != HfFormat.ONNX) return null
-        val same = candidates.filter { it.format == HfFormat.ONNX && it.main.dir == candidate.main.dir && it.variant == candidate.variant }
-        val encoders = same.filter { it.main.name.lowercase().startsWith("encoder_model") }
-        val everyDecoder = same.filter { it.main.name.lowercase().startsWith("decoder_") }
-        // decoder_model_merged is the plain decoder and the with-past one in one file: left out when both are there
-        val merged = everyDecoder.filter { it.main.name.lowercase().contains("merged") }
-        val decoders = if (merged.size < everyDecoder.size - 1) everyDecoder - merged.toSet() else everyDecoder
-        return if (encoders.isNotEmpty() && decoders.isNotEmpty() && candidate in encoders + everyDecoder) HfPair(encoders, decoders) else null
+        val folder = candidates.filter { it.format == HfFormat.ONNX && it.main.dir == candidate.main.dir }
+        val encoders = folder.filter { it.main.name.lowercase().startsWith("encoder_model") }.sortedBy { it.main.path.lowercase() }
+        val decoders = folder.filter { it.main.name.lowercase().startsWith("decoder_") }.sortedBy { it.main.path.lowercase() }
+        if (encoders.isEmpty() || decoders.isEmpty() || candidate !in encoders + decoders) return null
+        // Taken by default: the candidate's variant (the full one, as a rule), and of its decoders every one but
+        // decoder_model_merged, which is the plain decoder and the with-past one in one file, when both are there
+        val sameEncoders = encoders.filter { it.variant == candidate.variant }.ifEmpty { encoders.take(1) }
+        val sameDecoders = decoders.filter { it.variant == candidate.variant }.ifEmpty { decoders }
+        val merged = sameDecoders.filter { it.main.name.lowercase().contains("merged") }
+        val takenDecoders = if (merged.size < sameDecoders.size - 1) sameDecoders - merged.toSet() else sameDecoders
+        return HfPair(encoders, decoders, sameEncoders + takenDecoders)
+    }
+
+    /**
+     * The menu an import of [ref] offers over its default [pick]: a pair's encoders and decoders, else every candidate
+     * when there are several; null when there is nothing to choose, or the address named a file or folder itself
+     */
+    fun menu(ref: HfRef?, pick: HfPick, repo: String, local: String): HfMenu? {
+        pairOf(pick.candidate)?.let { pair -> return HfMenu(this, pair.all, pair.taken, pair, repo, local, pick.companions) }
+        if (ref?.path != null || candidates.size < 2) return null
+        return HfMenu(this, candidates, listOf(pick.candidate), null, repo, local, pick.companions)
+    }
+
+    /** The pick of [taken] out of [pair]: the first encoder its main file, the rest alongside */
+    fun pick(pair: HfPair, taken: List<HfCandidate>): HfPick {
+        val main = taken.first { it in pair.encoders }
+        return HfPick(main, companionsOf(main), also = taken.filter { it != main })
     }
 
     fun pick(candidate: HfCandidate): HfPick {
         val dir = candidate.main.dir
         // A pair comes whole, the encoder as its main file
-        pairOf(candidate)?.let { pair ->
-            val main = if (candidate in pair.encoders) candidate else pair.encoders.first()
-            return HfPick(main, companionsOf(main), also = pair.all.filter { it != main })
-        }
+        pairOf(candidate)?.let { pair -> return pick(pair, pair.taken) }
         val text = candidate.format == HfFormat.ONNX && companions.any { it.dir == dir && it.name == GENAI_CONFIG }
         if (text) return HfPick(candidate, companions.filter { it.dir == dir && it.name in TEXT_COMPANIONS }, text = true)
         val own = companionsOf(candidate)
