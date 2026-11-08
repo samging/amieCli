@@ -111,11 +111,11 @@ object NewCommand : Command("new", "A project: AMP/projects/<name> with a main.k
         val name = action
         if (!name.matches(Regex("[A-Za-z0-9][A-Za-z0-9._-]*"))) return fail("A project's name is letters, digits, dots, dashes and underscores; '$name' isn't")
         val dir = Projects.dir(name)
-        if (dir.exists()) return fail("project '$name' exists already at ${dir.path}")
+        if (dir.exists()) return fail("project '$name' exists already at ${dir.shown}")
         if (name !in ScriptEnvironments.names()) ScriptEnvironments.peek(name).dir.mkdirs()
         dir.mkdirs()
         File(dir, "main.kts").writeText(Projects.starter(name))
-        println("project '$name' made at ${dir.path}, in env '$name'; amie run $name runs its main.kts")
+        println("project '$name' made at ${dir.shown}, in env '$name'; amie run $name runs its main.kts")
         return Amie.EXIT_OK
     }
 }
@@ -211,7 +211,7 @@ object EnvsCommand : Command("envs", "The envs of AMP/env: each keeps the Maven 
                 if (name in ScriptEnvironments.names()) return fail("env '$name' exists already")
                 // An env is its folder under AMP/env; its lock file comes with the first package sourced into it
                 ScriptEnvironments.peek(name).dir.mkdirs()
-                println("env '$name' made at ${ScriptEnvironments.peek(name).dir.path}; environment(SettingsEnv(\"$name\")) in a script sources it, or amie -e $name")
+                println("env '$name' made at ${ScriptEnvironments.peek(name).dir.shown}; environment(SettingsEnv(\"$name\")) in a script sources it, or amie -e $name")
                 Amie.EXIT_OK
             }
             "use" -> {
@@ -220,7 +220,7 @@ object EnvsCommand : Command("envs", "The envs of AMP/env: each keeps the Maven 
                 val code = if (main.isFile) main.readText() else ""
                 main.parentFile.mkdirs()
                 main.writeText(EnvPlan.withEnv(code, name))
-                println(if (code.isEmpty()) "${main.path} made: it runs in env '$name'" else "main.kts runs in env '$name' from now on")
+                println(if (code.isEmpty()) "${main.shown} made: it runs in env '$name'" else "main.kts runs in env '$name' from now on")
                 Amie.EXIT_OK
             }
             "show" -> {
@@ -251,7 +251,7 @@ object TemplatesCommand : Command("templates", "The script templates of AMP/temp
             "list" -> {
                 Starters.seed()
                 val templates = ScriptTemplates.list()
-                if (templates.isEmpty()) println("No templates in ${ScriptTemplates.dir().path}")
+                if (templates.isEmpty()) println("No templates in ${ScriptTemplates.dir().shown}")
                 else printTable(templates.map { t -> listOf(t.id, t.name, "${t.lines} lines", t.env ?: "", t.uses.joinToString(", "), t.description.take(60)) })
                 Amie.EXIT_OK
             }
@@ -277,7 +277,7 @@ object TemplatesCommand : Command("templates", "The script templates of AMP/temp
                 } catch (e: IllegalArgumentException) {
                     return fail(e.message ?: "The template can't be saved")
                 }
-                println("'${t.name}' ${if (before == null) "saved" else "saved again, its id kept"} as ${ScriptTemplates.file(t.id).path} (${lines(t.lines)}); templates run \"${t.name}\" runs it")
+                println("'${t.name}' ${if (before == null) "saved" else "saved again, its id kept"} as ${ScriptTemplates.file(t.id).shown} (${lines(t.lines)}); templates run \"${t.name}\" runs it")
                 Amie.EXIT_OK
             }
             "edit" -> {
@@ -286,7 +286,7 @@ object TemplatesCommand : Command("templates", "The script templates of AMP/temp
                 if (!file.isFile) return fail("The code of template '${t.name}' is gone from AMP/templates")
                 val editor = (System.getenv("VISUAL") ?: System.getenv("EDITOR"))?.takeIf { it.isNotBlank() }
                 if (editor == null || System.console() == null) {
-                    println(file.path)
+                    println(file.shown)
                     return Amie.EXIT_OK
                 }
                 val code = ProcessBuilder(editor.split(' ').filter { it.isNotEmpty() } + file.path).inheritIO().start().waitFor()

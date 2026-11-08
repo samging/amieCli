@@ -42,34 +42,57 @@ object Picker {
             bind("leave", "n", "q", "\u001b", "\u0003")
             ambiguousTimeout = 200
         }
-        fun draw(first: Boolean) {
-            val text = StringBuilder()
-            if (!first) text.append("\u001b[").append(lines.size + footer.size + 2).append('A')
-            text.append("\u001b[2K\r").append(Style.accent(title)).append("\r\n")
+        var drawn = 0
+        fun draw() {
+            // Every line cut to the terminal's width first, so the rows drawn are counted right and the climb back is exact
+            val width = (terminal.width.takeIf { it > 20 } ?: 100) - 1
+            val frame = mutableListOf<String>()
+            fun put(text: String, paint: ((String) -> String)? = null, indent: String = "") {
+                wrap(text, width, indent).lines().forEach { frame += paint?.invoke(it) ?: it }
+            }
+            fun cut(text: String, indent: String, paint: ((String) -> String)?) {
+                var rest = text
+                var head = true
+                while (head || rest.isNotEmpty()) {
+                    val room = if (head) width else width - indent.length
+                    val piece = (if (head) "" else indent) + rest.take(room)
+                    frame += paint?.invoke(piece) ?: piece
+                    rest = rest.drop(room)
+                    head = false
+                }
+            }
+            put(title, Style::accent)
             lines.forEach { line ->
-                text.append("\u001b[2K\r")
                 when (line) {
-                    is Line.Header -> text.append("  ").append(line.text)
+                    is Line.Header -> frame += "  ${line.text}"
                     is Line.Row -> {
                         val here = rows[cursor].index == line.index
                         val mark = if (line.index in marked) "[x]" else "[ ]"
-                        val row = "${if (here) ">" else " "} $mark ${(line.index + 1).toString().padStart(2)}  ${line.text}"
-                        text.append(if (here) Style.accent(row) else row)
+                        cut("${if (here) ">" else " "} $mark ${(line.index + 1).toString().padStart(2)}  ${line.text}", "          ", if (here) Style::accent else null)
                     }
                 }
-                text.append("\r\n")
             }
-            footer.forEach { text.append("\u001b[2K\r").append(it).append("\r\n") }
-            text.append("\u001b[2K\r").append(status(marked)).append("\r\n")
-            text.append("\u001b[2K\r").append(Style.dim(if (several) "up and down move, space takes or leaves a file, Enter imports, n leaves" else "up and down move, Enter imports the one under the cursor, n leaves"))
+            footer.forEach { put(it, indent = "    ") }
+            put(status(marked))
+            put(if (several) "up and down move, space takes or leaves a file, Enter imports, n leaves" else "up and down move, Enter imports the one under the cursor, n leaves", Style::dim)
+            val text = StringBuilder()
+            if (drawn > 0) text.append("\u001b[").append(drawn - 1).append('A')
+            frame.forEachIndexed { k, row -> text.append("\u001b[2K\r").append(row); if (k < frame.lastIndex) text.append("\r\n") }
+            // A frame shorter than the last leaves rows below it: cleared, and the cursor brought back to the frame's end
+            val extra = drawn - frame.size
+            if (extra > 0) {
+                repeat(extra) { text.append("\r\n\u001b[2K") }
+                text.append("\u001b[").append(extra).append('A')
+            }
             out.print(text)
             out.flush()
+            drawn = frame.size
         }
         val saved = terminal.enterRawMode()
         out.print("\u001b[?25l")
         try {
             val reader = BindingReader(terminal.reader())
-            draw(true)
+            draw()
             while (true) {
                 when (reader.readBinding(keys)) {
                     "up" -> cursor = (cursor - 1 + rows.size) % rows.size
@@ -79,7 +102,7 @@ object Picker {
                     "leave", null -> return null
                 }
                 if (!several) { marked.clear(); marked += rows[cursor].index }
-                draw(false)
+                draw()
             }
         } finally {
             out.print("\u001b[?25h\r\n")

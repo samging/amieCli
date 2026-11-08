@@ -84,3 +84,6 @@ fun wrap(text: String, width: Int, indent: String = "", first: String = indent):
     lines += line.toString()
     lines.joinToString("\n")
 }
+
+/** A path as it is typed at the shell: a space or another character the shell reads is escaped, so the line can be pasted back */
+val java.io.File.shown: String get() = path.replace(Regex("""[ '"$&;()|<>*?\[\]!#~`\\]""")) { "\\" + it.value }

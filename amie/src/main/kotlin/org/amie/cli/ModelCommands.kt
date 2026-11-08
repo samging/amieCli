@@ -13,6 +13,13 @@
  */
 package org.amie.cli
 
+import org.example.project.components.terminal.window.controller.huggingFace.ImportedModel
+import org.example.project.components.terminal.window.controller.modelLoaders.imported.EncoderDecoderModel
+import org.example.project.components.terminal.window.controller.modelLoaders.imported.ModelFormats
+import org.example.project.components.terminal.window.controller.modelLoaders.imported.ImportedModels
+import org.example.project.components.terminal.window.controller.modules.deleteModule
+import org.example.project.components.terminal.window.controller.modules.hasModule
+import org.example.project.components.terminal.window.controller.script.HeadlessAmie
 import kotlinx.coroutines.runBlocking
 import org.example.project.amp.ModelFolders
 import org.example.project.components.terminal.window.controller.envBuilder.DEFAULT_ENV
@@ -54,6 +61,7 @@ object ModelsCommand : Command("models", "The models of the AMP folder: built in
         "models validate <name>" to "the model's last stored validation: accuracy, macro F1 and each label's figures",
         "models serve <name> [--port <n>] [--host <h>] [--path <p>]" to "serves the model over HTTP until stopped",
         "models info <name>" to "what is known of the model: its labels, encoder, version, how it was trained",
+        "models remove <name>" to "removes the model's folder from AMP/models, whatever its kind (intent, text, speech or imported); a session of it open here is closed first, and its serving stopped",
     )
     override val valued = setOf("--name", "--test", "--port", "--host", "--path")
 
@@ -65,7 +73,29 @@ object ModelsCommand : Command("models", "The models of the AMP folder: built in
                     TextModels.names().map { listOf(it, "text", "", "", "") } +
                     SpeechModels.names().map { listOf(it, "speech", "", "", "") } +
                     ImportedList.list(ModelFolders.amp).map { listOf(it.name, "imported", it.format?.label ?: "", it.source?.repo ?: "", labelsCell(it.labels)) }
-                if (rows.isEmpty()) println("No models in ${ModelFolders.amp.root.path}") else printTable(rows)
+                if (rows.isEmpty()) println("No models in ${ModelFolders.amp.root.shown}") else printTable(rows)
+                Amie.EXIT_OK
+            }
+            "remove" -> {
+                val name = flags.requireWord(0, "the model's name") ?: return Amie.EXIT_USAGE
+                val folders = ModelFolders.amp
+                // What goes, by kind, the folder named for the message; a speech model by its exact folder, not the prefix find() allows
+                val (kind, dir) = when {
+                    hasModule(name) -> "intent" to (readRegistry().modules[name]?.let { File(modulesDir, it) } ?: File(modulesDir, name))
+                    TextModels.has(name) -> "text" to TextModels.folder(name)
+                    name in SpeechModels.names() -> "speech" to File(folders.speech, name)
+                    ImportedModels.has(name) -> "imported" to File(folders.imported, name)
+                    else -> return fail("No model '$name' in ${folders.root.shown}; models list names them")
+                }
+                HeadlessAmie.terminate(name)
+                ModelServer.stop(name, persist = false) // nothing written about a model that is going; deleteModule stops an intent model's serving itself
+                val gone = when (kind) {
+                    "intent" -> deleteModule(name)
+                    "imported" -> ImportedList.delete(folders, name)
+                    else -> dir.deleteRecursively()
+                }
+                if (!gone) return fail("'$name' could not be removed entirely; what is left is in ${dir.shown}")
+                println("$kind model '$name' removed: ${dir.shown} is gone")
                 Amie.EXIT_OK
             }
             "build" -> {
@@ -103,19 +133,55 @@ object ModelsCommand : Command("models", "The models of the AMP folder: built in
                 val m = builtModels().firstOrNull { it.first == name }?.second
                 when {
                     m != null -> printInfo(name, m)
-                    TextModels.has(name) -> println("$name: a text model of ${TextModels.folder(name).path}; initMod(\"$name\").answer(text) asks it")
-                    SpeechModels.has(name) -> println("$name: a speech model of ${ModelFolders.amp.speech.path}")
-                    else -> ImportedList.list(ModelFolders.amp).firstOrNull { it.name.equals(name, ignoreCase = true) }?.let { i ->
-                        println("${i.name}: imported${i.source?.let { " from ${it.repo} (${it.revision.take(8)}), ${it.downloadedAt.take(10)}" } ?: ""}")
-                        println("  format: ${i.format?.label ?: "unknown"}, ${i.bytes shr 20} MB in ${i.dir.path}")
-                        i.task?.let { println("  task: $it") }
-                        if (i.labels.isNotEmpty()) println("  labels: ${i.labels.joinToString(", ")}")
-                    } ?: return fail("No model '$name'; models list names them")
+                    TextModels.has(name) -> println("$name: a text model of ${TextModels.folder(name).shown}; initMod(\"$name\").answer(text) asks it")
+                    SpeechModels.has(name) -> println("$name: a speech model of ${ModelFolders.amp.speech.shown}")
+                    else -> ImportedList.list(ModelFolders.amp).firstOrNull { it.name.equals(name, ignoreCase = true) }?.let { i -> printImported(i) }
+                        ?: return fail("No model '$name'; models list names them")
                 }
                 Amie.EXIT_OK
             }
             else -> null
         }
+    }
+
+    /**
+     * An imported model as its folder holds it: where it came from, its model files by role (an encoder and decoder pair
+     * named part by part), the files beside them, its tokenizer, the tokens its config names, its labels, and what
+     * initMod gives for it
+     */
+    private fun printImported(i: ImportedModel) {
+        println("${i.name}: imported${i.source?.let { " from ${it.repo} (${it.revision.take(8)}), ${it.downloadedAt.take(10)}" } ?: ""}")
+        println("  format: ${i.format?.label ?: "unknown"}, ${bytes(i.bytes)} in ${i.dir.shown}")
+        i.task?.let { println("  task: $it") }
+        val scan = ModelFormats.scan(i.dir)
+        fun shown(f: File) = "${f.relativeTo(i.dir).invariantSeparatorsPath} (${bytes(f.length())})"
+        val pair = EncoderDecoderModel.of(scan)
+        val models = scan.candidates.map { it.file }
+        if (pair != null) {
+            val (encoder, decoder, withPast) = pair
+            println("  encoder: ${shown(encoder)}")
+            println("  decoder: ${shown(decoder)}")
+            withPast?.let { println("  decoder with past: ${shown(it)}") }
+            val others = models - setOfNotNull(encoder, decoder, withPast)
+            if (others.isNotEmpty()) println("  other model files: ${others.joinToString { shown(it) }}")
+        } else if (models.isNotEmpty()) {
+            println("  model: ${shown(models.first())}" + if (models.size > 1) "; also ${models.drop(1).joinToString { shown(it) }}" else "")
+        }
+        val companions = i.dir.walkTopDown().filter { it.isFile && it !in models && it.name != ImportedList.SOURCE }.sortedBy { it.path }.toList()
+        if (companions.isNotEmpty()) println("  with: ${companions.joinToString { shown(it) }}")
+        val tokenizer = companions.firstOrNull { it.name == "tokenizer.json" }
+        println("  tokenizer: " + (tokenizer?.let { "${it.relativeTo(i.dir).invariantSeparatorsPath}; text goes in as its ids" + if (pair != null) ", .tokens(text) and .text(ids) use it" else "" } ?: "none; the model takes tensors, or numbers read from the text"))
+        val configs = listOf("generation_config.json", "config.json").mapNotNull { n -> companions.firstOrNull { it.name == n }?.readText() }
+        fun token(vararg keys: String) = keys.firstNotNullOfOrNull { key -> configs.firstNotNullOfOrNull { Regex("\"$key\"\\s*:\\s*\\[?\\s*(\\d+)").find(it)?.groupValues?.get(1)?.let { v -> "$v ($key)" } } }
+        val start = token("decoder_start_token_id", "bos_token_id")
+        val end = token("eos_token_id")
+        if (start != null || end != null) println("  tokens: " + listOfNotNull(start?.let { "start $it" }, end?.let { "end $it" }).joinToString(", "))
+        if (i.labels.isNotEmpty()) println("  labels: ${i.labels.joinToString(", ")}")
+        println("  initMod(\"${i.name}\"): " + when {
+            pair != null -> "an encoder and decoder pair: .encoder and .decoder are its sessions (.decoderWithPast too when the file is there), .inputs names their tensors, .startToken and .endToken bound the decoding; a script wires the two (amie learn, the pairs section)"
+            i.labels.isNotEmpty() -> ".predict(text) the label, .scores(text) every label with its score, .inputs/.outputs/.run(…) the tensors"
+            else -> ".inputs and .outputs name its tensors, .run(mapOf(…)) feeds them; .inference(text) when a tokenizer fills its inputs"
+        })
     }
 
     /** The built intent models by name, their manifests read as stored */
@@ -209,7 +275,7 @@ object PackagesCommand : Command("packages", "Package jars: those of AMP/pluginD
         return when (action) {
             "list" -> {
                 val jars = pluginDir.listFiles { f -> f.isFile && f.extension == "jar" }.orEmpty().sortedBy { it.name }
-                if (jars.isEmpty()) println("No jars in ${pluginDir.path}")
+                if (jars.isEmpty()) println("No jars in ${pluginDir.shown}")
                 else printTable(jars.map { jar ->
                     val meta = PackageMetadata.read(jar)
                     listOf(jar.name, meta?.name ?: "", meta?.version ?: "", "${jar.length() shr 10} KB", meta?.description?.take(60) ?: "")
@@ -231,7 +297,7 @@ object PackagesCommand : Command("packages", "Package jars: those of AMP/pluginD
                 pluginDir.mkdirs()
                 val target = File(pluginDir, file.name)
                 file.copyTo(target, overwrite = true)
-                println("${file.name} is in ${pluginDir.path} (${check.describe}); initMod(\"${file.name}\") opens it")
+                println("${file.name} is in ${pluginDir.shown} (${check.describe}); initMod(\"${file.name}\") opens it")
                 Amie.EXIT_OK
             }
             "maven" -> {
@@ -248,7 +314,7 @@ object PackagesCommand : Command("packages", "Package jars: those of AMP/pluginD
             "info" -> {
                 val name = flags.requireWord(0, "the jar's name") ?: return Amie.EXIT_USAGE
                 val (file, where) = JarPackages.resolve(name) ?: return fail("No package '$name': not in AMP/pluginDir, the env or as a path")
-                println("${file.name}: ${file.length() shr 10} KB, found in $where (${file.path})")
+                println("${file.name}: ${file.length() shr 10} KB, found in $where (${file.shown})")
                 PackageMetadata.read(file)?.let { m ->
                     m.name?.let { println("  name: $it" + (m.version?.let { v -> " $v" } ?: "")) }
                     m.description?.let { println("  description: $it") }

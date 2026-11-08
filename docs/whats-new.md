@@ -1,6 +1,6 @@
 # What's new
 
-## Encoders and decoders, projects, and the templates' three verbs
+## 1.1.0: encoders and decoders, projects, and the templates' three verbs
 
 - **Encoder and decoder pairs.** A sequence-to-sequence export (T5, BART, Marian translation, Whisper) is two ONNX
   files, `encoder_model.onnx` with `decoder_model.onnx`, which no single run answers. `amie hf import` now takes the pair

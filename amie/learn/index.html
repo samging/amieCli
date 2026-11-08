@@ -335,7 +335,8 @@ built.modelStatus()                         // precision, recall, F1 for each la
 <pre>$ amie models list
 intent    intents    3 labels    v1
 $ amie models validate intents
-$ amie models info intents</pre>
+$ amie models info intents
+$ amie models remove intents</pre>
 <p><code>validate</code> prints the stored validation again; <code>info</code> the labels, the encoder, the version, how it was trained, the groups it is in and where it is served, if anywhere. In script, <code>validateMetrics("intents")</code>, <code>confusionMatrix("intents")</code> and <code>mistakes("intents")</code> show the same as tables.</p>
 <h3>Teach it more</h3>
 <p>A trained model learns from new rows without starting over. Rows of labels it knows correct it, a label it doesn't know gets an output of its own, and what it knew is replayed so it keeps it. The model before stays as a version.</p>

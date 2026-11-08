@@ -123,7 +123,7 @@ your own.
 $ ./amie
  ______     __    __     __     ______
 ...
-amie 1.0.0 (Kotlin 2.1.0) on OpenJDK 64-Bit Server VM 21.0.5, Mac OS X aarch64
+amie 1.1.0 (Kotlin 2.1.0) on OpenJDK 64-Bit Server VM 21.0.5, Mac OS X aarch64
 Type :help for the commands, :api for the script's functions, :learn or :docs for the book, :quit to leave. AMP: /Users/me/Library/Application Support/amie pilot/AMP
 >>> val m = initMod("greetings")
 >>> m.predict("good morning")
@@ -215,6 +215,7 @@ Every command prints its help with `--help`. `-e`, `--amp` and `-v` go before th
 ./amie models validate intents                     the last stored validation: accuracy, macro F1, each label
 ./amie models serve intents --port 8765            serves it over HTTP until Ctrl-C; POST {"text": "hi"} at /models/intents/predict
 ./amie models info intents                         labels, encoder, version, how it was trained, its groups, its serving address
+./amie models remove intents                       removes the model's folder, whatever its kind; a session of it is closed first
 ```
 
 ### groups
