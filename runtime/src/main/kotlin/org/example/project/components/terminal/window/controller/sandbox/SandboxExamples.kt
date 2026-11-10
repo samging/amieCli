@@ -249,7 +249,7 @@ object SandboxExamples {
         Example("Scope functions: ortClosable and ortStatic", "Housekeeping", """
             |// ortClosable frees what its block opens when the block ends, so a handle is good for that one block.
             |// ortStatic keeps what its block opens across runs, until ortScopes frees it or it is terminated.
-            |// ortTimed keeps it until nothing has used it for so many seconds; ortLimited keeps at most so many.
+            |// ortRequired keeps it while anything else is in session; ortLimited keeps at most so many.
             |
             |// A session open before a block is left as it is, so this starts with dummy closed.
             |initMod("dummy").close()
@@ -276,8 +276,8 @@ object SandboxExamples {
             |// Closes what search holds and says how many.
             |log("freed ${'$'}{ortScopes.free("search")} session(s)")
             |
-            |// Kept while it is used: once nothing has asked it for 40 seconds it is freed by itself. Its row counts down.
-            |val recent = ortTimed("recent", 40) { initMod("dummy") }
+            |// Kept while anything else is in session: once nothing else is open it is freed by itself, and opened again when next run.
+            |val recent = ortRequired("recent") { initMod("dummy") }
             |log(recent.predict("hello there"))
             |
             |// At most two under the name, the oldest closed when a third is opened. A model has one session, so this
@@ -287,7 +287,7 @@ object SandboxExamples {
             |
             |// Closes what every block keeps, so this script leaves nothing open.
             |log("freed ${'$'}{ortScopes.freeAll()} more")
-            |""".trimMargin(), since = 3, formerly = listOf("Scope functions: ortClosable and ortForever")),
+            |""".trimMargin(), since = 8, formerly = listOf("Scope functions: ortClosable and ortForever", "Scope functions: ortClosable and ortStatic")),
 
         Example("What a script uses", "Housekeeping", """
             |// Run this, then open Models > Sessions. Scripts lists it under this template's name for the 30 seconds it runs:

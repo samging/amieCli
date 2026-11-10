@@ -8,4 +8,7 @@ package org.example.project.auth
 object Accounts {
     val enabled: Boolean
         get() = System.getenv("AMIE_ACCOUNTS") == "1" || System.getProperty("amie.accounts") == "true"
+
+    /** What a call that needs an account says while they are off */
+    const val OFF = "Accounts and the Amie backend aren't part of amie yet (AMIE_ACCOUNTS=1 turns them on)"
 }

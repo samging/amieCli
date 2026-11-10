@@ -26,6 +26,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
+import org.example.project.auth.Accounts
 import org.example.project.auth.AuthState
 import org.example.project.components.terminal.window.controller.LogLevel
 import org.example.project.components.terminal.window.controller.console.logInternal
@@ -97,6 +98,7 @@ object AmieBackend {
     }
 
     private suspend fun token(): String = AuthState.accessToken() ?: throw BackendException(
+        if (!Accounts.enabled) Accounts.OFF else
         // Still signed in means the session is kept and only Keycloak isn't answering: signing in wouldn't help
         if (AuthState.signedIn) "Couldn't renew your session, Keycloak isn't answering. You stay signed in; try again once it is back"
         else "Sign in with Keycloak first",
@@ -108,6 +110,7 @@ object AmieBackend {
      * tried and where to change it. Being signed in cannot help with these, so the message says what can.
      */
     private suspend fun <T> reach(what: String, block: suspend () -> T): T = try {
+        if (!Accounts.enabled) throw BackendException(Accounts.OFF)
         BackendConfig.resolve()
         block()
     } catch (e: BackendException) {
@@ -265,6 +268,7 @@ object AmieBackend {
      * went through the backend already, so a silent website is reported, never treated as a failure.
      */
     suspend fun websiteLists(username: String, files: List<String>): Boolean? {
+        if (!Accounts.enabled) return null
         val url = config.siteUserPackagesUrl(username, refresh = true)
         return try {
             val response = http.get(url)
@@ -310,6 +314,7 @@ object AmieBackend {
      * never writes to the console: a report that fails only reaches the debug log, so it cannot loop.
      */
     suspend fun reportError(kind: String, message: String) {
+        if (!Accounts.enabled) return
         try {
             val token = AuthState.accessToken()
             val response = if (token != null) {

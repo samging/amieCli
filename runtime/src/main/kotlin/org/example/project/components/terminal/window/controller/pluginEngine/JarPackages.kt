@@ -1,5 +1,6 @@
 package org.example.project.components.terminal.window.controller.pluginEngine
 
+import org.example.project.auth.Accounts
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.java.Java
 import io.ktor.client.request.get
@@ -292,7 +293,8 @@ object JarPackages {
      */
     fun open(name: String): JarPackageSession {
         val (file, source) = resolve(name) ?: throw IllegalArgumentException(
-            "Package $name not found: not in the env, AMP/pluginDir, as a path, on the server (${BackendConfig.load().site}) or in the GitHub repositories of AMP/github.json"
+            "Package $name not found: not in the env, AMP/pluginDir, as a path, " +
+                (if (Accounts.enabled) "on the server (${BackendConfig.load().site}) " else "") + "or in the GitHub repositories of AMP/github.json"
         )
         val meta = PackageMetadata.read(file)
         val configDir = PackageMetadata.configDir(file.name)
@@ -428,6 +430,8 @@ object JarPackages {
     fun fetch(name: String, problems: MutableList<String> = mutableListOf()): File? {
         val fileName = File(name).name
         if (!fileName.endsWith(".jar", ignoreCase = true)) { problems += "$fileName is not a jar"; return null }
+        // The Amie server isn't there yet: without accounts a jar comes only from GitHub
+        if (!Accounts.enabled) return GitHubJars.fetch(fileName)
         val config = BackendConfig.load()
         // A store jar is fetched from the address its listing gives; the downloads page's jars from the site, then the S3 service
         val listed = available().firstOrNull { it.name == fileName }
@@ -521,6 +525,7 @@ object JarPackages {
     fun listing(refresh: Boolean = false): JarListing {
         val now = System.currentTimeMillis()
         cached?.let { (at, found) -> if (!refresh && now - at < LISTING_TTL_MS) return found }
+        if (!Accounts.enabled) return JarListing(githubJars(refresh), null).also { cached = now to it }
         val config = BackendConfig.load()
         val urls = listOf("${config.site}/api/jars", "${config.s3}/api/aws/jars")
         var jars = emptyList<ServerJar>()
@@ -543,15 +548,17 @@ object JarPackages {
                 .filter { it.name.endsWith(".jar", ignoreCase = true) && it.download_url.isNotBlank() }
                 .map { f -> ServerJar(f.name, f.size.toLong(), where = "store", author = f.author.ifBlank { null }, downloadUrl = f.download_url, page = f.html_url.ifBlank { null } ?: storePage(f.author)) }
         }.orEmpty()
-        val github = GitHubJars.available(refresh).map { g ->
-            ServerJar(g.name, g.size, version = g.release, where = "github", author = g.repo, downloadUrl = g.download, page = g.page)
-        }
+        val github = githubJars(refresh)
         val server = jars + store.filter { s -> jars.none { it.name == s.name } }.distinctBy { it.name }
         val all = server + github.filter { g -> server.none { it.name == g.name } }.distinctBy { it.name }
         val problems = downloadProblems + storeProblems
         val problem = if (problems.isEmpty()) null else "Couldn't read the Amie package repository: ${problems.joinToString("; ")}. " +
             "Check the addresses in ${BackendConfig.file.path} (AMIE_SITE_URL and AMIE_S3_URL override them)"
         return JarListing(all, problem).also { cached = now to it }
+    }
+
+    private fun githubJars(refresh: Boolean): List<ServerJar> = GitHubJars.available(refresh).map { g ->
+        ServerJar(g.name, g.size, version = g.release, where = "github", author = g.repo, downloadUrl = g.download, page = g.page)
     }
 
     private fun get(url: String, problems: MutableList<String>): String? = runCatching {

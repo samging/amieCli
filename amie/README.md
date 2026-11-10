@@ -194,7 +194,7 @@ signatures, and [docs/sandbox-scripting.md](../../docs/sandbox-scripting.md) in 
 | `huggingFace("owner/repo")`, `huggingFace.search("bert", format = "onnx")` | A model of the Hub imported into `AMP/models/imported`, and the search |
 | `importModel("/path/model.onnx")` | An ONNX, TorchScript or TensorFlow model by its path |
 | `serve("name", port = 8765)`, `stopServing("name")` | The model over HTTP |
-| `ortClosable { }`, `ortStatic("name") { }`, `ortTimed("name", 60) { }`, `ortLimited("name", 3) { }`, `ortAsync { }` | What a block opens: closed with it, kept across runs, freed when idle, capped, or run in the background |
+| `ortClosable { }`, `ortStatic("name") { }`, `ortRequired("name") { }`, `ortLimited("name", 3) { }`, `ortAsync { }` | What a block opens: closed with it, kept across runs, kept while anything else is in session, capped, or run in the background |
 | `database("main")` | A Postgres database of `AMP/databases.json`: `.query(sql)`, `.execute(sql)`, `.print(sql)` |
 | `shell("ls")`, `shellScript("x.sh", args)` | A command in the login shell: `.out`, `.err`, `.exit` |
 | `implementation("group:module:version")`, `environment(SettingsEnv("name"))` | A Maven package into the env; the env the script runs in (read before it compiles) |
@@ -231,11 +231,132 @@ Every command prints its help with `--help`. `-e`, `--amp` and `-v` go before th
 
 ```
 ./amie packages list                               the jars of AMP/pluginDir, and the env's Maven packages
+./amie packages search google                     the jars of the GitHub repositories in AMP/github.json with google in the name
+./amie packages search --repo owner/name           one repository's jars; no query lists them all
 ./amie packages add ~/build/greeter.jar            checks the jar has a package class and copies it in; initMod("greeter.jar") opens it
+./amie packages add spotify.jar                    a name that is no file is downloaded from those repositories, checked and kept
 ./amie packages maven org.jsoup:jsoup:1.17.2       adds the Maven package to the env, from Maven Central
 ./amie packages test greeter.jar                   runs the tests the jar declares (META-INF/amie/package.json), else one call with hello
 ./amie packages info greeter.jar                   its metadata, where it came from, whether it opens here, its last test run
+./amie packages config                             every jar's config files and whether each is filled in
+./amie packages config spotify.jar                 its keys and values, a secret hidden, under the hint above each
+./amie packages config spotify.jar clientId=abc    sets a key in the file that has it; a key the file lacks is refused
+./amie packages config google-calendar.jar clientId=… clientSecret=… --all-jars   the same keys for every Google package
+./amie packages config gmail-reader.jar --file service-account.json --from ~/Downloads/key.json   copies a file in
+./amie packages config spotify.jar --edit          opens its files in $VISUAL or $EDITOR, else the Mac's text editor
+./amie packages setup google-drive.jar             asks for each key at the terminal; Enter keeps a value
 ```
+
+`search` matches every word of the query against a jar's name, and its description once the jar is in
+`AMP/pluginDir`; a jar already there shows as Added with its version. `info` shows labelled rows: where the jar was
+found and came from, its Java and class, each config file and whether it is filled in, its tests, flags and notes,
+and last whether it opens here. In a terminal a required file still to fill in is red, an optional one yellow, and
+a jar that opens green.
+
+A jar's settings live in `AMP/pluginDir/config/<jar>/`, written from its templates. `config` and `setup` change them
+without finding the folder:
+
+- **setup** goes through each file: the hint lines above a key, then the key with its value in brackets. Enter keeps
+  it, `-` empties it, and a secret is typed hidden. When another jar already has the same file filled in, as the
+  Google packages share `google.properties`, it offers those values first. When the hints name the jar's own
+  `authorize` step, it offers to run it, which opens the browser and writes the refresh token.
+- **config** sets keys from a script or a shell, each in the file that has a line for it, keeping every comment and
+  line around it. `--all-jars` sets them for every other jar with a file of that name. A file that gets a secret is
+  made readable by its owner only.
+- Environment variables a jar reads, such as `GOOGLE_TRANSLATE_API_KEY`, are shown but set in the shell.
+
+#### Writing a package: run and close
+
+A package is a jar with one public class that fulfils the `AmiePackage` interface:
+
+```kotlin
+interface AmiePackage : AutoCloseable {
+    fun run(input: String): List<String>   // one text in, the lines to show out
+    override fun close()                   // called once, when the host is done with the package
+}
+```
+
+Implementing it is the easiest way, but any class with the same two methods qualifies, inherited ones included, so a
+jar needs no amie library to compile against. Both methods are required: the website's upload check and the
+samging/jar-jar workflow refuse a jar without them.
+
+| Member | Needed | What amie does with it |
+|---|---|---|
+| A public no-arg constructor | yes | Every `initMod("x.jar")` makes a new instance, in a class loader of its own |
+| `configure(File dir)` | no | Called right after the constructor with the jar's config folder, `AMP/pluginDir/config/<jar>/`. `Path`, `String` and `Map<String, String>` work too |
+| `List<String> run(String text)` | yes | `.run(text)` and `.answer(text)` call it. Each element is one line |
+| `void close()` | yes | Called once, by `.close()`, `:terminate` or the end of a scope. It should release what `run` opened; the class loader is dropped after it |
+
+amie's own loader is more lenient than the contract: it also opens a class whose `run` returns something else, or
+that has no `close()`. Such a jar works on your machine but cannot be uploaded or added to samging/jar-jar.
+
+```java
+package com.example.greeter;
+
+import java.util.List;
+
+public class Greeter {
+    public List<String> run(String text) {
+        return List.of("Hello to you");
+    }
+
+    public void close() {}
+}
+```
+
+- **Each session is its own bottle.** Two sessions of the same jar never share an instance or a static field, since
+  each has its own class loader.
+- **`run` runs on a thread of amie's**, `amie-package-call`, with the jar's class loader as the context class loader,
+  while the script waits for the answer. Ctrl-C interrupts that thread, so a long `run` should end when it is
+  interrupted. An exception thrown by `run` becomes the script's error.
+- **Which class is the package class.** The `entry` the jar's metadata names, else the manifest's `Main-Class`, else
+  a class implementing an interface named `AmiePackage`, else the first class that fits. A jar with several
+  candidates should name one as `entry`.
+- **Java.** amie runs Java 21, so the classes must be compiled for 21 or older. amie's own Kotlin standard library
+  is under every package, so a Kotlin package does not need to bundle one.
+- **Metadata.** `META-INF/amie/package.json` gives the name, description, `entry`, `java`, the config files with their
+  templates, and the tests `amie packages test` runs. A jar without it still opens. See
+  [What a jar needs](../docs/sandbox-scripting.md#what-a-jar-needs-metadata-configuration-and-test-runs).
+
+#### Packages from GitHub
+
+**Requesting a jar.** A script names a GitHub source with `github:`. amie downloads the jar, checks it as `packages add`
+does, and keeps it in `AMP/pluginDir` with `<jar>.source.json` beside it, which records the repository, the file's
+sha and its page.
+
+```kotlin
+val notes = initMod("github:samging/jar-jar/memory.jar")       // the default branch
+val pinned = initMod("github:samging/jar-jar/memory.jar@main")  // a branch, tag or commit
+val files = initMod("files.jar")                                // found through AMP/github.json
+```
+
+- **Where a plain name is looked for.** The env, then `AMP/pluginDir`, then a path, and last the repositories listed
+  in `AMP/github.json`. That file is written on first use with `samging/jar-jar`. The amie server is not asked: it is
+  off, like accounts and Keycloak, until `AMIE_ACCOUNTS=1` turns them on.
+- **Folders and releases.** `github:owner/repo/libs/x.jar` names a folder. A name that is not a file of the repository
+  is looked for among the assets of its latest release, or of the release the `@ref` tags. A github.com file address
+  works too.
+- **Updates.** A `github:` open asks GitHub for the file's sha and downloads only when it changed. When GitHub cannot
+  be reached, the copy already there is used. A plain name finds the copy in `AMP/pluginDir` first and does not ask
+  GitHub, so open it once with `github:` to take a newer version.
+- **Private repositories need a token.** Set `GITHUB_TOKEN`, or `"token"` in `AMP/github.json`. Without one, a private
+  repository answers as if it were empty, and the jar is reported as not found. A token also raises GitHub's limit
+  of 60 requests an hour.
+
+**Uploading a jar.** samging/jar-jar takes jars through pull requests:
+
+1. Build the jar. In samging/amie-packages, `./gradlew jars` puts every package in `build/jars`.
+2. Check it here first: `amie packages add <jar>` runs the same check as a download, and `amie packages test <jar>`
+   runs its declared tests.
+3. Open a pull request that adds or replaces the jar at the top of samging/jar-jar. A jar in a folder works, but only
+   a `github:` source with the folder finds it.
+4. The **Check jars** workflow runs two steps over every jar of the repository. The first is the check amie makes
+   before it keeps a download, and it runs no code of the jar. The second opens each jar as `amie packages test`
+   does: it makes the package class with a config folder, calls `configure()`, sends every declared test through
+   `run()`, checks the answers and calls `close()`. Each jar gets a JVM of its own and a time limit. A class without
+   `List<String> run(String)` and `close()` fails the first step; missing metadata is only a note. The tests run on Linux without keys, so declare ones that
+   answer without them, such as `help`.
+5. Merge when the check passes. From then on `initMod("<jar>")` finds it on any machine that can read the repository.
 
 ### envs
 
@@ -275,7 +396,8 @@ Every command prints its help with `--help`. `-e`, `--amp` and `-v` go before th
 ./amie hf import onnx-community/whisper-tiny.en --model-name whisper-tiny
                                                    downloads it into AMP/models/imported; several files that run here are
                                                    picked with the arrow keys, the one taken marked (a pair: its encoders and
-                                                   decoders, space takes or leaves one); --take 3 picks for a pipe or a script/whisper-tiny; initMod("whisper-tiny") opens it
+                                                   decoders, space takes or leaves one); --take 3 picks for a pipe or a
+                                                   script; initMod("whisper-tiny") opens it
 ```
 
 TensorFlow repos are found under the Hub's `tf-keras` tag (a SavedModel), since `tf` mostly means Keras weights that

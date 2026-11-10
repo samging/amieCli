@@ -25,6 +25,10 @@ object Style {
     fun prompt(text: String): String = paint(text, "38;5;129")
     fun error(text: String): String = paint(text, "31")
     fun dim(text: String): String = paint(text, "2")
+    /** Green, for what holds: a check that passes, a file filled in */
+    fun ok(text: String): String = paint(text, "32")
+    /** Yellow, for what is fine but not done: an optional file still its template */
+    fun warn(text: String): String = paint(text, "33")
 
     /**
      * [text] in the pride flag's stripes, red to violet, as bands from left to right across its widest line: the banner

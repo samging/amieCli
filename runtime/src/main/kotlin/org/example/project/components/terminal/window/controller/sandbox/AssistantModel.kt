@@ -45,7 +45,7 @@ internal class NotOpened(message: String) : Exception(message)
 /**
  * handleBy's model: one of AMP/models/text, opened as initMod opens it ([ModelSessions.acquire]), so it is listed
  * under Still open, counted in a run's memory and ended by Terminate. What it opens it keeps in the timed scope
- * [SCOPE], as `ortTimed` would: freed once nothing has asked it for [IDLE_SECONDS], freed first when memory runs short
+ * [SCOPE], a timed one, which scripts no longer have: freed once nothing has asked it for [IDLE_SECONDS], freed first when memory runs short
  * (MemoryWatch). A session a script had open already is used and left to it.
  */
 internal object LocalTextModel : ScriptAnswerer {

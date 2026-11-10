@@ -24,6 +24,8 @@ internal data class SessionInfo(
     /** The script block that holds it, such as `static search`, `timed search, 40s left` or `closable`; null when none does */
     val scope: String? = null,
     val weight: SessionWeight = SessionWeight(),
+    /** The session object itself, for a scope to tell its own rows from the rest; null for a row that is not one */
+    val handle: Any? = null,
     val terminate: () -> Unit,
 ) {
     // Every read makes a new terminate that does what the old one did, so it says nothing of whether the session changed
