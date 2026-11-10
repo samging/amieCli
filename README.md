@@ -41,10 +41,19 @@ The commands: `run`, `new`, `example`, `model`, `group`, `package`, `env`, `temp
 [amie/README.md](amie/README.md) is the full guide: every command line, the prompt, the scripting functions, the
 exit codes. `amie docs` opens the learn book, chapter by chapter from the first line to a model served.
 
-[examples/clinc-oos](examples/clinc-oos) is a whole project to learn from: a classifier for the 150 intents of the
-CLINC150 benchmark that also says "out of scope", from the download to a served model, with its results.
-[examples/google-assistant](examples/google-assistant) is one template that shows the parts together: a model
-built with `modelBuilder` and its metrics, routing requests to the Google packages and the browser.
+## Examples
+
+Whole projects in [examples/](examples), each with a README and a `setup.sh` that adds it to the AMP folder.
+
+| Example | What it shows | Run it |
+|---|---|---|
+| [clinc-oos](examples/clinc-oos) | A classifier for the 150 intents of CLINC150 that also says "out of scope": the download, training, a threshold, error analysis, an out-of-scope intent and a served model, with the results on the benchmark's test split | `amie run clinc-oos` |
+| [google-assistant](examples/google-assistant) | One template: a model built with `modelBuilder` and its metrics routes requests to google-calendar, google-tasks, google-drive, gmail-reader, google-translate and the browser | `amie template run google-assistant` |
+
+```bash
+examples/google-assistant/setup.sh     # once: the template, and the package jars it asks for
+amie template run google-assistant
+```
 
 ## Layout
 
