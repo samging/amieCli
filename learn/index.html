@@ -1,181 +1,1966 @@
+
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Learn amie</title>
-<meta name="description" content="The learn book of the amie interpreter: the prompt, scripts, models, groups, packages, envs, templates and serving, chapter by chapter.">
-<style>
-  :root {
-    --bg: #ffffff;
-    --bg-soft: #f6f6f7;
-    --text: #1a1a1a;
-    --text-soft: #5f6368;
-    --line: #e6e6e8;
-    --accent: #1a1a1a;
-    --code-bg: #f3f3f4;
-    --code-text: #1f2328;
-    --nav-width: 240px;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #121212;
-      --bg-soft: #181818;
-      --text: #ececec;
-      --text-soft: #a0a0a5;
-      --line: #2a2a2d;
-      --accent: #ececec;
-      --code-bg: #1c1c1f;
-      --code-text: #e6e6e6;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #121212;
-    --bg-soft: #181818;
-    --text: #ececec;
-    --text-soft: #a0a0a5;
-    --line: #2a2a2d;
-    --accent: #ececec;
-    --code-bg: #1c1c1f;
-    --code-text: #e6e6e6;
-  }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-  }
-  a { color: inherit; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
-  a:hover { text-decoration-color: var(--text); }
-  header {
-    position: sticky; top: 0; z-index: 2;
-    display: flex; align-items: baseline; gap: 12px;
-    padding: 14px 24px;
-    background: var(--bg);
-    border-bottom: 1px solid var(--line);
-  }
-  header .name { font-weight: 600; letter-spacing: -0.01em; }
-  header .sub { color: var(--text-soft); font-size: 14px; }
-  .layout { display: flex; min-height: calc(100vh - 53px); }
-  nav {
-    width: var(--nav-width); flex: none;
-    position: sticky; top: 53px; align-self: flex-start;
-    max-height: calc(100vh - 53px); overflow-y: auto;
-    padding: 24px 12px 24px 24px;
-    border-right: 1px solid var(--line);
-  }
-  nav p { margin: 0 0 8px; padding-left: 12px; font-size: 12px; color: var(--text-soft); }
-  nav ol { list-style: none; margin: 0 0 20px; padding: 0; }
-  nav li a {
-    display: block; padding: 6px 12px; border-radius: 6px;
-    font-size: 14px; color: var(--text-soft); text-decoration: none;
-  }
-  nav li a:hover { background: var(--bg-soft); color: var(--text); }
-  nav li a.current { background: var(--bg-soft); color: var(--text); }
-  main { flex: 1; min-width: 0; padding: 32px 24px 96px; }
-  main > * { max-width: 760px; }
-  h1 { font-size: 32px; line-height: 1.2; letter-spacing: -0.02em; margin: 0 0 8px; font-weight: 600; }
-  h2 { font-size: 24px; line-height: 1.25; letter-spacing: -0.015em; margin: 64px 0 12px; padding-top: 24px; border-top: 1px solid var(--line); font-weight: 600; }
-  h2:first-of-type { margin-top: 24px; border-top: 0; padding-top: 0; }
-  h3 { font-size: 17px; margin: 32px 0 8px; font-weight: 600; }
-  p { margin: 0 0 14px; }
-  .lead { color: var(--text-soft); font-size: 18px; margin-bottom: 24px; }
-  pre {
-    background: var(--code-bg); color: var(--code-text);
-    border-radius: 8px; padding: 14px 16px; margin: 0 0 16px;
-    overflow-x: auto; font-size: 13.5px; line-height: 1.55;
-    font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
-  }
-  code { font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace; font-size: 0.92em; }
-  p code, li code, td code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
-  pre.banner { line-height: 1.2; font-size: 13px; }
-  table { border-collapse: collapse; width: 100%; margin: 0 0 16px; font-size: 14.5px; }
-  th, td { text-align: left; padding: 8px 10px 8px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
-  th { font-weight: 500; color: var(--text-soft); }
-  td:first-child { white-space: nowrap; }
-  ul, ol.steps { margin: 0 0 14px; padding-left: 22px; }
-  li { margin-bottom: 4px; }
-  .note { border-left: 2px solid var(--line); padding: 2px 0 2px 14px; color: var(--text-soft); margin: 0 0 16px; }
-  @media (max-width: 860px) {
-    .layout { display: block; }
-    nav { position: static; width: auto; max-height: none; border-right: 0; border-bottom: 1px solid var(--line); padding: 16px; }
-    nav ol { display: flex; flex-wrap: wrap; gap: 2px; }
-    main { padding: 24px 16px 64px; }
-    h1 { font-size: 26px; }
-    td:first-child { white-space: normal; }
-  }
-</style>
-</head>
-<body>
-<header>
-  <span class="name">amie</span>
-  <span class="sub">The learn book</span>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="How to use the Amie desktop app and the amie command line - the sandbox, scripting, packages, models and metrics">
+      
+      
+      
+        <link rel="canonical" href="https://samging.github.io/amieCli/learn/">
+      
+      
+        <link rel="prev" href="../getting-started/">
+      
+      
+        <link rel="next" href="../amie-reference/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Learn amie - Amie desktop app</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#learn-amie" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Amie desktop app" class="md-header__button md-logo" aria-label="Amie desktop app" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Amie desktop app
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Learn amie
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/samging/amieCli" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    samging/amieCli
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
 </header>
-<div class="layout">
-<nav aria-label="Chapters">
-  <p>Chapters</p>
-  <ol>
-    <li><a href="#welcome">What amie is</a></li>
-    <li><a href="#install">Install and the first run</a></li>
-    <li><a href="#prompt">The prompt</a></li>
-    <li><a href="#lines">The first lines of script</a></li>
-    <li><a href="#scripts">Scripts in files</a></li>
-    <li><a href="#models">Train a model</a></li>
-    <li><a href="#groups">Groups</a></li>
-    <li><a href="#packages">Packages</a></li>
-    <li><a href="#envs">Envs</a></li>
-    <li><a href="#templates">Templates and the background</a></li>
-    <li><a href="#serving">Serve a model</a></li>
-    <li><a href="#hub">Models from the Hub</a></li>
-    <li><a href="#housekeeping">Sessions and housekeeping</a></li>
-    <li><a href="#errors">When something goes wrong</a></li>
-    <li><a href="#reference">Reference</a></li>
-    <li><a href="#inside">Inside amie</a></li>
-  </ol>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Amie desktop app" class="md-nav__button md-logo" aria-label="Amie desktop app" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Amie desktop app
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/samging/amieCli" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    samging/amieCli
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start here
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start here
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How the app works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The components
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup-tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set up a new Mac
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The amie command line
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The amie command line
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Learn amie
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Learn amie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#welcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What amie is
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install and the first run
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Install and the first run">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-amp-folder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The AMP folder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-first-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The first run
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The prompt
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The prompt">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-prompts-own-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The prompt's own commands
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The first lines of script
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The first lines of script">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ask-a-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ask a model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-confidence-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A confidence gate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-model-for-one-block" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A model for one block
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scripts in files
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Train a model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Train a model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#look-at-what-was-built" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Look at what was built
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#teach-it-more" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teach it more
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#groups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Groups
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packages
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Packages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#writing-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Writing a package: run and close
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#github-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packages from GitHub
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#maven-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Maven packages
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#envs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Envs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Templates and the background
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Templates and the background">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-template-in-the-background" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A template in the background
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#serving" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serve a model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hub" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models from the Hub
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Models from the Hub">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pairs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Encoder and decoder pairs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#housekeeping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sessions and housekeeping
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sessions and housekeeping">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scope-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-and-the-shell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data and the shell
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When something goes wrong
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
-<main>
+      
+    </li>
+  
 
-<h1>Learn amie</h1>
-<p class="lead">An interpreter for scripts that train, ask and serve intent models, from the first line at the prompt to a model served over HTTP, one chapter at a time. Every example runs as it is written.</p>
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../amie-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    amie reference
+  
 
-<h2 id="welcome">What amie is</h2>
-<pre class="banner"> ______     __    __     __     ______
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working in the app
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working in the app
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sandbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The sandbox
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sandbox-scripting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scripting API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook, scripts to copy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models and metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../serving/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Serving a model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../amp-folder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The AMP folder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models-page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models page
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pi5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raspberry Pi 5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source-layout/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where the code is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../codebase/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The code of amie, what is where and why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#welcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What amie is
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install and the first run
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Install and the first run">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-amp-folder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The AMP folder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-first-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The first run
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The prompt
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The prompt">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-prompts-own-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The prompt's own commands
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The first lines of script
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The first lines of script">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ask-a-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ask a model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-confidence-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A confidence gate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-model-for-one-block" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A model for one block
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scripts in files
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Train a model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Train a model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#look-at-what-was-built" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Look at what was built
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#teach-it-more" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teach it more
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#groups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Groups
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packages
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Packages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#writing-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Writing a package: run and close
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#github-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packages from GitHub
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#maven-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Maven packages
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#envs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Envs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Templates and the background
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Templates and the background">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-template-in-the-background" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A template in the background
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#serving" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serve a model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hub" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models from the Hub
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Models from the Hub">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pairs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Encoder and decoder pairs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#housekeeping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sessions and housekeeping
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sessions and housekeeping">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scope-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-and-the-shell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data and the shell
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When something goes wrong
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="learn-amie">Learn amie<a class="headerlink" href="#learn-amie" title="Permanent link">&para;</a></h1>
+<p>An interpreter for scripts that train, ask and serve intent models, from the first line at the prompt to a model served over HTTP, one chapter at a time. Every example runs as it is written.</p>
+<h2 id="welcome">What amie is<a class="headerlink" href="#welcome" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code> ______     __    __     __     ______
 /\  __ \   /\ "-./  \   /\ \   /\  ___\
 \ \  __ \  \ \ \-./\ \  \ \ \  \ \  __\
  \ \_\ \_\  \ \_\ \ \_\  \ \_\  \ \_____\
-  \/_/\/_/   \/_/  \/_/   \/_/   \/_____/</pre>
+  \/_/\/_/   \/_/  \/_/   \/_/   \/_____/
+</code></pre></div>
 <p>amie trains small intent models on your own labeled text, runs them, groups them, serves them over HTTP and scripts all of it in Kotlin. A script is <code>main.kts</code>, and the functions it calls (<code>initMod</code>, <code>modelBuilder</code>, <code>group</code>, <code>database</code>, <code>log</code> and the rest) are in scope with nothing to import.</p>
 <p>It works the way the Python interpreter does: a prompt where each line runs as you type it, script files, <code>-c</code> for a line of code, and a command for every feature. Everything a script makes lives in one folder, the AMP, so a model built by one script is there for the next, and a package added at the command line opens in a script.</p>
 <p>amie is free software under the GNU General Public License, version 3 or later. The full text is the LICENSE file at the root of the repository; <code>amie --version</code> says so too.</p>
-
-<h2 id="install">Install and the first run</h2>
+<h2 id="install">Install and the first run<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <p>The install script builds the interpreter and puts it on the PATH: the distribution under <code>~/.local/lib/amie</code>, and <code>~/.local/bin/amie</code> linked to it.</p>
-<pre>$ amie/install.sh
+<div class="highlight"><pre><span></span><code>$ amie/install.sh
 Building amie...
-Installed amie 1.0.0 (Kotlin 2.1.0) on OpenJDK 64-Bit Server VM 21.0.5, Mac OS X aarch64 at /Users/me/.local/bin/amie</pre>
+Installed amie 1.0.0 (Kotlin 2.1.0) on OpenJDK 64-Bit Server VM 21.0.5, Mac OS X aarch64 at /Users/me/.local/bin/amie
+</code></pre></div>
 <p><code>--prefix /usr/local</code> installs it for every user (build as yourself first, then <code>sudo</code> it with <code>--no-build</code>); <code>--uninstall</code> takes it out again. A JDK 21 is needed, to run as well as to build, and <code>amie</code> finds one on its own: <code>AMIE_JAVA_HOME</code>, <code>JAVA_HOME</code> when it is one, the Mac's <code>java_home</code>, Homebrew's <code>openjdk@21</code>, sdkman's, <code>/usr/lib/jvm</code>, or one Gradle downloaded.</p>
 <p>From the checkout, the launcher at the root of the repository runs it without installing, building it the first time and again whenever the sources changed:</p>
-<pre>./amie --version
+<div class="highlight"><pre><span></span><code>./amie --version
 amie 1.0.0 (Kotlin 2.1.0) on OpenJDK 64-Bit Server VM 21.0.5, Mac OS X aarch64
-amie is free software under the GNU GPL, version 3 or later: see LICENSE.</pre>
+amie is free software under the GNU GPL, version 3 or later: see LICENSE.
+</code></pre></div>
 <p>Built by hand, <code>./gradlew :amie:installDist</code> at the repository root leaves it in <code>amie/build/install/amie</code>, the folder the install script copies. The rest of this book writes <code>amie</code> for any of these.</p>
-<h3>The AMP folder</h3>
+<h3 id="the-amp-folder">The AMP folder<a class="headerlink" href="#the-amp-folder" title="Permanent link">&para;</a></h3>
 <p>Everything amie knows is in one folder, the AMP: models, envs, packages, templates, the log. By default:</p>
 <table>
-  <tr><th>Where</th><th>Folder</th></tr>
-  <tr><td>macOS</td><td><code>~/Library/Application Support/amie pilot/AMP</code></td></tr>
-  <tr><td>Windows</td><td><code>%APPDATA%\amie pilot\AMP</code></td></tr>
-  <tr><td>Elsewhere</td><td><code>~/.local/share/amie-pilot/AMP</code></td></tr>
+<thead>
+<tr>
+<th>Where</th>
+<th>Folder</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>macOS</td>
+<td><code>~/Library/Application Support/amie pilot/AMP</code></td>
+</tr>
+<tr>
+<td>Windows</td>
+<td><code>%APPDATA%\amie pilot\AMP</code></td>
+</tr>
+<tr>
+<td>Elsewhere</td>
+<td><code>~/.local/share/amie-pilot/AMP</code></td>
+</tr>
+</tbody>
 </table>
 <p>Another folder is one option away: <code>amie --amp ~/scratch/amp</code>, or the environment variable <code>AMIE_AMP_DIR</code>. A folder that doesn't exist yet is made, empty, which is a fine way to try things without touching the default one. The greeting at the prompt says which AMP is in use.</p>
 <p>Intent models train on a BERT encoder, read from <code>AMP/models/bert</code>, or from the folder <code>AMIE_MODELS_DIR</code> names. A scratch AMP needs one or the other before its first build.</p>
-<h3>The first run</h3>
-<pre>$ amie
+<h3 id="the-first-run">The first run<a class="headerlink" href="#the-first-run" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>$ amie
  ______     __    __     __     ______
 /\  __ \   /\ "-./  \   /\ \   /\  ___\
 \ \  __ \  \ \ \-./\ \  \ \ \  \ \  __\
@@ -185,78 +1970,152 @@ amie 1.0.0 (Kotlin 2.1.0) on OpenJDK 64-Bit Server VM 21.0.5, Mac OS X aarch64
 Type :help for the commands, :api for the script's functions, :learn for the book, :quit to leave. AMP: /Users/me/Library/Application Support/amie pilot/AMP
 &gt;&gt;&gt; log("hello")
 hello
-&gt;&gt;&gt; :quit</pre>
+&gt;&gt;&gt; :quit
+</code></pre></div>
 <p><code>amie -h</code> prints the whole command line, and every command prints its own help with <code>--help</code>.</p>
-
-<h2 id="prompt">The prompt</h2>
+<h2 id="prompt">The prompt<a class="headerlink" href="#prompt" title="Permanent link">&para;</a></h2>
 <p>At <code>&gt;&gt;&gt;</code> each line is a piece of script, run in one interpreter kept from line to line. What a line defines (a <code>val</code>, a <code>fun</code>, a <code>class</code>, an <code>import</code>) is there for the lines after it. The value a line ends with is printed.</p>
-<pre>&gt;&gt;&gt; val texts = listOf("turn the lights on", "is it raining")
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; val texts = listOf("turn the lights on", "is it raining")
 &gt;&gt;&gt; texts.size
 2
 &gt;&gt;&gt; fun shout(s: String) = s.uppercase() + "!"
 &gt;&gt;&gt; shout(texts.first())
-TURN THE LIGHTS ON!</pre>
+TURN THE LIGHTS ON!
+</code></pre></div>
 <p>A line that isn't whole waits at <code>...</code> for the rest. A block whose brackets are closed is sent by a blank line, so a <code>for</code> or a function over several lines goes in as one piece:</p>
-<pre>&gt;&gt;&gt; for (t in texts) {
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; for (t in texts) {
 ...     log(t.length)
 ... }
 ...
 18
-13</pre>
+13
+</code></pre></div>
 <p>Lines are edited and recalled with the arrow keys, and the history lives in <code>~/.amie_history</code> between runs. Ctrl-C stops the line that is running, or drops the block being typed. Ctrl-D leaves, as <code>:quit</code> does.</p>
-<h3>The prompt's own commands</h3>
+<h3 id="the-prompts-own-commands">The prompt's own commands<a class="headerlink" href="#the-prompts-own-commands" title="Permanent link">&para;</a></h3>
 <p>A line that starts with a colon is for the prompt itself, not the script:</p>
 <table>
-  <tr><th>Command</th><th>What it does</th></tr>
-  <tr><td><code>:help</code></td><td>These commands</td></tr>
-  <tr><td><code>:api [word]</code></td><td>The script's functions, with the word in their name or description: <code>:api group</code></td></tr>
-  <tr><td><code>:learn</code></td><td>This book, in the browser</td></tr>
-  <tr><td><code>:env [name]</code></td><td>The env the lines run in; with a name, that env from now on</td></tr>
-  <tr><td><code>:load file.kts</code></td><td>Runs the file's lines here, so what it defines stays</td></tr>
-  <tr><td><code>:sessions</code></td><td>Every open session: models, groups, packages, templates in the background</td></tr>
-  <tr><td><code>:terminate x</code></td><td>Closes the session named x, or <code>#id</code>; <code>:terminate all</code> closes every one</td></tr>
-  <tr><td><code>:runs</code></td><td>The recorded runs of <code>main.kts</code>, <code>AMP/pluginDir/runs.jsonl</code></td></tr>
-  <tr><td><code>:reset</code></td><td>Forgets what the lines typed here defined</td></tr>
-  <tr><td><code>:clear</code></td><td>Clears the screen</td></tr>
-  <tr><td><code>:quit</code></td><td>Leaves; <code>:exit</code>, <code>:q</code> and Ctrl-D do too</td></tr>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:help</code></td>
+<td>These commands</td>
+</tr>
+<tr>
+<td><code>:api [word]</code></td>
+<td>The script's functions, with the word in their name or description: <code>:api group</code></td>
+</tr>
+<tr>
+<td><code>:learn</code></td>
+<td>This book, in the browser</td>
+</tr>
+<tr>
+<td><code>:env [name]</code></td>
+<td>The env the lines run in; with a name, that env from now on</td>
+</tr>
+<tr>
+<td><code>:load file.kts</code></td>
+<td>Runs the file's lines here, so what it defines stays</td>
+</tr>
+<tr>
+<td><code>:sessions</code></td>
+<td>Every open session: models, groups, packages, templates in the background</td>
+</tr>
+<tr>
+<td><code>:config [x.jar]</code></td>
+<td>Package config files: every jar's and whether each is filled in, or one jar's keys; <code>key=value</code> sets keys; <code>:config --help</code> lists all of it</td>
+</tr>
+<tr>
+<td><code>:setup x.jar</code></td>
+<td>Asks for each config key of the jar with its hint; Enter keeps a value</td>
+</tr>
+<tr>
+<td><code>:terminate x</code></td>
+<td>Closes the session named x, or <code>#id</code>; <code>:terminate all</code> closes every one</td>
+</tr>
+<tr>
+<td><code>:runs</code></td>
+<td>The recorded runs of <code>main.kts</code>, <code>AMP/pluginDir/runs.jsonl</code></td>
+</tr>
+<tr>
+<td><code>:reset</code></td>
+<td>Forgets what the lines typed here defined</td>
+</tr>
+<tr>
+<td><code>:clear</code></td>
+<td>Clears the screen</td>
+</tr>
+<tr>
+<td><code>:quit</code></td>
+<td>Leaves; <code>:exit</code>, <code>:q</code> and Ctrl-D do too</td>
+</tr>
+</tbody>
 </table>
 <p><code>help</code>, <code>help(group)</code>, <code>quit</code> and <code>exit</code> work without the colon too, with or without the parentheses, as they do at Python's prompt. A line that starts with <code>amie</code> and a space is amie's own command line, run right here: <code>amie envs new prod</code>, <code>amie models list</code>, <code>amie hf search bert</code>. On a terminal the banner is in the pride flag's colors, the commands and the prompt have a color each and errors are red; a piped output or <code>NO_COLOR</code> in the environment leaves everything plain.</p>
 <p><code>:api</code> is the fastest way to find a function. The description of each comes from the list the script API is generated from, so what it says is what the function does:</p>
-<pre>&gt;&gt;&gt; :api vote
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; :api vote
 fun group(name: String): ModelSwarm
-    The models of a group opened together: predict is the best score across them, vote the label most give, ...</pre>
-
-<h2 id="lines">The first lines of script</h2>
+    The models of a group opened together: predict is the best score across them, vote the label most give, ...
+</code></pre></div>
+<h2 id="lines">The first lines of script<a class="headerlink" href="#lines" title="Permanent link">&para;</a></h2>
 <p>The console has levels. <code>log</code> and <code>info</code> are the script's own output, <code>data</code> is what it produced, <code>error</code> is a problem. Internal lines, the engine's own, are hidden unless amie runs with <code>-v</code>.</p>
-<pre>&gt;&gt;&gt; log("hello from amie")
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; log("hello from amie")
 hello from amie
 &gt;&gt;&gt; data(mapOf("lights" to 0.9f, "weather" to 0.1f))
 lights: 0.9
 weather: 0.1
 &gt;&gt;&gt; error("how a problem looks")
-how a problem looks</pre>
+how a problem looks
+</code></pre></div>
 <p>Errors go to standard error, everything else to standard output, so a script's results can be piped and its complaints still reach the terminal. Every line also goes to <code>AMP/logs.txt</code>.</p>
-<h3>Ask a model</h3>
+<h3 id="ask-a-model">Ask a model<a class="headerlink" href="#ask-a-model" title="Permanent link">&para;</a></h3>
 <p>A model is opened by name with <code>initMod</code>, which gives a session: one per model, kept open until it is closed. Every session answers through the same three calls.</p>
-<pre>&gt;&gt;&gt; val m = initMod("intents")
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; val m = initMod("intents")
 &gt;&gt;&gt; m.predict("switch off the kitchen light")
 lights
 &gt;&gt;&gt; m.scores("is it going to rain")
 {weather=0.93, lights=0.04, greeting=0.03}
 &gt;&gt;&gt; m.answer("good morning")
-greeting:0.97</pre>
+greeting:0.97
+</code></pre></div>
 <table>
-  <tr><th>Call</th><th>Returns</th></tr>
-  <tr><td><code>predict(text)</code></td><td>The best label, nothing else; throws when the model answers nothing</td></tr>
-  <tr><td><code>scores(text)</code></td><td>Every label with its score, best first, a <code>Map&lt;String, Float&gt;</code></td></tr>
-  <tr><td><code>predictions(text)</code></td><td>The answers as <code>Prediction(label, score)</code>, in the model's order</td></tr>
-  <tr><td><code>inference(text)</code>, <code>run(text)</code></td><td>The raw lines the model answers, <code>label:score</code></td></tr>
-  <tr><td><code>answer(text)</code></td><td>The first raw answer as it came, or null</td></tr>
+<thead>
+<tr>
+<th>Call</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>predict(text)</code></td>
+<td>The best label, nothing else; throws when the model answers nothing</td>
+</tr>
+<tr>
+<td><code>scores(text)</code></td>
+<td>Every label with its score, best first, a <code>Map&lt;String, Float&gt;</code></td>
+</tr>
+<tr>
+<td><code>predictions(text)</code></td>
+<td>The answers as <code>Prediction(label, score)</code>, in the model's order</td>
+</tr>
+<tr>
+<td><code>inference(text)</code>, <code>run(text)</code></td>
+<td>The raw lines the model answers, <code>label:score</code></td>
+</tr>
+<tr>
+<td><code>answer(text)</code></td>
+<td>The first raw answer as it came, or null</td>
+</tr>
+</tbody>
 </table>
 <p>Each call runs the model once, so ask once and keep the result. The chapter on models trains the <code>intents</code> model these lines use.</p>
-<h3>A confidence gate</h3>
+<h3 id="a-confidence-gate">A confidence gate<a class="headerlink" href="#a-confidence-gate" title="Permanent link">&para;</a></h3>
 <p>The scores let a script say "not sure" instead of guessing:</p>
-<pre>&gt;&gt;&gt; val threshold = 0.5f
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; val threshold = 0.5f
 &gt;&gt;&gt; for (text in listOf("turn the lights on", "asdf qwerty")) {
 ...     val (label, score) = m.scores(text).entries.first()
 ...     if (score &lt; threshold) log("$text: not sure ($label ${"%.2f".format(score)})")
@@ -264,49 +2123,86 @@ greeting:0.97</pre>
 ... }
 ...
 turn the lights on: lights 0.97
-asdf qwerty: not sure (greeting 0.41)</pre>
-<h3>A model for one block</h3>
+asdf qwerty: not sure (greeting 0.41)
+</code></pre></div>
+<h3 id="a-model-for-one-block">A model for one block<a class="headerlink" href="#a-model-for-one-block" title="Permanent link">&para;</a></h3>
 <p><code>sessionMod</code> gives a snapshot of a model's head, kept in memory and gone when the block ends. Inside the block its functions need no name in front, and what the block ends on is what the call returns:</p>
-<pre>&gt;&gt;&gt; val answers = sessionMod("intents") {
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; val answers = sessionMod("intents") {
 ...     listOf("hello there", "lights off").map { predict(it) }
 ... }
 ...
 &gt;&gt;&gt; answers
-[greeting, lights]</pre>
-
-<h2 id="scripts">Scripts in files</h2>
+[greeting, lights]
+</code></pre></div>
+<h2 id="scripts">Scripts in files<a class="headerlink" href="#scripts" title="Permanent link">&para;</a></h2>
 <p>A file of script runs as <code>main.kts</code>, with the same API in scope and nothing to import:</p>
-<pre>// label.kts
+<div class="highlight"><pre><span></span><code>// label.kts
 val m = initMod("intents")
 val lines = generateSequence { input() }        // standard input, a line at a time, until it ends
-lines.forEach { log("${m.predict(it)}\t$it") }</pre>
-<pre>$ printf 'lights off\nis it raining\n' | amie label.kts
-lights	lights off
-weather	is it raining</pre>
+lines.forEach { log("${m.predict(it)}\t$it") }
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ printf 'lights off\nis it raining\n' | amie label.kts
+lights  lights off
+weather is it raining
+</code></pre></div>
 <p>The forms of a run:</p>
 <table>
-  <tr><th>Command line</th><th>What happens</th></tr>
-  <tr><td><code>amie label.kts</code></td><td>Runs the file</td></tr>
-  <tr><td><code>amie label.kts a b</code></td><td>With arguments, read as <code>System.getProperty("amie.args")</code>, one a line</td></tr>
-  <tr><td><code>amie -c 'log(initMod("intents").predict("hi"))'</code></td><td>Runs the code given</td></tr>
-  <tr><td><code>amie -i label.kts</code></td><td>Runs it, then opens the prompt with its models still open and its values defined</td></tr>
-  <tr><td><code>amie -e prod label.kts</code></td><td>In the env <code>prod</code>, over the one the script names</td></tr>
-  <tr><td><code>amie -v label.kts</code></td><td>With the internal lines: the env sourcing, a build's phases, what the run used</td></tr>
-  <tr><td><code>amie run label.kts</code></td><td>The same as the bare file</td></tr>
-  <tr><td><code>amie new reader</code></td><td>A project: <code>AMP/projects/reader/main.kts</code> to start from, in an env named <code>reader</code></td></tr>
-  <tr><td><code>amie run reader</code></td><td>Runs the project by its name, as a starter or a template by its title</td></tr>
+<thead>
+<tr>
+<th>Command line</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>amie label.kts</code></td>
+<td>Runs the file</td>
+</tr>
+<tr>
+<td><code>amie label.kts a b</code></td>
+<td>With arguments, read as <code>System.getProperty("amie.args")</code>, one a line</td>
+</tr>
+<tr>
+<td><code>amie -c 'log(initMod("intents").predict("hi"))'</code></td>
+<td>Runs the code given</td>
+</tr>
+<tr>
+<td><code>amie -i label.kts</code></td>
+<td>Runs it, then opens the prompt with its models still open and its values defined</td>
+</tr>
+<tr>
+<td><code>amie -e prod label.kts</code></td>
+<td>In the env <code>prod</code>, over the one the script names</td>
+</tr>
+<tr>
+<td><code>amie -v label.kts</code></td>
+<td>With the internal lines: the env sourcing, a build's phases, what the run used</td>
+</tr>
+<tr>
+<td><code>amie run label.kts</code></td>
+<td>The same as the bare file</td>
+</tr>
+<tr>
+<td><code>amie new reader</code></td>
+<td>A project: <code>AMP/projects/reader/main.kts</code> to start from, in an env named <code>reader</code></td>
+</tr>
+<tr>
+<td><code>amie run reader</code></td>
+<td>Runs the project by its name, as a starter or a template by its title</td>
+</tr>
+</tbody>
 </table>
 <p>Standard output carries the console, standard error the errors, with the script's line in front:</p>
-<pre>$ amie bad.kts
+<div class="highlight"><pre><span></span><code>$ amie bad.kts
 main.kts:2:5: Unresolved reference: initMode
 $ echo $?
-1</pre>
+1
+</code></pre></div>
 <p>The exit code is 0 when the script finished, 1 when it failed, and 2 for a command line amie can't read. A script that leaves a model serving keeps the process up until Ctrl-C.</p>
 <p><code>-i</code> is the way to work on a script: run it, then poke at what it built from the prompt, and <code>:load</code> runs a file into the prompt the same way without leaving.</p>
-
-<h2 id="models">Train a model</h2>
+<h2 id="models">Train a model<a class="headerlink" href="#models" title="Permanent link">&para;</a></h2>
 <p>An intent model is trained from a csv with a text column and a label column, whatever they are called. A handful of rows for each label is enough to start; more rows make a better model.</p>
-<pre>text,label
+<div class="highlight"><pre><span></span><code>text,label
 turn the lights on,lights
 switch off the kitchen light,lights
 lights out please,lights
@@ -315,58 +2211,63 @@ what's the weather like today,weather
 will it be sunny tomorrow,weather
 hello there,greeting
 good morning,greeting
-hi how are you,greeting</pre>
+hi how are you,greeting
+</code></pre></div>
 <p>The command does the whole thing and prints the validation:</p>
-<pre>$ amie models build intents.csv --name intents
+<div class="highlight"><pre><span></span><code>$ amie models build intents.csv --name intents
 Building intents: embedding 9 rows, training, exporting
 accuracy 1.00  macro F1 1.00
 label     precision  recall  f1  support
 greeting  1.00       1.00    1.00  3
 lights    1.00       1.00    1.00  3
-weather   1.00       1.00    1.00  3</pre>
+weather   1.00       1.00    1.00  3
+</code></pre></div>
 <p>The model is in <code>AMP/models/intents/intents</code>, ready for <code>initMod("intents")</code>. Validated on a split of its own rows by default, it validates on a test file instead with <code>--test test.csv</code>.</p>
-<p>The same build as script, which is what the command runs for you:</p>
-<pre>val train = source("intents.csv")          // the text and label columns are inferred
+<p>The same build as script, which is what the command runs for you. <code>intents.csv</code> stands for your own file: <code>source()</code> finds it as given, relative to the folder amie was started in, then in <code>AMP/</code>, then in <code>AMP/pluginDir/</code>. A new AMP folder has <code>sample-intents.csv</code> to try.</p>
+<div class="highlight"><pre><span></span><code>val train = source("intents.csv")          // the text and label columns are inferred
 relate(train, "intents-test.csv")          // optional: a test file to validate on
 val built = modelBuilder("intents", train)  // embeds with BERT, trains a small head, exports ONNX
-built.modelStatus()                         // precision, recall, F1 for each label</pre>
+built.modelStatus()                         // precision, recall, F1 for each label
+</code></pre></div>
 <p>A file named in a script is looked up as given, then in the AMP folder, then in <code>AMP/pluginDir</code>.</p>
-<h3>Look at what was built</h3>
-<pre>$ amie models list
+<h3 id="look-at-what-was-built">Look at what was built<a class="headerlink" href="#look-at-what-was-built" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>$ amie models list
 intent    intents    3 labels    v1
 $ amie models validate intents
 $ amie models info intents
-$ amie models remove intents</pre>
+$ amie models remove intents
+</code></pre></div>
 <p><code>validate</code> prints the stored validation again; <code>info</code> the labels, the encoder, the version, how it was trained, the groups it is in and where it is served, if anywhere. In script, <code>validateMetrics("intents")</code>, <code>confusionMatrix("intents")</code> and <code>mistakes("intents")</code> show the same as tables.</p>
-<h3>Teach it more</h3>
+<h3 id="teach-it-more">Teach it more<a class="headerlink" href="#teach-it-more" title="Permanent link">&para;</a></h3>
 <p>A trained model learns from new rows without starting over. Rows of labels it knows correct it, a label it doesn't know gets an output of its own, and what it knew is replayed so it keeps it. The model before stays as a version.</p>
-<pre>&gt;&gt;&gt; fineTune("intents", source("more.csv"))
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; fineTune("intents", source("more.csv"))
 &gt;&gt;&gt; versions("intents")
-&gt;&gt;&gt; rollback("intents", 1)</pre>
+&gt;&gt;&gt; rollback("intents", 1)
+</code></pre></div>
 <p><code>buildOptions</code> opens the rest: your own head architectures, cross-validation over folds, calibration so the scores mean what they say, and a search over candidates. <code>:api buildOptions</code> lists what it takes.</p>
-
-<h2 id="groups">Groups</h2>
+<h2 id="groups">Groups<a class="headerlink" href="#groups" title="Permanent link">&para;</a></h2>
 <p>A group is a named set of models, kept in the env, that is asked as one. <code>vote</code> is the label most of them give, <code>predict</code> the best score across them, <code>each</code> every model's own answer.</p>
-<pre>$ amie groups add house intents dummy
+<div class="highlight"><pre><span></span><code>$ amie groups add house intents dummy
 $ amie groups list
 house    intents, dummy    env default
 $ amie groups open house "turn the lights on"
 intents: lights
 dummy: lights
-vote: lights</pre>
+vote: lights
+</code></pre></div>
 <p>Without texts, <code>groups open</code> reads them from standard input, a line each. <code>groups remove house dummy</code> takes a model out, and without a model removes the group.</p>
 <p>In script:</p>
-<pre>&gt;&gt;&gt; val swarm = group("house")
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; val swarm = group("house")
 &gt;&gt;&gt; swarm.vote("is it raining")
 weather
 &gt;&gt;&gt; swarm.each("is it raining")
 {intents=weather, dummy=weather}
-&gt;&gt;&gt; swarm.close()</pre>
+&gt;&gt;&gt; swarm.close()
+</code></pre></div>
 <p>Opening a group opens a session of each model; closing the swarm closes the ones it opened.</p>
-
-<h2 id="packages">Packages</h2>
+<h2 id="packages">Packages<a class="headerlink" href="#packages" title="Permanent link">&para;</a></h2>
 <p>A package is a jar with a class that answers text, kept in <code>AMP/pluginDir</code>. It is opened like a model, by its file name, and asked with <code>run</code> or <code>answer</code>, since it has no labels of its own:</p>
-<pre>$ amie packages search google
+<div class="highlight"><pre><span></span><code>$ amie packages search google
 6 jars in samging/jar-jar matching 'google'
 $ amie packages add spotify.jar
 $ amie packages add ~/build/greeter.jar
@@ -375,125 +2276,168 @@ $ amie packages test greeter.jar
 $ amie packages info greeter.jar
 $ amie packages setup spotify.jar
     clientId: 
-    clientSecret: </pre>
+    clientSecret: 
+</code></pre></div>
 <p>A jar's settings are files in <code>AMP/pluginDir/config/&lt;jar&gt;/</code>. <code>amie packages setup</code> asks for each key with the hint the file gives, Enter keeping a value, and offers the values another jar already has, so one Google client fills every Google package. <code>amie packages config spotify.jar clientId=abc</code> sets a key from a script, <code>--all-jars</code> sets it for every jar with that file, and <code>amie packages config</code> alone shows every jar's files and whether each is filled in.</p>
-<pre>&gt;&gt;&gt; val greeter = initMod("greeter.jar")
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; val greeter = initMod("greeter.jar")
 &gt;&gt;&gt; greeter.answer("hello")
-Hello to you</pre>
+Hello to you
+</code></pre></div>
 <p><code>add</code> checks that the jar has a package class before copying it in. <code>test</code> runs the tests the jar declares in <code>META-INF/amie/package.json</code>, or one call with "hello" when it declares none. <code>info</code> says what the jar is, where it came from, whether it opens here and how its last test went.</p>
-<h3 id="writing-packages">Writing a package: run and close</h3>
+<h3 id="writing-packages">Writing a package: run and close<a class="headerlink" href="#writing-packages" title="Permanent link">&para;</a></h3>
 <p>A package class fulfils the <code>AmiePackage</code> interface: <code>List&lt;String&gt; run(String)</code> and <code>close()</code>, both required, and a public no-arg constructor. Implementing the interface is the easiest way, but any class with the same methods qualifies, so a jar needs no amie library to compile against:</p>
 <table>
-  <tr><th>Member</th><th>What amie does with it</th></tr>
-  <tr><td>The no-arg constructor</td><td>Every <code>initMod("x.jar")</code> makes a new instance, in a class loader of its own</td></tr>
-  <tr><td><code>configure(File dir)</code>, if there</td><td>Called after the constructor with <code>AMP/pluginDir/config/&lt;jar&gt;/</code>; <code>Path</code>, <code>String</code> and <code>Map</code> work too</td></tr>
-  <tr><td><code>List&lt;String&gt; run(String text)</code></td><td>What <code>.run</code> and <code>.answer</code> call; each element is one line</td></tr>
-  <tr><td><code>void close()</code></td><td>Called once, by <code>.close()</code>, <code>:terminate</code> or the end of a scope, to release what <code>run</code> opened; then the class loader is dropped</td></tr>
+<thead>
+<tr>
+<th>Member</th>
+<th>What amie does with it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The no-arg constructor</td>
+<td>Every <code>initMod("x.jar")</code> makes a new instance, in a class loader of its own</td>
+</tr>
+<tr>
+<td><code>configure(File dir)</code>, if there</td>
+<td>Called after the constructor with <code>AMP/pluginDir/config/&lt;jar&gt;/</code>; <code>Path</code>, <code>String</code> and <code>Map</code> work too</td>
+</tr>
+<tr>
+<td><code>List&lt;String&gt; run(String text)</code></td>
+<td>What <code>.run</code> and <code>.answer</code> call; each element is one line</td>
+</tr>
+<tr>
+<td><code>void close()</code></td>
+<td>Called once, by <code>.close()</code>, <code>:terminate</code> or the end of a scope, to release what <code>run</code> opened; then the class loader is dropped</td>
+</tr>
+</tbody>
 </table>
-<pre>public class Greeter {
+<div class="highlight"><pre><span></span><code>public class Greeter {
     public java.util.List&lt;String&gt; run(String text) {
         return java.util.List.of("Hello to you");
     }
 
     public void close() {}
-}</pre>
+}
+</code></pre></div>
 <p>Two sessions of one jar never share an instance or a static field. <code>run</code> runs on amie's <code>amie-package-call</code> thread while the script waits; Ctrl-C interrupts it, and an exception it throws becomes the script's error. The classes must be compiled for Java 21 or older, and a Kotlin package can rely on amie's own standard library. When a jar has several classes that fit, <code>"entry"</code> in its <code>META-INF/amie/package.json</code> names the one.</p>
-<h3 id="github-packages">Packages from GitHub</h3>
+<h3 id="github-packages">Packages from GitHub<a class="headerlink" href="#github-packages" title="Permanent link">&para;</a></h3>
 <p>A script asks for a jar in a GitHub repository with <code>github:</code>. amie downloads it, checks it as <code>packages add</code> does, and keeps it in <code>AMP/pluginDir</code> with where it came from:</p>
-<pre>&gt;&gt;&gt; val notes = initMod("github:samging/jar-jar/memory.jar")
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; val notes = initMod("github:samging/jar-jar/memory.jar")
 &gt;&gt;&gt; notes.answer("help")
 remember &lt;text&gt;  keeps it
-&gt;&gt;&gt; val files = initMod("files.jar")</pre>
+&gt;&gt;&gt; val files = initMod("files.jar")
+</code></pre></div>
 <p>A plain name like <code>files.jar</code> is looked for in the env, <code>AMP/pluginDir</code>, as a path, and last in the repositories of <code>AMP/github.json</code>, which starts with <code>samging/jar-jar</code>. <code>@main</code>, a tag or a commit after the name pins a version, and a release's assets are found too. A <code>github:</code> open downloads again only when the file changed; a plain name uses the copy already in <code>AMP/pluginDir</code>. A private repository needs <code>GITHUB_TOKEN</code> or a <code>"token"</code> in <code>AMP/github.json</code>; without one the jar is reported as not found. <code>amie packages search</code> lists what those repositories hold, and <code>amie packages add &lt;x.jar&gt;</code> downloads one by its name.</p>
 <p>To upload a jar, check it with <code>amie packages add</code> and <code>amie packages test</code>, then open a pull request that adds it at the top of samging/jar-jar. Its Check jars workflow first checks every jar the way amie checks a download, running none of its code, then opens each one as <code>amie packages test</code> does: it calls <code>run()</code> with every test the jar declares and then <code>close()</code>. The jar is there for everyone once the pull request is merged.</p>
-<h3>Maven packages</h3>
+<h3 id="maven-packages">Maven packages<a class="headerlink" href="#maven-packages" title="Permanent link">&para;</a></h3>
 <p>A library from Maven Central goes into the env, so a script can import it:</p>
-<pre>$ amie packages maven org.jsoup:jsoup:1.17.2
-$ amie packages list</pre>
-<pre>&gt;&gt;&gt; import org.jsoup.Jsoup
+<div class="highlight"><pre><span></span><code>$ amie packages maven org.jsoup:jsoup:1.17.2
+$ amie packages list
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; import org.jsoup.Jsoup
 &gt;&gt;&gt; Jsoup.parse("&lt;p&gt;hi&lt;/p&gt;").text()
-hi</pre>
+hi
+</code></pre></div>
 <p>In a script file the same is one line, read before the script compiles: <code>implementation("org.jsoup:jsoup:1.17.2")</code>. What was ever imported into an env is kept in its lock file, like a virtualenv.</p>
-
-<h2 id="envs">Envs</h2>
+<h2 id="envs">Envs<a class="headerlink" href="#envs" title="Permanent link">&para;</a></h2>
 <p>An env is a folder under <code>AMP/env</code> holding its Maven packages and its groups. Scripts run in <code>default</code> unless told otherwise. A second env keeps one project's packages away from another's.</p>
-<pre>$ amie envs new prod
+<div class="highlight"><pre><span></span><code>$ amie envs new prod
 $ amie envs list
 default    2 packages    1 group    AMP/env/default
 prod       0 packages    0 groups   AMP/env/prod
-$ amie envs show prod</pre>
+$ amie envs show prod
+</code></pre></div>
 <p>Three ways to run in an env:</p>
 <ul>
-  <li><code>amie -e prod script.kts</code>, or <code>-e prod</code> before any command, for this run.</li>
-  <li><code>:env prod</code> at the prompt, for the lines after it.</li>
-  <li><code>amie envs use prod</code>, which rewrites the <code>environment(...)</code> line of the saved <code>main.kts</code> in <code>AMP/pluginDir</code>, or makes one with it.</li>
+<li>
+<p><code>amie -e prod script.kts</code>, or <code>-e prod</code> before any command, for this run.</p>
+</li>
+<li>
+<p><code>:env prod</code> at the prompt, for the lines after it.</p>
+</li>
+<li>
+<p><code>amie envs use prod</code>, which rewrites the <code>environment(...)</code> line of the saved <code>main.kts</code> in <code>AMP/pluginDir</code>, or makes one with it.</p>
+</li>
 </ul>
 <p>A script names its own env with <code>environment(SettingsEnv("prod"))</code>, read before it compiles; <code>-e</code> wins over it.</p>
-
-<h2 id="templates">Templates and the background</h2>
+<h2 id="templates">Templates and the background<a class="headerlink" href="#templates" title="Permanent link">&para;</a></h2>
 <p>A template is a script saved under a name in <code>AMP/templates</code>: the starters that come with amie, and the scripts you save.</p>
-<pre>$ amie templates list
+<div class="highlight"><pre><span></span><code>$ amie templates list
 Hello: log at every level          first steps, starter
 Train a model from a csv           models, starter
 Serve a model and call it          serving, starter
 $ amie templates show "Train a model from a csv"
-$ amie templates run "Train a model from a csv"</pre>
+$ amie templates run "Train a model from a csv"
+</code></pre></div>
 <p><code>export</code> turns a template into a bundle that runs on its own, a folder with a <code>run.jar</code>:</p>
-<pre>$ amie templates save reader ~/reader.kts     keeps the file as the template "reader"; a name taken is saved again
+<div class="highlight"><pre><span></span><code>$ amie templates save reader ~/reader.kts     keeps the file as the template "reader"; a name taken is saved again
 $ amie templates edit reader                  opens it in $VISUAL or $EDITOR, or prints the path when neither is set
-$ amie templates delete reader                removes it</pre>
-<pre>$ amie templates export talk --out ~/bundles/talk
-$ java -jar ~/bundles/talk/run.jar</pre>
-<h3>A template in the background</h3>
+$ amie templates delete reader                removes it
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$ amie templates export talk --out ~/bundles/talk
+$ java -jar ~/bundles/talk/run.jar
+</code></pre></div>
+<p>The bundle carries the env's Maven jars and the package jars the script uses. <code>--no-jars</code> leaves them out, for a bundle to send where they are already, or to keep it small: <code>require.txt</code> then lists each file with the path to put it at under the bundle (a Maven jar from Maven Central or the exporting machine's <code>AMP/env/caches</code>, a package jar from its <code>AMP/pluginDir</code>), <code>run.jar --check</code> says which are still missing, and a run with a Maven jar missing fetches it from Maven Central when it can reach it; with a package jar missing it stops and names it.</p>
+<div class="highlight"><pre><span></span><code>$ amie templates export talk --out ~/bundles/talk --no-jars
+$ cat ~/bundles/talk/require.txt
+$ java -jar ~/bundles/talk/run.jar --check
+</code></pre></div>
+<h3 id="a-template-in-the-background">A template in the background<a class="headerlink" href="#a-template-in-the-background" title="Permanent link">&para;</a></h3>
 <p>A script can start a template beside itself and talk to it. The template reads its caller's lines with <code>input()</code> and answers with <code>output(...)</code>; the caller sends and receives.</p>
-<pre>// the template, saved as "reader"
+<div class="highlight"><pre><span></span><code>// the template, saved as "reader"
 val model = initMod("intents")
 while (true) {
     val text = input() ?: break        // null once the caller closes its input
     output(model.predict(text))
-}</pre>
-<pre>&gt;&gt;&gt; val job = coroutineTemplate("reader")
+}
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; val job = coroutineTemplate("reader")
 &gt;&gt;&gt; job.send("turn the lights on")
 &gt;&gt;&gt; job.receive()
 lights
 &gt;&gt;&gt; job.closeInput()
 &gt;&gt;&gt; job.await()
-finished</pre>
+finished
+</code></pre></div>
 <p>By delegation the same template is called like a function, started on the first call and reused after:</p>
-<pre>&gt;&gt;&gt; val reader by template("reader")
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; val reader by template("reader")
 &gt;&gt;&gt; reader("is it raining")
 weather
-&gt;&gt;&gt; reader.close()</pre>
+&gt;&gt;&gt; reader.close()
+</code></pre></div>
 <p>A template that fails makes the call throw, with its name and its error, so a failure never passes for an answer. <code>:sessions</code> lists the runs in the background, and a script that ends waits for the ones it started.</p>
-
-<h2 id="serving">Serve a model</h2>
+<h2 id="serving">Serve a model<a class="headerlink" href="#serving" title="Permanent link">&para;</a></h2>
 <p>A model served answers over HTTP. The command keeps the process up until Ctrl-C:</p>
-<pre>$ amie models serve intents --port 8765
+<div class="highlight"><pre><span></span><code>$ amie models serve intents --port 8765
 Serving intents at http://127.0.0.1:8765/models/intents/predict
-Serving. Stop with Ctrl-C or SIGTERM.</pre>
+Serving. Stop with Ctrl-C or SIGTERM.
+</code></pre></div>
 <p>From another terminal:</p>
-<pre>$ curl -X POST http://127.0.0.1:8765/models/intents/predict -d '{"text": "turn the lights on"}'
+<div class="highlight"><pre><span></span><code>$ curl -X POST http://127.0.0.1:8765/models/intents/predict -d '{"text": "turn the lights on"}'
 lights:0.97
-$ curl 'http://127.0.0.1:8765/models/intents/predict?text=is+it+raining'</pre>
+$ curl 'http://127.0.0.1:8765/models/intents/predict?text=is+it+raining'
+</code></pre></div>
 <p>Every request is appended to the model's <code>incoming.jsonl</code>. In script, <code>serve("intents", port = 8765)</code> returns the address or null when it couldn't start, and <code>stopServing("intents")</code> ends it; a script that leaves a model serving keeps amie running after its last line.</p>
-
-<h2 id="hub">Models from the Hub</h2>
+<h2 id="hub">Models from the Hub<a class="headerlink" href="#hub" title="Permanent link">&para;</a></h2>
 <p>Models of the Hugging Face Hub that run here, ONNX among them, are searched, looked at and imported into <code>AMP/models/imported</code>:</p>
-<pre>$ amie hf search sentiment --format onnx
+<div class="highlight"><pre><span></span><code>$ amie hf search sentiment --format onnx
 $ amie hf search whisper --task asr --limit 5
 $ amie hf info onnx-community/whisper-tiny.en
-$ amie hf import onnx-community/whisper-tiny.en --model-name whisper-tiny</pre>
-<pre>&gt;&gt;&gt; val whisper = initMod("whisper-tiny")
+$ amie hf import onnx-community/whisper-tiny.en --model-name whisper-tiny
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; val whisper = initMod("whisper-tiny")
 &gt;&gt;&gt; huggingFace.search("bert", format = "onnx")
-&gt;&gt;&gt; val m = huggingFace("owner/repo")</pre>
+&gt;&gt;&gt; val m = huggingFace("owner/repo")
+</code></pre></div>
 <p>The tasks narrow a search: text-classification, ner, tts, asr, embeddings and more; <code>info</code> says which files run here and which one an import takes. A repo with several files that run here (a full <code>model.onnx</code> beside quantized and fp16 ones, say) is picked at the terminal with the arrow keys: the same list, the one import takes under the cursor, up and down move it, Enter imports, <code>n</code> leaves. <code>--take 3</code> picks for a pipe or a script. A gated repo needs <code>HF_TOKEN</code> in the environment. An ONNX, TorchScript or TensorFlow model already on disk is opened by its path with <code>importModel("/path/model.onnx")</code>.</p>
-<h3 id="pairs">Encoder and decoder pairs</h3>
+<h3 id="pairs">Encoder and decoder pairs<a class="headerlink" href="#pairs" title="Permanent link">&para;</a></h3>
 <p>A sequence-to-sequence export (T5, BART, Marian translation, Whisper) is two ONNX files in one folder, <code>encoder_model.onnx</code> with <code>decoder_model.onnx</code> and often <code>decoder_with_past_model.onnx</code>. Neither answers a text alone: the encoder turns the input into hidden states, the decoder takes those with the ids written so far and gives the next token's scores, one step at a time. The import offers every encoder and decoder of the folder as a numbered menu, the companion files beneath, and at a terminal waits for the choice:</p>
-<pre>$ amie hf import google-t5/t5-small
+<div class="highlight"><pre><span></span><code>$ amie hf import google-t5/t5-small
 google-t5/t5-small is an encoder and decoder pair; the import takes the files marked:
   encoders
   [x]  1  onnx/encoder_model.onnx (134.9 MB)
-> [ ]  2  onnx/encoder_model_quantized.onnx (33.9 MB)
+&gt; [ ]  2  onnx/encoder_model_quantized.onnx (33.9 MB)
   decoders
   [x]  3  onnx/decoder_model.onnx (221.7 MB)
   [ ]  4  onnx/decoder_model_merged.onnx (221.9 MB)
@@ -503,27 +2447,88 @@ google-t5/t5-small is an encoder and decoder pair; the import takes the files ma
   [ ]  8  onnx/decoder_with_past_model_quantized.onnx (52.7 MB)
   with: config.json, generation_config.json, spiece.model, tokenizer.json, tokenizer_config.json
 Take 1 3 7, 568.3 MB
-up and down move, space takes or leaves a file, Enter imports, n leaves</pre>
+up and down move, space takes or leaves a file, Enter imports, n leaves
+</code></pre></div>
 <p>The marked files are the default: the full variant, with the merged decoder left out when the plain and the with-past ones are there. Space takes or leaves the file under the cursor, the quantized ones here, at least one encoder and one decoder; the size line follows. <code>--take "2 6 8"</code> picks for a pipe or a script's <code>huggingFace("…")</code>, which otherwise take the marked files without asking.</p>
 <p><code>initMod("opus-mt-en-de")</code> then opens both sessions, and the script wires them. <code>.inference</code>, <code>.predict</code> and <code>.answer</code> refuse on a pair, saying how.</p>
 <table>
-  <tr><th>Member</th><th>What it is</th><th>Comes from</th></tr>
-  <tr><td><code>m.encoder</code></td><td>The encoder session, run with tensors: <code>.inputs</code>, <code>.outputs</code>, <code>.run(mapOf(…))</code></td><td><code>encoder_model.onnx</code></td></tr>
-  <tr><td><code>m.decoder</code></td><td>The decoder session, the same way</td><td><code>decoder_model.onnx</code></td></tr>
-  <tr><td><code>m.decoderWithPast</code></td><td>The decoder that takes the past attention state back, or null when the export has none</td><td><code>decoder_with_past_model.onnx</code></td></tr>
-  <tr><td><code>m.tokens(text)</code></td><td>The token ids and the attention mask of a text, as <code>.ids</code> and <code>.mask</code></td><td><code>tokenizer.json</code> beside the models</td></tr>
-  <tr><td><code>m.text(ids)</code></td><td>The words of a list of ids</td><td>The same tokenizer</td></tr>
-  <tr><td><code>m.startToken</code></td><td>The id the decoder starts from, or null when no config names one</td><td><code>decoder_start_token_id</code>, else <code>bos_token_id</code>, of <code>generation_config.json</code>, then <code>config.json</code></td></tr>
-  <tr><td><code>m.endToken</code></td><td>The id that ends the decoding, or null</td><td><code>eos_token_id</code> of the same files</td></tr>
-  <tr><td><code>m.encode(text)</code>, <code>m.encode(file)</code></td><td>The encoder run: a text through the tokenizer, or an audio or image file through the preprocessor; <code>.hidden</code> the states, <code>.mask</code> the text's mask</td><td><code>tokenizer.json</code>, or <code>preprocessor_config.json</code></td></tr>
-  <tr><td><code>m.decoderFeeds(encoded, ids)</code></td><td>The decoder's inputs for one step: the ids so far, the hidden states, and the encoder's mask when the decoder names one</td><td><code>m.decoder.inputs</code></td></tr>
-  <tr><td><code>m.startTokens(encoded?, vararg tokens)</code></td><td>The ids the decoder starts from: the start id and the forced ones after it, each replaceable by a name the config knows: a language (<code>"de"</code>), a task (<code>"translate"</code>, <code>"transcribe"</code>), <code>"timestamps"</code> or <code>"notimestamps"</code>. A language left open and not named is detected from the encoding, else English</td><td><code>forced_decoder_ids</code>, <code>lang_to_id</code>, <code>task_to_id</code>, <code>no_timestamps_token_id</code> of the config files</td></tr>
-  <tr><td><code>m.preprocessor</code></td><td>The <code>preprocessor_config.json</code> as JSON: sampling rate, mel bins, image size, mean and std</td><td>That file</td></tr>
-  <tr><td><code>m.abilities</code></td><td><code>encoder</code>, <code>decoder</code>, and <code>decoderWithPast</code>, <code>tokens</code>, <code>startToken</code> when the folder has them; <code>text</code>, <code>audio</code> or <code>image</code> for what the encoder takes</td><td>The folder</td></tr>
-  <tr><td><code>m.getStatus()</code>, <code>m.close()</code></td><td>Each session's status by name; every session closed</td><td>Both sessions</td></tr>
+<thead>
+<tr>
+<th>Member</th>
+<th>What it is</th>
+<th>Comes from</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>m.encoder</code></td>
+<td>The encoder session, run with tensors: <code>.inputs</code>, <code>.outputs</code>, <code>.run(mapOf(…))</code></td>
+<td><code>encoder_model.onnx</code></td>
+</tr>
+<tr>
+<td><code>m.decoder</code></td>
+<td>The decoder session, the same way</td>
+<td><code>decoder_model.onnx</code></td>
+</tr>
+<tr>
+<td><code>m.decoderWithPast</code></td>
+<td>The decoder that takes the past attention state back, or null when the export has none</td>
+<td><code>decoder_with_past_model.onnx</code></td>
+</tr>
+<tr>
+<td><code>m.tokens(text)</code></td>
+<td>The token ids and the attention mask of a text, as <code>.ids</code> and <code>.mask</code></td>
+<td><code>tokenizer.json</code> beside the models</td>
+</tr>
+<tr>
+<td><code>m.text(ids)</code></td>
+<td>The words of a list of ids</td>
+<td>The same tokenizer</td>
+</tr>
+<tr>
+<td><code>m.startToken</code></td>
+<td>The id the decoder starts from, or null when no config names one</td>
+<td><code>decoder_start_token_id</code>, else <code>bos_token_id</code>, of <code>generation_config.json</code>, then <code>config.json</code></td>
+</tr>
+<tr>
+<td><code>m.endToken</code></td>
+<td>The id that ends the decoding, or null</td>
+<td><code>eos_token_id</code> of the same files</td>
+</tr>
+<tr>
+<td><code>m.encode(text)</code>, <code>m.encode(file)</code></td>
+<td>The encoder run: a text through the tokenizer, or an audio or image file through the preprocessor; <code>.hidden</code> the states, <code>.mask</code> the text's mask</td>
+<td><code>tokenizer.json</code>, or <code>preprocessor_config.json</code></td>
+</tr>
+<tr>
+<td><code>m.decoderFeeds(encoded, ids)</code></td>
+<td>The decoder's inputs for one step: the ids so far, the hidden states, and the encoder's mask when the decoder names one</td>
+<td><code>m.decoder.inputs</code></td>
+</tr>
+<tr>
+<td><code>m.startTokens(encoded?, vararg tokens)</code></td>
+<td>The ids the decoder starts from: the start id and the forced ones after it, each replaceable by a name the config knows: a language (<code>"de"</code>), a task (<code>"translate"</code>, <code>"transcribe"</code>), <code>"timestamps"</code> or <code>"notimestamps"</code>. A language left open and not named is detected from the encoding, else English</td>
+<td><code>forced_decoder_ids</code>, <code>lang_to_id</code>, <code>task_to_id</code>, <code>no_timestamps_token_id</code> of the config files</td>
+</tr>
+<tr>
+<td><code>m.preprocessor</code></td>
+<td>The <code>preprocessor_config.json</code> as JSON: sampling rate, mel bins, image size, mean and std</td>
+<td>That file</td>
+</tr>
+<tr>
+<td><code>m.abilities</code></td>
+<td><code>encoder</code>, <code>decoder</code>, and <code>decoderWithPast</code>, <code>tokens</code>, <code>startToken</code> when the folder has them; <code>text</code>, <code>audio</code> or <code>image</code> for what the encoder takes</td>
+<td>The folder</td>
+</tr>
+<tr>
+<td><code>m.getStatus()</code>, <code>m.close()</code></td>
+<td>Each session's status by name; every session closed</td>
+<td>Both sessions</td>
+</tr>
+</tbody>
 </table>
 <p>What the encoder takes is read off the folder: a text pair has no <code>preprocessor_config.json</code> and takes text through its tokenizer; one whose file names a feature extractor (Whisper) takes an audio file, wav or aiff at any rate, turned into the log-mel spectrogram that file describes; one naming an image processor (TrOCR, Donut, Nougat) takes an image file, resized and normalized as it says. <code>encode</code> does whichever applies, and <code>decoderFeeds</code> fills the decoder's inputs by their names, Marian's <code>encoder_attention_mask</code> among them. The same greedy loop then translates or transcribes:</p>
-<pre>&gt;&gt;&gt; val m = initMod("t5-small")                 // or "whisper-tiny", with a wav in place of the text
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; val m = initMod("t5-small")                 // or "whisper-tiny", with a wav in place of the text
 &gt;&gt;&gt; val e = m.encode("translate English to German: The house is wonderful.")
 &gt;&gt;&gt; val starts = m.startTokens(e)               // Whisper: start, language (detected, or startTokens(e, "de")), transcribe, no timestamps
 &gt;&gt;&gt; val ids = starts.toMutableList()
@@ -536,121 +2541,135 @@ up and down move, space takes or leaves a file, Enter imports, n leaves</pre>
 ...     ids.add(best.toLong())
 ... }
 &gt;&gt;&gt; log(m.text(ids.drop(starts.size).toLongArray()))
-Das Haus ist wunderbar.</pre>
+Das Haus ist wunderbar.
+</code></pre></div>
 <p>The sessions are still there raw: <code>m.tokens(text)</code> and <code>m.encoder.run(mapOf("input_ids" to t.ids, "attention_mask" to t.mask))</code> are what <code>encode(text)</code> does, and <code>m.encoder.inputs</code> names what a file becomes (<code>input_ids</code>, <code>input_features</code>, <code>pixel_values</code>). Running the whole id list each step is simple, not fast. A faster loop runs <code>m.decoder</code> once, then <code>m.decoderWithPast</code> with each step's <code>present.*</code> outputs fed back as its <code>past_key_values.*</code> inputs, which its <code>.inputs</code> name.</p>
-
-<h2 id="housekeeping">Sessions and housekeeping</h2>
+<h2 id="housekeeping">Sessions and housekeeping<a class="headerlink" href="#housekeeping" title="Permanent link">&para;</a></h2>
 <p>Whatever a script opens is a session: a model, a group, a package, a template in the background. Sessions stay open after the line that opened them, which is what makes the second <code>predict</code> fast.</p>
-<pre>&gt;&gt;&gt; :sessions
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; :sessions
 #1  intents  model    running  opened 14:02:11
 #2  house    group    running  opened 14:05:40
 &gt;&gt;&gt; :terminate house
-&gt;&gt;&gt; :terminate all</pre>
+&gt;&gt;&gt; :terminate all
+</code></pre></div>
 <p>From the command line, <code>amie sessions list</code> shows the sessions of that process, and <code>amie sessions runs</code> the recorded runs of <code>main.kts</code>.</p>
-<h3>Scope functions</h3>
+<h3 id="scope-functions">Scope functions<a class="headerlink" href="#scope-functions" title="Permanent link">&para;</a></h3>
 <p>A block decides how long what it opens lives:</p>
 <table>
-  <tr><th>Block</th><th>What it opens is</th></tr>
-  <tr><td><code>ortClosable { }</code></td><td>Closed with the block</td></tr>
-  <tr><td><code>ortStatic("name") { }</code></td><td>Kept across runs under that name</td></tr>
-  <tr><td><code>ortRequired("name") { }</code></td><td>Kept while anything else is in session, freed once nothing else is open; its block opens it again</td></tr>
-  <tr><td><code>ortLimited("name", 3) { }</code></td><td>Capped at that many</td></tr>
-  <tr><td><code>ortAsync { }</code></td><td>Run in the background</td></tr>
+<thead>
+<tr>
+<th>Block</th>
+<th>What it opens is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ortClosable { }</code></td>
+<td>Closed with the block</td>
+</tr>
+<tr>
+<td><code>ortStatic("name") { }</code></td>
+<td>Kept across runs under that name</td>
+</tr>
+<tr>
+<td><code>ortRequired("name") { }</code></td>
+<td>Kept while anything else is in session, freed once nothing else is open; its block opens it again</td>
+</tr>
+<tr>
+<td><code>ortLimited("name", 3) { }</code></td>
+<td>Capped at that many</td>
+</tr>
+<tr>
+<td><code>ortAsync { }</code></td>
+<td>Run in the background</td>
+</tr>
+</tbody>
 </table>
-<pre>&gt;&gt;&gt; ortClosable {
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; ortClosable {
 ...     val m = initMod("intents")
 ...     listOf("hi", "lights off").map { m.predict(it) }
 ... }
 ...
-[greeting, lights]</pre>
-<h3>Data and the shell</h3>
+[greeting, lights]
+</code></pre></div>
+<h3 id="data-and-the-shell">Data and the shell<a class="headerlink" href="#data-and-the-shell" title="Permanent link">&para;</a></h3>
 <p>A Postgres database named in <code>AMP/databases.json</code> is one call away, and so is the login shell:</p>
-<pre>&gt;&gt;&gt; val db = database("main")
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; val db = database("main")
 &gt;&gt;&gt; db.print("select label, count(*) from answers group by label")
-&gt;&gt;&gt; shell("ls ~/data").out</pre>
-
-<h2 id="errors">When something goes wrong</h2>
+&gt;&gt;&gt; shell("ls ~/data").out
+</code></pre></div>
+<h2 id="errors">When something goes wrong<a class="headerlink" href="#errors" title="Permanent link">&para;</a></h2>
 <p><code>initMod</code> and <code>database</code> throw when what they name isn't there, so a script doesn't go on without data. Wrap what may be missing:</p>
-<pre>val m = runCatching { initMod("intents") }.getOrElse { e -&gt;
+<div class="highlight"><pre><span></span><code>val m = runCatching { initMod("intents") }.getOrElse { e -&gt;
     error("no intents model yet (${e.message}); building one")
     modelBuilder("intents", source("intents.csv"))
     initMod("intents")
-}</pre>
+}
+</code></pre></div>
 <p><code>importModel</code>, <code>importPlugin</code> and the save and load of states never throw: they log one error line and return nothing, so test their value.</p>
 <p>At the prompt an error prints and the prompt comes back, with everything defined before it still there. In a file the run stops, the line is on standard error and the exit code is 1. <code>handleBy(handler) { }</code> runs a block on after an error with the handler's value, and <code>errorLog()</code> is what the local text model makes of the last one.</p>
 <p>When a build or a run does something you didn't expect, <code>-v</code> shows the internal lines: which env was sourced, the build's phases, what the run used.</p>
+<p>The <a href="../amie-reference/">amie reference</a> has the command line, every command, the script API in brief and the exit codes; the <a href="../sandbox-scripting/">Scripting API</a> has every function in full.</p>
 
-<h2 id="reference">Reference</h2>
-<h3>The command line</h3>
-<pre>amie [options] [script.kts [args] | -c code | command ...]
 
-  -c code          runs the code
-  -i               the prompt after the script, with its values defined
-  -e, --env name   the env to run in
-  --amp folder     the AMP folder, over AMIE_AMP_DIR and the default
-  -v, --verbose    the internal lines too
-  -q, --quiet      no banner at the prompt
-  --version, -V    the version and the license line
-  -h, --help       this; amie &lt;command&gt; --help for a command</pre>
-<h3>The commands</h3>
-<table>
-  <tr><th>Command</th><th>Actions</th></tr>
-  <tr><td><code>models</code></td><td><code>list</code>, <code>build &lt;csv&gt; --name n [--test csv]</code>, <code>validate &lt;n&gt;</code>, <code>serve &lt;n&gt; [--port]</code>, <code>info &lt;n&gt;</code></td></tr>
-  <tr><td><code>groups</code></td><td><code>list</code>, <code>add &lt;group&gt; &lt;models&gt;</code>, <code>remove &lt;group&gt; [model]</code>, <code>open &lt;group&gt; [texts]</code>; <code>--env</code> for another env</td></tr>
-  <tr><td><code>packages</code></td><td><code>list</code>, <code>add &lt;jar&gt;</code>, <code>maven &lt;coordinate&gt;</code>, <code>test &lt;jar&gt;</code>, <code>info &lt;jar&gt;</code></td></tr>
-  <tr><td><code>envs</code></td><td><code>list</code>, <code>new &lt;name&gt;</code>, <code>use &lt;name&gt;</code>, <code>show &lt;name&gt;</code></td></tr>
-  <tr><td><code>templates</code></td><td><code>list</code>, <code>show &lt;name&gt;</code>, <code>run &lt;name&gt;</code>, <code>export &lt;name&gt; --out &lt;folder&gt;</code></td></tr>
-  <tr><td><code>sessions</code></td><td><code>list</code>, <code>runs</code>, <code>terminate &lt;name | #id | all&gt;</code></td></tr>
-  <tr><td><code>hf</code></td><td><code>search &lt;query&gt; [--format] [--task] [--limit]</code>, <code>info &lt;repo&gt;</code>, <code>import &lt;repo&gt; [--model-name]</code></td></tr>
-  <tr><td><code>run</code></td><td><code>run &lt;file&gt; [args]</code></td></tr>
-  <tr><td><code>learn</code></td><td>This book; <code>learn path</code> prints where it is</td></tr>
-</table>
-<h3>The script API in brief</h3>
-<table>
-  <tr><th>Call</th><th>What it does</th></tr>
-  <tr><td><code>log</code>, <code>info</code>, <code>error</code>, <code>data</code></td><td>A console line at that level; lists, maps and answers printed as such</td></tr>
-  <tr><td><code>source</code>, <code>relate</code></td><td>A labeled csv; a test file for it</td></tr>
-  <tr><td><code>modelBuilder</code>, <code>buildOptions</code></td><td>Trains and exports an intent model, with options</td></tr>
-  <tr><td><code>fineTune</code>, <code>calibrate</code>, <code>versions</code>, <code>rollback</code></td><td>Teaches a model more, makes its scores honest, the heads it had</td></tr>
-  <tr><td><code>validateMetrics</code>, <code>confusionMatrix</code>, <code>mistakes</code>, <code>suspects</code></td><td>The stored validation as tables</td></tr>
-  <tr><td><code>initMod</code>, <code>sessionMod</code></td><td>A session of a model, a package or an imported model; one for a block</td></tr>
-  <tr><td><code>group</code></td><td>The models of a group asked together</td></tr>
-  <tr><td><code>huggingFace</code>, <code>importModel</code></td><td>A model of the Hub; one by its path. An encoder and decoder pair opens as <code>.encoder</code> and <code>.decoder</code> (<a href="#pairs">pairs</a>)</td></tr>
-  <tr><td><code>serve</code>, <code>stopServing</code></td><td>A model over HTTP</td></tr>
-  <tr><td><code>ortClosable</code>, <code>ortStatic</code>, <code>ortRequired</code>, <code>ortLimited</code>, <code>ortAsync</code></td><td>How long what a block opens lives</td></tr>
-  <tr><td><code>database</code>, <code>shell</code>, <code>shellScript</code></td><td>Postgres; the login shell</td></tr>
-  <tr><td><code>implementation</code>, <code>environment</code></td><td>A Maven package into the env; the env to run in</td></tr>
-  <tr><td><code>coroutineTemplate</code>, <code>template</code>, <code>input</code>, <code>output</code></td><td>A template in the background, and the two ends of its conversation</td></tr>
-  <tr><td><code>handleBy</code>, <code>errorLog</code></td><td>Running on after an error; what the text model makes of one</td></tr>
-</table>
-<p><code>:api</code> at the prompt has every function with its signature, and the scripting guide in the repository, <code>docs/sandbox-scripting.md</code>, has the rest.</p>
-<h3>Exit codes</h3>
-<table>
-  <tr><th>Code</th><th>Meaning</th></tr>
-  <tr><td>0</td><td>The script finished, or the command did what it was asked</td></tr>
-  <tr><td>1</td><td>The script failed, or the command couldn't</td></tr>
-  <tr><td>2</td><td>A command line amie can't read</td></tr>
-</table>
 
-<h2 id="inside">Inside amie</h2>
-<p>amie is a Gradle module, <code>amie</code>, and reimplements nothing: the script engine, the model groups, the packages, the envs, the templates, the Hub imports and the model server live in the engine module it depends on, <code>runtime</code>, reached through one facade there, <code>HeadlessAmie</code>, the script runtime for a program with no window. No UI toolkit is on its class path.</p>
-<p>The sources are short. <code>Main.kt</code> is the entry point and the exit codes, <code>CommandLine.kt</code> reads the command line, <code>Repl.kt</code> is the prompt, <code>ScriptRun.kt</code> runs a file as <code>main.kts</code>, and <code>Commands.kt</code>, <code>ModelCommands.kt</code> and <code>Learn.kt</code> are the commands. <code>jdk.sh</code> is the JDK 21 lookup, spliced into the built <code>bin/amie</code> and sourced by the launcher, and <code>install.sh</code> the install onto the PATH. The tests run against a folder of their own, never your AMP.</p>
-<p>amie is free software: you can redistribute it and modify it under the GNU General Public License, version 3 or any later version. Its text is the LICENSE file at the root of the repository.</p>
 
-</main>
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
 </div>
-<script>
-  // Marks the chapter in view in the navigation
-  const links = Array.from(document.querySelectorAll('nav a'));
-  const byId = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
-  const seen = new Map();
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => seen.set(e.target.id, e.isIntersecting));
-    const first = Array.from(byId.keys()).find(id => seen.get(id));
-    if (!first) return;
-    links.forEach(a => a.classList.toggle('current', a === byId.get(first)));
-  }, { rootMargin: '-53px 0px -70% 0px' });
-  byId.forEach((a, id) => { const h = document.getElementById(id); if (h) observer.observe(h); });
-</script>
-</body>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
 </html>

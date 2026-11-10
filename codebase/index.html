@@ -445,6 +445,65 @@
 
               
             
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The amie command line
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The amie command line
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
               
                 
   
@@ -452,14 +511,42 @@
   
   
     <li class="md-nav__item">
-      <a href="https://samging.github.io/amieCli/learn/" class="md-nav__link">
+      <a href="../learn/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    The amie book
+    Learn amie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../amie-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    amie reference
   
 
     
@@ -500,10 +587,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   
@@ -521,8 +608,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -757,10 +844,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
             
   
   
@@ -778,8 +865,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1452,7 +1539,7 @@ using amie; <a href="https://github.com/samging/amieCli/blob/main/amie/README.md
 <td>679</td>
 </tr>
 <tr>
-<td>Shell scripts (<code>bin/amie</code>, <code>install.sh</code>, <code>jdk.sh</code>, <code>AMP/setup/setup.sh</code>, the voice scripts)</td>
+<td>Shell scripts (<code>bin/amie</code>, <code>install.sh</code>, <code>jdk.sh</code>, <code>scripts/setup.sh</code>, the voice scripts)</td>
 <td>9</td>
 <td>225</td>
 </tr>
@@ -1662,7 +1749,7 @@ was the controller behind the app's terminal window. Below, <code>C/</code> stan
 <tr>
 <td><code>C/export</code></td>
 <td>2 095</td>
-<td><code>amie templates export</code>: a script packed with its models, env jars and a secrets manifest into a bundle that runs on its own; <code>ScriptScan</code>, the static scan of what a script uses, which the prompt also uses to size a line's memory</td>
+<td><code>amie templates export</code>: a script packed with its models, env jars (or <code>require.txt</code> naming them with <code>--no-jars</code>) and a secrets manifest into a bundle that runs on its own; <code>ScriptScan</code>, the static scan of what a script uses, which the prompt also uses to size a line's memory</td>
 <td><code>ScriptExporter.kt</code>, <code>ScriptScan.kt</code>, <code>CompiledScripts.kt</code>, <code>BundleRunner.kt</code>, <code>ExportCommand.kt</code></td>
 </tr>
 <tr>
@@ -1864,7 +1951,7 @@ ONNX Runtime or DJL (an <code>encoder_model.onnx</code> with <code>decoder_model
    checks <code>ModelRequirements.blockers</code>, opens the head <code>model.onnx</code> as an ONNX Runtime session and takes the encoder
    from <code>SharedEncoders.acquire</code>: one <code>BertOnnxModel</code> per encoder path, reference-counted, closed by the last release.</li>
 <li><code>BundledModels.root</code> is where the encoder lives: <code>amie.models.dir</code>, <code>AMIE_MODELS_DIR</code>, else <code>AMP/models/bert</code>
-   with the bge encoder in <code>bge/</code>. <code>AMP/setup/setup.sh</code> downloads both.</li>
+   with the bge encoder in <code>bge/</code>. <code>scripts/setup.sh</code> downloads both.</li>
 <li><code>OrtScopes.opened</code> registers the session with an enclosing <code>ortClosable { }</code> block when there is one, and
    <code>ScriptRuns.opened("model:&lt;id&gt;")</code> records it on the run, which is what <code>:sessions</code> lists and <code>:terminate</code> closes.</li>
 </ol>
@@ -1895,7 +1982,7 @@ the same at the <code>INTERNAL</code> level, which <code>Output.print</code> dro
 <tr>
 <td><code>models/bert/</code>, <code>models/bert/bge/</code></td>
 <td>the NER model and the encoder every intent model is trained on</td>
-<td><code>AMP/setup/setup.sh</code></td>
+<td><code>scripts/setup.sh</code></td>
 </tr>
 <tr>
 <td><code>models/intents/&lt;name&gt;/</code></td>

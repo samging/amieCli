@@ -447,6 +447,65 @@
 
               
             
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The amie command line
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The amie command line
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
               
                 
   
@@ -454,14 +513,42 @@
   
   
     <li class="md-nav__item">
-      <a href="https://samging.github.io/amieCli/learn/" class="md-nav__link">
+      <a href="../learn/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    The amie book
+    Learn amie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../amie-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    amie reference
   
 
     
@@ -504,10 +591,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   
@@ -525,8 +612,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_2">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1050,10 +1137,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
             
   
   
@@ -1071,8 +1158,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1577,6 +1664,7 @@
 
 <h1 id="scripting-api">Scripting API<a class="headerlink" href="#scripting-api" title="Permanent link">&para;</a></h1>
 <p>Complete scripts for every call below, ready to paste, are in the <a href="../cookbook/">Cookbook</a>.</p>
+<p>The same scripts run outside the app with the <code>amie</code> command line: <a href="../learn/">Learn amie</a> goes through them chapter by chapter, and the <a href="../amie-reference/">amie reference</a> has the commands and the API in brief.</p>
 <p>The sandbox is a Kotlin script editor (<code>main.kts</code>) with a console (how to use the editor, the completion dropdown and
 the console filters is in <a href="../sandbox/">The sandbox</a>). The script runs inside the app with the sandbox API bound to
 it; everything it logs shows in the console on the right and is appended to <code>AMP/logs.txt</code>.</p>
@@ -1849,8 +1937,8 @@ start, the counts on the others say what is hidden. <strong>Clear</strong> empti
 <td><code>importModel</code> under its old name: a saved script still runs, and the console says the new name</td>
 </tr>
 <tr>
-<td><code>packages.available()</code>, <code>packages.fetch("x.jar")</code>, <code>packages.print()</code>, <code>packages.closeAll()</code>, <code>packages.github()</code>, <code>packages.check("x.jar")</code>, <code>packages.meta("x.jar")</code>, <code>packages.test("x.jar")</code></td>
-<td>The package jars the GitHub repositories offer, a download into <code>AMP/pluginDir</code>, the open package sessions; the jars of the GitHub repositories in <code>AMP/github.json</code>; the check <code>initMod</code> and a fetch make, a jar's metadata, and its tests run (below)</td>
+<td><code>packages.available()</code>, <code>packages.fetch("x.jar")</code>, <code>packages.print()</code>, <code>packages.closeAll()</code>, <code>packages.github()</code>, <code>packages.check("x.jar")</code>, <code>packages.meta("x.jar")</code>, <code>packages.config("x.jar")</code>, <code>packages.setConfig("x.jar", "key" to "value")</code>, <code>packages.test("x.jar")</code></td>
+<td>The package jars the GitHub repositories offer, a download into <code>AMP/pluginDir</code>, the open package sessions; the jars of the GitHub repositories in <code>AMP/github.json</code>; the check <code>initMod</code> and a fetch make, a jar's metadata, the keys and values of its config files and setting them, and its tests run (below)</td>
 </tr>
 <tr>
 <td><code>saveState("name", json)</code>, <code>loadState("name")</code>, <code>listStates()</code></td>
@@ -2185,6 +2273,7 @@ calling <code>predict</code> and <code>scores</code> on the same text. A package
 <span class="n">log</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="na">scores</span><span class="p">(</span><span class="s">"turn the lights on"</span><span class="p">).</span><span class="na">toString</span><span class="p">())</span><span class="w">       </span><span class="c1">// {lights=0.97, weather=0.02, greeting=0.01}</span>
 <span class="n">m</span><span class="p">.</span><span class="na">close</span><span class="p">()</span>
 </code></pre></div>
+<p><code>intents.csv</code> stands for your own file. <code>source()</code> finds it as given, relative to the folder amie was started in, then in <code>AMP/</code>, then in <code>AMP/pluginDir/</code>; an absolute path is taken as it is. A new AMP folder has <code>sample-intents.csv</code> (45 rows) to try, and a name that is not found is reported with the folders looked in and the csv files of AMP whose names come closest.</p>
 <p>The charts are described with examples in <a href="../models/#reading-the-metrics">Models and metrics</a>.</p>
 <h2 id="packages">Packages<a class="headerlink" href="#packages" title="Permanent link">&para;</a></h2>
 <p>A package is a jar with one public class that fulfils the backend's <code>AmiePackage</code> interface: a public no-arg
@@ -2284,7 +2373,8 @@ sidecar and add to the jar's own.</p>
   <code>configure(Map&lt;String, String&gt;)</code> method of the package class, when it has one, is called with the folder right
   after the constructor (the map holds <code>dir</code> and each file in the folder by name). <code>importPlugin("x.jar")</code> loads a
   jar the same way, but it isn't refused as below. <code>amie packages setup &lt;x.jar&gt;</code> asks for each key at the terminal,
-  and <code>amie packages config &lt;x.jar&gt; key=value</code> sets one, so the files need no editor.</li>
+  and <code>amie packages config &lt;x.jar&gt; key=value</code> sets one, so the files need no editor. In a script, <code>packages.config("x.jar")</code> reads the keys
+  and <code>packages.setConfig("x.jar", "key" to "value")</code> sets them; at the prompt, <code>:config</code> and <code>:setup</code> do the same.</li>
 <li><strong><code>initMod</code> refuses a jar that lacks what it says it needs</strong>, before any instance is made: a required config file
   that is missing, a required one that still equals its template (the template is for the person to fill in, so
   mark a config whose template works as it stands <code>"required": false</code>), or a required <code>env</code> variable that is not

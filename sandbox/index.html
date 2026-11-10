@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://samging.github.io/amieCli/sandbox/">
       
       
-        <link rel="prev" href="../getting-started/">
+        <link rel="prev" href="../amie-reference/">
       
       
         <link rel="next" href="../sessions/">
@@ -447,6 +447,65 @@
 
               
             
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The amie command line
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The amie command line
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
               
                 
   
@@ -454,14 +513,42 @@
   
   
     <li class="md-nav__item">
-      <a href="https://samging.github.io/amieCli/learn/" class="md-nav__link">
+      <a href="../learn/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    The amie book
+    Learn amie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../amie-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    amie reference
   
 
     
@@ -504,10 +591,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   
@@ -525,8 +612,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_2">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -939,10 +1026,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
             
   
   
@@ -960,8 +1047,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1592,8 +1679,10 @@ no amie pilot, no Gradle, no window. A script does the same with <code>exportJvm
 </code></pre></div>
 <p><code>main.kts</code> can also be a template's id or a file. <code>--template</code> carries a saved template besides those the script
 starts (as often as needed), <code>--script</code> chooses the script mode below, <code>--plan</code> only says what would go in, and
-<code>--allow-missing</code> writes the bundle although something could not be included. A packaged app takes the same
-arguments after <code>--export-script</code>.</p>
+<code>--allow-missing</code> writes the bundle although something could not be included, and <code>--no-jars</code> leaves out the env's
+Maven jars and the package jars: <code>require.txt</code> in the bundle lists each with the path to put it at, <code>run.jar --check</code>
+says which are still missing, and a run fetches a missing Maven jar from Maven Central when it can reach it, while a
+missing package jar stops it. A packaged app takes the same arguments after <code>--export-script</code>.</p>
 <p>The pane shows what the script reaches before anything is written: the env, models, encoder, groups, packages,
 databases, data, the Java it needs and the size, what a deployer has to supply (<strong>To supply</strong>), and what could not be
 included (<strong>Can't include</strong>), which stops the export until it is dealt with. <strong>Export anyway</strong> writes it regardless and

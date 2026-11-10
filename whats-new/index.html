@@ -443,6 +443,65 @@
 
               
             
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The amie command line
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The amie command line
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
               
                 
   
@@ -450,14 +509,42 @@
   
   
     <li class="md-nav__item">
-      <a href="https://samging.github.io/amieCli/learn/" class="md-nav__link">
+      <a href="../learn/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    The amie book
+    Learn amie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../amie-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    amie reference
   
 
     
@@ -498,10 +585,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   
@@ -519,8 +606,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -753,10 +840,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
             
   
   
@@ -774,8 +861,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1385,6 +1472,11 @@
   and a blank line between them, as wide as the terminal; <code>:help</code> wraps the same way.</li>
 <li><strong>Projects.</strong> <code>amie new &lt;name&gt;</code> makes <code>AMP/projects/&lt;name&gt;/main.kts</code> to start from, in an env of the same name;
   <code>amie run &lt;name&gt;</code> runs it.</li>
+<li><strong>Export without the jars.</strong> <code>amie templates export &lt;name&gt; --out &lt;folder&gt; --no-jars</code> leaves the env's Maven jars and
+  the package jars out of the bundle and writes <code>require.txt</code>, one line a file with the path to put it at under the
+  bundle; the README has the same table. <code>run.jar --check</code> says which are still missing. A run with a Maven jar missing
+  fetches it from Maven Central when it can reach it, and with a package jar missing stops and names it. Compiled
+  bundles from <code>amie</code> now carry the app's own classes: before this the runner was missing from <code>run.jar</code>.</li>
 <li><strong>Templates: save, edit, delete.</strong> <code>amie templates save &lt;name&gt; &lt;file&gt;</code> keeps a script file, a project or a starter as a
   template (a name taken is saved again, its id kept); <code>amie templates edit &lt;name&gt;</code> opens its file in <code>$VISUAL</code> or
   <code>$EDITOR</code> and takes the edit, or prints the path when neither is set; <code>amie templates delete &lt;name&gt;</code> removes it.</li>
