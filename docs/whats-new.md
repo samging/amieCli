@@ -12,6 +12,10 @@
 - **`amie model metric <name>`** prints the model's `metrics.json`, one entry per build; `--last` the latest build only, `--file` where it is.
 - **`:docs` opens the book**, `amie docs` from the shell; `:learn` and `amie learn` are gone.
 - **`log(source("x.csv"))` lays the file out as pandas' `df.info()` does**: each column's non-null count, dtype and role, the labels with their rows. `logInfo(source(...))` and `source(...).info()` do the same, and neither needs `!!`.
+- **New: `quietly { }`.** Every model answer writes a console line, which floods the output when a script asks a model thousands of times to measure it. `quietly { }` runs its block without those lines, the script's own `log` lines still show, and the session logs still record every answer. See [Scope functions](learn.md#scope-functions).
+- **Metrics a script asks for now print.** `validateMetrics`, `metricsChart`, `confusionMatrix`, `calibrationChart`, `mistakes`, `suspects`, `metricsHistory`, `trainingCurves`, `modelStatus()` and `modelChart()` print at the normal level, so they show without `-v`. The report a build prints on its own stays hidden.
+- **New example: [examples/google-assistant](../examples/google-assistant/README.md).** One template: a model built with `modelBuilder` routes requests to google-calendar, google-tasks, google-drive, gmail-reader, google-translate and the browser, its metrics print, then each request is answered by its package.
+- **`sourceFile()` finds and reads a file as `source()` does**: as given, in `AMP/`, then in `AMP/pluginDir/`, saying where it looked when it can't; a quoted field keeps its commas, where before it was split at them.
 
 ## 1.1.0: encoders and decoders, projects, and the templates' three verbs
 

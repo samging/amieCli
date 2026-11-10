@@ -196,6 +196,7 @@ signatures, and [docs/sandbox-scripting.md](../../docs/sandbox-scripting.md) in 
 | `huggingFace("owner/repo")`, `huggingFace.search("bert", format = "onnx")` | A model of the Hub imported into `AMP/models/imported`, and the search |
 | `importModel("/path/model.onnx")` | An ONNX, TorchScript or TensorFlow model by its path |
 | `serve("name", port = 8765)`, `stopServing("name")` | The model over HTTP |
+| `quietly { }` | The block without the console line each model answer writes, for measuring a model on thousands of texts; the script's own `log` lines still show |
 | `ortClosable { }`, `ortStatic("name") { }`, `ortRequired("name") { }`, `ortLimited("name", 3) { }`, `ortAsync { }` | What a block opens: closed with it, kept across runs, kept while anything else is in session, capped, or run in the background |
 | `database("main")` | A Postgres database of `AMP/databases.json`: `.query(sql)`, `.execute(sql)`, `.print(sql)` |
 | `shell("ls")`, `shellScript("x.sh", args)` | A command in the login shell: `.out`, `.err`, `.exit` |

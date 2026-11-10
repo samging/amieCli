@@ -240,6 +240,11 @@ interface ScriptLogger {
      */
     fun <T> ortClosable(name: String = "closable", block: () -> T): T = OrtScopes.closable(name, block)
     /**
+     * Runs the block without the console line each model answer writes, for asking a model thousands of times to
+     * measure it; the script's own log lines show as always. Returns the block's value
+     */
+    fun <T> quietly(block: () -> T): T = org.example.project.components.terminal.window.controller.runtime.AnswersQuiet.during(block)
+    /**
      * ortClosable run in the background: the block runs on a thread of its own and the call returns a job at once.
      * What the block opens is closed when it ends, however it ends, and a template started in it ends with it. The job
      * ends with the script, however that ends, and with an ortClosable block around the call: .await() is the block's
@@ -329,26 +334,26 @@ interface ScriptLogger {
      * Reads the last stored validation of AMP/models/intents/<modelName> and prints it; labels narrows the table to those labels
      */
     fun validateMetrics(modelName: String, labels: List<String> = emptyList()): MetricsReport =
-        MetricsReport.load(modelName).print(labels)
+        MetricsReport.load(modelName).asked().print(labels)
     /** ASCII bar chart of the stored validation: accuracy, macro F1 and the F1 of each label (or the given ones) */
     fun metricsChart(modelName: String, labels: List<String> = emptyList()): MetricsReport =
-        MetricsReport.load(modelName).chart(labels)
+        MetricsReport.load(modelName).asked().chart(labels)
     /** ASCII line chart of accuracy and macro F1 across every build of the model */
-    fun metricsHistory(modelName: String): MetricsReport = MetricsReport.load(modelName).history()
+    fun metricsHistory(modelName: String): MetricsReport = MetricsReport.load(modelName).asked().history()
     /** The last validation's confusion matrix as an ASCII grid */
-    fun confusionMatrix(modelName: String): MetricsReport = MetricsReport.load(modelName).confusion()
+    fun confusionMatrix(modelName: String): MetricsReport = MetricsReport.load(modelName).asked().confusion()
     /** The validation rows the last run got wrong, the surest first (their texts only when the model keeps texts) */
-    fun mistakes(modelName: String): MetricsReport = MetricsReport.load(modelName).mistakes()
+    fun mistakes(modelName: String): MetricsReport = MetricsReport.load(modelName).asked().mistakes()
     /**
      * The training rows whose label the heads that didn't see them doubt; a build with buildOptions(folds = 5) finds them
      */
-    fun suspects(modelName: String): MetricsReport = MetricsReport.load(modelName).suspects()
+    fun suspects(modelName: String): MetricsReport = MetricsReport.load(modelName).asked().suspects()
     /**
      * How far the scores can be trusted: how often each score bin was right, the calibration error, what a score gate keeps
      */
-    fun calibrationChart(modelName: String): MetricsReport = MetricsReport.load(modelName).calibration()
+    fun calibrationChart(modelName: String): MetricsReport = MetricsReport.load(modelName).asked().calibration()
     /** Loss and accuracy by epoch of the chosen head of the last build, or of the last fine-tune */
-    fun trainingCurves(modelName: String): MetricsReport = MetricsReport.load(modelName).curves()
+    fun trainingCurves(modelName: String): MetricsReport = MetricsReport.load(modelName).asked().curves()
     fun implementation(it: BuildSettings) {}
     fun import(it: SettingsEnv) {}
     /**
@@ -657,13 +662,13 @@ abstract class ModelCreationalInterface {
 
     fun modelStatus(): Unit {
         val name = modelName
-        if (name != null) MetricsReport.load(name).print()
+        if (name != null) MetricsReport.load(name).asked().print()
         else logToConsole(ResponseDto(time = Instant.now(), message = "Status of model ${this.javaClass.simpleName}"))
     }
 
     /** The stored validation as ASCII charts: bars per label, the build history and the confusion matrix */
     fun modelChart(): Unit {
         val name = modelName ?: return logToConsole(ResponseDto(time = Instant.now(), message = "modelChart: nothing was exported", level = LogLevel.ERROR))
-        MetricsReport.load(name).chart().history().confusion()
+        MetricsReport.load(name).asked().chart().history().confusion()
     }
 }
