@@ -1714,7 +1714,11 @@ start, the counts on the others say what is hidden. <strong>Clear</strong> empti
 </tr>
 <tr>
 <td><code>source("train.csv")</code></td>
-<td>Reads a labeled CSV (text and label columns are inferred from headers like <code>text</code>, <code>label</code>, <code>intent</code>). Looked up as given, then in <code>AMP/</code>, then <code>AMP/pluginDir/</code></td>
+<td>Reads a labeled CSV (text and label columns are inferred from headers like <code>text</code>, <code>label</code>, <code>intent</code>). Looked up as given, then in <code>AMP/</code>, then <code>AMP/pluginDir/</code>. A file whose every line is quoted whole is read as the rows inside the quotes</td>
+</tr>
+<tr>
+<td><code>source("train.csv")!!.describe()</code></td>
+<td>What the file holds, as pandas' <code>info()</code>: its path and rows, each column with its role, how many rows fill it, its distinct values and an example; every label with its rows and share (uneven labels said); the texts' lengths, duplicates and texts given two labels; its test file. <code>log(s.describe())</code> prints it</td>
 </tr>
 <tr>
 <td><code>relate(train, "test.csv")</code></td>

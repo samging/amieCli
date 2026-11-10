@@ -1308,7 +1308,7 @@
 <tbody>
 <tr>
 <td><code>model</code></td>
-<td><code>list</code>, <code>build &lt;csv&gt; --name n [--test csv]</code>, <code>validate &lt;n&gt;</code>, <code>serve &lt;n&gt; [--port]</code>, <code>info &lt;n&gt;</code></td>
+<td><code>list</code>, <code>build &lt;csv&gt; --name n [--test csv]</code>, <code>validate &lt;n&gt;</code>, <code>metric &lt;n&gt; [--last] [--file]</code>, <code>serve &lt;n&gt; [--port]</code>, <code>info &lt;n&gt;</code></td>
 </tr>
 <tr>
 <td><code>group</code></td>
@@ -1363,7 +1363,7 @@
 </tr>
 <tr>
 <td><code>source</code>, <code>relate</code></td>
-<td>A labeled csv; a test file for it</td>
+<td>A labeled csv; a test file for it. <code>.describe()</code> says what it holds: columns, labels and their rows, text lengths, duplicates</td>
 </tr>
 <tr>
 <td><code>modelBuilder</code>, <code>buildOptions</code></td>
