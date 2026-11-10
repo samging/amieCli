@@ -1,0 +1,211 @@
+text,label
+"what's on my calendar today",calendar
+"do i have any meetings today",calendar
+"show me my schedule for this week",calendar
+"what are my appointments tomorrow",calendar
+"am i free this afternoon",calendar
+"list my events for the week",calendar
+"when is my next meeting",calendar
+"what does my day look like",calendar
+"check my calendar",calendar
+"anything scheduled for friday",calendar
+"what's coming up on my agenda",calendar
+"do i have plans tonight",calendar
+"show upcoming events",calendar
+"how busy am i this week",calendar
+"is there a meeting at 3",calendar
+"what meetings do i have on monday",calendar
+"open my google calendar",calendar
+"read me today's events",calendar
+"what time is my dentist appointment",calendar
+"do i have anything booked this weekend",calendar
+"what's my first meeting tomorrow",calendar
+"show my calendar for next week",calendar
+"any events on my calendar",calendar
+"when am i meeting the team",calendar
+"what's planned for today",calendar
+"list today's appointments",calendar
+"is my afternoon clear",calendar
+"what's next on my schedule",calendar
+"tell me my meetings",calendar
+"calendar for the week please",calendar
+"show my to-do list",tasks
+"what tasks do i have",tasks
+"list my tasks",tasks
+"what's on my todo list",tasks
+"what do i still need to do",tasks
+"show my open tasks",tasks
+"any tasks due today",tasks
+"read my task list",tasks
+"which tasks are left",tasks
+"what's on my google tasks",tasks
+"show me my pending to-dos",tasks
+"what should i work on next",tasks
+"list everything i have to do",tasks
+"how many tasks are open",tasks
+"what are my chores",tasks
+"check my todo list",tasks
+"show unfinished tasks",tasks
+"what's due this week on my list",tasks
+"my tasks please",tasks
+"do i have tasks overdue",tasks
+"what's left on my checklist",tasks
+"show all my task lists",tasks
+"remind me what i need to finish",tasks
+"what items are on my to do",tasks
+"open google tasks",tasks
+"what's on my list for today",tasks
+"tasks for today",tasks
+"show my reminders list",tasks
+"what jobs are still open",tasks
+"list my to-dos",tasks
+"show my recent files in drive",drive
+"find a file in google drive",drive
+"what files did i edit recently",drive
+"search my drive for the budget",drive
+"list my google drive files",drive
+"open my drive",drive
+"find the document called report",drive
+"where is my presentation",drive
+"show recent documents",drive
+"search drive for invoice",drive
+"what's in my google drive",drive
+"find my spreadsheet named expenses",drive
+"list files in my drive folder",drive
+"look for the slides about the project",drive
+"find the pdf i uploaded",drive
+"show me my latest drive files",drive
+"search my files for contract",drive
+"what documents do i have",drive
+"find the file named resume",drive
+"browse my drive",drive
+"recent files please",drive
+"which files were changed today",drive
+"find my notes in drive",drive
+"get the file called meeting notes",drive
+"search google drive for photos",drive
+"show the newest files",drive
+"locate my thesis document",drive
+"list documents in drive",drive
+"find a sheet about sales",drive
+"drive files from this week",drive
+"do i have new emails",email
+"check my inbox",email
+"any unread mail",email
+"read my latest emails",email
+"show unread messages in gmail",email
+"how many unread emails do i have",email
+"did anyone email me",email
+"check gmail",email
+"what's in my inbox",email
+"any new messages from work",email
+"show my recent emails",email
+"read the last email",email
+"do i have mail",email
+"search my email for the invoice",email
+"any emails from my boss",email
+"list my unread gmail",email
+"open my mailbox",email
+"what emails came in today",email
+"check for new mail",email
+"show me emails about the trip",email
+"find the email from amazon",email
+"any important emails",email
+"read my unread messages",email
+"is there an email from the bank",email
+"inbox summary please",email
+"show my gmail",email
+"count my unread emails",email
+"what did i get in the mail today",email
+"new email check",email
+"look at my email",email
+"translate hello into spanish",translate
+"how do you say thank you in french",translate
+"translate good night to german",translate
+"what is cheese in italian",translate
+"say where is the bathroom in japanese",translate
+"translate i love you to portuguese",translate
+"how do i say good morning in chinese",translate
+"translate this to korean: see you soon",translate
+"what's dog in dutch",translate
+"translate how much does it cost into russian",translate
+"how do you say happy birthday in arabic",translate
+"translate excuse me to polish",translate
+"say nice to meet you in swedish",translate
+"translate the bill please into turkish",translate
+"how do you say goodbye in greek",translate
+"translate welcome into hindi",translate
+"what does bonjour mean in english",translate
+"translate i am hungry to spanish",translate
+"how to say water in french",translate
+"translate where is the station into german",translate
+"say thank you very much in italian",translate
+"translate one coffee please to portuguese",translate
+"how do you say friend in japanese",translate
+"translate i don't understand into chinese",translate
+"what's the french word for apple",translate
+"translate good luck to korean",translate
+"how do i say help in spanish",translate
+"translate see you tomorrow into dutch",translate
+"say cheers in german",translate
+"translate my name is sam to french",translate
+"who was alan turing",web_lookup
+"what is quantum computing",web_lookup
+"tell me about the eiffel tower",web_lookup
+"look up the history of rome",web_lookup
+"who invented the telephone",web_lookup
+"what is machine learning",web_lookup
+"find information about black holes",web_lookup
+"who is the president of france",web_lookup
+"what is the capital of australia",web_lookup
+"tell me about marie curie",web_lookup
+"search the web for python programming",web_lookup
+"what is photosynthesis",web_lookup
+"who wrote war and peace",web_lookup
+"look up the great wall of china",web_lookup
+"what does dna stand for",web_lookup
+"tell me about the moon landing",web_lookup
+"who painted the mona lisa",web_lookup
+"what is bitcoin",web_lookup
+"find out about climate change",web_lookup
+"who is ada lovelace",web_lookup
+"what is the tallest mountain",web_lookup
+"look up mount everest",web_lookup
+"tell me about ancient egypt",web_lookup
+"what are neural networks",web_lookup
+"who discovered penicillin",web_lookup
+"information about the roman empire",web_lookup
+"what is a transformer model",web_lookup
+"search for facts about octopuses",web_lookup
+"who founded google",web_lookup
+"what is the theory of relativity",web_lookup
+"what's the news today",news
+"show me the headlines",news
+"latest news please",news
+"what's happening in the world",news
+"news about technology",news
+"any news on the economy",news
+"read me the top stories",news
+"what are today's headlines",news
+"sports news",news
+"latest news about artificial intelligence",news
+"what's new in science",news
+"give me the news",news
+"headlines about the election",news
+"what happened today",news
+"breaking news",news
+"news on climate",news
+"business headlines",news
+"what's trending in the news",news
+"latest world news",news
+"news about space exploration",news
+"today's top headlines",news
+"any news about apple",news
+"tech headlines please",news
+"what's in the news this morning",news
+"news from europe",news
+"latest stories about health",news
+"show recent news",news
+"news about football",news
+"current events please",news
+"morning news briefing",news

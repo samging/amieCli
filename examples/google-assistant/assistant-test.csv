@@ -1,0 +1,71 @@
+text,label
+"what's on for tomorrow morning",calendar
+"do i have a call later",calendar
+"show this week's meetings",calendar
+"am i busy on thursday",calendar
+"what's my schedule like",calendar
+"next appointment please",calendar
+"my events today",calendar
+"anything on the calendar tonight",calendar
+"when do i meet the client",calendar
+"plans for saturday",calendar
+"what's left to do today",tasks
+"show my todos",tasks
+"open tasks please",tasks
+"anything overdue on my list",tasks
+"what's on my to do list this week",tasks
+"read my tasks",tasks
+"tasks still pending",tasks
+"what do i have to finish",tasks
+"my checklist",tasks
+"list open to-dos",tasks
+"find my report in drive",drive
+"recent drive documents",drive
+"search drive for the lease",drive
+"where's my spreadsheet",drive
+"files i opened recently",drive
+"find slides called roadmap",drive
+"my google drive",drive
+"look for the pdf named receipt",drive
+"documents changed this week",drive
+"search files for passport",drive
+"anything new in my inbox",email
+"unread emails please",email
+"read me my mail",email
+"emails from john",email
+"check messages in gmail",email
+"new mail today",email
+"any emails about the order",email
+"what's unread",email
+"latest message in my inbox",email
+"show emails from the school",email
+"translate good evening into french",translate
+"how do you say beer in german",translate
+"what's hello in japanese",translate
+"say thank you in korean",translate
+"translate where is the hotel to spanish",translate
+"how to say love in italian",translate
+"translate yes please into dutch",translate
+"what is bread in portuguese",translate
+"say good morning in russian",translate
+"translate see you later to chinese",translate
+"who was isaac newton",web_lookup
+"what is an atom",web_lookup
+"tell me about the amazon rainforest",web_lookup
+"look up the pyramids",web_lookup
+"who invented the light bulb",web_lookup
+"what is cloud computing",web_lookup
+"facts about whales",web_lookup
+"who is serena williams",web_lookup
+"what is the speed of light",web_lookup
+"information about the titanic",web_lookup
+"today's news",news
+"what are the headlines",news
+"news about the stock market",news
+"latest science news",news
+"anything new in tech",news
+"top stories today",news
+"world headlines please",news
+"news about the weather",news
+"sports headlines",news
+"recent news about electric cars",news
