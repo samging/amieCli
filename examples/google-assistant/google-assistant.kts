@@ -58,7 +58,7 @@ ortClosable("assistant") {
         if (score < minScore) return "\"$request\" -> not sure (%s %.2f, under %.2f); no package asked".format(action, score, minScore)
         val route = routes.getValue(action)
         val command = route.command(request)
-        val lines = handleBy({ listOf("needs setup: amie package setup ${route.jar}") }) {
+        val lines = handleBy({ e -> listOf(if ("can't run" in "${e.message}") "needs setup: amie package setup ${route.jar}" else "failed: ${e.message}") }) {
             initMod(route.jar).run(command).take(3).map { it.take(160) }
         }
         return "\"$request\" -> $action %.2f -> ${route.jar} \"$command\"\n  ".format(score) + lines.joinToString("\n  ")

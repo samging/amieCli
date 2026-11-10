@@ -1,7 +1,8 @@
 # Out-of-scope detection on CLINC150
 
 An amie project from data to a served model: a classifier for 150 intents that also says "out of scope" for requests
-that match none of them, measured on the CLINC150 benchmark. Six templates run in order, then a results table.
+that match none of them, measured on the CLINC150 benchmark. Three templates run in order; the project's `main.kts` then calls three more
+like functions and prints the results table.
 
 | Model, on the CLINC150 test split | In-scope accuracy | Out-of-scope recall |
 |---|---|---|
@@ -22,22 +23,24 @@ examples/clinc-oos/setup.sh
 amie run clinc-oos
 ```
 
-`setup.sh` saves the six templates in your AMP and makes the project `clinc-oos` that runs them; arguments go to amie,
+`setup.sh` saves the six templates in your AMP and makes the project `clinc-oos`; arguments go to amie,
 so `examples/clinc-oos/setup.sh --amp ~/scratch/amp` sets it up in another AMP folder (then
 `amie --amp ~/scratch/amp run clinc-oos`). The run takes about ten minutes on a laptop. The first step downloads
 CLINC150 (2.5 MB) into the AMP folder once.
 
-| Step | Template | What it does |
-|---|---|---|
-| 1 | [`clinc-data`](templates/clinc-data.kts) | Downloads CLINC150 once, shows the training file as pandas' `info()`, attaches the validation file |
-| 2 | [`clinc-train`](templates/clinc-train.kts) | Trains two heads on the frozen encoder, keeps the better by macro-F1 on validation, calibrates it |
-| 3 | [`clinc-threshold`](templates/clinc-threshold.kts) | Picks the out-of-scope threshold on validation, then scores the test split |
-| 4 | [`clinc-errors`](templates/clinc-errors.kts) | The surest mistakes and the intent pairs confused most, on validation |
-| 5 | [`clinc-oos-class`](templates/clinc-oos-class.kts) | Teaches out of scope as a 151st intent, kept only if validation says it is better |
-| 6 | [`clinc-serve`](templates/clinc-serve.kts) | Serves the model over HTTP with the threshold and asks it three questions |
-| | [`main.kts`](main.kts) | The results table |
+| Step | Template | What it does | amie calls |
+|---|---|---|---|
+| 1 | [`clinc-data`](templates/clinc-data.kts) | Downloads CLINC150 once, shows the training file as pandas' `info()`, attaches the validation file | `shell`, `source`, `log`, `relate`, `sourceFile` |
+| 2 | [`clinc-train`](templates/clinc-train.kts) | Trains two heads on the frozen encoder, keeps the better by macro-F1 on validation, calibrates it | `architecture`, `buildOptions`, `modelBuilder`, `calibrate`, `validateMetrics` |
+| 3 | [`clinc-errors`](templates/clinc-errors.kts) | The surest mistakes and the intent pairs confused most, on validation | `mistakes`, `quietly`, `sessionMod` |
+| 4 | [`main.kts`](main.kts) | Calls the next three templates like functions, serves the model kept, prints the results table | `template`, `serve`, `stopServing` |
+| 4a | [`clinc-threshold`](templates/clinc-threshold.kts) | Picks the out-of-scope threshold on validation, then scores the test split; answers the numbers | `quietly`, `sessionMod`, `scores`, `output` |
+| 4b | [`clinc-oos-class`](templates/clinc-oos-class.kts) | Teaches out of scope as a 151st intent, kept only if validation says it is better | `fineTune`, `calibrate`, `versions`, `rollback`, `output` |
+| 4c | [`clinc-serve`](templates/clinc-serve.kts) | Asks the served model three questions over HTTP with curl | `servingUrl`, `serve`, `shell`, `accessLog`, `output` |
 
-The results are written to `AMP/clinc-oos/`, and the model is `clinc`, on the Models page and in
+No result file is written: each called template answers one line with what it found, which is what
+`val threshold by template("clinc-threshold")` and `threshold("measure")` return in `main.kts`. `serve()` keeps the
+threshold with the model, so `serve("clinc")` later answers "oos" under it the same way. The model is `clinc`, in
 `amie model list`. To ask it yourself:
 
 ```bash
