@@ -1710,15 +1710,19 @@ start, the counts on the others say what is hidden. <strong>Clear</strong> empti
 <tbody>
 <tr>
 <td><code>log("...")</code>, <code>info</code>, <code>error</code>, <code>data</code></td>
-<td>Any value, so <code>log(pkg.run("x"))</code> prints every answer: a list, a set or an array one element a line, a map <code>key: value</code>. Console lines at the given level: <strong>info</strong> for the script's own output (the only level on at start), <strong>data</strong> for what it produced (every model answer is one), <strong>error</strong> (turns itself on when a run fails), <strong>internal</strong> for the app's own lines</td>
+<td>Any value, so <code>log(pkg.run("x"))</code> prints every answer: a list, a set or an array one element a line, a map <code>key: value</code>, a data source as pandas' <code>df.info()</code> lays it out. Console lines at the given level: <strong>info</strong> for the script's own output (the only level on at start), <strong>data</strong> for what it produced (every model answer is one), <strong>error</strong> (turns itself on when a run fails), <strong>internal</strong> for the app's own lines</td>
 </tr>
 <tr>
 <td><code>source("train.csv")</code></td>
 <td>Reads a labeled CSV (text and label columns are inferred from headers like <code>text</code>, <code>label</code>, <code>intent</code>). Looked up as given, then in <code>AMP/</code>, then <code>AMP/pluginDir/</code>. A file whose every line is quoted whole is read as the rows inside the quotes</td>
 </tr>
 <tr>
+<td><code>log(source("train.csv"))</code>, <code>source("train.csv")!!.info()</code></td>
+<td>The file as pandas' <code>df.info()</code> lays a DataFrame out: its entries, each column with its non-null count, its dtype (<code>int64</code>, <code>float64</code>, <code>bool</code> or <code>object</code>, read off its values) and the role amie gave it (<code>text</code>, <code>label</code>), the dtypes, the file size, every label with its rows, and its test file. <code>log</code>, <code>info</code>, <code>data</code> and <code>error</code> print it for a source, and so does the prompt for a source on its own</td>
+</tr>
+<tr>
 <td><code>source("train.csv")!!.describe()</code></td>
-<td>What the file holds, as pandas' <code>info()</code>: its path and rows, each column with its role, how many rows fill it, its distinct values and an example; every label with its rows and share (uneven labels said); the texts' lengths, duplicates and texts given two labels; its test file. <code>log(s.describe())</code> prints it</td>
+<td>What the file holds, as pandas' <code>info()</code> and <code>describe()</code> together: its path and rows, each column with its role, how many rows fill it, its distinct values and an example; every label with its rows and share (uneven labels said); the texts' lengths, duplicates and texts given two labels; its test file. <code>log(s.describe())</code> prints it</td>
 </tr>
 <tr>
 <td><code>relate(train, "test.csv")</code></td>

@@ -2252,6 +2252,21 @@ val built = modelBuilder("intents", train)  // embeds with BERT, trains a small 
 built.modelStatus()                         // precision, recall, F1 for each label
 </code></pre></div>
 <p>A file named in a script is looked up as given, then in the AMP folder, then in <code>AMP/pluginDir</code>.</p>
+<p><code>log(source("x.csv"))</code> shows what a file holds before a model trains on it, laid out as pandas' <code>df.info()</code>: each column with how many rows fill it, its type and whether amie reads it as the text or the label, then the labels with their rows. <code>source("x.csv")!!.describe()</code> says more: the share of each label, the texts' lengths, duplicates, and texts given two labels.</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; log(source("demo.csv"))
+&lt;class 'DataSource'&gt; demo.csv
+RangeIndex: 5 entries, 0 to 4
+Data columns (total 4 columns):
+ #   Column  Non-Null Count  Dtype    Role
+---  ------  --------------  -----    ----
+ 0   id      5 non-null      int64
+ 1   text    5 non-null      object   text
+ 2   label   5 non-null      object   label
+ 3   score   4 non-null      float64
+dtypes: float64(1), int64(1), object(2)
+file size: 135 bytes
+labels (3): greet 2, bye 2, time 1
+</code></pre></div>
 <h3 id="look-at-what-was-built">Look at what was built<a class="headerlink" href="#look-at-what-was-built" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code>$ amie model list
 intent    intents    3 labels    v1
