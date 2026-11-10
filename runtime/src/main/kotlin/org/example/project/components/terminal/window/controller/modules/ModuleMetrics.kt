@@ -210,6 +210,15 @@ internal fun macroF1Of(confusion: Array<IntArray>, presentOnly: Boolean): Double
 class MetricsReport(val modelName: String, val runs: List<MetricsRun>) {
     constructor(modelName: String, run: MetricsRun?) : this(modelName, listOfNotNull(run))
 
+    /**
+     * The level its tables and charts are written at: internal for the report a build prints by itself, the
+     * script's own level once a script asks for it (validateMetrics, metricsChart, ...), so amie shows it without -v
+     */
+    private var level: LogLevel = LogLevel.INTERNAL
+
+    /** This report as a script asked for it: its tables and charts are lines of the script's output */
+    fun asked(): MetricsReport = apply { level = LogLevel.INFO }
+
     val run: MetricsRun? get() = runs.lastOrNull()
 
     fun precision(label: String): Double? = run?.labels?.get(label)?.precision
@@ -246,7 +255,7 @@ class MetricsReport(val modelName: String, val runs: List<MetricsRun>) {
             run.note?.let { add(it) }
             run.warnings.forEach { add("warning: $it") }
         }
-        logInternal(lines.joinToString("\n"))
+        logInternal(lines.joinToString("\n"), level)
         return this
     }
 
@@ -272,7 +281,7 @@ class MetricsReport(val modelName: String, val runs: List<MetricsRun>) {
             addAll(AsciiCharts.bars(rows))
             run.warnings.forEach { add("warning: $it") }
         }
-        logInternal(lines.joinToString("\n"))
+        logInternal(lines.joinToString("\n"), level)
         return this
     }
 
@@ -287,7 +296,7 @@ class MetricsReport(val modelName: String, val runs: List<MetricsRun>) {
                     listOfNotNull(r.version?.let { "v$it" }, r.kind).joinToString(" ").let { if (it.isEmpty()) "" else "  $it" })
             }
         }
-        logInternal(lines.joinToString("\n"))
+        logInternal(lines.joinToString("\n"), level)
         return this
     }
 
@@ -296,7 +305,7 @@ class MetricsReport(val modelName: String, val runs: List<MetricsRun>) {
         val run = run ?: return missing("confusionMatrix")
         val labels = run.labels.keys.toList()
         val lines = listOf("confusion '$modelName' · ${run.validationSize} validation samples") + AsciiCharts.grid(labels, run.confusion)
-        logInternal(lines.joinToString("\n"))
+        logInternal(lines.joinToString("\n"), level)
         return this
     }
 
@@ -330,7 +339,7 @@ class MetricsReport(val modelName: String, val runs: List<MetricsRun>) {
                 add("score = how sure the answer was, label's = the score the row's own label got")
             }
         }
-        logInternal(lines.joinToString("\n"))
+        logInternal(lines.joinToString("\n"), level)
         return this
     }
 
@@ -354,7 +363,7 @@ class MetricsReport(val modelName: String, val runs: List<MetricsRun>) {
                 add("a suspect is mislabeled or just hard: fix its label in the data file, or keep it")
             }
         }
-        logInternal(lines.joinToString("\n"))
+        logInternal(lines.joinToString("\n"), level)
         return this
     }
 
@@ -379,7 +388,7 @@ class MetricsReport(val modelName: String, val runs: List<MetricsRun>) {
                 ?.takeIf { it.threshold > 0.0 }
                 ?.let { add("a gate at ${f2(it.threshold)} keeps ${pct(it.coverage)} of the rows, and ${pct(it.accuracy)} of what it keeps is right") }
         }
-        logInternal(lines.joinToString("\n"))
+        logInternal(lines.joinToString("\n"), level)
         return this
     }
 
@@ -418,7 +427,7 @@ class MetricsReport(val modelName: String, val runs: List<MetricsRun>) {
             }
             add("validation loss rising while training loss falls = memorising: fewer epochs, patience, dropout or weight decay")
         }
-        logInternal(lines.joinToString("\n"))
+        logInternal(lines.joinToString("\n"), level)
         return this
     }
 

@@ -43,6 +43,8 @@ exit codes. `amie docs` opens the learn book, chapter by chapter from the first 
 
 [examples/clinc-oos](examples/clinc-oos) is a whole project to learn from: a classifier for the 150 intents of the
 CLINC150 benchmark that also says "out of scope", from the download to a served model, with its results.
+[examples/google-assistant](examples/google-assistant) is one template that shows the parts together: a model
+built with `modelBuilder` and its metrics, routing requests to the Google packages and the browser.
 
 ## Layout
 
@@ -52,7 +54,7 @@ runtime/     the engine: the script runtime, models, groups, packages, envs, tem
 scripts/     setup.sh, which downloads the encoder and voice models into the AMP folder
 bin/amie     builds and runs amie from the checkout
 docs/        the documentation written for the desktop app; docs/sandbox-scripting.md is the scripting guide
-examples/    whole projects: clinc-oos, out-of-scope detection on CLINC150
+examples/    whole projects: clinc-oos, out-of-scope detection on CLINC150; google-assistant, a model routing to packages
 voice/       the voice scripts: talk to amie through its intent models and a text model
 ```
 
