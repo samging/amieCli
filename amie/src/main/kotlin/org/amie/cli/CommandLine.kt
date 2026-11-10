@@ -38,12 +38,12 @@ sealed interface Invocation {
     /** `amie -c "code"`: the code as main.kts; -i then the prompt */
     data class Code(val code: String, val interactive: Boolean, override val options: Options) : Invocation
 
-    /** `amie models list`: one of [Commands] with its own arguments */
+    /** `amie model list`: one of [Commands] with its own arguments */
     data class Command(val name: String, val args: List<String>, override val options: Options) : Invocation
 
     data class Version(override val options: Options = Options()) : Invocation
 
-    /** `-h`, or `amie models --help` */
+    /** `-h`, or `amie model --help` */
     data class Help(val command: String? = null, override val options: Options = Options()) : Invocation
 
     /** Something the command line can't mean, with why; the exit code is 2 */
@@ -63,8 +63,8 @@ functions in scope (initMod, group, database, modelBuilder, log, ...).
   amie -c "log(1 + 1)" runs the code given
   amie -i script.kts   runs the file, then the prompt
   amie run script.kts  the same as the bare file
-  amie new NAME        a project: AMP/projects/NAME with a main.kts, in an env of its name; amie run NAME runs it
-  amie examples        the starter scripts by group, what amie can do; amie run "<title>" runs one
+  amie new NAME        a project: a group of templates in an env of its name; amie run NAME runs them in order
+  amie example         the starter scripts by group, what amie can do; amie run "<title>" runs one
 
 Options
   -e, --env NAME       the env to run in (AMP/env/NAME), over the one the script names

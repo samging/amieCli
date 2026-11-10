@@ -73,7 +73,7 @@ class ScriptRunTest {
 
     @Test
     fun `main runs a command against the AMP folder`() {
-        val code = captured { Amie.main(listOf("envs", "list")) }
+        val code = captured { Amie.main(listOf("env", "list")) }
         assertEquals(Amie.EXIT_OK, code, err.toString())
         assertTrue(out.toString().contains("default"), out.toString())
     }
@@ -84,7 +84,7 @@ class ScriptRunTest {
         assertTrue(out.toString().startsWith("amie "), out.toString())
         assertTrue(out.toString().contains("GPL"))
         assertEquals(Amie.EXIT_USAGE, captured { Amie.main(listOf("--nope")) })
-        assertEquals(Amie.EXIT_USAGE, captured { Amie.main(listOf("models")) })
-        assertEquals(Amie.EXIT_OK, captured { Amie.main(listOf("models", "--help")) })
+        assertEquals(Amie.EXIT_USAGE, captured { Amie.main(listOf("model")) })
+        assertEquals(Amie.EXIT_OK, captured { Amie.main(listOf("model", "--help")) })
     }
 }

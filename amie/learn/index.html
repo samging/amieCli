@@ -213,7 +213,7 @@ TURN THE LIGHTS ON!</pre>
   <tr><td><code>:docs</code></td><td>This book, in the browser</td></tr>
   <tr><td><code>:env [name]</code></td><td>The env the lines run in; with a name, that env from now on</td></tr>
   <tr><td><code>:load file.kts</code></td><td>Runs the file's lines here, so what it defines stays</td></tr>
-  <tr><td><code>:sessions</code></td><td>Every open session: models, groups, packages, templates in the background</td></tr>
+  <tr><td><code>:session</code></td><td>Every open session: models, groups, packages, templates in the background</td></tr>
   <tr><td><code>:config [x.jar]</code></td><td>Package config files: every jar's and whether each is filled in, or one jar's keys; <code>key=value</code> sets keys; <code>:config --help</code> lists all of it</td></tr>
   <tr><td><code>:setup x.jar</code></td><td>Asks for each config key of the jar with its hint; Enter keeps a value</td></tr>
   <tr><td><code>:terminate x</code></td><td>Closes the session named x, or <code>#id</code>; <code>:terminate all</code> closes every one</td></tr>
@@ -222,7 +222,7 @@ TURN THE LIGHTS ON!</pre>
   <tr><td><code>:clear</code></td><td>Clears the screen</td></tr>
   <tr><td><code>:quit</code></td><td>Leaves; <code>:exit</code>, <code>:q</code> and Ctrl-D do too</td></tr>
 </table>
-<p><code>help</code>, <code>help(group)</code>, <code>quit</code> and <code>exit</code> work without the colon too, with or without the parentheses, as they do at Python's prompt. A line that starts with <code>amie</code> and a space is amie's own command line, run right here: <code>amie envs new prod</code>, <code>amie models list</code>, <code>amie hf search bert</code>. On a terminal the banner is in the pride flag's colors, the commands and the prompt have a color each and errors are red; a piped output or <code>NO_COLOR</code> in the environment leaves everything plain.</p>
+<p><code>help</code>, <code>help(group)</code>, <code>quit</code> and <code>exit</code> work without the colon too, with or without the parentheses, as they do at Python's prompt. A line that starts with <code>amie</code> and a space is amie's own command line, run right here: <code>amie env new prod</code>, <code>amie model list</code>, <code>amie hf search bert</code>. On a terminal the banner is in the pride flag's colors, the commands and the prompt have a color each and errors are red; a piped output or <code>NO_COLOR</code> in the environment leaves everything plain.</p>
 <p><code>:api</code> is the fastest way to find a function. The description of each comes from the list the script API is generated from, so what it says is what the function does:</p>
 <pre>&gt;&gt;&gt; :api vote
 fun group(name: String): ModelSwarm
@@ -295,7 +295,7 @@ weather	is it raining</pre>
   <tr><td><code>amie -e prod label.kts</code></td><td>In the env <code>prod</code>, over the one the script names</td></tr>
   <tr><td><code>amie -v label.kts</code></td><td>With the internal lines: the env sourcing, a build's phases, what the run used</td></tr>
   <tr><td><code>amie run label.kts</code></td><td>The same as the bare file</td></tr>
-  <tr><td><code>amie new reader</code></td><td>A project: <code>AMP/projects/reader/main.kts</code> to start from, in an env named <code>reader</code></td></tr>
+  <tr><td><code>amie new reader</code></td><td>A project: <code>AMP/projects/reader</code>, a group of templates run in order in an env named <code>reader</code> (<a href="#projects">projects</a>)</td></tr>
   <tr><td><code>amie run reader</code></td><td>Runs the project by its name, as a starter or a template by its title</td></tr>
 </table>
 <p>Standard output carries the console, standard error the errors, with the script's line in front:</p>
@@ -319,7 +319,7 @@ hello there,greeting
 good morning,greeting
 hi how are you,greeting</pre>
 <p>The command does the whole thing and prints the validation:</p>
-<pre>$ amie models build intents.csv --name intents
+<pre>$ amie model build intents.csv --name intents
 Building intents: embedding 9 rows, training, exporting
 accuracy 1.00  macro F1 1.00
 label     precision  recall  f1  support
@@ -334,11 +334,11 @@ val built = modelBuilder("intents", train)  // embeds with BERT, trains a small 
 built.modelStatus()                         // precision, recall, F1 for each label</pre>
 <p>A file named in a script is looked up as given, then in the AMP folder, then in <code>AMP/pluginDir</code>.</p>
 <h3>Look at what was built</h3>
-<pre>$ amie models list
+<pre>$ amie model list
 intent    intents    3 labels    v1
-$ amie models validate intents
-$ amie models info intents
-$ amie models remove intents</pre>
+$ amie model validate intents
+$ amie model info intents
+$ amie model remove intents</pre>
 <p><code>validate</code> prints the stored validation again; <code>info</code> the labels, the encoder, the version, how it was trained, the groups it is in and where it is served, if anywhere. In script, <code>validateMetrics("intents")</code>, <code>confusionMatrix("intents")</code> and <code>mistakes("intents")</code> show the same as tables.</p>
 <h3>Teach it more</h3>
 <p>A trained model learns from new rows without starting over. Rows of labels it knows correct it, a label it doesn't know gets an output of its own, and what it knew is replayed so it keeps it. The model before stays as a version.</p>
@@ -349,14 +349,14 @@ $ amie models remove intents</pre>
 
 <h2 id="groups">Groups</h2>
 <p>A group is a named set of models, kept in the env, that is asked as one. <code>vote</code> is the label most of them give, <code>predict</code> the best score across them, <code>each</code> every model's own answer.</p>
-<pre>$ amie groups add house intents dummy
-$ amie groups list
+<pre>$ amie group add house intents dummy
+$ amie group list
 house    intents, dummy    env default
-$ amie groups open house "turn the lights on"
+$ amie group open house "turn the lights on"
 intents: lights
 dummy: lights
 vote: lights</pre>
-<p>Without texts, <code>groups open</code> reads them from standard input, a line each. <code>groups remove house dummy</code> takes a model out, and without a model removes the group.</p>
+<p>Without texts, <code>group open</code> reads them from standard input, a line each. <code>group remove house dummy</code> takes a model out, and without a model removes the group.</p>
 <p>In script:</p>
 <pre>&gt;&gt;&gt; val swarm = group("house")
 &gt;&gt;&gt; swarm.vote("is it raining")
@@ -368,17 +368,17 @@ weather
 
 <h2 id="packages">Packages</h2>
 <p>A package is a jar with a class that answers text, kept in <code>AMP/pluginDir</code>. It is opened like a model, by its file name, and asked with <code>run</code> or <code>answer</code>, since it has no labels of its own:</p>
-<pre>$ amie packages search google
+<pre>$ amie package search google
 6 jars in samging/jar-jar matching 'google'
-$ amie packages add spotify.jar
-$ amie packages add ~/build/greeter.jar
+$ amie package add spotify.jar
+$ amie package add ~/build/greeter.jar
 greeter.jar: Greeter 1.2, a package class found
-$ amie packages test greeter.jar
-$ amie packages info greeter.jar
-$ amie packages setup spotify.jar
+$ amie package test greeter.jar
+$ amie package info greeter.jar
+$ amie package setup spotify.jar
     clientId: 
     clientSecret: </pre>
-<p>A jar's settings are files in <code>AMP/pluginDir/config/&lt;jar&gt;/</code>. <code>amie packages setup</code> asks for each key with the hint the file gives, Enter keeping a value, and offers the values another jar already has, so one Google client fills every Google package. <code>amie packages config spotify.jar clientId=abc</code> sets a key from a script, <code>--all-jars</code> sets it for every jar with that file, and <code>amie packages config</code> alone shows every jar's files and whether each is filled in.</p>
+<p>A jar's settings are files in <code>AMP/pluginDir/config/&lt;jar&gt;/</code>. <code>amie package setup</code> asks for each key with the hint the file gives, Enter keeping a value, and offers the values another jar already has, so one Google client fills every Google package. <code>amie package config spotify.jar clientId=abc</code> sets a key from a script, <code>--all-jars</code> sets it for every jar with that file, and <code>amie package config</code> alone shows every jar's files and whether each is filled in.</p>
 <pre>&gt;&gt;&gt; val greeter = initMod("greeter.jar")
 &gt;&gt;&gt; greeter.answer("hello")
 Hello to you</pre>
@@ -401,17 +401,17 @@ Hello to you</pre>
 }</pre>
 <p>Two sessions of one jar never share an instance or a static field. <code>run</code> runs on amie's <code>amie-package-call</code> thread while the script waits; Ctrl-C interrupts it, and an exception it throws becomes the script's error. The classes must be compiled for Java 21 or older, and a Kotlin package can rely on amie's own standard library. When a jar has several classes that fit, <code>"entry"</code> in its <code>META-INF/amie/package.json</code> names the one.</p>
 <h3 id="github-packages">Packages from GitHub</h3>
-<p>A script asks for a jar in a GitHub repository with <code>github:</code>. amie downloads it, checks it as <code>packages add</code> does, and keeps it in <code>AMP/pluginDir</code> with where it came from:</p>
+<p>A script asks for a jar in a GitHub repository with <code>github:</code>. amie downloads it, checks it as <code>package add</code> does, and keeps it in <code>AMP/pluginDir</code> with where it came from:</p>
 <pre>&gt;&gt;&gt; val notes = initMod("github:samging/jar-jar/memory.jar")
 &gt;&gt;&gt; notes.answer("help")
 remember &lt;text&gt;  keeps it
 &gt;&gt;&gt; val files = initMod("files.jar")</pre>
-<p>A plain name like <code>files.jar</code> is looked for in the env, <code>AMP/pluginDir</code>, as a path, and last in the repositories of <code>AMP/github.json</code>, which starts with <code>samging/jar-jar</code>. <code>@main</code>, a tag or a commit after the name pins a version, and a release's assets are found too. A <code>github:</code> open downloads again only when the file changed; a plain name uses the copy already in <code>AMP/pluginDir</code>. A private repository needs <code>GITHUB_TOKEN</code> or a <code>"token"</code> in <code>AMP/github.json</code>; without one the jar is reported as not found. <code>amie packages search</code> lists what those repositories hold, and <code>amie packages add &lt;x.jar&gt;</code> downloads one by its name.</p>
-<p>To upload a jar, check it with <code>amie packages add</code> and <code>amie packages test</code>, then open a pull request that adds it at the top of samging/jar-jar. Its Check jars workflow first checks every jar the way amie checks a download, running none of its code, then opens each one as <code>amie packages test</code> does: it calls <code>run()</code> with every test the jar declares and then <code>close()</code>. The jar is there for everyone once the pull request is merged.</p>
+<p>A plain name like <code>files.jar</code> is looked for in the env, <code>AMP/pluginDir</code>, as a path, and last in the repositories of <code>AMP/github.json</code>, which starts with <code>samging/jar-jar</code>. <code>@main</code>, a tag or a commit after the name pins a version, and a release's assets are found too. A <code>github:</code> open downloads again only when the file changed; a plain name uses the copy already in <code>AMP/pluginDir</code>. A private repository needs <code>GITHUB_TOKEN</code> or a <code>"token"</code> in <code>AMP/github.json</code>; without one the jar is reported as not found. <code>amie package search</code> lists what those repositories hold, and <code>amie package add &lt;x.jar&gt;</code> downloads one by its name.</p>
+<p>To upload a jar, check it with <code>amie package add</code> and <code>amie package test</code>, then open a pull request that adds it at the top of samging/jar-jar. Its Check jars workflow first checks every jar the way amie checks a download, running none of its code, then opens each one as <code>amie package test</code> does: it calls <code>run()</code> with every test the jar declares and then <code>close()</code>. The jar is there for everyone once the pull request is merged.</p>
 <h3>Maven packages</h3>
 <p>A library from Maven Central goes into the env, so a script can import it:</p>
-<pre>$ amie packages maven org.jsoup:jsoup:1.17.2
-$ amie packages list</pre>
+<pre>$ amie package maven org.jsoup:jsoup:1.17.2
+$ amie package list</pre>
 <pre>&gt;&gt;&gt; import org.jsoup.Jsoup
 &gt;&gt;&gt; Jsoup.parse("&lt;p&gt;hi&lt;/p&gt;").text()
 hi</pre>
@@ -419,37 +419,60 @@ hi</pre>
 
 <h2 id="envs">Envs</h2>
 <p>An env is a folder under <code>AMP/env</code> holding its Maven packages and its groups. Scripts run in <code>default</code> unless told otherwise. A second env keeps one project's packages away from another's.</p>
-<pre>$ amie envs new prod
-$ amie envs list
+<pre>$ amie env new prod
+$ amie env list
 default    2 packages    1 group    AMP/env/default
 prod       0 packages    0 groups   AMP/env/prod
-$ amie envs show prod</pre>
+$ amie env show prod</pre>
 <p>Three ways to run in an env:</p>
 <ul>
   <li><code>amie -e prod script.kts</code>, or <code>-e prod</code> before any command, for this run.</li>
   <li><code>:env prod</code> at the prompt, for the lines after it.</li>
-  <li><code>amie envs use prod</code>, which rewrites the <code>environment(...)</code> line of the saved <code>main.kts</code> in <code>AMP/pluginDir</code>, or makes one with it.</li>
+  <li><code>amie env use prod</code>, which rewrites the <code>environment(...)</code> line of the saved <code>main.kts</code> in <code>AMP/pluginDir</code>, or makes one with it.</li>
 </ul>
 <p>A script names its own env with <code>environment(SettingsEnv("prod"))</code>, read before it compiles; <code>-e</code> wins over it.</p>
 
 <h2 id="templates">Templates and the background</h2>
 <p>A template is a script saved under a name in <code>AMP/templates</code>: the starters that come with amie, and the scripts you save.</p>
-<pre>$ amie templates list
+<pre>$ amie template list
 Hello: log at every level          first steps, starter
 Train a model from a csv           models, starter
 Serve a model and call it          serving, starter
-$ amie templates show "Train a model from a csv"
-$ amie templates run "Train a model from a csv"</pre>
+$ amie template show "Train a model from a csv"
+$ amie template run "Train a model from a csv"</pre>
 <p><code>export</code> turns a template into a bundle that runs on its own, a folder with a <code>run.jar</code>:</p>
-<pre>$ amie templates save reader ~/reader.kts     keeps the file as the template "reader"; a name taken is saved again
-$ amie templates edit reader                  opens it in $VISUAL or $EDITOR, or prints the path when neither is set
-$ amie templates delete reader                removes it</pre>
-<pre>$ amie templates export talk --out ~/bundles/talk
+<pre>$ amie template save reader ~/reader.kts     keeps the file as the template "reader"; a name taken is saved again
+$ amie template edit reader                  opens it in $VISUAL or $EDITOR, or prints the path when neither is set
+$ amie template delete reader                removes it</pre>
+<pre>$ amie template export talk --out ~/bundles/talk
 $ java -jar ~/bundles/talk/run.jar</pre>
 <p>The bundle carries the env's Maven jars and the package jars the script uses. <code>--no-jars</code> leaves them out, for a bundle to send where they are already, or to keep it small: <code>require.txt</code> then lists each file with the path to put it at under the bundle (a Maven jar from Maven Central or the exporting machine's <code>AMP/env/caches</code>, a package jar from its <code>AMP/pluginDir</code>), <code>run.jar --check</code> says which are still missing, and a run with a Maven jar missing fetches it from Maven Central when it can reach it; with a package jar missing it stops and names it.</p>
-<pre>$ amie templates export talk --out ~/bundles/talk --no-jars
+<pre>$ amie template export talk --out ~/bundles/talk --no-jars
 $ cat ~/bundles/talk/require.txt
 $ java -jar ~/bundles/talk/run.jar --check</pre>
+<h3 id="projects">Templates grouped into a project</h3>
+<p>The templates are what you write; a project groups them. <code>amie template new</code> makes a template and opens it in <code>$VISUAL</code> or <code>$EDITOR</code> (with neither set, it prints the file's path to open yourself), and <code>--project</code> puts it at the end of a project, running in the project's env:</p>
+<pre>$ amie new house                                    a project: AMP/projects/house, in an env named house
+$ amie template new reader --project house          writes the template "reader", the first of house
+$ amie template new notifier --project house        and "notifier", the second
+$ amie template edit reader                         opens it again
+$ amie project show house
+project: house  env: house
+  1. reader  3 lines
+  2. notifier  3 lines
+$ amie run house
+house: 1/2 reader
+house: 2/2 notifier</pre>
+<p><code>amie run house</code> runs the templates one after another in the env <code>house</code>, then the project's own <code>main.kts</code> when you wrote more in it than the line <code>amie new</code> puts there, and stops at the first that fails. Background templates they start are waited for, and a model one of them left serving keeps the run up, as with a single script.</p>
+<p>A template can be in several projects, and taking one out of a project leaves the template itself in <code>AMP/templates</code>:</p>
+<pre>$ amie new garden reader notifier                   a project made with two templates already in it
+$ amie project add house speaker                    puts "speaker" at the end of house
+$ amie project add house speaker --at 1             moves it to the front
+$ amie project remove house notifier                takes it out of house
+$ amie project edit house                           the order itself, templates.txt, in your editor
+$ amie project list</pre>
+<p>The order is <code>AMP/projects/&lt;name&gt;/templates.txt</code>, one template id a line, so it can be edited by hand too.</p>
+
 <h3>A template in the background</h3>
 <p>A script can start a template beside itself and talk to it. The template reads its caller's lines with <code>input()</code> and answers with <code>output(...)</code>; the caller sends and receives.</p>
 <pre>// the template, saved as "reader"
@@ -470,11 +493,11 @@ finished</pre>
 &gt;&gt;&gt; reader("is it raining")
 weather
 &gt;&gt;&gt; reader.close()</pre>
-<p>A template that fails makes the call throw, with its name and its error, so a failure never passes for an answer. <code>:sessions</code> lists the runs in the background, and a script that ends waits for the ones it started.</p>
+<p>A template that fails makes the call throw, with its name and its error, so a failure never passes for an answer. <code>:session</code> lists the runs in the background, and a script that ends waits for the ones it started.</p>
 
 <h2 id="serving">Serve a model</h2>
 <p>A model served answers over HTTP. The command keeps the process up until Ctrl-C:</p>
-<pre>$ amie models serve intents --port 8765
+<pre>$ amie model serve intents --port 8765
 Serving intents at http://127.0.0.1:8765/models/intents/predict
 Serving. Stop with Ctrl-C or SIGTERM.</pre>
 <p>From another terminal:</p>
@@ -547,12 +570,12 @@ Das Haus ist wunderbar.</pre>
 
 <h2 id="housekeeping">Sessions and housekeeping</h2>
 <p>Whatever a script opens is a session: a model, a group, a package, a template in the background. Sessions stay open after the line that opened them, which is what makes the second <code>predict</code> fast.</p>
-<pre>&gt;&gt;&gt; :sessions
+<pre>&gt;&gt;&gt; :session
 #1  intents  model    running  opened 14:02:11
 #2  house    group    running  opened 14:05:40
 &gt;&gt;&gt; :terminate house
 &gt;&gt;&gt; :terminate all</pre>
-<p>From the command line, <code>amie sessions list</code> shows the sessions of that process, and <code>amie sessions runs</code> the recorded runs of <code>main.kts</code>.</p>
+<p>From the command line, <code>amie session list</code> shows the sessions of that process, and <code>amie session runs</code> the recorded runs of <code>main.kts</code>.</p>
 <h3>Scope functions</h3>
 <p>A block decides how long what it opens lives:</p>
 <table>
@@ -601,12 +624,13 @@ Das Haus ist wunderbar.</pre>
 <h3>The commands</h3>
 <table>
   <tr><th>Command</th><th>Actions</th></tr>
-  <tr><td><code>models</code></td><td><code>list</code>, <code>build &lt;csv&gt; --name n [--test csv]</code>, <code>validate &lt;n&gt;</code>, <code>serve &lt;n&gt; [--port]</code>, <code>info &lt;n&gt;</code></td></tr>
-  <tr><td><code>groups</code></td><td><code>list</code>, <code>add &lt;group&gt; &lt;models&gt;</code>, <code>remove &lt;group&gt; [model]</code>, <code>open &lt;group&gt; [texts]</code>; <code>--env</code> for another env</td></tr>
-  <tr><td><code>packages</code></td><td><code>list</code>, <code>add &lt;jar&gt;</code>, <code>maven &lt;coordinate&gt;</code>, <code>test &lt;jar&gt;</code>, <code>info &lt;jar&gt;</code></td></tr>
-  <tr><td><code>envs</code></td><td><code>list</code>, <code>new &lt;name&gt;</code>, <code>use &lt;name&gt;</code>, <code>show &lt;name&gt;</code></td></tr>
-  <tr><td><code>templates</code></td><td><code>list</code>, <code>show &lt;name&gt;</code>, <code>run &lt;name&gt;</code>, <code>export &lt;name&gt; --out &lt;folder&gt;</code></td></tr>
-  <tr><td><code>sessions</code></td><td><code>list</code>, <code>runs</code>, <code>terminate &lt;name | #id | all&gt;</code></td></tr>
+  <tr><td><code>model</code></td><td><code>list</code>, <code>build &lt;csv&gt; --name n [--test csv]</code>, <code>validate &lt;n&gt;</code>, <code>serve &lt;n&gt; [--port]</code>, <code>info &lt;n&gt;</code></td></tr>
+  <tr><td><code>group</code></td><td><code>list</code>, <code>add &lt;group&gt; &lt;models&gt;</code>, <code>remove &lt;group&gt; [model]</code>, <code>open &lt;group&gt; [texts]</code>; <code>--env</code> for another env</td></tr>
+  <tr><td><code>package</code></td><td><code>list</code>, <code>add &lt;jar&gt;</code>, <code>maven &lt;coordinate&gt;</code>, <code>test &lt;jar&gt;</code>, <code>info &lt;jar&gt;</code></td></tr>
+  <tr><td><code>env</code></td><td><code>list</code>, <code>new &lt;name&gt;</code>, <code>use &lt;name&gt;</code>, <code>show &lt;name&gt;</code></td></tr>
+  <tr><td><code>template</code></td><td><code>list</code>, <code>new &lt;name&gt; [--project p]</code>, <code>show &lt;name&gt;</code>, <code>run &lt;name&gt;</code>, <code>edit &lt;name&gt;</code>, <code>save &lt;name&gt; &lt;file&gt;</code>, <code>delete &lt;name&gt;</code>, <code>export &lt;name&gt; --out &lt;folder&gt;</code></td></tr>
+  <tr><td><code>project</code></td><td><code>list</code>, <code>show &lt;p&gt;</code>, <code>new &lt;p&gt; [templates]</code>, <code>add &lt;p&gt; &lt;templates&gt; [--at n]</code>, <code>remove &lt;p&gt; &lt;template&gt;</code>, <code>run &lt;p&gt;</code>, <code>edit &lt;p&gt;</code></td></tr>
+  <tr><td><code>session</code></td><td><code>list</code>, <code>runs</code>, <code>terminate &lt;name | #id | all&gt;</code></td></tr>
   <tr><td><code>hf</code></td><td><code>search &lt;query&gt; [--format] [--task] [--limit]</code>, <code>info &lt;repo&gt;</code>, <code>import &lt;repo&gt; [--model-name]</code></td></tr>
   <tr><td><code>run</code></td><td><code>run &lt;file&gt; [args]</code></td></tr>
   <tr><td><code>docs</code></td><td>This book; <code>docs path</code> prints where it is</td></tr>

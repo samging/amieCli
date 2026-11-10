@@ -26,7 +26,7 @@ import org.jline.terminal.TerminalBuilder
 import java.io.File
 
 /**
- * `amie packages config` and `amie packages setup`: the config files of a package jar, AMP/pluginDir/config/<jar>/,
+ * `amie package config` and `amie package setup`: the config files of a package jar, AMP/pluginDir/config/<jar>/,
  * shown and set from the command line, so no one has to find the folder and edit them by hand.
  */
 internal object PackageConfigCli {
@@ -47,7 +47,7 @@ internal object PackageConfigCli {
         }
     }
 
-    /** `packages config [x.jar] [key=value...] [--file f] [--from path] [--edit] [--all-jars]` */
+    /** `package config [x.jar] [key=value...] [--file f] [--from path] [--edit] [--all-jars]` */
     fun config(flags: Flags): Int {
         val name = flags.words.firstOrNull() ?: return overview()
         val (jar, meta) = jar(name)
@@ -73,7 +73,7 @@ internal object PackageConfigCli {
         return Amie.EXIT_OK
     }
 
-    /** `packages setup x.jar`: each key asked at the terminal, Enter keeping its value */
+    /** `package setup x.jar`: each key asked at the terminal, Enter keeping its value */
     fun setup(flags: Flags): Int {
         val name = flags.words.firstOrNull() ?: throw IllegalArgumentException("Missing: the jar's name")
         val (jar, meta) = jar(name)
@@ -82,7 +82,7 @@ internal object PackageConfigCli {
             println("${jar.name} has no config files to set up")
             return Amie.EXIT_OK
         }
-        val ask = Asker.open() ?: throw IllegalArgumentException("setup asks at a terminal; without one, amie packages config ${jar.name} key=value sets a key")
+        val ask = Asker.open() ?: throw IllegalArgumentException("setup asks at a terminal; without one, amie package config ${jar.name} key=value sets a key")
         val width = terminalWidth() - 1
         try {
             println(Style.accent(jar.name) + "  " + Style.dim("Enter keeps a value, - empties it, Ctrl-C leaves"))
@@ -124,7 +124,7 @@ internal object PackageConfigCli {
         meta?.env?.forEach { v ->
             if (System.getenv(v.name).isNullOrEmpty()) println(Style.dim("\$${v.name} is read from the environment: export ${v.name}=... before amie" + (v.description?.let { ", $it" } ?: "")))
         }
-        println(Style.dim("amie packages info ${jar.name} says whether it opens now"))
+        println(Style.dim("amie package info ${jar.name} says whether it opens now"))
         return Amie.EXIT_OK
     }
 
@@ -157,7 +157,7 @@ internal object PackageConfigCli {
         val w1 = rows.maxOf { it.first.length }
         val w2 = rows.maxOf { it.second.file.name.length }
         rows.forEach { (jar, d) -> println(Style.accent(jar.padEnd(w1)) + "  " + d.file.name.padEnd(w2) + "  " + state(d)) }
-        println(Style.dim("amie packages config <x.jar> shows its keys; amie packages setup <x.jar> asks for each"))
+        println(Style.dim("amie package config <x.jar> shows its keys; amie package setup <x.jar> asks for each"))
         return Amie.EXIT_OK
     }
 
@@ -170,7 +170,7 @@ internal object PackageConfigCli {
             println(Style.accent(d.file.name) + "  " + state(d))
             d.config.description?.let { println(Style.dim(wrap(it, width, INDENT))) }
             if (!d.properties) {
-                println(INDENT + if (d.file.isFile) "${d.file.length()} bytes" else Style.dim("copy it in: amie packages config ${jar.name} --file ${d.file.name} --from <path>"))
+                println(INDENT + if (d.file.isFile) "${d.file.length()} bytes" else Style.dim("copy it in: amie package config ${jar.name} --file ${d.file.name} --from <path>"))
                 return@forEach
             }
             val entries = PackageConfigFiles.entries(d.file)
@@ -194,7 +194,7 @@ internal object PackageConfigCli {
             v.description?.let { println(Style.dim(wrap(it, width, INDENT))) }
         }
         println()
-        println(Style.dim("amie packages config ${jar.name} key=value sets a key; amie packages setup ${jar.name} asks for each; --edit opens the files"))
+        println(Style.dim("amie package config ${jar.name} key=value sets a key; amie package setup ${jar.name} asks for each; --edit opens the files"))
     }
 
     /** Sets key=value pairs, each in the file that has the key; one .properties file alone takes keys it lacks too */

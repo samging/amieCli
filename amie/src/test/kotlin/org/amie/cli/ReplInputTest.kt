@@ -72,7 +72,7 @@ class ReplInputTest {
 
     @Test
     fun `a command line of amie is run as one, a call on amie is script`() {
-        assertEquals(ReplInput.Action.Command("amie", "envs new prod"), ReplInput().feed("amie envs new prod"))
+        assertEquals(ReplInput.Action.Command("amie", "env new prod"), ReplInput().feed("amie env new prod"))
         assertEquals(ReplInput.Action.Command("amie", "--help"), ReplInput().feed("  amie --help "))
         assertEquals(ReplInput.Action.Run("amie.log(\"x\")"), ReplInput().feed("amie.log(\"x\")"))
     }

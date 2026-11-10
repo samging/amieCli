@@ -24,7 +24,7 @@ import org.example.project.components.terminal.window.controller.script.Template
 
 /*
  * Every open session and the way to end it, with no window: what the app's Sessions tab and console list, and what the
- * interpreter's :sessions and terminate use
+ * interpreter's :session and terminate use
  */
 /**
  * Every session open now, as the Sessions tab lists them and with the same Terminate: model sessions, snapshots,

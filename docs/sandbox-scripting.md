@@ -407,8 +407,8 @@ The runtime reads it before the jar is opened (`pluginEngine/PackageMeta.kt`, `J
   for the jar; and a public **`configure(File)`**, `configure(Path)`, `configure(String)` or
   `configure(Map<String, String>)` method of the package class, when it has one, is called with the folder right
   after the constructor (the map holds `dir` and each file in the folder by name). `importPlugin("x.jar")` loads a
-  jar the same way, but it isn't refused as below. `amie packages setup <x.jar>` asks for each key at the terminal,
-  and `amie packages config <x.jar> key=value` sets one, so the files need no editor. In a script, `packages.config("x.jar")` reads the keys
+  jar the same way, but it isn't refused as below. `amie package setup <x.jar>` asks for each key at the terminal,
+  and `amie package config <x.jar> key=value` sets one, so the files need no editor. In a script, `packages.config("x.jar")` reads the keys
   and `packages.setConfig("x.jar", "key" to "value")` sets them; at the prompt, `:config` and `:setup` do the same.
 - **`initMod` refuses a jar that lacks what it says it needs**, before any instance is made: a required config file
   that is missing, a required one that still equals its template (the template is for the person to fill in, so

@@ -1,5 +1,16 @@
 # What's new
 
+## Next: projects of templates, and one name per command
+
+- **Projects group templates.** `amie template new <name> [--project p]` makes a template and opens it in `$VISUAL` or
+  `$EDITOR`. A project (`amie new p [templates]`) keeps an ordered list of templates in `AMP/projects/p/templates.txt`,
+  and `amie run p` runs them one after another in the env `p`, then the project's `main.kts`, stopping at the first that
+  fails. `amie project list`, `show`, `add` (`--at n` to place or move one), `remove`, `run` and `edit`. See
+  [Templates grouped into a project](learn.md#projects).
+- **Every command is singular.** `amie model`, `group`, `package`, `env`, `template`, `project`, `session` and
+  `example`; at the prompt `:session`. The plural names are gone.
+- **`:docs` opens the book**, `amie docs` from the shell; `:learn` and `amie learn` are gone.
+
 ## 1.1.0: encoders and decoders, projects, and the templates' three verbs
 
 - **Encoder and decoder pairs.** A sequence-to-sequence export (T5, BART, Marian translation, Whisper) is two ONNX
@@ -16,9 +27,9 @@
   `m.startTokens(encoded, "de", "translate")` gives the decoder's first ids from the config's forced tokens, each
   replaceable by a name the config knows, Whisper's language detected when none is given. A script's own part is the
   twelve-line greedy loop. Whisper tiny transcribes a spoken wav exactly, and a quantized T5 translates.
-- **`amie models remove <name>`.** Removes a model's folder whatever its kind, an intent, text, speech or imported
+- **`amie model remove <name>`.** Removes a model's folder whatever its kind, an intent, text, speech or imported
   model, closing a session of it first. Paths are printed as a shell takes them, `Application\ Support`.
-- **`amie models info` on an imported model** lists its files by role (the encoder, the decoders, or the model and the
+- **`amie model info` on an imported model** lists its files by role (the encoder, the decoders, or the model and the
   files beside it), the config and tokenizer files with their sizes, the start and end tokens, its labels, and how
   `initMod` opens it.
 - **`ortRequired` in place of `ortTimed`.** `ortRequired("name") { }` keeps what its block opens while anything else is
@@ -30,14 +41,14 @@
   and a blank line between them, as wide as the terminal; `:help` wraps the same way.
 - **Projects.** `amie new <name>` makes `AMP/projects/<name>/main.kts` to start from, in an env of the same name;
   `amie run <name>` runs it.
-- **Export without the jars.** `amie templates export <name> --out <folder> --no-jars` leaves the env's Maven jars and
+- **Export without the jars.** `amie template export <name> --out <folder> --no-jars` leaves the env's Maven jars and
   the package jars out of the bundle and writes `require.txt`, one line a file with the path to put it at under the
   bundle; the README has the same table. `run.jar --check` says which are still missing. A run with a Maven jar missing
   fetches it from Maven Central when it can reach it, and with a package jar missing stops and names it. Compiled
   bundles from `amie` now carry the app's own classes: before this the runner was missing from `run.jar`.
-- **Templates: save, edit, delete.** `amie templates save <name> <file>` keeps a script file, a project or a starter as a
-  template (a name taken is saved again, its id kept); `amie templates edit <name>` opens its file in `$VISUAL` or
-  `$EDITOR` and takes the edit, or prints the path when neither is set; `amie templates delete <name>` removes it.
+- **Templates: save, edit, delete.** `amie template save <name> <file>` keeps a script file, a project or a starter as a
+  template (a name taken is saved again, its id kept); `amie template edit <name>` opens its file in `$VISUAL` or
+  `$EDITOR` and takes the edit, or prints the path when neither is set; `amie template delete <name>` removes it.
 - **Piper voices import ready to speak.** A Piper voice from the Hub (`rhasspy/piper-voices`, a path to one voice) lands
   in `AMP/models/speech`, laid out as sherpa-onnx wants it, its ONNX metadata added when the export lacks it. A path
   that names no voice is refused instead of another voice being taken in its place.
@@ -46,8 +57,8 @@
 - **Fixes at the prompt.** `:help` lists every command line of amie, each as `amie <command> --help` when it has more
   than one action, with no example line repeated. The line editor no longer expands `!!` as shell history, which broke
   Kotlin's non-null assertion in a pasted block. A name `initMod` can't find says every folder it looked in and names
-  `amie models list` and `amie hf import`. A tokenizer with an empty "Precompiled" normalizer (Marian's) no longer
-  aborts the process. `amie models list` wraps a model's labels instead of running off the row, and a pair shows none.
+  `amie model list` and `amie hf import`. A tokenizer with an empty "Precompiled" normalizer (Marian's) no longer
+  aborts the process. `amie model list` wraps a model's labels instead of running off the row, and a pair shows none.
 
 ## Less said twice
 

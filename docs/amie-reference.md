@@ -19,12 +19,13 @@ amie [options] [script.kts [args] | -c code | command ...]
 
 | Command | Actions |
 |---|---|
-| `models` | `list`, `build <csv> --name n [--test csv]`, `validate <n>`, `serve <n> [--port]`, `info <n>` |
-| `groups` | `list`, `add <group> <models>`, `remove <group> [model]`, `open <group> [texts]`; `--env` for another env |
-| `packages` | `list`, `search [query]`, `add <jar>`, `maven <coordinate>`, `test <jar>`, `info <jar>`, `config [jar] [key=value]`, `setup <jar>` |
-| `envs` | `list`, `new <name>`, `use <name>`, `show <name>` |
-| `templates` | `list`, `show <name>`, `run <name>`, `export <name> --out <folder>` |
-| `sessions` | `list`, `runs`, `terminate <name \| #id \| all>` |
+| `model` | `list`, `build <csv> --name n [--test csv]`, `validate <n>`, `serve <n> [--port]`, `info <n>` |
+| `group` | `list`, `add <group> <models>`, `remove <group> [model]`, `open <group> [texts]`; `--env` for another env |
+| `package` | `list`, `search [query]`, `add <jar>`, `maven <coordinate>`, `test <jar>`, `info <jar>`, `config [jar] [key=value]`, `setup <jar>` |
+| `env` | `list`, `new <name>`, `use <name>`, `show <name>` |
+| `template` | `list`, `new <name> [--project p]`, `show <name>`, `run <name>`, `edit <name>`, `save <name> <file>`, `delete <name>`, `export <name> --out <folder>` |
+| `project` | `list`, `show <p>`, `new <p> [templates]`, `add <p> <templates> [--at n]`, `remove <p> <template>`, `run <p>`, `edit <p>` |
+| `session` | `list`, `runs`, `terminate <name \| #id \| all>` |
 | `hf` | `search <query> [--format] [--task] [--limit]`, `info <repo>`, `import <repo> [--model-name]` |
 | `run` | `run <file> [args]` |
 | `docs` | The book, [Learn amie](learn.md), offline in the browser; `docs path` prints where it is |

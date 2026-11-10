@@ -376,7 +376,7 @@ fun readModule(name: String): Pair<File, ModuleManifest>? {
     val manifestFile = File(dir, "module.json")
     if (!manifestFile.exists()) {
         // A text, speech or imported model of that name is not a module and not an error: initMod opens it on its own path
-        if (!TextModels.has(name) && !SpeechModels.has(name) && !ImportedModels.has(name)) logInternal("no model '$name' in ${modulesDir.parentFile.absolutePath}: not an intent, text, speech or imported model; amie models list shows what is there, amie hf import <repo> brings one from Hugging Face", LogLevel.ERROR)
+        if (!TextModels.has(name) && !SpeechModels.has(name) && !ImportedModels.has(name)) logInternal("no model '$name' in ${modulesDir.parentFile.absolutePath}: not an intent, text, speech or imported model; amie model list shows what is there, amie hf import <repo> brings one from Hugging Face", LogLevel.ERROR)
         return null
     }
     val manifest = moduleJson.decodeFromString<ModuleManifest>(manifestFile.readText())

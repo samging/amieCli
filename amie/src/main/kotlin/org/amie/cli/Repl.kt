@@ -93,7 +93,7 @@ class ReplInput(private val isComplete: (String) -> Boolean = HeadlessAmie::isCo
     }
 
     private companion object {
-        /** `amie envs new prod`: the interpreter's own command line, typed where a script line goes */
+        /** `amie env new prod`: the interpreter's own command line, typed where a script line goes */
         val COMMAND_LINE = Regex("""amie\s+(\S.*)""")
         val BARE = Regex("""(help|quit|exit)(?:\(\s*([^()]*?)\s*\))?""")
     }
@@ -104,7 +104,7 @@ class ReplInput(private val isComplete: (String) -> Boolean = HeadlessAmie::isCo
  * API in scope as main.kts has it. Line editing and the history (`~/.amie_history`) are JLine's.
  */
 class Repl(private val options: Options, private val banner: Boolean = !options.quiet) {
-    /** Where a help line's description starts, past the longest command, "amie templates --help" */
+    /** Where a help line's description starts, past the longest command, "amie template --help" */
     private val HELP_COLUMN = 23
 
     private val input = ReplInput()
@@ -127,10 +127,10 @@ class Repl(private val options: Options, private val banner: Boolean = !options.
         ":api [word]"         to "the script's functions, those with the word in their name or description",
         ":env [name]"         to "the env the lines run in; with a name, that env from now on (what was defined is forgotten)",
         ":load file.kts"      to "runs the file's lines here, so what it defines stays",
-        ":sessions"           to "every open session: models, groups, packages, templates in the background",
+        ":session"            to "every open session: models, groups, packages, templates in the background",
         ":config [x.jar]"     to "package config files: every jar's and whether each is filled in, or one jar's keys; key=value sets keys; :config --help for all of it",
         ":setup x.jar"        to "asks for each config key of the jar, with its hint; Enter keeps a value",
-        ":docs"              to "opens the learn book in the browser: amie chapter by chapter, from the first line to a model served",
+        ":docs"               to "opens the learn book in the browser: amie chapter by chapter, from the first line to a model served",
         ":terminate x"        to "closes the session named x, or #id; :terminate all closes every one",
         ":runs"               to "the recorded runs of main.kts, AMP/pluginDir/runs.jsonl",
         ":reset"              to "forgets what the lines typed here defined",
@@ -204,24 +204,24 @@ class Repl(private val options: Options, private val banner: Boolean = !options.
             "api" -> describeApi(rest).forEach(::println)
             "env" -> if (rest.isEmpty()) println("env '${ScriptEnvironments.current?.name ?: "default"}'" + (ScriptEnvironments.current?.let { "\n" + it.print().joinToString("\n") } ?: "")) else useEnv(rest)
             "load" -> ScriptRun.readScript(rest)?.let { runCode(it) }
-            "sessions" -> listSessions().forEach(::println)
+            "session" -> listSessions().forEach(::println)
             "docs" -> LearnBook.openInBrowser(LearnBook.writeToAmp())
             "terminate" -> println(terminate(rest))
             "runs" -> HeadlessAmie.readRecentRuns().ifEmpty { listOf("No runs yet") }.forEach(::println)
             "clear" -> clearScreen()
             "amie" -> runCommandLine(rest)
             "config" -> config(rest)
-            "setup" -> if (rest.isBlank()) System.err.println(Style.error("Missing: the jar's name, :setup x.jar")) else runCommandLine("packages setup $rest")
+            "setup" -> if (rest.isBlank()) System.err.println(Style.error("Missing: the jar's name, :setup x.jar")) else runCommandLine("package setup $rest")
             "reset" -> println(if (HeadlessAmie.reset()) "Forgotten: what the lines typed here defined" else "Nothing to forget: no line has run yet")
             else -> System.err.println(Style.error("No command :$name; :help lists them"))
         }
         return true
     }
 
-    /** `:config [x.jar] [key=value...]`: `amie packages config` at the prompt; `:config --help` its lines */
+    /** `:config [x.jar] [key=value...]`: `amie package config` at the prompt; `:config --help` its lines */
     private fun config(rest: String) {
         val words = CommandLine.split(rest)
-        if ("--help" !in words && "-h" !in words) return runCommandLine("packages config $rest")
+        if ("--help" !in words && "-h" !in words) return runCommandLine("package config $rest")
         val lines = listOf(
             ":config" to "every jar of AMP/pluginDir with config files, and whether each is filled in",
             ":config x.jar" to "its config files: each key with its value under the hint the file gives, a secret hidden",
@@ -239,7 +239,7 @@ class Repl(private val options: Options, private val banner: Boolean = !options.
         lines.forEach { (command, what) -> println(Style.accent(command.padEnd(column)) + wrap(what, terminalWidth() - 1, pad, pad).removePrefix(pad)) }
     }
 
-    /** `amie models list` typed at the prompt: the command line as the shell would run it, in this process */
+    /** `amie model list` typed at the prompt: the command line as the shell would run it, in this process */
     private fun runCommandLine(line: String) {
         when (val parsed = CommandLine.parse(CommandLine.split(line))) {
             is Invocation.Command -> {
@@ -249,9 +249,9 @@ class Repl(private val options: Options, private val banner: Boolean = !options.
             is Invocation.Help -> println(parsed.command?.let(Commands::find)?.help ?: CommandLine.USAGE)
             is Invocation.Version -> println(Banner.versionLine)
             is Invocation.Usage -> System.err.println(Style.error(parsed.problem))
-            is Invocation.Script -> ScriptRun.readScript(parsed.file)?.let {
+            is Invocation.Script -> {
                 ScriptRun.passArguments(parsed.args)
-                ScriptRun.runCode(it, parsed.options.env ?: options.env, parsed.file)
+                ScriptRun.runFile(parsed.file, parsed.options.env ?: options.env)
             }
             is Invocation.Code -> ScriptRun.runCode(parsed.code, parsed.options.env ?: options.env, "-c")
             is Invocation.Repl -> println("This is the prompt; :help lists its commands")
@@ -280,9 +280,9 @@ class Repl(private val options: Options, private val banner: Boolean = !options.
     }
 
     fun terminate(what: String): String = when {
-        what.isEmpty() -> ":terminate <name or #id>, or :terminate all; :sessions lists what is open"
+        what.isEmpty() -> ":terminate <name or #id>, or :terminate all; :session lists what is open"
         what.equals("all", ignoreCase = true) -> "${HeadlessAmie.terminateAll()} sessions closed"
-        else -> HeadlessAmie.terminate(what).let { n -> if (n == 0) "No open session is named '$what'; :sessions lists them" else "$n session${if (n == 1) "" else "s"} closed" }
+        else -> HeadlessAmie.terminate(what).let { n -> if (n == 0) "No open session is named '$what'; :session lists them" else "$n session${if (n == 1) "" else "s"} closed" }
     }
 
     // The lines run in the env sourced last: sourced here with nothing new, so group("x") finds the env's groups

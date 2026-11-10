@@ -5,8 +5,8 @@ import java.io.StringReader
 import java.util.Properties
 
 /**
- * The config files of a package jar in AMP/pluginDir/config/<jar>/, read and written key by key, so `amie packages
- * config` and `amie packages setup` change them without an editor. A .properties file keeps its comments, its order
+ * The config files of a package jar in AMP/pluginDir/config/<jar>/, read and written key by key, so `amie package
+ * config` and `amie package setup` change them without an editor. A .properties file keeps its comments, its order
  * and every line that is not set; any other file, such as a credentials JSON, is copied in whole.
  */
 object PackageConfigFiles {

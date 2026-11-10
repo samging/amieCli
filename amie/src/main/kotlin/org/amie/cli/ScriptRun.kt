@@ -28,8 +28,14 @@ object ScriptRun {
         if (f.isFile) return f.readText()
         Projects.mainScript(file)?.let { return it.readText() }
         Starters.template(file)?.let { t -> return ScriptTemplates.code(t.id) }
-        System.err.println(Style.error("amie: can't open file '$file': no such file, project, starter or template (amie examples lists the starters)"))
+        System.err.println(Style.error("amie: can't open file '$file': no such file, project, starter or template (amie example lists the starters)"))
         return null
+    }
+
+    /** Runs [file]: a project of templates by its name, else the script [readScript] finds; null when there is none */
+    fun runFile(file: String, env: String?): Int? {
+        if (!File(file).isFile && ProjectTemplates.exists(file) && ProjectTemplates.ids(file).isNotEmpty()) return ProjectTemplates.run(file, env)
+        return readScript(file)?.let { runCode(it, env, file) }
     }
 
     /** What follows the script on the command line, for the script: the system property amie.args, one line each */

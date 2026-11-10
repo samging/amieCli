@@ -56,21 +56,21 @@ internal fun String.quoted(): String = "\"" + replace("\\", "\\\\").replace("\""
 internal fun labelsCell(labels: List<String>, shown: Int = 6): String =
     if (labels.size <= shown + 2) labels.joinToString(", ") else labels.take(shown).joinToString(", ") + ", … (${labels.size} labels)"
 
-object ModelsCommand : Command("models", "The models of the AMP folder: built intent models, text and speech models, and those imported from Hugging Face") {
+object ModelsCommand : Command("model", "The models of the AMP folder: built intent models, text and speech models, and those imported from Hugging Face") {
     override val actions = listOf(
-        "models list" to "every model: its kind, version, date and first labels",
-        "models build <data.csv> [--name <name>] [--test <test.csv>]" to "trains an intent model on the labeled rows, as modelBuilder does; the name is the file's unless given",
-        "models validate <name>" to "the model's last stored validation: accuracy, macro F1 and each label's figures",
-        "models serve <name> [--port <n>] [--host <h>] [--path <p>]" to "serves the model over HTTP until stopped",
-        "models info <name>" to "what is known of the model: its labels, encoder, version, how it was trained",
-        "models remove <name>" to "removes the model's folder from AMP/models, whatever its kind (intent, text, speech or imported); a session of it open here is closed first, and its serving stopped",
+        "model list" to "every model: its kind, version, date and first labels",
+        "model build <data.csv> [--name <name>] [--test <test.csv>]" to "trains an intent model on the labeled rows, as modelBuilder does; the name is the file's unless given",
+        "model validate <name>" to "the model's last stored validation: accuracy, macro F1 and each label's figures",
+        "model serve <name> [--port <n>] [--host <h>] [--path <p>]" to "serves the model over HTTP until stopped",
+        "model info <name>" to "what is known of the model: its labels, encoder, version, how it was trained",
+        "model remove <name>" to "removes the model's folder from AMP/models, whatever its kind (intent, text, speech or imported); a session of it open here is closed first, and its serving stopped",
     )
     override val valued = setOf("--name", "--test", "--port", "--host", "--path")
 
     override fun perform(action: String, flags: Flags, options: Options): Int? {
         return when (action) {
             "list" -> {
-                // The labels last and shortened, so a model with forty of them doesn't push every column off the screen; models info names them all
+                // The labels last and shortened, so a model with forty of them doesn't push every column off the screen; model info names them all
                 val rows = builtModels().map { (name, m) -> listOf(name, "intent", m.version?.let { "v$it" } ?: "", m.createdAt.take(10), labelsCell(m.labels)) } +
                     TextModels.names().map { listOf(it, "text", "", "", "") } +
                     SpeechModels.names().map { listOf(it, "speech", "", "", "") } +
@@ -87,7 +87,7 @@ object ModelsCommand : Command("models", "The models of the AMP folder: built in
                     TextModels.has(name) -> "text" to TextModels.folder(name)
                     name in SpeechModels.names() -> "speech" to File(folders.speech, name)
                     ImportedModels.has(name) -> "imported" to File(folders.imported, name)
-                    else -> return fail("No model '$name' in ${folders.root.shown}; models list names them")
+                    else -> return fail("No model '$name' in ${folders.root.shown}; model list names them")
                 }
                 HeadlessAmie.terminate(name)
                 ModelServer.stop(name, persist = false) // nothing written about a model that is going; deleteModule stops an intent model's serving itself
@@ -115,13 +115,13 @@ object ModelsCommand : Command("models", "The models of the AMP folder: built in
             }
             "validate" -> {
                 val name = flags.requireWord(0, "the model's name") ?: return Amie.EXIT_USAGE
-                if (!moduleExists(name)) return fail("No built model '$name'; models list names them")
+                if (!moduleExists(name)) return fail("No built model '$name'; model list names them")
                 Output.withInternalShown { MetricsReport.load(name).print() }
                 Amie.EXIT_OK
             }
             "serve" -> {
                 val name = flags.requireWord(0, "the model's name") ?: return Amie.EXIT_USAGE
-                if (!moduleExists(name)) return fail("No built model '$name'; models list names them")
+                if (!moduleExists(name)) return fail("No built model '$name'; model list names them")
                 val port = flags.valueOf("--port")?.let { it.toIntOrNull() ?: return failUsage("--port needs a number") }
                 val settings = readServing(name).with(port, flags.valueOf("--host"), flags.valueOf("--path"), null, null, null)
                 val started = Output.withInternalShown { ModelServer.start(name, settings) }
@@ -138,7 +138,7 @@ object ModelsCommand : Command("models", "The models of the AMP folder: built in
                     TextModels.has(name) -> println("$name: a text model of ${TextModels.folder(name).shown}; initMod(\"$name\").answer(text) asks it")
                     SpeechModels.has(name) -> println("$name: a speech model of ${ModelFolders.amp.speech.shown}")
                     else -> ImportedList.list(ModelFolders.amp).firstOrNull { it.name.equals(name, ignoreCase = true) }?.let { i -> printImported(i) }
-                        ?: return fail("No model '$name'; models list names them")
+                        ?: return fail("No model '$name'; model list names them")
                 }
                 Amie.EXIT_OK
             }
@@ -209,12 +209,12 @@ object ModelsCommand : Command("models", "The models of the AMP folder: built in
     }
 }
 
-object GroupsCommand : Command("groups", "Model groups: models asked together, kept per env in AMP/env/<env>/groups.json") {
+object GroupsCommand : Command("group", "Model groups: models asked together, kept per env in AMP/env/<env>/groups.json") {
     override val actions = listOf(
-        "groups list" to "every group of every env, with its models",
-        "groups add <group> <model>..." to "makes the group, or adds the models to it; --env for another env than the default",
-        "groups remove <group> [<model>]" to "takes the model out of the group, or removes the group when no model is given",
-        "groups open <group> [text...]" to "opens the group and asks it: each text given, else every line of standard input; each model's answer, then the vote",
+        "group list" to "every group of every env, with its models",
+        "group add <group> <model>..." to "makes the group, or adds the models to it; --env for another env than the default",
+        "group remove <group> [<model>]" to "takes the model out of the group, or removes the group when no model is given",
+        "group open <group> [text...]" to "opens the group and asks it: each text given, else every line of standard input; each model's answer, then the vote",
     )
     override val valued = setOf("--env")
 
@@ -223,7 +223,7 @@ object GroupsCommand : Command("groups", "Model groups: models asked together, k
         return when (action) {
                 "list" -> {
                     val groups = ModelGroups.all()
-                    if (groups.isEmpty()) println("No groups; groups add <group> <model>... makes one")
+                    if (groups.isEmpty()) println("No groups; group add <group> <model>... makes one")
                     else printTable(groups.map { g -> listOf(g.name, g.env, g.models.joinToString(", ")) })
                     Amie.EXIT_OK
                 }
@@ -239,13 +239,13 @@ object GroupsCommand : Command("groups", "Model groups: models asked together, k
                     val group = flags.requireWord(0, "the group's name") ?: return Amie.EXIT_USAGE
                     val model = flags.words.getOrNull(1)
                     val done = if (model == null) ModelGroups.delete(group, env) else ModelGroups.remove(group, model, env)
-                    if (!done) return fail("No group '$group' in env '$env'; groups list names them")
+                    if (!done) return fail("No group '$group' in env '$env'; group list names them")
                     println(if (model == null) "'$group' removed from env '$env'; its models stay" else "'$model' taken out of '$group'")
                     Amie.EXIT_OK
                 }
                 "open" -> {
                     val group = flags.requireWord(0, "the group's name") ?: return Amie.EXIT_USAGE
-                    if (ModelGroups.find(group, env) == null && ModelGroups.find(group) == null) return fail("No group '$group'; groups list names them")
+                    if (ModelGroups.find(group, env) == null && ModelGroups.find(group) == null) return fail("No group '$group'; group list names them")
                     val swarm = Output.withInternalShown { ModelGroups.open(group) }
                     try {
                         val texts = flags.words.drop(1).ifEmpty { generateSequence { readLine() }.toList() }
@@ -261,19 +261,19 @@ object GroupsCommand : Command("groups", "Model groups: models asked together, k
     }
 }
 
-object PackagesCommand : Command("packages", "Package jars: those of AMP/pluginDir and the Maven packages of the env, what initMod(\"x.jar\") opens") {
+object PackagesCommand : Command("package", "Package jars: those of AMP/pluginDir and the Maven packages of the env, what initMod(\"x.jar\") opens") {
     override val actions = listOf(
-        "packages list" to "the jars of AMP/pluginDir with their metadata, and the env's Maven packages",
-        "packages search [query] [--repo owner/name]" to "the jars of the GitHub repositories in AMP/github.json (or --repo's) whose name, or description once added, has every word of the query; all of them without one",
-        "packages add <file.jar | x.jar>" to "checks the jar has a package class and copies it into AMP/pluginDir; a name that is no file is downloaded from the GitHub repositories",
-        "packages maven <group:module:version>" to "adds the Maven package to the env (the default, or --env's), resolved from Maven Central",
-        "packages test <x.jar>" to "runs the tests the jar declares on a fresh session, else one call with hello; the report is kept beside it",
-        "packages info <x.jar>" to "what the jar says of itself and whether it opens here",
-        "packages config [x.jar]" to "every jar's config files and whether each is filled in; with a jar, its keys and values, a secret hidden, under the hint above each",
-        "packages config <x.jar> key=value... [--file f] [--all-jars] [--add]" to "sets the keys in the jar's config file that has them; --all-jars sets them as well for every other jar with a file of that name, so one Google client fills every Google package; a key the file lacks is refused unless --add",
-        "packages config <x.jar> --file f --from <path>" to "copies a file in, such as a credentials JSON",
-        "packages config <x.jar> --edit" to "opens the jar's config files in \$VISUAL or \$EDITOR, else the Mac's text editor",
-        "packages setup <x.jar>" to "asks for each key at the terminal with its hint, Enter keeping a value; offers the values another jar already has in a file of that name",
+        "package list" to "the jars of AMP/pluginDir with their metadata, and the env's Maven packages",
+        "package search [query] [--repo owner/name]" to "the jars of the GitHub repositories in AMP/github.json (or --repo's) whose name, or description once added, has every word of the query; all of them without one",
+        "package add <file.jar | x.jar>" to "checks the jar has a package class and copies it into AMP/pluginDir; a name that is no file is downloaded from the GitHub repositories",
+        "package maven <group:module:version>" to "adds the Maven package to the env (the default, or --env's), resolved from Maven Central",
+        "package test <x.jar>" to "runs the tests the jar declares on a fresh session, else one call with hello; the report is kept beside it",
+        "package info <x.jar>" to "what the jar says of itself and whether it opens here",
+        "package config [x.jar]" to "every jar's config files and whether each is filled in; with a jar, its keys and values, a secret hidden, under the hint above each",
+        "package config <x.jar> key=value... [--file f] [--all-jars] [--add]" to "sets the keys in the jar's config file that has them; --all-jars sets them as well for every other jar with a file of that name, so one Google client fills every Google package; a key the file lacks is refused unless --add",
+        "package config <x.jar> --file f --from <path>" to "copies a file in, such as a credentials JSON",
+        "package config <x.jar> --edit" to "opens the jar's config files in \$VISUAL or \$EDITOR, else the Mac's text editor",
+        "package setup <x.jar>" to "asks for each key at the terminal with its hint, Enter keeping a value; offers the values another jar already has in a file of that name",
     )
     override val valued = setOf("--env", "--repo", "--file", "--from")
 
@@ -377,7 +377,7 @@ object PackagesCommand : Command("packages", "Package jars: those of AMP/pluginD
             val rest = row[4].let { d -> if (d.length > width - used) d.take((width - used - 1).coerceAtLeast(0)).trimEnd() + "…" else d }
             println((head + "  " + Style.dim(rest)).trimEnd())
         }
-        println(Style.dim("amie packages info <x.jar> downloads one and says what it holds; amie packages add <x.jar> keeps it in AMP/pluginDir"))
+        println(Style.dim("amie package info <x.jar> downloads one and says what it holds; amie package add <x.jar> keeps it in AMP/pluginDir"))
         return if (problems.isEmpty()) Amie.EXIT_OK else Amie.EXIT_ERROR
     }
 
@@ -407,7 +407,7 @@ object PackagesCommand : Command("packages", "Package jars: those of AMP/pluginD
             c.description?.let { more(Style.dim(wrapped(it))) }
             if (d.file.isFile) more(Style.dim(d.file.shown))
         }
-        if (meta?.config?.isNotEmpty() == true) more(Style.dim("amie packages setup ${file.name} fills them in"))
+        if (meta?.config?.isNotEmpty() == true) more(Style.dim("amie package setup ${file.name} fills them in"))
         meta?.env?.forEach { v ->
             val set = !System.getenv(v.name).isNullOrEmpty()
             row("Environment", "\$${v.name}  " + when { set -> Style.ok("set"); v.required -> Style.error("not set, required"); else -> Style.dim("not set, optional") })

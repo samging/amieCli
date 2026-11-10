@@ -30,11 +30,11 @@ amie script.kts                  # runs the file as main.kts
 amie -c 'log(1 + 1)'             # runs the code given
 amie new weather                 # a project: AMP/projects/weather with a main.kts, in an env of its name
 amie run weather                 # runs the project's main.kts
-amie examples                    # the starter scripts by group; amie run "<title>" runs one
+amie example                    # the starter scripts by group; amie run "<title>" runs one
 amie --help                      # the options; amie <command> --help for a command's actions
 ```
 
-The commands: `run`, `new`, `examples`, `models`, `groups`, `packages`, `envs`, `templates`, `sessions`, `hf`
+The commands: `run`, `new`, `example`, `model`, `group`, `package`, `env`, `template`, `project`, `session`, `hf`
 (Hugging Face) and `docs`, the learn book. Everything amie reads or writes is in the AMP folder: `--amp`, else
 `AMIE_AMP_DIR`, else the user's data folder (`~/Library/Application Support/amie pilot/AMP` on a Mac).
 

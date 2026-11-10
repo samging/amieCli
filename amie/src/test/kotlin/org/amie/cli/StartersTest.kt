@@ -79,20 +79,20 @@ class StartersTest {
 
     @Test
     fun `the examples command lists every group and prints a starter by its title`() {
-        assertEquals(Amie.EXIT_OK, captured { Amie.main(listOf("examples")) }, err.toString())
+        assertEquals(Amie.EXIT_OK, captured { Amie.main(listOf("example")) }, err.toString())
         val listed = out.toString()
         Starters.groups.forEach { assertTrue(listed.lines().contains(it), "group $it listed") }
         assertTrue(listed.contains("  Ask the dummy model"), listed)
         out.reset()
-        assertEquals(Amie.EXIT_OK, captured { Amie.main(listOf("examples", "Ask the dummy model")) }, err.toString())
+        assertEquals(Amie.EXIT_OK, captured { Amie.main(listOf("example", "Ask the dummy model")) }, err.toString())
         assertTrue(out.toString().contains("initMod(\"dummy\")"), out.toString())
-        assertEquals(Amie.EXIT_ERROR, captured { Amie.main(listOf("examples", "No such starter")) })
+        assertEquals(Amie.EXIT_ERROR, captured { Amie.main(listOf("example", "No such starter")) })
     }
 
     @Test
     fun `the command line takes a title after run`() {
         val parsed = CommandLine.parse(listOf("run", "Ask the dummy model"))
         assertEquals(Invocation.Script("Ask the dummy model", emptyList(), interactive = false, options = Options()), parsed)
-        assertEquals(Invocation.Command("examples", listOf("Ask the dummy model"), Options()), CommandLine.parse(listOf("examples", "Ask the dummy model")))
+        assertEquals(Invocation.Command("example", listOf("Ask the dummy model"), Options()), CommandLine.parse(listOf("example", "Ask the dummy model")))
     }
 }

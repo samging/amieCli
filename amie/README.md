@@ -47,13 +47,13 @@ exist. The BERT encoder every intent model trains on is read from `AMP/models/be
 
 ## Try it
 
-The starters, the scripts the app's Examples menu holds, come with amie: `amie examples` lists them by group, a title
+The starters, the scripts the app's Examples menu holds, come with amie: `amie example` lists them by group, a title
 prints one, `amie run "<title>"` runs it. They run on a fresh AMP folder: the first one seeds the templates, a model
 called `dummy` and `sample-intents.csv`. What follows is a run against an empty folder (`AMIE_AMP_DIR`), with the
 BERT encoder under `AMIE_MODELS_DIR`.
 
 ```
-$ amie examples
+$ amie example
 First steps
   Hello: log at every level
   Ask the dummy model
@@ -65,7 +65,7 @@ Models
 Functions
   Function: clean a text
   ...
-amie examples "<title>" prints one, amie run "<title>" runs it; they are in AMP/templates too (amie templates list)
+amie example "<title>" prints one, amie run "<title>" runs it; they are in AMP/templates too (amie template list)
 
 $ amie run "Hello: log at every level"
 hello from main.kts
@@ -114,7 +114,7 @@ The three most commonly recognized colors of the rainbow are **red**, **orange**
 "Talk to amie" downloads a 500 MB chat model (Qwen3 0.6B) into `AMP/models/text/qwen3-0.6b` on its first run.
 
 The dummy's scores are made up (it is there so a script has a model before any is trained); the one trained from the
-csv answers for real. `amie examples "Ask the dummy model"` prints a starter's code to read or to copy into a file of
+csv answers for real. `amie example "Ask the dummy model"` prints a starter's code to read or to copy into a file of
 your own.
 
 ## The prompt
@@ -148,7 +148,7 @@ are red; a piped output or `NO_COLOR` in the environment leaves everything plain
 | `:docs` | The learn book, [learn/index.html](learn/index.html), in the browser (`./amie docs`, `./amie docs path` from the shell); online it is [Learn amie](https://samging.github.io/amieCli/learn/) |
 | `:env [name]` | The env the lines run in; with a name, that env from now on |
 | `:load file.kts` | Runs the file's lines here, so what it defines stays |
-| `:sessions` | Every open session: models, groups, packages, templates in the background |
+| `:session` | Every open session: models, groups, packages, templates in the background |
 | `:config [x.jar]` | Package config files: every jar's and whether each is filled in, or one jar's keys; `key=value` sets keys; `:config --help` lists all of it |
 | `:setup x.jar` | Asks for each config key of the jar with its hint; Enter keeps a value |
 | `:terminate x` | Closes the session named x, or `#id`; `:terminate all` closes every one |
@@ -157,7 +157,7 @@ are red; a piped output or `NO_COLOR` in the environment leaves everything plain
 | `:clear` | Clears the screen |
 | `:quit` | Leaves (`:exit`, `:q`, Ctrl-D) |
 | `help`, `help(x)`, `quit` | The same without the colon, as python has them: `help(group)` is `:api group` |
-| `amie models list` | A command line of amie, run here: `amie envs new prod`, `amie hf search bert`, `amie --help` |
+| `amie model list` | A command line of amie, run here: `amie env new prod`, `amie hf search bert`, `amie --help` |
 
 ## Scripts
 
@@ -208,45 +208,45 @@ signatures, and [docs/sandbox-scripting.md](../../docs/sandbox-scripting.md) in 
 
 Every command prints its help with `--help`. `-e`, `--amp` and `-v` go before the command.
 
-### models
+### model
 
 ```
-./amie models list                                 every model: intent, text, speech, imported
-./amie models build data.csv --name intents        trains an intent model on the labeled rows (modelBuilder) and prints its validation
-./amie models build data.csv --test test.csv       validated on the test file instead of a split
-./amie models validate intents                     the last stored validation: accuracy, macro F1, each label
-./amie models serve intents --port 8765            serves it over HTTP until Ctrl-C; POST {"text": "hi"} at /models/intents/predict
-./amie models info intents                         labels, encoder, version, how it was trained, its groups, its serving address
-./amie models remove intents                       removes the model's folder, whatever its kind; a session of it is closed first
+./amie model list                                 every model: intent, text, speech, imported
+./amie model build data.csv --name intents        trains an intent model on the labeled rows (modelBuilder) and prints its validation
+./amie model build data.csv --test test.csv       validated on the test file instead of a split
+./amie model validate intents                     the last stored validation: accuracy, macro F1, each label
+./amie model serve intents --port 8765            serves it over HTTP until Ctrl-C; POST {"text": "hi"} at /models/intents/predict
+./amie model info intents                         labels, encoder, version, how it was trained, its groups, its serving address
+./amie model remove intents                       removes the model's folder, whatever its kind; a session of it is closed first
 ```
 
-### groups
+### group
 
 ```
-./amie groups list                                 every group of every env
-./amie groups add weather intents places           makes the group, or adds the models; --env prod for another env
-./amie groups remove weather places                takes a model out; without a model, removes the group
-./amie groups open weather "is it raining"         asks the group: each model's answer, then the vote; without texts, every line of standard input
+./amie group list                                 every group of every env
+./amie group add weather intents places           makes the group, or adds the models; --env prod for another env
+./amie group remove weather places                takes a model out; without a model, removes the group
+./amie group open weather "is it raining"         asks the group: each model's answer, then the vote; without texts, every line of standard input
 ```
 
-### packages
+### package
 
 ```
-./amie packages list                               the jars of AMP/pluginDir, and the env's Maven packages
-./amie packages search google                     the jars of the GitHub repositories in AMP/github.json with google in the name
-./amie packages search --repo owner/name           one repository's jars; no query lists them all
-./amie packages add ~/build/greeter.jar            checks the jar has a package class and copies it in; initMod("greeter.jar") opens it
-./amie packages add spotify.jar                    a name that is no file is downloaded from those repositories, checked and kept
-./amie packages maven org.jsoup:jsoup:1.17.2       adds the Maven package to the env, from Maven Central
-./amie packages test greeter.jar                   runs the tests the jar declares (META-INF/amie/package.json), else one call with hello
-./amie packages info greeter.jar                   its metadata, where it came from, whether it opens here, its last test run
-./amie packages config                             every jar's config files and whether each is filled in
-./amie packages config spotify.jar                 its keys and values, a secret hidden, under the hint above each
-./amie packages config spotify.jar clientId=abc    sets a key in the file that has it; a key the file lacks is refused
-./amie packages config google-calendar.jar clientId=… clientSecret=… --all-jars   the same keys for every Google package
-./amie packages config gmail-reader.jar --file service-account.json --from ~/Downloads/key.json   copies a file in
-./amie packages config spotify.jar --edit          opens its files in $VISUAL or $EDITOR, else the Mac's text editor
-./amie packages setup google-drive.jar             asks for each key at the terminal; Enter keeps a value
+./amie package list                               the jars of AMP/pluginDir, and the env's Maven packages
+./amie package search google                     the jars of the GitHub repositories in AMP/github.json with google in the name
+./amie package search --repo owner/name           one repository's jars; no query lists them all
+./amie package add ~/build/greeter.jar            checks the jar has a package class and copies it in; initMod("greeter.jar") opens it
+./amie package add spotify.jar                    a name that is no file is downloaded from those repositories, checked and kept
+./amie package maven org.jsoup:jsoup:1.17.2       adds the Maven package to the env, from Maven Central
+./amie package test greeter.jar                   runs the tests the jar declares (META-INF/amie/package.json), else one call with hello
+./amie package info greeter.jar                   its metadata, where it came from, whether it opens here, its last test run
+./amie package config                             every jar's config files and whether each is filled in
+./amie package config spotify.jar                 its keys and values, a secret hidden, under the hint above each
+./amie package config spotify.jar clientId=abc    sets a key in the file that has it; a key the file lacks is refused
+./amie package config google-calendar.jar clientId=… clientSecret=… --all-jars   the same keys for every Google package
+./amie package config gmail-reader.jar --file service-account.json --from ~/Downloads/key.json   copies a file in
+./amie package config spotify.jar --edit          opens its files in $VISUAL or $EDITOR, else the Mac's text editor
+./amie package setup google-drive.jar             asks for each key at the terminal; Enter keeps a value
 ```
 
 `search` matches every word of the query against a jar's name, and its description once the jar is in
@@ -317,12 +317,12 @@ public class Greeter {
 - **Java.** amie runs Java 21, so the classes must be compiled for 21 or older. amie's own Kotlin standard library
   is under every package, so a Kotlin package does not need to bundle one.
 - **Metadata.** `META-INF/amie/package.json` gives the name, description, `entry`, `java`, the config files with their
-  templates, and the tests `amie packages test` runs. A jar without it still opens. See
+  templates, and the tests `amie package test` runs. A jar without it still opens. See
   [What a jar needs](../docs/sandbox-scripting.md#what-a-jar-needs-metadata-configuration-and-test-runs).
 
 #### Packages from GitHub
 
-**Requesting a jar.** A script names a GitHub source with `github:`. amie downloads the jar, checks it as `packages add`
+**Requesting a jar.** A script names a GitHub source with `github:`. amie downloads the jar, checks it as `package add`
 does, and keeps it in `AMP/pluginDir` with `<jar>.source.json` beside it, which records the repository, the file's
 sha and its page.
 
@@ -348,46 +348,47 @@ val files = initMod("files.jar")                                // found through
 **Uploading a jar.** samging/jar-jar takes jars through pull requests:
 
 1. Build the jar. In samging/amie-packages, `./gradlew jars` puts every package in `build/jars`.
-2. Check it here first: `amie packages add <jar>` runs the same check as a download, and `amie packages test <jar>`
+2. Check it here first: `amie package add <jar>` runs the same check as a download, and `amie package test <jar>`
    runs its declared tests.
 3. Open a pull request that adds or replaces the jar at the top of samging/jar-jar. A jar in a folder works, but only
    a `github:` source with the folder finds it.
 4. The **Check jars** workflow runs two steps over every jar of the repository. The first is the check amie makes
-   before it keeps a download, and it runs no code of the jar. The second opens each jar as `amie packages test`
+   before it keeps a download, and it runs no code of the jar. The second opens each jar as `amie package test`
    does: it makes the package class with a config folder, calls `configure()`, sends every declared test through
    `run()`, checks the answers and calls `close()`. Each jar gets a JVM of its own and a time limit. A class without
    `List<String> run(String)` and `close()` fails the first step; missing metadata is only a note. The tests run on Linux without keys, so declare ones that
    answer without them, such as `help`.
 5. Merge when the check passes. From then on `initMod("<jar>")` finds it on any machine that can read the repository.
 
-### envs
+### env
 
 ```
-./amie envs list                                   every env with its packages and groups
-./amie envs new prod                               an empty env, AMP/env/prod
-./amie envs use prod                               main.kts runs in it from now on (its environment line rewritten, or a main.kts made with one)
-./amie envs show prod                              its packages, where each came from, its groups
+./amie env list                                   every env with its packages and groups
+./amie env new prod                               an empty env, AMP/env/prod
+./amie env use prod                               main.kts runs in it from now on (its environment line rewritten, or a main.kts made with one)
+./amie env show prod                              its packages, where each came from, its groups
 ```
 
-### templates
+### template
 
 ```
-./amie templates list                              the starter templates and the scripts saved as templates
-./amie templates show "Build a model"              its code
-./amie templates run "Build a model"               runs it as main.kts
-./amie templates export talk --out ~/bundles/talk  a bundle that runs on its own: java -jar run.jar
-./amie templates export talk --out ~/b --no-jars   the same without the env's Maven jars and package jars; require.txt lists what to put where
-./amie templates save reader ~/reader.kts          keeps the file as the template "reader" (a name taken is saved again)
-./amie templates edit reader                       opens it in $VISUAL or $EDITOR; prints the path when neither is set
-./amie templates delete reader                     removes it
+./amie template list                              the starter templates and the scripts saved as templates
+./amie template show "Build a model"              its code
+./amie template run "Build a model"               runs it as main.kts
+./amie template export talk --out ~/bundles/talk  a bundle that runs on its own: java -jar run.jar
+./amie template export talk --out ~/b --no-jars   the same without the env's Maven jars and package jars; require.txt lists what to put where
+./amie template new reader [--project house]      a new template, opened in $VISUAL or $EDITOR; --project puts it at the end of house
+./amie template save reader ~/reader.kts          keeps the file as the template "reader" (a name taken is saved again)
+./amie template edit reader                       opens it in $VISUAL or $EDITOR; prints the path when neither is set
+./amie template delete reader                     removes it
 ```
 
-### sessions
+### session
 
 ```
-./amie sessions list                               the sessions open in this process (:sessions at the prompt lists the prompt's)
-./amie sessions runs                               the recorded runs of main.kts
-./amie sessions terminate "#3"                     closes a session; terminate all closes every one
+./amie session list                               the sessions open in this process (:session at the prompt lists the prompt's)
+./amie session runs                               the recorded runs of main.kts
+./amie session terminate "#3"                     closes a session; terminate all closes every one
 ```
 
 ### hf
@@ -412,24 +413,40 @@ Runtime GenAI chat model: it lands in `AMP/models/text/<name>`, where `initMod("
 ```
 ./amie run train.kts                               the same as ./amie train.kts
 ./amie run "Ask the dummy model"                   a starter or a template by its title
-./amie run reader                                  a project of AMP/projects (its main.kts) by its name
+./amie run house                                   a project: its templates in order in its env, then its main.kts
 ```
 
 ### new
 
 ```
-./amie new reader                                  a project: AMP/projects/reader/main.kts to start from, in an env named reader
+./amie new house                                   a project: AMP/projects/house, a group of templates, in an env named house
+./amie new house reader notifier                   the same, with those templates in it
 ```
 
-### examples
+### project
 
 ```
-./amie examples                                    the starters by group: what amie can do, each ready to run
-./amie examples "Ask the dummy model"              prints one
+./amie project list                                every project, with its templates
+./amie project show house                          its templates in their order, its env and folder
+./amie project add house speaker [--at 1]          puts a template at the end, or at place 1, moving one already in it
+./amie project remove house notifier               takes it out of the project; the template stays
+./amie project run house                           the same as ./amie run house
+./amie project edit house                          templates.txt, the order they run in, in $VISUAL or $EDITOR
+```
+
+A project groups templates: `AMP/projects/<name>/templates.txt` holds their ids, one a line, in the order `amie run`
+runs them, each in the project's env; the project's `main.kts` runs after them when it holds more than the line
+`amie new` writes. A run stops at the first template that fails.
+
+### example
+
+```
+./amie example                                    the starters by group: what amie can do, each ready to run
+./amie example "Ask the dummy model"              prints one
 ./amie run "Ask the dummy model"                   runs it
 ```
 
-The starters are the scripts the app's Examples menu holds. The first `examples`, `templates` or `run` by title seeds
+The starters are the scripts the app's Examples menu holds. The first `example`, `template` or `run` by title seeds
 them into `AMP/templates` as the app does (tagged `starter` and with their group), with what they run on beside them:
 a model called `dummy` and `sample-intents.csv`.
 

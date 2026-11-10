@@ -85,7 +85,7 @@ was the controller behind the app's terminal window. Below, `C/` stands for that
 | `C/huggingFace` | 1 436 | The Hub: search, a repo's files sorted into what runs here (`HfPair`, an encoder and decoder folder as a menu with a default, `HfMenu` what an import offers to pick from), the download into `AMP/models/imported`, `text` or `speech`, and `PiperVoice`, which makes a raw Piper voice ready for sherpa-onnx | `HfHub.kt`, `HfRef.kt`, `HfRepo.kt`, `HfSearch.kt`, `ImportedList.kt`, `PiperVoice.kt` |
 | `C/pluginEngine` | 1 520 | Package jars: found in the env, `AMP/pluginDir`, a path, the Amie server or GitHub; opened as a model or a plugin; their metadata and tests. The speech package is one of these | `JarPackages.kt`, `PackageMeta.kt`, `GitHubJars.kt`, `JarInspector.kt`, `JarInterpreter.kt` |
 | `C/sourceFile` | 257 | CSV training data: reading a file, inferring its text and label columns | `DataSource.kt`, `SourceCsv.kt` |
-| `C/export` | 2 095 | `amie templates export`: a script packed with its models, env jars (or `require.txt` naming them with `--no-jars`) and a secrets manifest into a bundle that runs on its own; `ScriptScan`, the static scan of what a script uses, which the prompt also uses to size a line's memory | `ScriptExporter.kt`, `ScriptScan.kt`, `CompiledScripts.kt`, `BundleRunner.kt`, `ExportCommand.kt` |
+| `C/export` | 2 095 | `amie template export`: a script packed with its models, env jars (or `require.txt` naming them with `--no-jars`) and a secrets manifest into a bundle that runs on its own; `ScriptScan`, the static scan of what a script uses, which the prompt also uses to size a line's memory | `ScriptExporter.kt`, `ScriptScan.kt`, `CompiledScripts.kt`, `BundleRunner.kt`, `ExportCommand.kt` |
 | `C/databases` | 201 | `database("name")`: JDBC connections from `AMP/databases.json`, secrets as `$ENV:NAME`. amie ships no JDBC driver, so a database needs its driver in the env | `Databases.kt` |
 | `C/sandbox` | 1 008 | The starter scripts (`SandboxExamples`), the record of runs in `AMP/pluginDir/runs.jsonl`, and `handleBy()`, which asks a local text model about an error | `SandboxExamples.kt`, `SandboxRuns.kt`, `AssistantModel.kt`, `AssistantPrompt.kt` |
 | `C/models` | 171 | Texts shared by the script API and the app's Models page; an open session's row | `ModelWords.kt`, `SessionInfo.kt` |
@@ -227,7 +227,7 @@ ONNX Runtime or DJL (an `encoder_model.onnx` with `decoder_model.onnx` pair as `
 3. `BundledModels.root` is where the encoder lives: `amie.models.dir`, `AMIE_MODELS_DIR`, else `AMP/models/bert`
    with the bge encoder in `bge/`. `scripts/setup.sh` downloads both.
 4. `OrtScopes.opened` registers the session with an enclosing `ortClosable { }` block when there is one, and
-   `ScriptRuns.opened("model:<id>")` records it on the run, which is what `:sessions` lists and `:terminate` closes.
+   `ScriptRuns.opened("model:<id>")` records it on the run, which is what `:session` lists and `:terminate` closes.
 
 `modelBuilder(name, data)` is `SandboxLogger.modelBuilder` → `parseLabeledData` → `JetBuilder.buildClassifier`:
 preprocess, embed through the encoder (cache in `AMP/cache/embeddings`), train and score candidate heads, validate and
@@ -256,8 +256,8 @@ Everything amie reads and writes is under one folder, the same one the desktop a
 | `models/text/<name>/` | the chat models, ONNX Runtime GenAI exports | `hf import` of a GenAI repo |
 | `models/speech/<name>/` | Whisper and the voices the speech package runs | `hf import` of a Piper voice, or by hand |
 | `models/imported/<name>/` | any other model of the Hub or copied in, with its `source.json` | `hf import`, `huggingFace()` |
-| `env/<name>/` | an env: `env.lock.json`, `libs/`, `groups.json`; `env/caches/` the shared Maven cache | `envs new`, a script's `environment(...)` |
-| `templates/` | the starters and saved scripts | `amie examples`, `templates` |
+| `env/<name>/` | an env: `env.lock.json`, `libs/`, `groups.json`; `env/caches/` the shared Maven cache | `env new`, a script's `environment(...)` |
+| `templates/` | the starters and saved scripts | `amie example`, `amie template` |
 | `projects/<name>/main.kts` | a project | `amie new` |
 | `pluginDir/` | package jars, `assembly.kts` (the last assembled script), `runs.jsonl`, `config/speech/` | the engine |
 | `cache/embeddings/`, `cache/djl/` | encoder outputs between builds; DJL's native libraries | the builder, DJL |

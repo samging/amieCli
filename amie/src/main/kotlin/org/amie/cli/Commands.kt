@@ -86,7 +86,7 @@ abstract class Command(val name: String, val summary: String) {
 }
 
 object Commands {
-    val all: List<Command> by lazy { listOf(RunCommand, NewCommand, ExamplesCommand, ModelsCommand, GroupsCommand, PackagesCommand, EnvsCommand, TemplatesCommand, SessionsCommand, HfCommand, LearnCommand) }
+    val all: List<Command> by lazy { listOf(RunCommand, NewCommand, ExamplesCommand, ModelsCommand, GroupsCommand, PackagesCommand, EnvsCommand, TemplatesCommand, ProjectsCommand, SessionsCommand, HfCommand, LearnCommand) }
 
     fun find(name: String): Command? = all.firstOrNull { it.name == name }
 }
@@ -95,27 +95,32 @@ object Commands {
 object RunCommand : Command("run", "Runs a script file, a starter or a template as main.kts, in the env it names (or -e's)") {
     override val actions = listOf(
         "run script.kts [args]" to "the same as amie script.kts; -i then opens the prompt",
-        "run \"<title>\" [args]" to "a starter or a template by its title, as amie examples lists them",
+        "run \"<title>\" [args]" to "a starter or a template by its title, as amie example lists them",
+        "run <project> [args]" to "a project: its templates one after another in its env, then its main.kts",
     )
     override fun perform(action: String, flags: Flags, options: Options): Int? = null
 }
 
-/** `amie new <name>`: a project, a folder of AMP/projects with a main.kts to start from and an env of its name */
-object NewCommand : Command("new", "A project: AMP/projects/<name> with a main.kts to start from, in an env of the same name; amie run <name> runs it") {
+/** `amie new <name> [template ...]`: a project, a folder of AMP/projects grouping templates, with an env of its name */
+object NewCommand : Command("new", "A project: AMP/projects/<name>, a group of templates run in order in an env of the same name, then its main.kts; amie run <name> runs it") {
     override val actions = listOf(
-        "new <name>" to "makes the project's folder, its main.kts and its env; nothing on a name taken",
+        "new <name> [template ...]" to "makes the project's folder, its list of templates (these, when given), its main.kts and its env; nothing on a name taken",
     )
-    override val usage = "amie new <name>"
+    override val usage = "amie new <name> [template ...]"
 
-    override fun perform(action: String, flags: Flags, options: Options): Int? {
-        val name = action
+    override fun perform(action: String, flags: Flags, options: Options): Int? = make(action, flags.words)
+
+    /** Makes the project [name] with [templates] in it, by name or id; also `amie project new` */
+    fun make(name: String, templates: List<String>): Int {
+        val found = templates.map { w -> Starters.template(w)?.id ?: return fail("No template '$w'; template list names them, template new $w makes it") }
         if (!name.matches(Regex("[A-Za-z0-9][A-Za-z0-9._-]*"))) return fail("A project's name is letters, digits, dots, dashes and underscores; '$name' isn't")
         val dir = Projects.dir(name)
         if (dir.exists()) return fail("project '$name' exists already at ${dir.shown}")
         if (name !in ScriptEnvironments.names()) ScriptEnvironments.peek(name).dir.mkdirs()
         dir.mkdirs()
         File(dir, "main.kts").writeText(Projects.starter(name))
-        println("project '$name' made at ${dir.shown}, in env '$name'; amie run $name runs its main.kts")
+        ProjectTemplates.write(name, found.distinct())
+        println("project '$name' made at ${dir.shown}, in env '$name'" + (if (found.isEmpty()) "; amie template new <name> --project $name writes its first template" else " with ${found.distinct().size} template${if (found.distinct().size == 1) "" else "s"}") + "; amie run $name runs it")
         return Amie.EXIT_OK
     }
 }
@@ -137,10 +142,10 @@ object Projects {
         |""".trimMargin()
 }
 
-/** `amie examples`: the starter scripts by group; a title prints one, `amie run "<title>"` runs it */
-object ExamplesCommand : Command("examples", "The starter scripts, by group: what amie can do, each ready to run") {
+/** `amie example`: the starter scripts by group; a title prints one, `amie run "<title>"` runs it */
+object ExamplesCommand : Command("example", "The starter scripts, by group: what amie can do, each ready to run") {
     override val actions = listOf(
-        "examples list" to "every starter by group, with its title",
+        "example list" to "every starter by group, with its title",
         "examples \"<title>\"" to "prints the starter's code; amie run \"<title>\" runs it",
     )
     override val defaultAction = "list"
@@ -152,28 +157,28 @@ object ExamplesCommand : Command("examples", "The starter scripts, by group: wha
                 println(group)
                 Starters.inGroup(group).forEach { println("  ${it.title}") }
             }
-            println("amie examples \"<title>\" prints one, amie run \"<title>\" runs it; they are in AMP/templates too (amie templates list)")
+            println("amie example \"<title>\" prints one, amie run \"<title>\" runs it; they are in AMP/templates too (amie template list)")
             return Amie.EXIT_OK
         }
         val title = if (action == "show") flags.requireWord(0, "the starter's title") ?: return Amie.EXIT_USAGE else action
-        val starter = Starters.find(title) ?: return fail("No starter '$title'; amie examples lists them")
+        val starter = Starters.find(title) ?: return fail("No starter '$title'; amie example lists them")
         println(starter.code)
         return Amie.EXIT_OK
     }
 }
 
-object SessionsCommand : Command("sessions", "The sessions open in this process, and the recorded runs of main.kts") {
+object SessionsCommand : Command("session", "The sessions open in this process, and the recorded runs of main.kts") {
     override val actions = listOf(
-        "sessions list" to "every session open in this process (a model, a group, a package, a template in the background)",
-        "sessions runs" to "the recorded runs of main.kts, AMP/pluginDir/runs.jsonl",
-        "sessions terminate <name or #id>" to "closes that session; terminate all closes every one",
+        "session list" to "every session open in this process (a model, a group, a package, a template in the background)",
+        "session runs" to "the recorded runs of main.kts, AMP/pluginDir/runs.jsonl",
+        "session terminate <name or #id>" to "closes that session; terminate all closes every one",
     )
 
     override fun perform(action: String, flags: Flags, options: Options): Int? {
         return when (action) {
             "list" -> {
                 val open = HeadlessAmie.listSessions()
-                if (open.isEmpty()) println("No open sessions in this process: sessions live in the process that opened them, so :sessions at the prompt lists the prompt's")
+                if (open.isEmpty()) println("No open sessions in this process: sessions live in the process that opened them, so :session at the prompt lists the prompt's")
                 else printTable(open.map { s -> listOf("#${s.id}", s.owner, s.kind, s.scope ?: "", if (s.running) "running" else "") })
                 Amie.EXIT_OK
             }
@@ -189,12 +194,12 @@ object SessionsCommand : Command("sessions", "The sessions open in this process,
     }
 }
 
-object EnvsCommand : Command("envs", "The envs of AMP/env: each keeps the Maven packages, jars and model groups a script sources") {
+object EnvsCommand : Command("env", "The envs of AMP/env: each keeps the Maven packages, jars and model groups a script sources") {
     override val actions = listOf(
-        "envs list" to "every env, with what it holds",
-        "envs new <name>" to "makes an env, empty",
-        "envs use <name>" to "the env the saved main.kts runs in from now on: its environment line is rewritten, or a main.kts made with one",
-        "envs show <name>" to "what the env holds: its packages, where each came from, its groups",
+        "env list" to "every env, with what it holds",
+        "env new <name>" to "makes an env, empty",
+        "env use <name>" to "the env the saved main.kts runs in from now on: its environment line is rewritten, or a main.kts made with one",
+        "env show <name>" to "what the env holds: its packages, where each came from, its groups",
     )
 
     override fun perform(action: String, flags: Flags, options: Options): Int? {
@@ -225,7 +230,7 @@ object EnvsCommand : Command("envs", "The envs of AMP/env: each keeps the Maven 
             }
             "show" -> {
                 val name = flags.requireWord(0, "the env's name") ?: return Amie.EXIT_USAGE
-                if (name !in ScriptEnvironments.names()) return fail("No env '$name'; envs list names them")
+                if (name !in ScriptEnvironments.names()) return fail("No env '$name'; env list names them")
                 ScriptEnvironments.peek(name).print().forEach(::println)
                 Amie.EXIT_OK
             }
@@ -234,17 +239,18 @@ object EnvsCommand : Command("envs", "The envs of AMP/env: each keeps the Maven 
     }
 }
 
-object TemplatesCommand : Command("templates", "The script templates of AMP/templates: the starters and the scripts saved there") {
+object TemplatesCommand : Command("template", "The script templates of AMP/templates: the starters and the scripts saved there") {
     override val actions = listOf(
-        "templates list" to "every template: its name, lines, env and what it opens, and which run in this process",
-        "templates show <name or id>" to "prints the template's code",
-        "templates run <name or id> [args]" to "runs the template as main.kts",
-        "templates export <name or id> --out <folder> [--no-jars]" to "exports it as a bundle that runs on its own (java -jar run.jar); --no-jars leaves the env's Maven packages and the package jars out, listed in the bundle's require.txt",
-        "templates save <name> <file> [--description <text>]" to "keeps a script file (or a project or starter by its name) as the template <name>; a name taken is saved again, its id kept",
-        "templates edit <name or id>" to "opens its file in \$VISUAL or \$EDITOR and takes the edit; prints the file's path when neither is set",
-        "templates delete <name or id>" to "removes the template, its code and its entry",
+        "template list" to "every template: its name, lines, env and what it opens, and which run in this process",
+        "template show <name or id>" to "prints the template's code",
+        "template run <name or id> [args]" to "runs the template as main.kts",
+        "template export <name or id> --out <folder> [--no-jars]" to "exports it as a bundle that runs on its own (java -jar run.jar); --no-jars leaves the env's Maven packages and the package jars out, listed in the bundle's require.txt",
+        "template new <name> [--description <text>] [--project <project>]" to "a new template, opened in \$VISUAL or \$EDITOR to write (its path printed when neither is set); --project puts it at the end of that project and runs it in the project's env",
+        "template save <name> <file> [--description <text>]" to "keeps a script file (or a project or starter by its name) as the template <name>; a name taken is saved again, its id kept",
+        "template edit <name or id>" to "opens its file in \$VISUAL or \$EDITOR and takes the edit; prints the file's path when neither is set",
+        "template delete <name or id>" to "removes the template, its code and its entry",
     )
-    override val valued = setOf("--out", "--description")
+    override val valued = setOf("--out", "--description", "--project")
 
     override fun perform(action: String, flags: Flags, options: Options): Int? {
         return when (action) {
@@ -269,7 +275,7 @@ object TemplatesCommand : Command("templates", "The script templates of AMP/temp
                         val d = t.description.lines().first()
                         if (d.isNotEmpty()) println(Style.dim("  " + if (d.length > width - 2) d.take((width - 3).coerceAtLeast(0)).trimEnd() + "…" else d))
                     }
-                    println(Style.dim("amie templates show \"<name>\" prints one, run runs it, export makes a bundle of it; a name or its id, as the file in AMP/templates. Running means in this process"))
+                    println(Style.dim("amie template show \"<name>\" prints one, run runs it, export makes a bundle of it; a name or its id, as the file in AMP/templates. Running means in this process"))
                 }
                 Amie.EXIT_OK
             }
@@ -285,6 +291,25 @@ object TemplatesCommand : Command("templates", "The script templates of AMP/temp
                 ExportCommand.main((listOf(t.id, "--out", out) + listOf("--no-jars").filter { flags.has(it) }).toTypedArray())
                 Amie.EXIT_OK
             }
+            "new" -> {
+                val name = flags.requireWord(0, "the template's name") ?: return Amie.EXIT_USAGE
+                if (Starters.template(name) != null) return fail("A template '$name' exists already; template edit \"$name\" opens it")
+                val project = flags.valueOf("--project")?.let { p -> p.takeIf(ProjectTemplates::exists) ?: return fail("No project '$p'; amie new $p makes it") }
+                val code = (project?.let { "environment(SettingsEnv(\"${ProjectTemplates.env(it)}\"))\n\n" } ?: "") + "log(\"$name: hello\")\n"
+                val t = ScriptTemplates.save(name, code, flags.valueOf("--description").orEmpty(), emptyList(), "new")
+                project?.let { ProjectTemplates.write(it, ProjectTemplates.ids(it) + t.id) }
+                val file = ScriptTemplates.file(t.id)
+                val where = project?.let { ", the last of project '$it'" } ?: ""
+                when (openInEditor(file)) {
+                    false -> println("'${t.name}' made$where: write it in ${file.shown}, then templates run \"${t.name}\"")
+                    null -> return fail("The editor didn't finish; '${t.name}' is kept as it left it, at ${file.shown}")
+                    true -> {
+                        ScriptTemplates.save(t.name, file.readText().ifBlank { code }, t.description, t.tags, t.source)
+                        println("'${t.name}' saved$where (${lines(file.readText().trimEnd().lines().size)})")
+                    }
+                }
+                Amie.EXIT_OK
+            }
             "save" -> {
                 val name = flags.requireWord(0, "the template's name") ?: return Amie.EXIT_ERROR
                 val file = flags.requireWord(1, "the script file to keep") ?: return Amie.EXIT_ERROR
@@ -295,7 +320,7 @@ object TemplatesCommand : Command("templates", "The script templates of AMP/temp
                 } catch (e: IllegalArgumentException) {
                     return fail(e.message ?: "The template can't be saved")
                 }
-                println("'${t.name}' ${if (before == null) "saved" else "saved again, its id kept"} as ${ScriptTemplates.file(t.id).shown} (${lines(t.lines)}); templates run \"${t.name}\" runs it")
+                println("'${t.name}' ${if (before == null) "saved" else "saved again, its id kept"} as ${ScriptTemplates.file(t.id).shown} (${lines(t.lines)}); template run \"${t.name}\" runs it")
                 Amie.EXIT_OK
             }
             "edit" -> {
@@ -328,6 +353,6 @@ object TemplatesCommand : Command("templates", "The script templates of AMP/temp
 
     private fun findTemplate(flags: Flags): ScriptTemplate? {
         val wanted = flags.requireWord(0, "the template's name or id") ?: return null
-        return Starters.template(wanted) ?: null.also { System.err.println(Style.error("No template '$wanted'; templates list names them")) }
+        return Starters.template(wanted) ?: null.also { System.err.println(Style.error("No template '$wanted'; template list names them")) }
     }
 }

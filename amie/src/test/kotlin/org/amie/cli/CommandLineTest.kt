@@ -48,7 +48,7 @@ class CommandLineTest {
 
     @Test
     fun `a command's name takes its arguments`() {
-        assertEquals(Invocation.Command("models", listOf("list"), Options()), CommandLine.parse(listOf("models", "list")))
+        assertEquals(Invocation.Command("model", listOf("list"), Options()), CommandLine.parse(listOf("model", "list")))
         assertEquals(Invocation.Command("hf", listOf("search", "bert", "--format", "onnx"), Options()), CommandLine.parse(listOf("hf", "search", "bert", "--format", "onnx")))
     }
 
@@ -56,7 +56,7 @@ class CommandLineTest {
     fun `help and version`() {
         assertEquals(Invocation.Help(), CommandLine.parse(listOf("-h")))
         assertEquals(Invocation.Help(), CommandLine.parse(listOf("--help")))
-        assertEquals(Invocation.Help("models"), CommandLine.parse(listOf("models", "--help")))
+        assertEquals(Invocation.Help("model"), CommandLine.parse(listOf("model", "--help")))
         assertEquals(Invocation.Version(), CommandLine.parse(listOf("--version")))
     }
 
@@ -91,7 +91,7 @@ class CommandLineTest {
 
     @Test
     fun `a name or a path is quoted for a script`() {
-        assertEquals(listOf("groups", "open", "weather", "is it raining", "x y", "z"), CommandLine.split("groups open  weather \"is it raining\" 'x y' z "))
+        assertEquals(listOf("group", "open", "weather", "is it raining", "x y", "z"), CommandLine.split("group open  weather \"is it raining\" 'x y' z "))
         assertEquals("\"a b\"", "a b".quoted())
         assertEquals("\"say \\\"hi\\\" \\\$x \\\\\"", "say \"hi\" \$x \\".quoted())
     }

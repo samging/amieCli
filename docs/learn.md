@@ -109,7 +109,7 @@ A line that starts with a colon is for the prompt itself, not the script:
 | `:docs` | This book, in the browser |
 | `:env [name]` | The env the lines run in; with a name, that env from now on |
 | `:load file.kts` | Runs the file's lines here, so what it defines stays |
-| `:sessions` | Every open session: models, groups, packages, templates in the background |
+| `:session` | Every open session: models, groups, packages, templates in the background |
 | `:config [x.jar]` | Package config files: every jar's and whether each is filled in, or one jar's keys; `key=value` sets keys; `:config --help` lists all of it |
 | `:setup x.jar` | Asks for each config key of the jar with its hint; Enter keeps a value |
 | `:terminate x` | Closes the session named x, or `#id`; `:terminate all` closes every one |
@@ -118,7 +118,7 @@ A line that starts with a colon is for the prompt itself, not the script:
 | `:clear` | Clears the screen |
 | `:quit` | Leaves; `:exit`, `:q` and Ctrl-D do too |
 
-`help`, `help(group)`, `quit` and `exit` work without the colon too, with or without the parentheses, as they do at Python's prompt. A line that starts with `amie` and a space is amie's own command line, run right here: `amie envs new prod`, `amie models list`, `amie hf search bert`. On a terminal the banner is in the pride flag's colors, the commands and the prompt have a color each and errors are red; a piped output or `NO_COLOR` in the environment leaves everything plain.
+`help`, `help(group)`, `quit` and `exit` work without the colon too, with or without the parentheses, as they do at Python's prompt. A line that starts with `amie` and a space is amie's own command line, run right here: `amie env new prod`, `amie model list`, `amie hf search bert`. On a terminal the banner is in the pride flag's colors, the commands and the prompt have a color each and errors are red; a piped output or `NO_COLOR` in the environment leaves everything plain.
 
 `:api` is the fastest way to find a function. The description of each comes from the list the script API is generated from, so what it says is what the function does:
 
@@ -225,7 +225,7 @@ The forms of a run:
 | `amie -e prod label.kts` | In the env `prod`, over the one the script names |
 | `amie -v label.kts` | With the internal lines: the env sourcing, a build's phases, what the run used |
 | `amie run label.kts` | The same as the bare file |
-| `amie new reader` | A project: `AMP/projects/reader/main.kts` to start from, in an env named `reader` |
+| `amie new reader` | A project: `AMP/projects/reader`, a group of templates run in order in an env named `reader` ([Templates grouped into a project](#projects)) |
 | `amie run reader` | Runs the project by its name, as a starter or a template by its title |
 
 Standard output carries the console, standard error the errors, with the script's line in front:
@@ -261,7 +261,7 @@ hi how are you,greeting
 The command does the whole thing and prints the validation:
 
 ```
-$ amie models build intents.csv --name intents
+$ amie model build intents.csv --name intents
 Building intents: embedding 9 rows, training, exporting
 accuracy 1.00  macro F1 1.00
 label     precision  recall  f1  support
@@ -286,11 +286,11 @@ A file named in a script is looked up as given, then in the AMP folder, then in 
 ### Look at what was built
 
 ```
-$ amie models list
+$ amie model list
 intent    intents    3 labels    v1
-$ amie models validate intents
-$ amie models info intents
-$ amie models remove intents
+$ amie model validate intents
+$ amie model info intents
+$ amie model remove intents
 ```
 
 `validate` prints the stored validation again; `info` the labels, the encoder, the version, how it was trained, the groups it is in and where it is served, if anywhere. In script, `validateMetrics("intents")`, `confusionMatrix("intents")` and `mistakes("intents")` show the same as tables.
@@ -312,16 +312,16 @@ A trained model learns from new rows without starting over. Rows of labels it kn
 A group is a named set of models, kept in the env, that is asked as one. `vote` is the label most of them give, `predict` the best score across them, `each` every model's own answer.
 
 ```
-$ amie groups add house intents dummy
-$ amie groups list
+$ amie group add house intents dummy
+$ amie group list
 house    intents, dummy    env default
-$ amie groups open house "turn the lights on"
+$ amie group open house "turn the lights on"
 intents: lights
 dummy: lights
 vote: lights
 ```
 
-Without texts, `groups open` reads them from standard input, a line each. `groups remove house dummy` takes a model out, and without a model removes the group.
+Without texts, `group open` reads them from standard input, a line each. `group remove house dummy` takes a model out, and without a model removes the group.
 
 In script:
 
@@ -341,19 +341,19 @@ Opening a group opens a session of each model; closing the swarm closes the ones
 A package is a jar with a class that answers text, kept in `AMP/pluginDir`. It is opened like a model, by its file name, and asked with `run` or `answer`, since it has no labels of its own:
 
 ```
-$ amie packages search google
+$ amie package search google
 6 jars in samging/jar-jar matching 'google'
-$ amie packages add spotify.jar
-$ amie packages add ~/build/greeter.jar
+$ amie package add spotify.jar
+$ amie package add ~/build/greeter.jar
 greeter.jar: Greeter 1.2, a package class found
-$ amie packages test greeter.jar
-$ amie packages info greeter.jar
-$ amie packages setup spotify.jar
+$ amie package test greeter.jar
+$ amie package info greeter.jar
+$ amie package setup spotify.jar
     clientId: 
     clientSecret: 
 ```
 
-A jar's settings are files in `AMP/pluginDir/config/<jar>/`. `amie packages setup` asks for each key with the hint the file gives, Enter keeping a value, and offers the values another jar already has, so one Google client fills every Google package. `amie packages config spotify.jar clientId=abc` sets a key from a script, `--all-jars` sets it for every jar with that file, and `amie packages config` alone shows every jar's files and whether each is filled in.
+A jar's settings are files in `AMP/pluginDir/config/<jar>/`. `amie package setup` asks for each key with the hint the file gives, Enter keeping a value, and offers the values another jar already has, so one Google client fills every Google package. `amie package config spotify.jar clientId=abc` sets a key from a script, `--all-jars` sets it for every jar with that file, and `amie package config` alone shows every jar's files and whether each is filled in.
 
 ```
 >>> val greeter = initMod("greeter.jar")
@@ -388,7 +388,7 @@ Two sessions of one jar never share an instance or a static field. `run` runs on
 
 ### Packages from GitHub {#github-packages}
 
-A script asks for a jar in a GitHub repository with `github:`. amie downloads it, checks it as `packages add` does, and keeps it in `AMP/pluginDir` with where it came from:
+A script asks for a jar in a GitHub repository with `github:`. amie downloads it, checks it as `package add` does, and keeps it in `AMP/pluginDir` with where it came from:
 
 ```
 >>> val notes = initMod("github:samging/jar-jar/memory.jar")
@@ -397,17 +397,17 @@ remember <text>  keeps it
 >>> val files = initMod("files.jar")
 ```
 
-A plain name like `files.jar` is looked for in the env, `AMP/pluginDir`, as a path, and last in the repositories of `AMP/github.json`, which starts with `samging/jar-jar`. `@main`, a tag or a commit after the name pins a version, and a release's assets are found too. A `github:` open downloads again only when the file changed; a plain name uses the copy already in `AMP/pluginDir`. A private repository needs `GITHUB_TOKEN` or a `"token"` in `AMP/github.json`; without one the jar is reported as not found. `amie packages search` lists what those repositories hold, and `amie packages add <x.jar>` downloads one by its name.
+A plain name like `files.jar` is looked for in the env, `AMP/pluginDir`, as a path, and last in the repositories of `AMP/github.json`, which starts with `samging/jar-jar`. `@main`, a tag or a commit after the name pins a version, and a release's assets are found too. A `github:` open downloads again only when the file changed; a plain name uses the copy already in `AMP/pluginDir`. A private repository needs `GITHUB_TOKEN` or a `"token"` in `AMP/github.json`; without one the jar is reported as not found. `amie package search` lists what those repositories hold, and `amie package add <x.jar>` downloads one by its name.
 
-To upload a jar, check it with `amie packages add` and `amie packages test`, then open a pull request that adds it at the top of samging/jar-jar. Its Check jars workflow first checks every jar the way amie checks a download, running none of its code, then opens each one as `amie packages test` does: it calls `run()` with every test the jar declares and then `close()`. The jar is there for everyone once the pull request is merged.
+To upload a jar, check it with `amie package add` and `amie package test`, then open a pull request that adds it at the top of samging/jar-jar. Its Check jars workflow first checks every jar the way amie checks a download, running none of its code, then opens each one as `amie package test` does: it calls `run()` with every test the jar declares and then `close()`. The jar is there for everyone once the pull request is merged.
 
 ### Maven packages
 
 A library from Maven Central goes into the env, so a script can import it:
 
 ```
-$ amie packages maven org.jsoup:jsoup:1.17.2
-$ amie packages list
+$ amie package maven org.jsoup:jsoup:1.17.2
+$ amie package list
 ```
 
 ```
@@ -423,11 +423,11 @@ In a script file the same is one line, read before the script compiles: `impleme
 An env is a folder under `AMP/env` holding its Maven packages and its groups. Scripts run in `default` unless told otherwise. A second env keeps one project's packages away from another's.
 
 ```
-$ amie envs new prod
-$ amie envs list
+$ amie env new prod
+$ amie env list
 default    2 packages    1 group    AMP/env/default
 prod       0 packages    0 groups   AMP/env/prod
-$ amie envs show prod
+$ amie env show prod
 ```
 
 Three ways to run in an env:
@@ -436,7 +436,7 @@ Three ways to run in an env:
 
 - `:env prod` at the prompt, for the lines after it.
 
-- `amie envs use prod`, which rewrites the `environment(...)` line of the saved `main.kts` in `AMP/pluginDir`, or makes one with it.
+- `amie env use prod`, which rewrites the `environment(...)` line of the saved `main.kts` in `AMP/pluginDir`, or makes one with it.
 
 
 A script names its own env with `environment(SettingsEnv("prod"))`, read before it compiles; `-e` wins over it.
@@ -446,34 +446,67 @@ A script names its own env with `environment(SettingsEnv("prod"))`, read before 
 A template is a script saved under a name in `AMP/templates`: the starters that come with amie, and the scripts you save.
 
 ```
-$ amie templates list
+$ amie template list
 Hello: log at every level          first steps, starter
 Train a model from a csv           models, starter
 Serve a model and call it          serving, starter
-$ amie templates show "Train a model from a csv"
-$ amie templates run "Train a model from a csv"
+$ amie template show "Train a model from a csv"
+$ amie template run "Train a model from a csv"
 ```
 
 `export` turns a template into a bundle that runs on its own, a folder with a `run.jar`:
 
 ```
-$ amie templates save reader ~/reader.kts     keeps the file as the template "reader"; a name taken is saved again
-$ amie templates edit reader                  opens it in $VISUAL or $EDITOR, or prints the path when neither is set
-$ amie templates delete reader                removes it
+$ amie template save reader ~/reader.kts     keeps the file as the template "reader"; a name taken is saved again
+$ amie template edit reader                  opens it in $VISUAL or $EDITOR, or prints the path when neither is set
+$ amie template delete reader                removes it
 ```
 
 ```
-$ amie templates export talk --out ~/bundles/talk
+$ amie template export talk --out ~/bundles/talk
 $ java -jar ~/bundles/talk/run.jar
 ```
 
 The bundle carries the env's Maven jars and the package jars the script uses. `--no-jars` leaves them out, for a bundle to send where they are already, or to keep it small: `require.txt` then lists each file with the path to put it at under the bundle (a Maven jar from Maven Central or the exporting machine's `AMP/env/caches`, a package jar from its `AMP/pluginDir`), `run.jar --check` says which are still missing, and a run with a Maven jar missing fetches it from Maven Central when it can reach it; with a package jar missing it stops and names it.
 
 ```
-$ amie templates export talk --out ~/bundles/talk --no-jars
+$ amie template export talk --out ~/bundles/talk --no-jars
 $ cat ~/bundles/talk/require.txt
 $ java -jar ~/bundles/talk/run.jar --check
 ```
+
+### Templates grouped into a project {#projects}
+
+The templates are what you write; a project groups them. `amie template new` makes a template and opens it in `$VISUAL` or `$EDITOR` (with neither set, it prints the file's path to open yourself), and `--project` puts it at the end of a project, running in the project's env:
+
+```
+$ amie new house                                    a project: AMP/projects/house, in an env named house
+$ amie template new reader --project house          writes the template "reader", the first of house
+$ amie template new notifier --project house        and "notifier", the second
+$ amie template edit reader                         opens it again
+$ amie project show house
+project: house  env: house
+  1. reader  3 lines
+  2. notifier  3 lines
+$ amie run house
+house: 1/2 reader
+house: 2/2 notifier
+```
+
+`amie run house` runs the templates one after another in the env `house`, then the project's own `main.kts` when you wrote more in it than the line `amie new` puts there, and stops at the first that fails. Background templates they start are waited for, and a model one of them left serving keeps the run up, as with a single script.
+
+A template can be in several projects, and taking one out of a project leaves the template itself in `AMP/templates`:
+
+```
+$ amie new garden reader notifier                   a project made with two templates already in it
+$ amie project add house speaker                    puts "speaker" at the end of house
+$ amie project add house speaker --at 1             moves it to the front
+$ amie project remove house notifier                takes it out of house
+$ amie project edit house                           the order itself, templates.txt, in your editor
+$ amie project list
+```
+
+The order is `AMP/projects/<name>/templates.txt`, one template id a line, so it can be edited by hand too.
 
 ### A template in the background
 
@@ -507,14 +540,14 @@ weather
 >>> reader.close()
 ```
 
-A template that fails makes the call throw, with its name and its error, so a failure never passes for an answer. `:sessions` lists the runs in the background, and a script that ends waits for the ones it started.
+A template that fails makes the call throw, with its name and its error, so a failure never passes for an answer. `:session` lists the runs in the background, and a script that ends waits for the ones it started.
 
 ## Serve a model {#serving}
 
 A model served answers over HTTP. The command keeps the process up until Ctrl-C:
 
 ```
-$ amie models serve intents --port 8765
+$ amie model serve intents --port 8765
 Serving intents at http://127.0.0.1:8765/models/intents/predict
 Serving. Stop with Ctrl-C or SIGTERM.
 ```
@@ -616,14 +649,14 @@ The sessions are still there raw: `m.tokens(text)` and `m.encoder.run(mapOf("inp
 Whatever a script opens is a session: a model, a group, a package, a template in the background. Sessions stay open after the line that opened them, which is what makes the second `predict` fast.
 
 ```
->>> :sessions
+>>> :session
 #1  intents  model    running  opened 14:02:11
 #2  house    group    running  opened 14:05:40
 >>> :terminate house
 >>> :terminate all
 ```
 
-From the command line, `amie sessions list` shows the sessions of that process, and `amie sessions runs` the recorded runs of `main.kts`.
+From the command line, `amie session list` shows the sessions of that process, and `amie session runs` the recorded runs of `main.kts`.
 
 ### Scope functions
 

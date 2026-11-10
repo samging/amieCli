@@ -51,9 +51,8 @@ object Amie {
             when (parsed) {
                 is Invocation.Repl -> Repl(parsed.options).start()
                 is Invocation.Script -> {
-                    val code = ScriptRun.readScript(parsed.file) ?: return EXIT_ERROR
                     ScriptRun.passArguments(parsed.args)
-                    promptIfInteractive(ScriptRun.runCode(code, parsed.options.env, parsed.file), parsed.interactive, parsed.options)
+                    promptIfInteractive(ScriptRun.runFile(parsed.file, parsed.options.env) ?: return EXIT_ERROR, parsed.interactive, parsed.options)
                 }
                 is Invocation.Code -> promptIfInteractive(ScriptRun.runCode(parsed.code, parsed.options.env, "-c"), parsed.interactive, parsed.options)
                 is Invocation.Command -> Commands.find(parsed.name)!!.run(parsed.args, parsed.options)
