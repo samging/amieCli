@@ -47,7 +47,7 @@ application {
 
 // The start script Gradle writes takes the java JAVA_HOME or the PATH names, whatever its version; amie needs a 21,
 // and jdk.sh finds one first. ./amie at the repository root and install.sh source the same file.
-// The learn book (learn/index.html) rides in the jar: :learn and :docs copy it to AMP/learn and open it
+// The learn book (learn/index.html) rides in the jar: :docs copies it to AMP/learn and open it
 tasks.processResources {
     from("learn") { into("learn") }
 }
@@ -66,9 +66,10 @@ tasks.withType<Test>().configureEach {
     maxHeapSize = "1g"
     // A folder of its own, never the user's AMP
     environment("AMIE_AMP_DIR", layout.buildDirectory.dir("test-amp").get().asFile.path)
-    environment("AMIE_BACKEND_URL", "http://backend.test")
-    environment("AMIE_SITE_URL", "http://site.test")
-    environment("AMIE_S3_URL", "http://s3.test")
-    environment("KEYCLOAK_URL", "http://keycloak.test")
-    environment("AMIE_CLOUD_SAVE", "off")
+    // Accounts, Keycloak and the Amie backend are off (auth/Accounts.kt), so tests reach none of them
+    // environment("AMIE_BACKEND_URL", "http://backend.test")
+    // environment("AMIE_SITE_URL", "http://site.test")
+    // environment("AMIE_S3_URL", "http://s3.test")
+    // environment("KEYCLOAK_URL", "http://keycloak.test")
+    // environment("AMIE_CLOUD_SAVE", "off")
 }

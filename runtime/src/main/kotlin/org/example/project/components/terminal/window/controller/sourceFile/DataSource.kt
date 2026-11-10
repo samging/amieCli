@@ -57,7 +57,7 @@ class DataSource internal constructor(
         /** Reads a CSV with a header row; the structure is inferred unless given (a related test file reuses its train's) */
         fun read(path: String, structure: DataStructure? = null): DataSource? {
             val file = locate(path) ?: run {
-                logInternal("source: $path not found", LogLevel.ERROR)
+                logInternal(notFound(path), LogLevel.ERROR)
                 return null
             }
             if (file.extension.lowercase() != "csv") {
@@ -99,6 +99,22 @@ class DataSource internal constructor(
             val rows = lines.drop(1)
             DataSource(file, headers, rows, inferStructure(headers, rows) ?: return null).samples()
         }.getOrNull()
+
+        /**
+         * Says where [path] was looked for and, when AMP holds csv files, the ones whose names come closest: a data file
+         * is found as given (from the folder amie was started in), in AMP/ or in AMP/pluginDir/
+         */
+        internal fun notFound(path: String): String {
+            val amp = File(getDirectory().toString())
+            val where = if (File(path).isAbsolute) path else "${File(path).absoluteFile.parentFile.path}, ${amp.path} or ${File(amp, "pluginDir").path}"
+            val stem = File(path).nameWithoutExtension.lowercase()
+            val csvs = (amp.listFiles().orEmpty().toList() + File(amp, "pluginDir").listFiles().orEmpty())
+                .filter { it.isFile && it.extension.equals("csv", ignoreCase = true) }.map { it.name }.distinct().sorted()
+            val close = csvs.filter { n -> val s = n.substringBeforeLast('.').lowercase(); stem.isNotEmpty() && (stem in s || s in stem) }
+            val shown = close.ifEmpty { csvs }.take(6)
+            return "source: $path not found in $where" + if (shown.isEmpty()) "" else
+                "; AMP has ${shown.joinToString(", ")}" + (if (close.isEmpty() && csvs.size > shown.size) " and ${csvs.size - shown.size} more" else "")
+        }
 
         /** The file a data path names: as given, in AMP/, or in AMP/pluginDir/ */
         fun locate(path: String): File? {

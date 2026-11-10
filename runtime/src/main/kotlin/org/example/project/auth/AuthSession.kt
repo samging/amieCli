@@ -51,7 +51,7 @@ object AuthState {
     val session: StateFlow<AuthSession?> = _session.asStateFlow()
 
     val user: String get() = _session.value?.username ?: ""
-    val signedIn: Boolean get() = _session.value != null
+    val signedIn: Boolean get() = Accounts.enabled && _session.value != null
 
     private val realmConfig: KeycloakConfig by lazy { KeycloakConfig.load() }
     private val realmClient: KeycloakClient by lazy { KeycloakClient(realmConfig) }
@@ -83,6 +83,7 @@ object AuthState {
      * AMP/keycloak.json names, or nothing left to renew it with. [restore] then asks Keycloak.
      */
     fun resume(): AuthSession? {
+        if (!Accounts.enabled) return null
         _session.value?.let { return it }
         val saved = runCatching { json.decodeFromString<AuthSession>(file.readText()) }.getOrNull() ?: return null
         val realm = clientOverride?.config ?: realmConfig
@@ -133,6 +134,7 @@ object AuthState {
 
     /** A fresh access token, refreshing when the current one is about to expire; null when signed out */
     suspend fun accessToken(): String? {
+        if (!Accounts.enabled) return null
         val current = _session.value ?: return null
         if (!current.expired()) return current.accessToken
         return refresh(current)?.accessToken

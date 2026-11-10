@@ -118,6 +118,10 @@ cp -R "$built" "$home"
 ln -sf "../lib/amie/bin/amie" "$link"
 
 echo "Installed $("$link" --version | head -1) at $link"
+# A session still open reads the jars again by their path, so its next line fails until amie is started again
+if pgrep -f "$home/lib/amie.jar" >/dev/null 2>&1; then
+    echo "An amie session is still open: leave it with :quit and start amie again, it can't read the new version's classes."
+fi
 case ":$PATH:" in
     *":$prefix/bin:"*) ;;
     *) echo "$prefix/bin isn't on your PATH yet: add it, in ~/.zshrc or ~/.bashrc, with" ; echo "  export PATH=\"$prefix/bin:\$PATH\"" ;;

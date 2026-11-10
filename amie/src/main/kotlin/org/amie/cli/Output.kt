@@ -26,6 +26,19 @@ import org.example.project.components.terminal.window.controller.script.Headless
 object Output {
     @Volatile var verbose = false
 
+    /**
+     * The jar amie runs from and when it was written, as this process found it. The script compiler reads it again by
+     * its path on every run, so an install while a session is open breaks that session's next line with a message
+     * about buffer positions; [print] then says to start amie again.
+     */
+    private val ownJar: Pair<java.io.File, Long>? = runCatching {
+        java.io.File(Output::class.java.protectionDomain.codeSource.location.toURI()).takeIf { it.isFile }?.let { it to it.lastModified() }
+    }.getOrNull()
+    @Volatile private var toldReinstalled = false
+
+    /** Whether amie was installed again since this process started */
+    fun reinstalled(): Boolean = ownJar?.let { (file, at) -> !file.isFile || file.lastModified() != at } ?: false
+
     /** Takes the console over; before the first line that logs */
     fun install(verbose: Boolean) {
         this.verbose = verbose
@@ -45,6 +58,10 @@ object Output {
             LogLevel.INTERNAL -> Style.dim(text)
             else -> text
         })
+        if (line.level == LogLevel.ERROR && !toldReinstalled && reinstalled()) {
+            toldReinstalled = true
+            out.println(Style.error("amie was installed again while this session was open, so it can't read its own classes any more. Leave with :quit and start amie again."))
+        }
         out.flush()
     }
 

@@ -6,7 +6,7 @@
 |---|---|---|
 | JDK 21 | The desktop module pins a Java 21 toolchain | Gradle's foojay resolver downloads one if it is missing |
 | Gradle wrapper | `./gradlew` from the repository root | Gradle 9.3, configuration cache on |
-| BERT models | `modelBuilder` and `initMod` embed text with the `bge` encoder; `initMod()` runs the NER model | The NER folder (`model.onnx`, `tokenizer.json`) with `bge/` inside it: `AMP/models/bert` for a Gradle run, where `./AMP/setup/setup.sh` downloads them, or `AMIE_MODELS_DIR` (`BundledModels.kt`). The packaged app ships them in `app/resources/models/bert/` |
+| BERT models | `modelBuilder` and `initMod` embed text with the `bge` encoder; `initMod()` runs the NER model | The NER folder (`model.onnx`, `tokenizer.json`) with `bge/` inside it: `AMP/models/bert` for a Gradle run, where `./scripts/setup.sh` downloads them, or `AMIE_MODELS_DIR` (`BundledModels.kt`). The packaged app ships them in `app/resources/models/bert/` |
 | Keycloak (off) | Sign-in, backups and publishing | The desktop app has no accounts for now; `AMIE_ACCOUNTS=1` turns them on, with Keycloak in Docker on `http://localhost:8080` |
 | Amie backend (optional) | Devices, packages, **Publish** | Address in `AMP/backend.json`; see [Amie backend](backend-integration.md) |
 | Android SDK (optional) | Only for the Android app | `sdk.dir=...` in `local.properties` |

@@ -251,10 +251,11 @@ interface ScriptLogger {
      */
     fun <T> ortStatic(name: String = "static", block: () -> T): T = OrtScopes.static(name, block)
     /**
-     * Kept like ortStatic, and freed by itself once nothing has used it for idleSeconds: the block not run again, no
-     * session it holds asked. One daemon timer looks when the time is up. Returns the block's value
+     * Kept like ortStatic while anything else is in session: a model, package, group, template or background job the
+     * required scopes don't hold themselves, the encoders models share not counted. Once nothing else is open, what it holds is freed, and the block opens it again when next run: for what
+     * other models need beside them, an encoder they share, say. Returns the block's value
      */
-    fun <T> ortTimed(name: String, idleSeconds: Int, block: () -> T): T = OrtScopes.timed(name, idleSeconds, block)
+    fun <T> ortRequired(name: String = "required", block: () -> T): T = OrtScopes.required(name, block)
     /**
      * Kept like ortStatic, at most max sessions under the name: when one more is opened the oldest is closed first.
      * Returns the block's value

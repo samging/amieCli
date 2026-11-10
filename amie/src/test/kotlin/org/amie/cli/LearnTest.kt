@@ -40,8 +40,9 @@ class LearnTest {
     }
 
     @Test
-    fun `learn is a command, and path prints where the book is`() {
-        assertEquals("learn", Commands.find("learn")?.name)
-        assertEquals(Invocation.Command("learn", listOf("path"), Options()), CommandLine.parse(listOf("learn", "path")))
+    fun `docs is a command, and path prints where the book is`() {
+        assertEquals("docs", Commands.find("docs")?.name)
+        assertEquals(null, Commands.find("learn"))
+        assertEquals(Invocation.Command("docs", listOf("path"), Options()), CommandLine.parse(listOf("docs", "path")))
     }
 }

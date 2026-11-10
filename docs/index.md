@@ -22,6 +22,8 @@ mkdocs build                        # static site in build/docs-site/
 | Write and run a script, read the console | [The sandbox](sandbox.md) |
 | Open a model or a package, ask it things, keep it running, close it | [Running sessions](sessions.md) |
 | Know every function a script can call | [Scripting API](sandbox-scripting.md) |
+| Run scripts from the terminal with `amie`, chapter by chapter | [Learn amie](learn.md) |
+| Look up an `amie` command, option or exit code | [amie reference](amie-reference.md) |
 | Train a model and look at its metrics | [Models and metrics](models.md) |
 | Teach a trained model a new label, or go back to an earlier version | [Fine-tuning](models.md#fine-tuning-teaching-a-model-more), [Versions](models.md#versions-and-rollback) |
 | Try a model on a sentence, correct its wrong answers and fine-tune on them, from the page | [Models page: Try and Improve](models-page.md#models) |

@@ -19,7 +19,7 @@ bin/amie --version               # from the checkout: builds when the sources ch
 
 `amie/install.sh --prefix /usr/local`, `--no-build` and `--uninstall` are the other forms.
 
-The intent models need the encoder models: `AMP/setup/setup.sh` downloads them, and `AMIE_MODELS_DIR` points
+The intent models need the encoder models: `scripts/setup.sh` downloads them, and `AMIE_MODELS_DIR` points
 at another copy.
 
 ## Use
@@ -35,18 +35,18 @@ amie --help                      # the options; amie <command> --help for a comm
 ```
 
 The commands: `run`, `new`, `examples`, `models`, `groups`, `packages`, `envs`, `templates`, `sessions`, `hf`
-(Hugging Face) and `learn`, the learn book. Everything amie reads or writes is in the AMP folder: `--amp`, else
+(Hugging Face) and `docs`, the learn book. Everything amie reads or writes is in the AMP folder: `--amp`, else
 `AMIE_AMP_DIR`, else the user's data folder (`~/Library/Application Support/amie pilot/AMP` on a Mac).
 
 [amie/README.md](amie/README.md) is the full guide: every command line, the prompt, the scripting functions, the
-exit codes. `amie learn` opens the learn book, chapter by chapter from the first line to a model served.
+exit codes. `amie docs` opens the learn book, chapter by chapter from the first line to a model served.
 
 ## Layout
 
 ```
 amie/        the interpreter: the command line, the prompt, the commands (module :amie)
 runtime/     the engine: the script runtime, models, groups, packages, envs, templates, serving (module :runtime)
-AMP/         the AMP folder shipped with a checkout: setup.sh and the seed
+scripts/     setup.sh, which downloads the encoder and voice models into the AMP folder
 bin/amie     builds and runs amie from the checkout
 docs/        the documentation written for the desktop app; docs/sandbox-scripting.md is the scripting guide
 voice/       the voice scripts: talk to amie through its intent models and a text model

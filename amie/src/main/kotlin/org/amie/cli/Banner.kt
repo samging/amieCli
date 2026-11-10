@@ -38,5 +38,5 @@ object Banner {
 
     /** The banner, the version line and how to get help, as python's greeting goes */
     fun greetingFor(amp: String): String = Style.pride(ASCII) + "\n" + versionLine + "\n" +
-        Style.dim("Type :help for the commands, :api for the script's functions, :learn or :docs for the book, :quit to leave. AMP: $amp")
+        Style.dim("Type :help for the commands, :api for the script's functions, :docs for the book, :quit to leave. AMP: $amp")
 }

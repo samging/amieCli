@@ -1,5 +1,6 @@
 package org.example.project.components.terminal.window.controller.pluginEngine
 
+import org.example.project.auth.Accounts
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.java.Java
 import io.ktor.client.request.get
@@ -292,7 +293,8 @@ object JarPackages {
      */
     fun open(name: String): JarPackageSession {
         val (file, source) = resolve(name) ?: throw IllegalArgumentException(
-            "Package $name not found: not in the env, AMP/pluginDir, as a path, on the server (${BackendConfig.load().site}) or in the GitHub repositories of AMP/github.json"
+            "Package $name not found: not in the env, AMP/pluginDir, as a path, " +
+                (if (Accounts.enabled) "on the server (${BackendConfig.load().site}) " else "") + "or in the GitHub repositories of AMP/github.json"
         )
         val meta = PackageMetadata.read(file)
         val configDir = PackageMetadata.configDir(file.name)
@@ -365,6 +367,39 @@ object JarPackages {
     fun meta(name: String): PackageMeta? = resolve(name)?.first?.let { PackageMetadata.read(it) }
 
     /**
+     * The keys of the jar's .properties config files, each file name to its keys and values, the templates written
+     * first: `packages.config("spotify.jar")["spotify.properties"]?.get("clientId")`. Empty for a jar that declares none
+     */
+    fun config(name: String): Map<String, Map<String, String>> {
+        val file = resolve(name)?.first ?: return emptyMap<String, Map<String, String>>().also { logInternal("config: no package '$name'", LogLevel.ERROR) }
+        return PackageConfigFiles.declared(file.name, PackageMetadata.read(file)).filter { it.properties }
+            .associate { d -> d.file.name to PackageConfigFiles.entries(d.file).associate { it.key to it.value } }
+    }
+
+    /**
+     * Sets keys in the jar's config files, each in the file that has a line for it, every comment and other line kept:
+     * `packages.setConfig("spotify.jar", "clientId" to "abc", "clientSecret" to "xyz")`. A key no file has is not
+     * written, a typo would only add a line no one reads; those keys are returned and said as an error
+     */
+    fun setConfig(name: String, vararg values: Pair<String, String>): List<String> {
+        val file = resolve(name)?.first ?: return values.map { it.first }.also { logInternal("setConfig: no package '$name'", LogLevel.ERROR) }
+        val files = PackageConfigFiles.declared(file.name, PackageMetadata.read(file)).filter { it.properties }
+        val left = values.map { it.first }.toMutableList()
+        files.forEach { d ->
+            val keys = PackageConfigFiles.entries(d.file).map { it.key }.toSet()
+            val here = values.filter { it.first in keys && it.first in left }.toMap()
+            if (here.isNotEmpty()) {
+                PackageConfigFiles.set(d.file, here)
+                left -= here.keys
+                logInternal("setConfig: ${here.keys.joinToString(", ")} set in ${d.file.name} of ${file.name}")
+            }
+        }
+        if (left.isNotEmpty()) logInternal("setConfig: ${file.name} has no key ${left.joinToString(", ")}; its keys: " +
+            files.flatMap { PackageConfigFiles.entries(it.file) }.joinToString(", ") { it.key }, LogLevel.ERROR)
+        return left
+    }
+
+    /**
      * Runs the tests the jar declares on a fresh session (opened as initMod would, configuration and all) and
      * closes it: every test's input through run, the answer checked against expect, contains and lines. With no
      * tests declared, one call with "hello" that must not throw. The report is printed, kept beside the jar as
@@ -428,6 +463,8 @@ object JarPackages {
     fun fetch(name: String, problems: MutableList<String> = mutableListOf()): File? {
         val fileName = File(name).name
         if (!fileName.endsWith(".jar", ignoreCase = true)) { problems += "$fileName is not a jar"; return null }
+        // The Amie server isn't there yet: without accounts a jar comes only from GitHub
+        if (!Accounts.enabled) return GitHubJars.fetch(fileName)
         val config = BackendConfig.load()
         // A store jar is fetched from the address its listing gives; the downloads page's jars from the site, then the S3 service
         val listed = available().firstOrNull { it.name == fileName }
@@ -521,6 +558,7 @@ object JarPackages {
     fun listing(refresh: Boolean = false): JarListing {
         val now = System.currentTimeMillis()
         cached?.let { (at, found) -> if (!refresh && now - at < LISTING_TTL_MS) return found }
+        if (!Accounts.enabled) return JarListing(githubJars(refresh), null).also { cached = now to it }
         val config = BackendConfig.load()
         val urls = listOf("${config.site}/api/jars", "${config.s3}/api/aws/jars")
         var jars = emptyList<ServerJar>()
@@ -543,15 +581,17 @@ object JarPackages {
                 .filter { it.name.endsWith(".jar", ignoreCase = true) && it.download_url.isNotBlank() }
                 .map { f -> ServerJar(f.name, f.size.toLong(), where = "store", author = f.author.ifBlank { null }, downloadUrl = f.download_url, page = f.html_url.ifBlank { null } ?: storePage(f.author)) }
         }.orEmpty()
-        val github = GitHubJars.available(refresh).map { g ->
-            ServerJar(g.name, g.size, version = g.release, where = "github", author = g.repo, downloadUrl = g.download, page = g.page)
-        }
+        val github = githubJars(refresh)
         val server = jars + store.filter { s -> jars.none { it.name == s.name } }.distinctBy { it.name }
         val all = server + github.filter { g -> server.none { it.name == g.name } }.distinctBy { it.name }
         val problems = downloadProblems + storeProblems
         val problem = if (problems.isEmpty()) null else "Couldn't read the Amie package repository: ${problems.joinToString("; ")}. " +
             "Check the addresses in ${BackendConfig.file.path} (AMIE_SITE_URL and AMIE_S3_URL override them)"
         return JarListing(all, problem).also { cached = now to it }
+    }
+
+    private fun githubJars(refresh: Boolean): List<ServerJar> = GitHubJars.available(refresh).map { g ->
+        ServerJar(g.name, g.size, version = g.release, where = "github", author = g.repo, downloadUrl = g.download, page = g.page)
     }
 
     private fun get(url: String, problems: MutableList<String>): String? = runCatching {

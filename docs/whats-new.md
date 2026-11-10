@@ -4,9 +4,10 @@
 
 - **Encoder and decoder pairs.** A sequence-to-sequence export (T5, BART, Marian translation, Whisper) is two ONNX
   files, `encoder_model.onnx` with `decoder_model.onnx`, which no single run answers. `amie hf import` now takes the pair
-  whole: it lists every encoder and decoder of the folder, numbered, the full variant marked, and at a terminal waits for
-  Enter or the numbers you want (`--take` names them for a pipe or a script), with the config, tokenizer and preprocessor
-  files alongside. `hf info` marks the pair's files. `initMod("<name>")` opens both sessions as `.encoder` and
+  whole: it lists every encoder and decoder of the folder, the full variant marked, to pick with the arrow keys (space
+  takes or leaves the file under the cursor, Enter imports, `n` leaves; `--take` names them for a pipe or a script), with
+  the config, tokenizer and preprocessor files alongside. Any repo with several files that run here is picked the same
+  way, the file `hf info` says an import takes already marked. `hf info` marks the pair's files. `initMod("<name>")` opens both sessions as `.encoder` and
   `.decoder` (`.decoderWithPast` when exported), with `.tokens(text)`, `.text(ids)`, `.startToken` and `.endToken` from
   the files beside them. See [Encoder and decoder pairs](sandbox-scripting.md#encoder-and-decoder-pairs).
 - **The encoder's input made for you.** `m.encode(text)` runs the tokenizer and the encoder; `m.encode(file)` reads the
@@ -15,8 +16,25 @@
   `m.startTokens(encoded, "de", "translate")` gives the decoder's first ids from the config's forced tokens, each
   replaceable by a name the config knows, Whisper's language detected when none is given. A script's own part is the
   twelve-line greedy loop. Whisper tiny transcribes a spoken wav exactly, and a quantized T5 translates.
+- **`amie models remove <name>`.** Removes a model's folder whatever its kind, an intent, text, speech or imported
+  model, closing a session of it first. Paths are printed as a shell takes them, `Application\ Support`.
+- **`amie models info` on an imported model** lists its files by role (the encoder, the decoders, or the model and the
+  files beside it), the config and tokenizer files with their sizes, the start and end tokens, its labels, and how
+  `initMod` opens it.
+- **`ortRequired` in place of `ortTimed`.** `ortRequired("name") { }` keeps what its block opens while anything else is
+  in session, a model, package, group, template or background job, and frees it within a couple of seconds once
+  nothing else is open; its block opens it again when next run, as lazily as `ortStatic`. For what other models need
+  beside them. `ortTimed` is gone from scripts: a saved script that calls it no longer compiles. The starter **Scope
+  functions** is brought up to date in every AMP folder where it was never saved over.
+- **Help that reads.** `amie <command> --help` puts every action on its own line with its description wrapped beneath
+  and a blank line between them, as wide as the terminal; `:help` wraps the same way.
 - **Projects.** `amie new <name>` makes `AMP/projects/<name>/main.kts` to start from, in an env of the same name;
   `amie run <name>` runs it.
+- **Export without the jars.** `amie templates export <name> --out <folder> --no-jars` leaves the env's Maven jars and
+  the package jars out of the bundle and writes `require.txt`, one line a file with the path to put it at under the
+  bundle; the README has the same table. `run.jar --check` says which are still missing. A run with a Maven jar missing
+  fetches it from Maven Central when it can reach it, and with a package jar missing stops and names it. Compiled
+  bundles from `amie` now carry the app's own classes: before this the runner was missing from `run.jar`.
 - **Templates: save, edit, delete.** `amie templates save <name> <file>` keeps a script file, a project or a starter as a
   template (a name taken is saved again, its id kept); `amie templates edit <name>` opens its file in `$VISUAL` or
   `$EDITOR` and takes the edit, or prints the path when neither is set; `amie templates delete <name>` removes it.

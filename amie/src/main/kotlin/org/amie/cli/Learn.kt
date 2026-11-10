@@ -15,11 +15,11 @@ package org.amie.cli
 
 import java.io.File
 
-/** `amie learn`: the learn book, amie chapter by chapter from the first line to a model served, as HTML in the browser */
-object LearnCommand : Command("learn", "The learn book: the prompt, scripts, models, groups, packages, envs, templates and serving, chapter by chapter") {
+/** `amie docs`: the learn book, amie chapter by chapter from the first line to a model served, as HTML in the browser */
+object LearnCommand : Command("docs", "The learn book: the prompt, scripts, models, groups, packages, envs, templates and serving, chapter by chapter") {
     override val actions = listOf(
-        "learn" to "opens the book in the browser",
-        "learn path" to "prints where the book is, for a browser of your own",
+        "docs" to "opens the book in the browser",
+        "docs path" to "prints where the book is, for a browser of your own",
     )
     override val defaultAction = "open"
 

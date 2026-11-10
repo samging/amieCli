@@ -119,8 +119,19 @@ AMIE_AMP_DIR names a folder to work in, set up from the bundle's AMP/ the first 
         val code = File(amp, "pluginDir/main.kts").readText()
         val rewrite = { script: String -> pointAtBundle(script, manifest, amp) }
         val missing = manifest.secrets.filter { it.required && Secrets.get(it.name) == null }
-        val failed = if (check) check(root, manifest, amp, code, rewrite, missing) else {
+        val lacking = lacking(root, amp, manifest)
+        val failed = if (check) check(root, manifest, amp, code, rewrite, missing, lacking) else {
             missing.forEach { System.err.println("${it.name} is not set: ${it.why} (see README.md)") }
+            if (lacking.isNotEmpty()) {
+                System.err.println("This bundle was exported without its jars, and these are not in place (${ScriptExporter.REQUIRE_FILE} lists them all):")
+                lacking.forEach { System.err.println("  ${it.path}  ${it.what}") }
+                val packages = lacking.filter { it.what.startsWith("package ") }
+                if (packages.isNotEmpty()) {
+                    System.err.println("A package jar is fetched from nowhere: put ${packages.joinToString { File(it.path).name }} in AMP/pluginDir and run again")
+                    exitProcess(2)
+                }
+                System.err.println("The env fetches a Maven package from Maven Central when it can reach it; offline, put the files in place")
+            }
             if (manifest.compiled) runCompiled(root, manifest, amp, code, entry) else run(code, rewrite)
         }
         close(failed)
@@ -247,7 +258,12 @@ AMIE_AMP_DIR names a folder to work in, set up from the bundle's AMP/ the first 
         return failure != null || backgroundFailed
     }
 
-    private fun check(root: File, manifest: BundleManifest, amp: File, code: String, rewrite: (String) -> String, missing: List<BundleSecret>): Boolean {
+    /** The files require.txt names that are not in place: under the bundle, or under the AMP folder the run was given */
+    private fun lacking(root: File, amp: File, manifest: BundleManifest): List<BundleRequirement> = manifest.required.filter { r ->
+        !File(root, r.path).isFile && !File(amp, r.path.removePrefix("${ScriptExporter.AMP}/")).isFile
+    }
+
+    private fun check(root: File, manifest: BundleManifest, amp: File, code: String, rewrite: (String) -> String, missing: List<BundleSecret>, lacking: List<BundleRequirement>): Boolean {
         var ok = true
         fun line(what: String, passed: Boolean, detail: String) {
             println("${if (passed) "ok " else "NO "} ${what.padEnd(9)} $detail")
@@ -259,6 +275,7 @@ AMIE_AMP_DIR names a folder to work in, set up from the bundle's AMP/ the first 
             .filter { File(root, it.path).length() != it.size }
         line("files", damaged.isEmpty(), if (damaged.isEmpty()) "the jars and models are all there" else "wrong size or missing: ${damaged.joinToString { it.path }}")
         line("AMP", amp.canWrite(), getDirectory().toString())
+        if (manifest.required.isNotEmpty()) line("jars", lacking.isEmpty(), if (lacking.isEmpty()) "the ${manifest.required.size} files ${ScriptExporter.REQUIRE_FILE} names are in place" else "not in place: ${lacking.joinToString { it.path }} (${ScriptExporter.REQUIRE_FILE})")
         if (manifest.encoders.isNotEmpty() || manifest.models.isNotEmpty() || manifest.nerModel) {
             val native = runCatching { OrtSessions.env }
             line("natives", native.isSuccess, native.fold({ "ONNX Runtime loads on ${System.getProperty("os.name")} ${System.getProperty("os.arch")}" }, { "ONNX Runtime doesn't load: ${it.message}" }))

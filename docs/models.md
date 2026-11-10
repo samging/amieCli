@@ -18,6 +18,8 @@ model.modelStatus()                      // the validation table
 model.modelChart()                       // bars, history and confusion matrix
 ```
 
+`intents.csv` stands for your own file. `source()` finds it as given, relative to the folder amie was started in, then in `AMP/`, then in `AMP/pluginDir/`; an absolute path is taken as it is. A new AMP folder has `sample-intents.csv` (45 rows) to try, and a name that is not found is reported with the folders looked in and the csv files of AMP whose names come closest.
+
 `modelBuilder` runs the **preprocessor** over the rows, embeds every text once, trains **every candidate head**
 on the same rows, keeps the best one by macro F1 on the validation rows, and exports it:
 

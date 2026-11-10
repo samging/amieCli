@@ -39,7 +39,9 @@ import org.example.project.components.terminal.window.controller.modules.moduleE
 import org.example.project.components.terminal.window.controller.modules.modulesDir
 import org.example.project.components.terminal.window.controller.modules.readRegistry
 import org.example.project.components.terminal.window.controller.modules.readStoredManifest
+import org.example.project.components.terminal.window.controller.pluginEngine.GitHubJars
 import org.example.project.components.terminal.window.controller.pluginEngine.JarPackages
+import org.example.project.components.terminal.window.controller.pluginEngine.PackageConfigFiles
 import org.example.project.components.terminal.window.controller.pluginEngine.PackageMetadata
 import org.example.project.components.terminal.window.controller.runtime.ModelServer
 import org.example.project.components.terminal.window.controller.runtime.SpeechModels
@@ -178,7 +180,7 @@ object ModelsCommand : Command("models", "The models of the AMP folder: built in
         if (start != null || end != null) println("  tokens: " + listOfNotNull(start?.let { "start $it" }, end?.let { "end $it" }).joinToString(", "))
         if (i.labels.isNotEmpty()) println("  labels: ${i.labels.joinToString(", ")}")
         println("  initMod(\"${i.name}\"): " + when {
-            pair != null -> "an encoder and decoder pair: .encoder and .decoder are its sessions (.decoderWithPast too when the file is there), .inputs names their tensors, .startToken and .endToken bound the decoding; a script wires the two (amie learn, the pairs section)"
+            pair != null -> "an encoder and decoder pair: .encoder and .decoder are its sessions (.decoderWithPast too when the file is there), .inputs names their tensors, .startToken and .endToken bound the decoding; a script wires the two (amie docs, the pairs section)"
             i.labels.isNotEmpty() -> ".predict(text) the label, .scores(text) every label with its score, .inputs/.outputs/.run(…) the tensors"
             else -> ".inputs and .outputs name its tensors, .run(mapOf(…)) feeds them; .inference(text) when a tokenizer fills its inputs"
         })
@@ -262,14 +264,21 @@ object GroupsCommand : Command("groups", "Model groups: models asked together, k
 object PackagesCommand : Command("packages", "Package jars: those of AMP/pluginDir and the Maven packages of the env, what initMod(\"x.jar\") opens") {
     override val actions = listOf(
         "packages list" to "the jars of AMP/pluginDir with their metadata, and the env's Maven packages",
-        "packages add <file.jar>" to "checks the jar has a package class and copies it into AMP/pluginDir",
+        "packages search [query] [--repo owner/name]" to "the jars of the GitHub repositories in AMP/github.json (or --repo's) whose name, or description once added, has every word of the query; all of them without one",
+        "packages add <file.jar | x.jar>" to "checks the jar has a package class and copies it into AMP/pluginDir; a name that is no file is downloaded from the GitHub repositories",
         "packages maven <group:module:version>" to "adds the Maven package to the env (the default, or --env's), resolved from Maven Central",
         "packages test <x.jar>" to "runs the tests the jar declares on a fresh session, else one call with hello; the report is kept beside it",
         "packages info <x.jar>" to "what the jar says of itself and whether it opens here",
+        "packages config [x.jar]" to "every jar's config files and whether each is filled in; with a jar, its keys and values, a secret hidden, under the hint above each",
+        "packages config <x.jar> key=value... [--file f] [--all-jars] [--add]" to "sets the keys in the jar's config file that has them; --all-jars sets them as well for every other jar with a file of that name, so one Google client fills every Google package; a key the file lacks is refused unless --add",
+        "packages config <x.jar> --file f --from <path>" to "copies a file in, such as a credentials JSON",
+        "packages config <x.jar> --edit" to "opens the jar's config files in \$VISUAL or \$EDITOR, else the Mac's text editor",
+        "packages setup <x.jar>" to "asks for each key at the terminal with its hint, Enter keeping a value; offers the values another jar already has in a file of that name",
     )
-    override val valued = setOf("--env")
+    override val valued = setOf("--env", "--repo", "--file", "--from")
 
     private val pluginDir: File get() = File(AmpFolder.dir, "pluginDir")
+    private const val LABEL = 14
 
     override fun perform(action: String, flags: Flags, options: Options): Int? {
         return when (action) {
@@ -288,9 +297,19 @@ object PackagesCommand : Command("packages", "Package jars: those of AMP/pluginD
                 }
                 Amie.EXIT_OK
             }
+            "search" -> search(flags.words.joinToString(" ").trim(), flags.valueOf("--repo"))
+            "config" -> PackageConfigCli.config(flags)
+            "setup" -> PackageConfigCli.setup(flags)
             "add" -> {
                 val path = flags.requireWord(0, "the jar file") ?: return Amie.EXIT_USAGE
                 val file = File(path)
+                if (!file.isFile && '/' !in path && path.endsWith(".jar", ignoreCase = true)) {
+                    val problems = mutableListOf<String>()
+                    val fetched = runCatching { JarPackages.fetch(path, problems) }.getOrElse { return fail("$path: ${it.message}") }
+                        ?: return fail("No file $path, and no GitHub repository of AMP/github.json has it" + problems.joinToString("") { "; $it" })
+                    println("${fetched.name} is in ${pluginDir.shown} (${JarPackages.check(fetched).describe}); initMod(\"${fetched.name}\") opens it")
+                    return Amie.EXIT_OK
+                }
                 if (!file.isFile) return fail("No file $path")
                 val check = JarPackages.check(file)
                 if (!check.ok) return fail("${file.name}: ${check.describe}")
@@ -313,26 +332,99 @@ object PackagesCommand : Command("packages", "Package jars: those of AMP/pluginD
             }
             "info" -> {
                 val name = flags.requireWord(0, "the jar's name") ?: return Amie.EXIT_USAGE
-                val (file, where) = JarPackages.resolve(name) ?: return fail("No package '$name': not in AMP/pluginDir, the env or as a path")
-                println("${file.name}: ${file.length() shr 10} KB, found in $where (${file.shown})")
-                PackageMetadata.read(file)?.let { m ->
-                    m.name?.let { println("  name: $it" + (m.version?.let { v -> " $v" } ?: "")) }
-                    m.description?.let { println("  description: $it") }
-                    m.java?.let { println("  needs Java $it") }
-                    m.entry?.let { println("  package class: $it") }
-                    if (m.config.isNotEmpty()) println("  config files: ${m.config.joinToString(", ") { it.toString() }}")
-                    if (m.env.isNotEmpty()) println("  environment: ${m.env.joinToString(", ") { it.name + if (it.required) " (required)" else "" }}")
-                    if (m.tests.isNotEmpty()) println("  tests: ${m.tests.size}")
-                    if (m.flags.isNotEmpty()) println("  flags: ${m.flags.joinToString(", ") { it.text }}")
-                } ?: println("  no metadata (META-INF/amie/package.json or a sidecar)")
-                JarPackages.origin(file.name)?.let { println("  from: ${it.url}" + (it.version?.let { v -> ", version $v" } ?: "")) }
-                val check = JarPackages.check(file)
-                println("  ${if (check.ok) "opens here: " else "does not open here: "}${check.describe}")
-                PackageMetadata.lastReport(file.name)?.let { println("  last test run: ${it.summary()}") }
-                if (check.ok) Amie.EXIT_OK else Amie.EXIT_ERROR
+                val (file, where) = runCatching { JarPackages.resolve(name) }.getOrElse { return fail("$name: ${it.message}") }
+                    ?: return fail("No package '$name': not in the env, AMP/pluginDir, as a path or in the GitHub repositories of AMP/github.json")
+                if (info(file, where)) Amie.EXIT_OK else Amie.EXIT_ERROR
             }
             else -> null
         }
+    }
+
+    /** The jars the GitHub repositories offer, as a table; a jar already in AMP/pluginDir with its version and description */
+    private fun search(query: String, only: String?): Int {
+        val repos = only?.let { listOf(it) } ?: GitHubJars.settings().repos
+        val problems = mutableListOf<String>()
+        val listed = repos.associateWith { repo -> runCatching { GitHubJars.list(repo) }.onFailure { problems += "$repo: ${it.message}" }.getOrDefault(emptyList()) }
+        val words = query.lowercase().split(' ').filter { it.isNotBlank() }
+        val rows = listed.values.flatten().distinctBy { it.name }.sortedBy { it.name }.map { jar ->
+            val local = File(pluginDir, jar.name).takeIf { it.isFile }?.let { PackageMetadata.read(it) to it }
+            Triple(jar, local, local?.first?.description.orEmpty())
+        }.filter { (jar, _, description) -> words.all { w -> w in jar.name.lowercase().removeSuffix(".jar") || w in description.lowercase() } }
+        problems.forEach { System.err.println(Style.error(it)) }
+        val from = if (repos.size == 1) repos.single() else "${repos.size} repositories"
+        if (rows.isEmpty()) {
+            println(if (query.isEmpty()) "No jars in $from" else "No jar in $from matches '$query'")
+            val empty = listed.filterValues { it.isEmpty() }.keys
+            if (empty.isNotEmpty()) println(Style.dim(
+                if (System.getenv("GITHUB_TOKEN").isNullOrBlank() && GitHubJars.settings().token.isNullOrBlank()) "A private repository lists nothing without GITHUB_TOKEN or a \"token\" in AMP/github.json"
+                else "Check that ${empty.joinToString(", ")} exist${if (empty.size == 1) "s" else ""} and the token can read ${if (empty.size == 1) "it" else "them"}"
+            ))
+            return if (problems.isEmpty()) Amie.EXIT_OK else Amie.EXIT_ERROR
+        }
+        println(Style.dim("${rows.size} jar${if (rows.size == 1) "" else "s"} in $from" + if (query.isEmpty()) "" else " matching '$query'"))
+        val width = terminalWidth() - 1
+        val cells = rows.map { (jar, local, description) ->
+            listOf(jar.name, "${(jar.size + 1023) shr 10} KB", if (repos.size == 1) jar.release ?: "" else jar.repo + (jar.release?.let { " $it" } ?: ""),
+                local?.let { (m, _) -> "Added" + (m?.version?.let { v -> " $v" } ?: "") } ?: "", description)
+        }
+        // A column no jar fills (no releases, nothing added yet) is left out
+        val shown = (0 until 4).filter { c -> cells.any { it[c].isNotEmpty() } }
+        val widths = (0 until 4).map { c -> cells.maxOf { it[c].length } }
+        val paints = listOf<(String) -> String>(Style::accent, { it }, Style::dim, Style::ok)
+        cells.forEach { row ->
+            val head = shown.joinToString("  ") { c -> paints[c](row[c].padEnd(widths[c])) }
+            val used = shown.sumOf { widths[it] + 2 }
+            val rest = row[4].let { d -> if (d.length > width - used) d.take((width - used - 1).coerceAtLeast(0)).trimEnd() + "…" else d }
+            println((head + "  " + Style.dim(rest)).trimEnd())
+        }
+        println(Style.dim("amie packages info <x.jar> downloads one and says what it holds; amie packages add <x.jar> keeps it in AMP/pluginDir"))
+        return if (problems.isEmpty()) Amie.EXIT_OK else Amie.EXIT_ERROR
+    }
+
+    /** What the jar says of itself and whether it opens here, as labelled rows; true when it opens */
+    private fun info(file: File, where: String): Boolean {
+        val meta = PackageMetadata.read(file)
+        val check = JarPackages.check(file)
+        val width = terminalWidth() - 1
+        val indent = " ".repeat(2 + LABEL)
+        fun wrapped(text: String) = wrap(text, width, indent, indent).removePrefix(indent)
+        fun row(label: String, value: String) = println(Style.dim("  " + label.padEnd(LABEL)) + value)
+        fun more(value: String) = println(indent + value)
+
+        println(Style.accent(file.name) + (meta?.name?.let { n -> "  " + n + (meta.version?.let { v -> " $v" } ?: "") } ?: ""))
+        meta?.description?.let { println(wrap(it, width)) }
+        println()
+        row("Found in", where)
+        more(Style.dim(file.shown))
+        row("Size", "${(file.length() + 1023) shr 10} KB")
+        JarPackages.origin(file.name)?.let { o -> row("From", (o.repo?.let { "$it  " } ?: "") + Style.dim(o.page.ifBlank { o.url })) }
+        meta?.java?.let { row("Java", "$it or newer") }
+        row("Class", check.entryClass ?: meta?.entry ?: Style.error("none"))
+        val dir = PackageMetadata.configDir(file.name)
+        meta?.config?.forEach { c ->
+            val d = PackageConfigFiles.Declared(c, File(dir, c.file))
+            row("Config", c.file + "  " + PackageConfigCli.state(d))
+            c.description?.let { more(Style.dim(wrapped(it))) }
+            if (d.file.isFile) more(Style.dim(d.file.shown))
+        }
+        if (meta?.config?.isNotEmpty() == true) more(Style.dim("amie packages setup ${file.name} fills them in"))
+        meta?.env?.forEach { v ->
+            val set = !System.getenv(v.name).isNullOrEmpty()
+            row("Environment", "\$${v.name}  " + when { set -> Style.ok("set"); v.required -> Style.error("not set, required"); else -> Style.dim("not set, optional") })
+            v.description?.let { more(Style.dim(wrapped(it))) }
+        }
+        meta?.tests?.takeIf { it.isNotEmpty() }?.let { tests -> row("Tests", wrapped("${tests.size}: " + tests.joinToString(", ") { it.title })) }
+        PackageMetadata.lastReport(file.name)?.let { r -> row("Last test run", (if (r.ok) Style::ok else Style::error)(r.summary())) }
+        meta?.flags?.takeIf { it.isNotEmpty() }?.let { flags -> row("Flags", flags.joinToString(", ") { it.text }) }
+        meta?.notes?.let { row("Notes", wrapped(it)) }
+        if (meta == null) row("Metadata", Style.warn("none: no META-INF/amie/package.json or sidecar"))
+        val blockers = PackageMetadata.blockers(file.name, meta)
+        row("Opens here", when {
+            !check.ok -> Style.error(wrapped("No: ${check.problem}"))
+            blockers.isNotEmpty() -> Style.error(wrapped("Not yet: " + blockers.joinToString(", ") { it.name } + " first"))
+            else -> Style.ok(if (check.amiePackage) "Yes, implements AmiePackage" else "Yes, run(String) and close() by shape")
+        })
+        return check.ok
     }
 }
 

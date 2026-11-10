@@ -132,13 +132,13 @@ internal object CompiledRuntime {
     private val version = Regex("""-\d.*$""")
 
     // Always: the Kotlin runtime, coroutines, serialization and okio (the AMP folder is an okio path), the two
-    // loggers, ONNX Runtime, the tokenizers with the DJL API they are part of, and the app's own jars
-    private val always = Regex("^(kotlin-stdlib(-jdk[78])?|kotlinx-coroutines-core(-jvm)?|kotlinx-serialization-(core|json)(-jvm)?|annotations|slf4j-api|slf4j-simple|okio(-jvm)?|onnxruntime|tokenizers|api|gson|jna|desktopApp.*|shared.*)$")
+    // loggers, ONNX Runtime, the tokenizers with the DJL API they are part of, and the app's own jars (amie.jar and runtime.jar of the CLI)
+    private val always = Regex("^(kotlin-stdlib(-jdk[78])?|kotlinx-coroutines-core(-jvm)?|kotlinx-serialization-(core|json)(-jvm)?|annotations|slf4j-api|slf4j-simple|okio(-jvm)?|onnxruntime|tokenizers|api|gson|jna|desktopApp.*|shared.*|amie|runtime)$")
     private val withDatabases = Regex("^postgresql$")
     private val withBackend = Regex("^(ktor-.*|kotlinx-io-.*)$")
 
     /** The app's own classes: a class folder of a Gradle run, or the app's jars in a packaged one */
-    private val appJar = Regex("^(desktopApp|shared)(-.*)?$")
+    private val appJar = Regex("^(desktopApp|shared|amie|runtime)(-.*)?$")
 
     fun baseName(jar: File): String = ScriptExporter.jarName(jar).removeSuffix(".jar").replace(version, "")
 

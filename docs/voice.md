@@ -1,6 +1,6 @@
 # Talk to Amie
 
-Speak, and Amie does what you said or answers out loud. `./AMP/setup/setup.sh` puts everything in place once: about 4 GB
+Speak, and Amie does what you said or answers out loud. `./scripts/setup.sh` puts everything in place once: about 4 GB
 of free ONNX models, the shell scripts and the template. Then Templates > Talk to Amie > Load, and Run. The script loads nothing until you type `talk` in the console.
 
 ## A companion on your Mac

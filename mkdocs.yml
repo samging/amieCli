@@ -1,8 +1,21 @@
 site_name: Amie desktop app
-site_description: How to use the Amie desktop app - sign-in, the sandbox, scripting, models and metrics
+site_description: How to use the Amie desktop app and the amie command line - the sandbox, scripting, packages, models and metrics
+site_url: https://samging.github.io/amieCli/
+repo_url: https://github.com/samging/amieCli
+repo_name: samging/amieCli
 docs_dir: docs
 site_dir: build/docs-site
 use_directory_urls: true
+
+# Accounts, Keycloak and the Amie backend aren't part of amie yet: their pages stay in the repository, off the site
+exclude_docs: |
+  sign-in.md
+  authentication.md
+  backend-integration.md
+
+# A link to a file of the repository outside docs/ points at it on GitHub
+hooks:
+  - scripts/mkdocs_hooks.py
 
 theme:
   name: material
@@ -28,6 +41,7 @@ theme:
 markdown_extensions:
   - admonition
   - tables
+  - attr_list
   - toc:
       permalink: true
   - pymdownx.highlight
@@ -40,6 +54,9 @@ nav:
       - The components: components.md
       - Set up a new Mac: setup-tutorial.md
       - Getting started: getting-started.md
+  - The amie command line:
+      - Learn amie: learn.md
+      - amie reference: amie-reference.md
   - Working in the app:
       - The sandbox: sandbox.md
       - Running sessions: sessions.md
@@ -50,9 +67,10 @@ nav:
       - Devices: devices.md
   - Reference:
       - The AMP folder: amp-folder.md
-      - Signing in: sign-in.md
-      - Keycloak setup: authentication.md
-      - Amie backend: backend-integration.md
+      # Accounts, Keycloak and the Amie backend aren't part of amie yet (AMIE_ACCOUNTS=1 turns them on)
+      # - Signing in: sign-in.md
+      # - Keycloak setup: authentication.md
+      # - Amie backend: backend-integration.md
       - Models page: models-page.md
       - Settings: settings.md
       - Troubleshooting: troubleshooting.md

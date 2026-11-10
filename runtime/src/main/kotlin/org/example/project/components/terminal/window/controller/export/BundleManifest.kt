@@ -45,6 +45,8 @@ data class BundleManifest(
     val leftOut: List<String> = emptyList(),
     // What the scan could not find, with Export anyway or --allow-missing; the script fails or does less without it
     val missing: List<String> = emptyList(),
+    // Exported without its jars (--no-jars): each file the bundle needs put in place, also listed in require.txt
+    val required: List<BundleRequirement> = emptyList(),
     val notes: List<String> = emptyList(),
     val files: List<BundleFile> = emptyList(),
 ) {
@@ -88,3 +90,7 @@ data class BundleSecret(val name: String, val why: String, val required: Boolean
 
 @Serializable
 data class BundleFile(val path: String, val size: Long, val sha256: String)
+
+/** A file left out of the bundle on purpose that it needs to run: [path] under the bundle, [what] names it (a Maven coordinate, a package) */
+@Serializable
+data class BundleRequirement(val path: String, val what: String)

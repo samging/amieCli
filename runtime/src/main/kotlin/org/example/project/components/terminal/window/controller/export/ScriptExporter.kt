@@ -63,6 +63,8 @@ data class ExportOptions(
     val mode: ExportMode = ExportMode.COMPILED,
     // Templates to carry besides those the script starts, by name or id: entry points of their own in the bundle
     val templates: Set<String> = emptySet(),
+    // The env's Maven packages and the package jars go in; false leaves them out and lists them in require.txt
+    val withJars: Boolean = true,
 )
 
 /** A file going into the bundle as it is; [to] is relative to the bundle. A jar with [keep] goes with only the entries it says */
@@ -108,6 +110,17 @@ object ScriptExporter {
     const val MODELS = "models/bert"
     const val LIB = "lib"
     const val SECRETS_FILE = "secrets.env"
+
+    /** What a bundle exported with --no-jars needs put in place: one line a file, its path under the bundle then what it is */
+    const val REQUIRE_FILE = "require.txt"
+
+    internal fun requireText(required: Collection<BundleRequirement>): String = buildString {
+        appendLine("# This bundle was exported without its jars. Put each file at the path given, relative to this folder, before running it:")
+        appendLine("# a Maven package's jar from the env that exported it (AMP/env/caches of that machine) or from Maven Central,")
+        appendLine("# a package jar from AMP/pluginDir of that machine. run.jar --check says which are still missing.")
+        val width = required.maxOf { it.path.length }
+        required.forEach { appendLine(it.path.padEnd(width) + "  " + it.what) }
+    }
 
     private val json = Json { prettyPrint = true; ignoreUnknownKeys = true; encodeDefaults = true }
 
@@ -296,6 +309,9 @@ object ScriptExporter {
         val problems = mutableListOf<String>()
         val notes = mutableListOf<String>()
         val leftOut = mutableListOf<String>()
+        val required = linkedMapOf<String, BundleRequirement>()
+        // A file the bundle needs that --no-jars leaves out: noted for require.txt instead of copied
+        fun require(to: String, what: String) { required.putIfAbsent(to, BundleRequirement(to, what)) }
         val secrets = linkedMapOf<String, BundleSecret>()
         val paths = linkedMapOf<String, String>()
         val relations = linkedMapOf<String, String>()
@@ -371,9 +387,11 @@ object ScriptExporter {
                 relations = relations,
                 leftOut = leftOut,
                 missing = if (options.allowMissing) problems.toList() else emptyList(),
+                required = required.values.toList(),
                 notes = notes,
             )
             generated[inAmp("pluginDir/main.kts")] = code
+            if (required.isNotEmpty()) generated[REQUIRE_FILE] = requireText(required.values)
             return ExportPlan(name, source, code, needs, copies.values.toList(), generated, folders, problems, manifest, options.mode, classPath, templateCode)
         }
 
@@ -530,7 +548,8 @@ object ScriptExporter {
             lock.packages.forEach { p ->
                 p.files.forEach { path ->
                     val file = File(envRoot, path)
-                    if (file.isFile) copy(file, inAmp("env/$path")) else problems += "${p.coordinate}: $path is missing from the env's cache"
+                    if (!options.withJars) require(inAmp("env/$path"), p.coordinate)
+                    else if (file.isFile) copy(file, inAmp("env/$path")) else problems += "${p.coordinate}: $path is missing from the env's cache"
                 }
             }
             return BundleEnv(plan.envName, plan.activeProfile, lock.declared, lock.packages.size)
@@ -557,7 +576,7 @@ object ScriptExporter {
                 }
                 val fileName = jar.name
                 val pluginDir = File(amp, "pluginDir")
-                copy(jar, inAmp("pluginDir/$fileName"))
+                if (options.withJars) copy(jar, inAmp("pluginDir/$fileName")) else require(inAmp("pluginDir/$fileName"), "package $spec")
                 if (spec != fileName) paths[spec] = "pluginDir/$fileName"
                 listOf(".package.json", ".source.json", ".tests.json").map { File(pluginDir, "$fileName$it") }.filter { it.isFile }
                     .forEach { copy(it, inAmp("pluginDir/${it.name}")) }
@@ -620,6 +639,11 @@ object ScriptExporter {
                 return
             }
             if (found.canonicalFile == File(amp, "pluginDir/main.kts").canonicalFile) return
+            // A jar the script names is a package: with --no-jars it is listed in require.txt, not carried
+            if (!options.withJars && found.extension == "jar") {
+                if (found.canonicalFile.parentFile == File(amp, "pluginDir").canonicalFile) require(inAmp("pluginDir/${found.name}"), "package ${found.name}")
+                return
+            }
             include(found, path)
             relatedTo(found)
         }

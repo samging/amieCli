@@ -167,6 +167,18 @@ exec "${'$'}java" ${'$'}JAVA_OPTS -jar "${'$'}here/run.jar" "${'$'}@"
         appendLine("VOLUME /data")
         appendLine("ENTRYPOINT [\"java\", \"-jar\", \"/app/run.jar\"]")
         appendLine("```")
+        if (m.required.isNotEmpty()) {
+            appendLine()
+            appendLine("## Jars to supply")
+            appendLine()
+            appendLine("This bundle was exported without its jars. `${ScriptExporter.REQUIRE_FILE}` lists each file with its path under this folder; put")
+            appendLine("them there before running, or under the AMP folder `AMIE_AMP_DIR` names. A Maven package the env can't find is fetched")
+            appendLine("from Maven Central when the machine reaches it; a package jar is not fetched. `./run.sh --check` says which are still missing.")
+            appendLine()
+            appendLine("| Path | What |")
+            appendLine("|---|---|")
+            m.required.forEach { appendLine("| `${it.path}` | ${it.what} |") }
+        }
         if (m.leftOut.isNotEmpty()) {
             appendLine()
             appendLine("## Left out")

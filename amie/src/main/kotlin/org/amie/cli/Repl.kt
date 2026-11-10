@@ -128,7 +128,9 @@ class Repl(private val options: Options, private val banner: Boolean = !options.
         ":env [name]"         to "the env the lines run in; with a name, that env from now on (what was defined is forgotten)",
         ":load file.kts"      to "runs the file's lines here, so what it defines stays",
         ":sessions"           to "every open session: models, groups, packages, templates in the background",
-        ":learn, :docs"       to "opens the learn book in the browser: amie chapter by chapter, from the first line to a model served",
+        ":config [x.jar]"     to "package config files: every jar's and whether each is filled in, or one jar's keys; key=value sets keys; :config --help for all of it",
+        ":setup x.jar"        to "asks for each config key of the jar, with its hint; Enter keeps a value",
+        ":docs"              to "opens the learn book in the browser: amie chapter by chapter, from the first line to a model served",
         ":terminate x"        to "closes the session named x, or #id; :terminate all closes every one",
         ":runs"               to "the recorded runs of main.kts, AMP/pluginDir/runs.jsonl",
         ":reset"              to "forgets what the lines typed here defined",
@@ -203,15 +205,38 @@ class Repl(private val options: Options, private val banner: Boolean = !options.
             "env" -> if (rest.isEmpty()) println("env '${ScriptEnvironments.current?.name ?: "default"}'" + (ScriptEnvironments.current?.let { "\n" + it.print().joinToString("\n") } ?: "")) else useEnv(rest)
             "load" -> ScriptRun.readScript(rest)?.let { runCode(it) }
             "sessions" -> listSessions().forEach(::println)
-            "learn", "docs" -> LearnBook.openInBrowser(LearnBook.writeToAmp())
+            "docs" -> LearnBook.openInBrowser(LearnBook.writeToAmp())
             "terminate" -> println(terminate(rest))
             "runs" -> HeadlessAmie.readRecentRuns().ifEmpty { listOf("No runs yet") }.forEach(::println)
             "clear" -> clearScreen()
             "amie" -> runCommandLine(rest)
+            "config" -> config(rest)
+            "setup" -> if (rest.isBlank()) System.err.println(Style.error("Missing: the jar's name, :setup x.jar")) else runCommandLine("packages setup $rest")
             "reset" -> println(if (HeadlessAmie.reset()) "Forgotten: what the lines typed here defined" else "Nothing to forget: no line has run yet")
             else -> System.err.println(Style.error("No command :$name; :help lists them"))
         }
         return true
+    }
+
+    /** `:config [x.jar] [key=value...]`: `amie packages config` at the prompt; `:config --help` its lines */
+    private fun config(rest: String) {
+        val words = CommandLine.split(rest)
+        if ("--help" !in words && "-h" !in words) return runCommandLine("packages config $rest")
+        val lines = listOf(
+            ":config" to "every jar of AMP/pluginDir with config files, and whether each is filled in",
+            ":config x.jar" to "its config files: each key with its value under the hint the file gives, a secret hidden",
+            ":config x.jar key=value..." to "sets the keys in the file that has them; a key no file has is refused unless --add",
+            ":config x.jar key=value --all-jars" to "the same keys for every jar with a file of that name, as the Google packages share google.properties",
+            ":config x.jar --file f --from path" to "copies a file in, such as a credentials JSON",
+            ":config x.jar --edit" to "opens its files in \$VISUAL or \$EDITOR, else the Mac's text editor",
+            ":setup x.jar" to "asks for each key at the terminal; Enter keeps a value, - empties it, and it offers values another jar already has",
+            "packages.config(\"x.jar\")" to "in a script, the keys and values of its .properties files, file name to key to value",
+            "packages.setConfig(\"x.jar\", \"k\" to \"v\")" to "in a script, sets keys in the file that has them; returns the keys no file has",
+        )
+        val column = lines.maxOf { it.first.length } + 2
+        val pad = " ".repeat(column)
+        println("The config files of a package jar live in ${File(AmpFolder.dir, "pluginDir/config").path}/<jar>/, written from its templates.\n")
+        lines.forEach { (command, what) -> println(Style.accent(command.padEnd(column)) + wrap(what, terminalWidth() - 1, pad, pad).removePrefix(pad)) }
     }
 
     /** `amie models list` typed at the prompt: the command line as the shell would run it, in this process */

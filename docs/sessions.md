@@ -67,8 +67,9 @@ Without the `close()`, every run of the script leaves one more `amie-demo-1.0.0.
 That is fine while you experiment (terminate them on the page, or `packages.closeAll()` at the top of the
 script), but a script you run often should close the packages it opens.
 
-Where the jar comes from: the active environment, then `AMP/pluginDir`, then a path, then the Amie server, which
-stores it in `AMP/pluginDir` so the next open is local. `packages.available()` lists what the server offers.
+Where the jar comes from: the active environment, then `AMP/pluginDir`, then a path, then the GitHub repositories of
+`AMP/github.json`; a download is stored in `AMP/pluginDir` so the next open is local. `packages.available()` lists
+what those repositories offer. The Amie server is off, like accounts and Keycloak, until `AMIE_ACCOUNTS=1` turns them on.
 
 ## Keep a session warm between runs
 
@@ -105,11 +106,11 @@ take a name and a block, run the block and return its value, so `val label: Stri
 |---|---|---|
 | `ortClosable(name) { }` | What the block opens is for that block alone. It is closed when the block ends, by a return or an exception, the last opened first. A handle kept past the block fails with `is closed`, which is what one-time use means | Used and left open, with a console line saying so: the block frees only what it opened itself |
 | `ortStatic(name) { }` | What the block opens stays open across runs until it is terminated or freed. Running the block again finds the same model session | Adopted: the scope keeps it from now on. If a closable around the block held it, static wins and the closable no longer closes it |
-| `ortTimed(name, idleSeconds) { }` | Kept like `ortStatic`, and freed by itself once nothing has used it for `idleSeconds`: the block not run again, no session it holds asked. Its rows on the Sessions tab count down | Adopted, and used from then on |
+| `ortRequired(name) { }` | Kept like `ortStatic` while anything else is in session: a model, package, group, template or background job that no required scope holds. Once nothing else is open it is freed, within a couple of seconds, and the block opens it again when next run. For what other models need beside them | Adopted, and freed with the rest |
 | `ortLimited(name, max) { }` | Kept like `ortStatic`, at most `max` sessions under the name: when one more is opened the oldest is closed first | Adopted, and one of the `max` |
-| `ortScopes.print()` | Lists what each static, timed and limited scope holds, a timed one with the time it has left, a limited one with how full it is, and returns those lines | Listed once it is adopted; a session no scope holds isn't listed |
+| `ortScopes.print()` | Lists what each static, required and limited scope holds, a limited one with how full it is, and returns those lines | Listed once it is adopted; a session no scope holds isn't listed |
 | `ortScopes.free("name")` | Closes what that scope holds, the last opened first, and returns how many were closed | Closed if the scope adopted it |
-| `ortScopes.freeAll()` | Closes what every static, timed and limited scope holds, and returns how many were closed | Closed if a scope adopted it; a session no scope holds stays open |
+| `ortScopes.freeAll()` | Closes what every static, required and limited scope holds, and returns how many were closed | Closed if a scope adopted it; a session no scope holds stays open |
 
 A template called in an `ortClosable` block belongs to that block, however deep the call is. It runs inside the block,
 so what it opens is the block's too, and when the block ends the template ends with it: first its input closes so it can
@@ -123,7 +124,7 @@ the starter **Scope functions: ortClosable and ortStatic** in the sandbox's Temp
 ```kotlin
 // ortClosable frees what its block opens when the block ends, so a handle is good for that one block.
 // ortStatic keeps what its block opens across runs, until ortScopes frees it or it is terminated.
-// ortTimed keeps it until nothing has used it for so many seconds; ortLimited keeps at most so many.
+// ortRequired keeps it while anything else is in session; ortLimited keeps at most so many.
 
 // A session open before a block is left as it is, so this starts with dummy closed.
 initMod("dummy").close()
@@ -150,8 +151,8 @@ ortScopes.print().forEach { log(it) }
 // Closes what search holds and says how many.
 log("freed ${ortScopes.free("search")} session(s)")
 
-// Kept while it is used: once nothing has asked it for 40 seconds it is freed by itself. Its row counts down.
-val recent = ortTimed("recent", 40) { initMod("dummy") }
+// Kept while anything else is in session: once nothing else is open it is freed by itself, and opened again when next run.
+val recent = ortRequired("recent") { initMod("dummy") }
 log(recent.predict("hello there"))
 
 // At most two under the name, the oldest closed when a third is opened. A model has one session, so this
@@ -167,22 +168,25 @@ What to keep in mind:
 
 - **Blocks nest and the innermost decides.** A closable inside a static block frees what it opened and leaves what the
   static block holds alone. A static block inside a closable keeps what is opened in it after the closable has ended.
-  The same goes for timed and limited blocks, which keep like a static one.
+  The same goes for required and limited blocks, which keep like a static one.
 - **What a block tracks** is what the script opens itself: `initMod("name")`, `initMod("name.jar")`, `initMod()`,
   `group("name")` and `importModelOnnx(...)`. `initAmie` stays a one-off inside a block, opened and closed for the
   call. `serve("x")` holds its own model, so a closable around it doesn't stop the listener.
 - **Packages and ONNX files are new on every call.** A static block keeps one more of them on each run, as a bare
   `initMod("x.jar")` leaves one more; a model has one session, so a model is held once however often it runs. That is
   what a limited block is for: `ortLimited("pool", 3) { initMod("x.jar") }` run again and again holds the three newest.
-- **A timed scope counts use when it looks.** One daemon timer serves every timed scope, set to the nearest time up.
-  When it is, a scope whose sessions ran since the last look counts as used and gets its `idleSeconds` again; running
-  the block again counts at once. So what it holds goes between `idleSeconds` and twice that after its last use, never
-  before, and the console says `ortTimed 'recent': nothing used it for 40s, 1 closed`.
+- **A required scope looks every couple of seconds.** While a session no required scope holds is open, a model, a
+  package, a group, a template or a background job, it keeps what it holds; once none is, the console says
+  `ortRequired 'recent': nothing else is in session, 1 closed`, and the block opens it again when next run. What a
+  model is made of doesn't count as something else: the encoders models share, an intent model's BERT encoder, and
+  the encoder and decoders of a pair, which are all the pair's own. Two required scopes don't keep each other, a
+  static or limited scope's sessions do. Nothing is freed while the scope's block is still going, while what it holds
+  runs, or while a `model.inBackground` job waits on it.
 - **A swarm answers for what it opened.** Closing a swarm closes the sessions it opened, even one a kept scope
   adopted meanwhile, and a closable closes the swarm it opened with them.
-- **A session is held by one scope at most.** A second static, timed or limited block that asks for it takes it over
+- **A session is held by one scope at most.** A second static, required or limited block that asks for it takes it over
   from the first.
-- **A name is one scope.** `ortTimed("search", 60) { }` after `ortStatic("search") { }` makes `search` a timed scope
+- **A name is one scope.** `ortRequired("search") { }` after `ortStatic("search") { }` makes `search` a required scope
   with what it holds, and the console says so; the kind and settings asked for last are the ones in force.
 - **The block in force belongs to the thread.** Work a block starts on another thread is not tracked: it behaves as
   a bare `initMod` and stays open, which is the safe direction.
@@ -340,8 +344,8 @@ The starter **What a script uses** asks a model for 30 seconds, so there is time
 |---|---|
 | `m.close()` | this session; a second call does nothing |
 | The end of an `ortClosable` block | what that block opened itself, the last opened first, after the templates it started have ended ([Scope functions](#scope-functions)) |
-| `ortScopes.free("name")`, `ortScopes.freeAll()` | what that static, timed or limited scope holds, what every one of them holds |
-| An `ortTimed` scope's time up | what it holds, once nothing has used it for its `idleSeconds` |
+| `ortScopes.free("name")`, `ortScopes.freeAll()` | what that static, required or limited scope holds, what every one of them holds |
+| An `ortRequired` scope with nothing else in session | what it holds, once no other session is open |
 | One more than `max` opened in an `ortLimited` scope | the oldest it holds |
 | `packages.closeAll()` | every open package session (each package's `close()` is called, its class loader dropped) |
 | `sessions.cancel("module:intents")`, `sessions.cancel("3")` | ONNX Runtime sessions by name or id; in-flight runs are terminated first. The model it belonged to stays open and opens it again on its next text |
@@ -369,8 +373,8 @@ closed object throws. Sessions do not survive a restart of the app: it starts wi
 | `encoder: bge was cancelled, opened again as #14` | The same for the shared encoder: it opens its ONNX Runtime session again on the next text, for every model holding it |
 | `Module 'x' not found in …/AMP/models/intents` | No model of that name was built; see the Models tab or `AMP/models/intents/` |
 | `Module 'x' can't run: head: model.onnx missing in x/; labels: 1 for 2 outputs: a` | The model lacks something it needs, so nothing of it was opened; the message names all of it. `initMod`, **Open session** and Listen refuse when the encoder folder, its `model.onnx`, `tokenizer.json` or `config.json` is missing, when the encoder's hidden size isn't what the head expects, when the head file is missing, or when there isn't one label per output. A `config.json` with no `hidden_size` doesn't count, since a DistilBERT config says `dim`. The model's **Requirements** tab shows the same lines |
-| `Package 'x.jar' can't run: key.properties: still its template, fill it in; $API_KEY: not set and required. Its config folder is …` | The package lacks something its metadata says it needs, so no instance of it was made; the message names all of it and the folder. `initMod` and **Test run** refuse when a required config file is missing, when a required one still equals its template (written there on that first open, for you to fill in) or when a required environment variable is not set. Fill it in and open it again. A package that declares nothing runs as before, and its panel's **REQUIREMENTS** shows the same verdict |
-| `package x.jar not found: not in the env, AMP/pluginDir, as a path, or on the server (…)` | The jar is nowhere local and the Amie server does not list it; check `packages.available()` and `AMP/backend.json` |
+| `Package 'x.jar' can't run: key.properties: still its template, fill it in; $API_KEY: not set and required. Its config folder is …` | The package lacks something its metadata says it needs, so no instance of it was made; the message names all of it and the folder. `initMod` and **Test run** refuse when a required config file is missing, when a required one still equals its template (written there on that first open, for you to fill in) or when a required environment variable is not set. Fill it in with `amie packages setup x.jar`, or `amie packages config x.jar key=value`, and open it again. A package that declares nothing runs as before, and its panel's **REQUIREMENTS** shows the same verdict |
+| `Package x.jar not found: not in the env, AMP/pluginDir, as a path, or in the GitHub repositories of AMP/github.json` | The jar is nowhere local and no repository of `AMP/github.json` has it; check `packages.available()` and the token for a private repository |
 | `x.jar has no package class: a public class with run(String): List and close(), and a no-arg constructor` | The jar does not follow the package contract, see [Packages](sandbox-scripting.md#packages) |
 | `Script is already running` | Wait for `Finished` or `Failed`; sessions are unaffected |
 | Many `name.jar #n` rows under Sessions | Package sessions are one per `initMod` call; close them in the script or press Terminate all |

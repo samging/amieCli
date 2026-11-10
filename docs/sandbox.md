@@ -80,7 +80,7 @@ Enter* in [Settings](settings.md) (**Editor**) turns that off; Enter then only s
 - **Marks as you type**: a moment after you stop typing (a third of a second), the editor checks the calls to the
   script API, without running or compiling anything. A mistake gets a red wavy line, and its line number a red dot;
   rest the pointer on either and a short message says what is wrong. It marks a call with too few arguments
-  (`ortTimed("x") { }`: *ortTimed needs idleSeconds*) or too many, a named argument the function hasn't
+  (`ortLimited("x") { }`: *ortLimited needs max*) or too many, a named argument the function hasn't
   (`log("x", levle = …)`: *log has no parameter levle. Did you mean level?*), a literal of the wrong type
   (`initMod(12)`: *initMod takes a String, not a number*; `learningRate = 1`: *write 1.0, not 1*), and a member that
   `amie`, or a model taken with `val m = initMod(…)` or `sessionMod(…)`, doesn't have (`amie.lgo(…)`). A call that
@@ -268,8 +268,10 @@ no amie pilot, no Gradle, no window. A script does the same with `exportJvm("mai
 
 `main.kts` can also be a template's id or a file. `--template` carries a saved template besides those the script
 starts (as often as needed), `--script` chooses the script mode below, `--plan` only says what would go in, and
-`--allow-missing` writes the bundle although something could not be included. A packaged app takes the same
-arguments after `--export-script`.
+`--allow-missing` writes the bundle although something could not be included, and `--no-jars` leaves out the env's
+Maven jars and the package jars: `require.txt` in the bundle lists each with the path to put it at, `run.jar --check`
+says which are still missing, and a run fetches a missing Maven jar from Maven Central when it can reach it, while a
+missing package jar stops it. A packaged app takes the same arguments after `--export-script`.
 
 The pane shows what the script reaches before anything is written: the env, models, encoder, groups, packages,
 databases, data, the Java it needs and the size, what a deployer has to supply (**To supply**), and what could not be
@@ -426,7 +428,7 @@ they are closed in a script or terminated on the Models page, **Sessions** tab, 
 log of what it was asked and answered. So the usual loop is: open the model at the top of the script, ask it,
 read the console, edit, Run again (instant, the model is already loaded), and close it when you are done.
 `ortClosable { }` closes what its block opened when the block ends; `ortStatic("name") { }` keeps it until it is
-freed, `ortTimed("name", 60) { }` until nothing has used it for a minute, and `ortLimited("name", 3) { }` keeps the
+freed, `ortRequired("name") { }` while anything else is in session, and `ortLimited("name", 3) { }` keeps the
 three newest. All of it, with the pitfalls, is in [Running sessions](sessions.md).
 
 `sessionMod("name")` is the other way to ask a model: a snapshot of its head, which can't train or change it, leaves

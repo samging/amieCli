@@ -4,8 +4,8 @@
 # About 4 GB of free ONNX models: the BERT models intents are built on, Whisper small.en, the Supertonic voice and
 # Llama 3.2 3B. AMIE_QWEN=1 also downloads Qwen2.5 1.5B, for faster, simpler answers.
 set -e
-# This file is AMP/setup/setup.sh of the repository; the voice files are in its voice/, the jars in a jar-jar beside it
-repo="$(cd "$(dirname "$0")/../.." && pwd)"
+# This file is scripts/setup.sh of the repository; the voice files are in its voice/, the jars in a jar-jar beside it
+repo="$(cd "$(dirname "$0")/.." && pwd)"
 amp="${AMIE_AMP_DIR:-$HOME/Library/Application Support/amie pilot/AMP}"
 # Every model goes under models/: bert, speech, text. A model still in the folder the app used before November 2026
 # (pluginDir/config/speech/models, textModels) is left there: the app moves it into models/ when it next starts

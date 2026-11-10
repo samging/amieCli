@@ -68,7 +68,7 @@ and sign-in to another checkout or machine.
 
 | Folder | Holds | Was, before November 2026 |
 |---|---|---|
-| `models/bert/`, `models/bert/bge/` | The NER model and the bge encoder every intent model is trained on; `./AMP/setup/setup.sh` puts them there | the same |
+| `models/bert/`, `models/bert/bge/` | The NER model and the bge encoder every intent model is trained on; `./scripts/setup.sh` puts them there | the same |
 | `models/intents/<name>/` | The trained intent models (the table above), with `models/intents/modules.json` as their registry | `modules/` |
 | `models/text/<name>/` | The text models, Llama and Qwen: ONNX Runtime GenAI exports | `textModels/` |
 | `models/speech/<name>/` | Whisper and the voices `speech.jar` runs | `pluginDir/config/speech/models/` |

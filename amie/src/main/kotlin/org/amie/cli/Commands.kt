@@ -236,10 +236,10 @@ object EnvsCommand : Command("envs", "The envs of AMP/env: each keeps the Maven 
 
 object TemplatesCommand : Command("templates", "The script templates of AMP/templates: the starters and the scripts saved there") {
     override val actions = listOf(
-        "templates list" to "every template: its id, name, lines and what it opens",
+        "templates list" to "every template: its name, lines, env and what it opens, and which run in this process",
         "templates show <name or id>" to "prints the template's code",
         "templates run <name or id> [args]" to "runs the template as main.kts",
-        "templates export <name or id> --out <folder>" to "exports it as a bundle that runs on its own (java -jar run.jar)",
+        "templates export <name or id> --out <folder> [--no-jars]" to "exports it as a bundle that runs on its own (java -jar run.jar); --no-jars leaves the env's Maven packages and the package jars out, listed in the bundle's require.txt",
         "templates save <name> <file> [--description <text>]" to "keeps a script file (or a project or starter by its name) as the template <name>; a name taken is saved again, its id kept",
         "templates edit <name or id>" to "opens its file in \$VISUAL or \$EDITOR and takes the edit; prints the file's path when neither is set",
         "templates delete <name or id>" to "removes the template, its code and its entry",
@@ -252,7 +252,25 @@ object TemplatesCommand : Command("templates", "The script templates of AMP/temp
                 Starters.seed()
                 val templates = ScriptTemplates.list()
                 if (templates.isEmpty()) println("No templates in ${ScriptTemplates.dir().shown}")
-                else printTable(templates.map { t -> listOf(t.id, t.name, "${t.lines} lines", t.env ?: "", t.uses.joinToString(", "), t.description.take(60)) })
+                else {
+                    // One template two lines: its labelled fields, then the description fitted to the terminal
+                    val width = terminalWidth() - 1
+                    val running = HeadlessAmie.listSessions().filter { it.kind == "Background template" }.map { it.owner }.toSet()
+                    templates.forEach { t ->
+                        val uses = if (t.uses.size > 2) "${t.uses.first()} … (${t.uses.size})" else t.uses.joinToString(", ")
+                        val fields = listOfNotNull(
+                            Style.dim("name: ") + Style.accent(t.name),
+                            Style.dim("lines: ") + t.lines,
+                            t.env?.let { Style.dim("env: ") + it },
+                            uses.takeIf { it.isNotEmpty() }?.let { Style.dim("opens: ") + it },
+                            if (t.name in running) Style.ok("running") else null,
+                        )
+                        println(fields.joinToString("  "))
+                        val d = t.description.lines().first()
+                        if (d.isNotEmpty()) println(Style.dim("  " + if (d.length > width - 2) d.take((width - 3).coerceAtLeast(0)).trimEnd() + "…" else d))
+                    }
+                    println(Style.dim("amie templates show \"<name>\" prints one, run runs it, export makes a bundle of it; a name or its id, as the file in AMP/templates. Running means in this process"))
+                }
                 Amie.EXIT_OK
             }
             "show" -> findTemplate(flags)?.let { t -> println(ScriptTemplates.code(t.id).orEmpty()); Amie.EXIT_OK } ?: Amie.EXIT_ERROR
@@ -264,7 +282,7 @@ object TemplatesCommand : Command("templates", "The script templates of AMP/temp
                 val t = findTemplate(flags) ?: return Amie.EXIT_ERROR
                 val out = flags.valueOf("--out") ?: return failUsage("export needs --out <folder>")
                 // Says what goes in and exits with its own code: 0 written, 1 a problem, 2 nothing to export
-                ExportCommand.main(arrayOf(t.id, "--out", out))
+                ExportCommand.main((listOf(t.id, "--out", out) + listOf("--no-jars").filter { flags.has(it) }).toTypedArray())
                 Amie.EXIT_OK
             }
             "save" -> {

@@ -12,13 +12,15 @@ object ExportCommand {
 
     private const val USAGE = """Exports a script of amie pilot as a bundle that runs without the app.
 
-  $FLAG <script> --out <folder> [--script] [--template <name>]... [--allow-missing] [--plan]
+  $FLAG <script> --out <folder> [--script] [--template <name>]... [--allow-missing] [--no-jars] [--plan]
 
   <script>          main.kts, the id of a template, or a file
   --out             where the bundle goes: a new or empty folder
   --script          carry the script as text with the Kotlin compiler, instead of compiled to classes (the default)
   --template        a saved template to carry besides those the script starts, by name or id; may be given more than once
   --allow-missing   write it even though something could not be included, saying so in its README
+  --no-jars         leave out the env's Maven packages and the package jars; require.txt in the bundle lists them, and
+                    run.jar says which are missing before it runs
   --plan            only say what would go in"""
 
     /** What a name on the command line or a template's row comes to: the code, a display name, and where it came from */
@@ -53,7 +55,7 @@ object ExportCommand {
         val allowMissing = "--allow-missing" in list
         val templates = list.withIndex().filter { it.value == "--template" }.mapNotNull { list.getOrNull(it.index + 1) }.toSet()
         val mode = if ("--script" in list) ExportMode.SCRIPT else ExportMode.COMPILED
-        val plan = ScriptExporter.plan(found.code, found.name, found.source, ExportOptions(allowMissing = allowMissing, mode = mode, templates = templates))
+        val plan = ScriptExporter.plan(found.code, found.name, found.source, ExportOptions(allowMissing = allowMissing, mode = mode, templates = templates, withJars = "--no-jars" !in list))
         describe(plan)
         if (onlyPlan) exitProcess(if (plan.problems.isEmpty()) 0 else 1)
         if (plan.problems.isNotEmpty() && !allowMissing) fail("Nothing written. Deal with the above, or pass --allow-missing.")
@@ -78,6 +80,7 @@ object ExportCommand {
         line("data", m.data)
         line("secrets to supply", m.secrets.filter { it.required }.map { it.name })
         m.leftOut.forEach { println("  left out: $it") }
+        if (m.required.isNotEmpty()) println("  jars left out, listed in ${ScriptExporter.REQUIRE_FILE}: ${m.required.joinToString { it.what }}")
         m.notes.forEach { println("  note: $it") }
         plan.problems.forEach { System.err.println("  PROBLEM: $it") }
     }
