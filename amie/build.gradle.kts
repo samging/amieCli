@@ -66,9 +66,10 @@ tasks.withType<Test>().configureEach {
     maxHeapSize = "1g"
     // A folder of its own, never the user's AMP
     environment("AMIE_AMP_DIR", layout.buildDirectory.dir("test-amp").get().asFile.path)
-    environment("AMIE_BACKEND_URL", "http://backend.test")
-    environment("AMIE_SITE_URL", "http://site.test")
-    environment("AMIE_S3_URL", "http://s3.test")
-    environment("KEYCLOAK_URL", "http://keycloak.test")
-    environment("AMIE_CLOUD_SAVE", "off")
+    // Accounts, Keycloak and the Amie backend are off (auth/Accounts.kt), so tests reach none of them
+    // environment("AMIE_BACKEND_URL", "http://backend.test")
+    // environment("AMIE_SITE_URL", "http://site.test")
+    // environment("AMIE_S3_URL", "http://s3.test")
+    // environment("KEYCLOAK_URL", "http://keycloak.test")
+    // environment("AMIE_CLOUD_SAVE", "off")
 }

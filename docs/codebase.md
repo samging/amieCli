@@ -8,7 +8,7 @@ using amie; [the amie guide](../amie/README.md) covers the use.
 
 | Part | Files | Lines |
 |---|---|---|
-| `amie/src/main` (the interpreter) | 12 | 1 693 |
+| `amie/src/main` (the interpreter) | 13 | 1 785 |
 | `amie/src/test` | 5 | 428 |
 | `runtime/src/main` (the engine) | 131 | 25 475 |
 | Gradle build files (`*.kts`) | 7 | 679 |
@@ -31,7 +31,7 @@ amie/                 the interpreter, Gradle module :amie, package org.amie.cli
   install.sh, jdk.sh  install on the PATH; find (or install) a JDK 21
 runtime/              the engine, Gradle module :runtime, package org.example.project
   src/main/kotlin/org/example/project/
-AMP/                  the seed of an AMP folder: setup.sh for the encoder models, a sample csv
+scripts/              setup.sh, which downloads the encoder and voice models into the AMP folder
 bin/amie              runs amie from the checkout, building it first when the sources changed
 docs/                 this documentation; most pages were written for the desktop app
 voice/                the talk-to-amie scripts: intent model plus text model plus speech
@@ -48,12 +48,13 @@ its own repository, depends on the same `runtime` module.
 |---|---|---|
 | `Main.kt` | 70 | `Amie.main(args)`: parse, print help or version, else install the console, settle the AMP folder, dispatch |
 | `CommandLine.kt` | 179 | `CommandLine.parse` into an `Invocation`: `Repl`, `Script`, `Code`, `Command`, `Help`, `Version`, `Usage`; the usage text |
-| `Output.kt` | 61 | Where console lines go: stdout, errors on stderr, internal lines only with `-v`; the slf4j properties |
+| `Output.kt` | 89 | Where console lines go: stdout, errors on stderr, internal lines only with `-v`; the slf4j properties |
 | `AmpFolder.kt` | 52 | The AMP folder to work in: `--amp`, else `AMIE_AMP_DIR`, else the user's data folder; the DJL cache; the models migration |
 | `ScriptRun.kt` | 63 | A script as main.kts: read a file, a project or a starter, pass its arguments, run it, wait for the background, keep serving |
-| `Repl.kt` | 252 | The prompt: JLine line editing, `ReplInput` deciding when a block is complete, the colon commands, `:help` |
-| `Commands.kt` | 270 | The `Command` base class (actions, flags, help), `Commands.all`, and `run`, `new`, `examples`, `sessions`, `envs`, `templates` |
-| `ModelCommands.kt` | 316 | `models`, `groups`, `packages`, `hf` |
+| `Repl.kt` | 268 | The prompt: JLine line editing, `ReplInput` deciding when a block is complete, the colon commands, `:help` |
+| `Commands.kt` | 315 | The `Command` base class (actions, flags, help), `Commands.all`, and `run`, `new`, `examples`, `sessions`, `envs`, `templates` |
+| `ModelCommands.kt` | 418 | `models` (with `info` and `remove` for every kind), `groups`, `packages`, `hf` |
+| `Picker.kt` | 114 | The arrow-key list `hf import` picks files from: up and down, space takes or leaves, Enter, `n` leaves; redrawn in place, wrapped to the terminal |
 | `Starters.kt` | 49 | The starter scripts, from the engine's `SandboxExamples`, seeded into `AMP/templates` on first use |
 | `Learn.kt` | 69 | `amie learn`: the book copied to `AMP/learn` and opened in the browser |
 | `Banner.kt` | 42 | The banner and the version line |
@@ -81,7 +82,7 @@ was the controller behind the app's terminal window. Below, `C/` stands for that
 | `C/modelLoaders` | 2 066 | ONNX Runtime sessions (`OrtSessions`) and the loaders of outside models: `imported/` opens an ONNX, TorchScript or SavedModel from `AMP/models/imported` through ONNX Runtime or DJL, `ModelFormats` scans a folder for what runs, `ModelText` reads a tokenizer and a language-model head; `builderImplement/onnxModel.kt` wraps a raw ONNX file as an `InteractionModel`; `imported/EncoderDecoderModel` is an `encoder_model.onnx` with `decoder_model.onnx` pair as two sessions plus the tokenizer, `encode`, `decoderFeeds` and `startTokens` read off the config files; `imported/Preprocessing.kt` makes the encoder's input from a file as `preprocessor_config.json` says: `Audio` reads and resamples a sound file, `LogMel` is Whisper's log-mel spectrogram, `Preprocessor.image` the resized, normalized pixels | `OrtSessions.kt`, `imported/ImportedModels.kt`, `imported/ModelFormats.kt`, `imported/DjlModel.kt`, `imported/ModelText.kt`, `imported/EncoderDecoderModel.kt`, `imported/Preprocessing.kt` |
 | `C/jetbrainDLBuilder` | 3 567 | The trainer behind `modelBuilder`: preprocess, embed the texts with the encoder (cached in `AMP/cache/embeddings`), train and score candidate heads, validate, calibrate, export the head to ONNX. Despite the name it uses neither KotlinDL nor TensorFlow: `DenseNet.kt` is plain Kotlin. Fine-tuning, the label queue and calibration live here too | `JetBuilder.kt`, `FineTune.kt`, `LabelQueue.kt`, `ModelCalibration.kt`, `Preprocessor.kt`, `EmbeddingCache.kt`, `Search.kt` |
 | `C/metrics` | 477 | What a build reports: ASCII charts, the model card written to `guide.md`, bootstrap confidence intervals, and `ModelRequirements`, what blocks a model from running | `MetricsCharts.kt`, `ModelCard.kt`, `ScoreIntervals.kt`, `ModelRequirements.kt` |
-| `C/huggingFace` | 1 436 | The Hub: search, a repo's files sorted into what runs here (`HfPair`, an encoder and decoder folder as a numbered menu with a default), the download into `AMP/models/imported`, `text` or `speech`, and `PiperVoice`, which makes a raw Piper voice ready for sherpa-onnx | `HfHub.kt`, `HfRef.kt`, `HfRepo.kt`, `HfSearch.kt`, `ImportedList.kt`, `PiperVoice.kt` |
+| `C/huggingFace` | 1 436 | The Hub: search, a repo's files sorted into what runs here (`HfPair`, an encoder and decoder folder as a menu with a default, `HfMenu` what an import offers to pick from), the download into `AMP/models/imported`, `text` or `speech`, and `PiperVoice`, which makes a raw Piper voice ready for sherpa-onnx | `HfHub.kt`, `HfRef.kt`, `HfRepo.kt`, `HfSearch.kt`, `ImportedList.kt`, `PiperVoice.kt` |
 | `C/pluginEngine` | 1 520 | Package jars: found in the env, `AMP/pluginDir`, a path, the Amie server or GitHub; opened as a model or a plugin; their metadata and tests. The speech package is one of these | `JarPackages.kt`, `PackageMeta.kt`, `GitHubJars.kt`, `JarInspector.kt`, `JarInterpreter.kt` |
 | `C/sourceFile` | 257 | CSV training data: reading a file, inferring its text and label columns | `DataSource.kt`, `SourceCsv.kt` |
 | `C/export` | 2 095 | `amie templates export`: a script packed with its models, env jars and a secrets manifest into a bundle that runs on its own; `ScriptScan`, the static scan of what a script uses, which the prompt also uses to size a line's memory | `ScriptExporter.kt`, `ScriptScan.kt`, `CompiledScripts.kt`, `BundleRunner.kt`, `ExportCommand.kt` |

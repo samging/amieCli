@@ -79,7 +79,7 @@ Defined in `ScriptLogger.kt`. The most used calls (prefix `amie.` optional):
 | `initAmie("text")` | Named entities in one text with the same NER model, opened and closed for the call: the tags are printed and returned. For many texts use `initMod()` |
 | `initMod("whisper")`, `initMod("voice")` | The speech models `speech.properties` names, or `initMod("whisper-base.en")` for one by its folder. Whisper's `.answer(wav)` is what was said, a voice's `.answer(text)` is the file it spoke into. One session each, held by a block around it, on the Sessions tab, ended by Terminate |
 | `model.can("chat")` | Whether a model can do something before you call it: `chat` and `generate` for a text model, `classify` and `fineTune` for a built one, `tag` for `initMod()`, `hear` and `speak` for speech, `run` for all |
-| `initMod("name.jar")` | A new instance of a package jar: `.run("text")` calls its `run(text)` and returns every answer, `.answer("text")` the first (null when none), `.close()` its `close()`. `predict`, `scores` and `predictions` throw on a package: it has no labels. Looked up in the env, `AMP/pluginDir`, as a path, then fetched from the Amie server, then from the repositories in `AMP/github.json`; `initMod("github:owner/repo/x.jar@ref")` takes it from that repository (below) |
+| `initMod("name.jar")` | A new instance of a package jar: `.run("text")` calls its `run(text)` and returns every answer, `.answer("text")` the first (null when none), `.close()` its `close()`. `predict`, `scores` and `predictions` throw on a package: it has no labels. Looked up in the env, `AMP/pluginDir`, as a path, then fetched from the repositories in `AMP/github.json`; `initMod("github:owner/repo/x.jar@ref")` takes it from that repository (below) |
 | `validateMetrics("name", labels = listOf(...))` | Prints the stored validation table of a model, with the range of its accuracy and macro F1 when the run kept them, and returns it: `.accuracy`, `.macroF1`, `.accuracyRange` and `.macroF1Range` (`low`, `high`; null for a run from before) |
 | `metricsChart("name", labels = listOf(...))` | ASCII bars: accuracy, macro F1 and the F1 of each label with precision, recall and support |
 | `metricsHistory("name")` | ASCII line chart of accuracy and macro F1 across every build |
@@ -94,15 +94,15 @@ Defined in `ScriptLogger.kt`. The most used calls (prefix `amie.` optional):
 | `ortClosable(name) { }` | What the block opens is for that block alone: closed when it ends, however it ends, the last opened first, so a handle kept past it fails as closed. A session open before the block is used and left open. A template started in the block works inside it and ends with it. Returns the block's value. See [Scope functions](sessions.md#scope-functions) |
 | `ortAsync(name) { }` | `ortClosable` run in the background: the block runs on a thread of its own and the call returns a job at once. What the block opens is closed when it ends, however it ends, and a template started in it ends with it. Its log lines go to the script's console. The job ends with the script, however it ends (done, stopped or terminated), and with an `ortClosable` block around the call, which waits for it: it is cancelled and what it opened is closed. `job.await()` is the block's value and rethrows its failure, `job.await(millis)` waits that long at most and gives null if it hasn't ended, `job.done`, `job.state` (running, finished, cancelled or failed), `job.cancel()`, which interrupts the block as Stop does a script. The name is `async` unless given. `val job = ortAsync("warm") { initMod("dummy").predict("turn the lights on") }`, then `log(job.await())` |
 | `ortStatic(name) { }` | What the block opens stays open across runs until it is terminated or freed, and a session open before the block is kept too. Returns the block's value. See [Scope functions](sessions.md#scope-functions). `ortForever` is its old name: a saved script that calls it still runs, and the console says the new name |
-| `ortTimed(name, idleSeconds) { }` | Kept like `ortStatic`, and freed by itself once nothing has used it for `idleSeconds`: the block not run again, no session it holds asked. Returns the block's value |
+| `ortRequired(name) { }` | Kept like `ortStatic` while anything else is in session: a model, package, group, template or background job that no required scope holds. The encoders models share, and an intent model's BERT encoder, don't count. Once nothing else is open it is freed within a couple of seconds, unless its block is still going or what it holds is running, and the block opens it again when next run. For what other models need beside them, an encoder they share, say. Returns the block's value |
 | `ortLimited(name, max) { }` | Kept like `ortStatic`, at most `max` sessions under the name: when one more is opened the oldest is closed first. Returns the block's value |
-| Memory running short | Below 32 MB of free heap or 512 MB of free RAM, the app closes the idle sessions of `ortTimed` and `ortLimited` scopes, oldest first, one at a time, with a console line for each. It never closes what is running, what a block still going holds, what has a `model.inBackground` job on it, or anything in `ortStatic`. A script that keeps such a session gets an error on its next call, as after the timer |
-| `ortScopes.print()`, `ortScopes.free("name")`, `ortScopes.freeAll()` | What each static, timed and limited scope holds; closing what one holds, or what all of them hold, which return how many were closed |
+| Memory running short | Below 32 MB of free heap or 512 MB of free RAM, the app closes the idle sessions of `ortLimited` scopes and the model `handleBy` opened, oldest first, one at a time, with a console line for each. It never closes what is running, what a block still going holds, what has a `model.inBackground` job on it, or anything in `ortStatic`. A script that keeps such a session gets an error on its next call, as after `ortScopes.free` |
+| `ortScopes.print()`, `ortScopes.free("name")`, `ortScopes.freeAll()` | What each static, required and limited scope holds; closing what one holds, or what all of them hold, which return how many were closed |
 | `handleBy(handler) { }` | Runs the block and returns its value; when it throws, the handler's value for what it threw instead, and the run goes on: `val text = handleBy({ e -> log("failed: ${e.message}"); "" }) { initMod("dummy").predict("hi") }`. A stop, a cancel (Stop, Terminate, a template's or a job's cancel) and an Error such as `OutOfMemoryError` are never handled: they go on as they would |
 | `handleBy("message")` / `handleBy(e)` | What the local text model (`AMP/models/text`, the one `assistantModel` in settings.json names, else the first) makes of an error: what is wrong and how to fix it, from the message, main.kts and the env, printed and returned. It only answers; the script stays as it is. `handleBy({ e -> handleBy(e) }) { source(Path("intents.csv")) }` asks about what the block threw. Without a text model, or short of RAM to open one, an error line says why and the answer is `""`. The model stays open five idle minutes, as **handleBy** under Still open |
 | `errorLog(last = 20)`, `handleBy()`, `handleBy(lines)` | The error terminal's log: the last error lines the console showed, oldest first, as it has them: a run's failures, what a command printed on stderr and why it failed, the app's own error lines. Emptied with the console, which a run does when it starts, so they are the run's. `handleBy()` hands the last ten of them to the local text model with main.kts and the env, so one call after a failed command or run asks about what the console showed in red; `handleBy(lines)` takes any list of lines. With nothing there it says so and asks nothing |
 | `importModelTensorflow(Path.of("…"))` | `importModel` under its old name: a saved script still runs, and the console says the new name |
-| `packages.available()`, `packages.fetch("x.jar")`, `packages.print()`, `packages.closeAll()`, `packages.github()`, `packages.check("x.jar")`, `packages.meta("x.jar")`, `packages.test("x.jar")` | The package jars the server offers, a download into `AMP/pluginDir`, the open package sessions; the jars of the GitHub repositories in `AMP/github.json`; the check `initMod` and a fetch make, a jar's metadata, and its tests run (below) |
+| `packages.available()`, `packages.fetch("x.jar")`, `packages.print()`, `packages.closeAll()`, `packages.github()`, `packages.check("x.jar")`, `packages.meta("x.jar")`, `packages.test("x.jar")` | The package jars the GitHub repositories offer, a download into `AMP/pluginDir`, the open package sessions; the jars of the GitHub repositories in `AMP/github.json`; the check `initMod` and a fetch make, a jar's metadata, and its tests run (below) |
 | `saveState("name", json)`, `loadState("name")`, `listStates()` | A JSON text kept per user on the Amie backend (signed in): store it under a name, read it back (null when absent), list the names. The sandbox has no state that outlives a run; this is how a script remembers a choice across runs and machines |
 | `database(name = "main")` | A Postgres database from `AMP/databases.json`: `.query(sql, params…)` rows as maps, `.scalar`, `.execute` for changes, `.print(sql)` a table in the console, `.tables()`, `.close()`. Failures are one Error line and a `DatabaseException` |
 | `databases.print()`, `databases.names()`, `databases.closeAll()` | The configured databases |
@@ -110,7 +110,7 @@ Defined in `ScriptLogger.kt`. The most used calls (prefix `amie.` optional):
 | `shellScript("~/bin/lookup.sh", listOf("arg one", "arg two"))` | Runs a script file with its arguments passed one by one; returns what `shell` returns |
 | `exportJvm("main.kts", to = "~/bundles/talk")` | Exports a script as a bundle that runs without the app, as **Export…** does ([Exporting a script](sandbox.md#exporting-a-script)): main.kts, a template's name or id, or a file, into a new or empty folder, the first free one under `~/amie-bundles` when `to` is empty. What can't be included stops it unless `anyway = true`; `planOnly = true` only says what would go in; `compiled = false` carries the text and the compiler. The console says what goes in and where it went; returns the bundle's folder, null when nothing was written |
 | `serve("name", port = 8765)` | Serves the model over HTTP like the Models page's Listen; returns the predict URL or null. `minScore = 0.75` makes it abstain under that score, answering `fallbackLabel` or no label ([Serving a model](serving.md#answering-only-when-it-is-sure)); `minScore = 0.0` and `fallbackLabel = ""` take saved ones away, and a min score outside 0 to 1 doesn't start it. `stopServing("name")`, `servingUrl("name")`, `accessLog("name", last = 20)` (the last requests of its [access log](serving.md), printed and returned) |
-| `importPlugin("plugin.jar")` | Runs a static `run()` or `main` of a plugin jar once (not a package session; open packages with `initMod("x.jar")`), found in the env, `AMP/pluginDir`, as a path or on the server; never throws: a missing jar, a jar without an entry point or a plugin that fails is one Error line and the script goes on |
+| `importPlugin("plugin.jar")` | Runs a static `run()` or `main` of a plugin jar once (not a package session; open packages with `initMod("x.jar")`), found in the env, `AMP/pluginDir`, as a path or in the GitHub repositories; never throws: a missing jar, a jar without an entry point or a plugin that fails is one Error line and the script goes on |
 | `implementation("group:module:version")`, `dependency("…")`, `amie.import("...")` | Add a package to the script's environment (`dependency` is another name for `implementation`) (the Models page's **Add → From Maven Central…** does the same with a search) |
 | `implementation("my.jar")`, `amie.import("my.jar")` | Add a jar file to the environment |
 | `environment(SettingsEnv("name", "profile"))`, `amie.import(SettingsEnv(...))` | Select the script environment (must be written literally) |
@@ -291,24 +291,29 @@ The charts are described with examples in [Models and metrics](models.md#reading
 
 ## Packages
 
-A package is a jar with one public class that has `run(text: String): List<String>` and `close()`, the contract the
-website checks on upload (implementing the backend's `AmiePackage` interface is the easiest way to get there).
+A package is a jar with one public class that fulfils the backend's `AmiePackage` interface: a public no-arg
+constructor, `run(input: String): List<String>` and `close()`, both required. That is the contract the website
+checks on upload and the samging/jar-jar workflow checks on every jar; implementing the interface is the easiest way
+to get there, and any class with the same methods qualifies. amie's own loader is more lenient (any non-void `run`,
+`close()` optional), so such a jar opens locally but cannot be uploaded. [The amie
+guide](../amie/README.md#writing-a-package-run-and-close) has the whole contract with an example.
 Packages are bottles: every `initMod("name.jar")` makes a fresh instance in its own class loader, so two sessions
 on the same jar never share state, and `close()` releases that instance and its loader. The jar is looked up in the
-active env, then `AMP/pluginDir`, then as a path; when it is nowhere local it is fetched from the Amie server (the
-website's `/api/jar-download`, else the S3 service's `/api/aws/jars/<name>`; addresses in `AMP/backend.json`) and
-stored in `AMP/pluginDir`, so the next open is local. Next to it, `AMP/pluginDir/<name>.source.json` records where
+active env, then `AMP/pluginDir`, then as a path; when it is nowhere local it is fetched from the GitHub
+repositories of `AMP/github.json` (below) and stored in `AMP/pluginDir`, so the next open is local. The Amie server
+(the website's `/api/jar-download`, else the S3 service's `/api/aws/jars/<name>`) is off, like accounts and Keycloak,
+until `AMIE_ACCOUNTS=1` turns them on. Next to it, `AMP/pluginDir/<name>.source.json` records where
 it came from: the exact download URL, the website page that lists and describes it (`<site>/downloads`), version,
 size, publish date and fetch time. `getStatus()` of a package session carries the `url` and `page`, and the
 Models page shows them behind the **i** toggle of the package.
 
 ```kotlin
-val echo = initMod("echo-1.0.jar")        // fetched from the server when it is not local
+val echo = initMod("echo-1.0.jar")        // fetched from GitHub when it is not local
 echo.run("hello there").forEach { log(it) }   // every answer of its run(text); echo.answer(...) the first
 log(echo.getStatus().toString())          // jar, class, source, runs
 echo.close()
 
-packages.available().forEach { log("${it.name} ${it.size}") }   // what the server lists
+packages.available().forEach { log("${it.name} ${it.size}") }   // what the repositories list
 packages.print()                                                   // open package sessions
 ```
 
@@ -318,7 +323,7 @@ A jar can come from a GitHub repository. `initMod("github:owner/repo/x.jar")` ta
 default branch; `github:owner/repo/libs/x.jar@v1.2` names a folder and a branch, tag or commit, and a github.com
 file address (`https://github.com/owner/repo/blob/main/x.jar`) works too. A name that is not a file of the
 repository is looked for among the assets of its latest release (or of the release tagged with the ref). A plain
-`initMod("x.jar")` that is nowhere local and not on the Amie server is looked for in the repositories listed in
+`initMod("x.jar")` that is nowhere local is looked for in the repositories listed in
 `AMP/github.json` (`{"repos": ["samging/jar-jar"], "token": null}`, written on first use).
 
 ```kotlin
@@ -329,7 +334,7 @@ log(tr.answer("to de: good morning"))                   // Guten Morgen
 packages.check("google-translate.jar")                  // package class com.amie.translate.GoogleTranslate (run(String) and close() by shape)
 ```
 
-**Every downloaded jar is checked before it is kept** (from GitHub and from the Amie server alike): it must read as
+**Every downloaded jar is checked before it is kept** (from GitHub, and from the Amie server when accounts are on): it must read as
 a jar, its classes must load on this app's Java, its metadata's `java` must hold, and a class must satisfy the
 package contract (public, a no-arg constructor, `run(String)` returning the answer, `close()`; implementing
 `AmiePackage` is the easiest way), and when the metadata names the `entry` class, that class must be it. The check
@@ -341,13 +346,21 @@ A jar from GitHub lands in `AMP/pluginDir` with its origin beside it (`repo`, `s
 GitHub for the file's current version and downloads it only when it changed; when GitHub cannot be reached, the
 copy already there is used. A jar of the same name that came from elsewhere is replaced only when its bytes are the
 repository's (same git blob sha); otherwise the open fails and says so. Without a token GitHub allows 60 requests an
-hour; `token` in `AMP/github.json` or `GITHUB_TOKEN` raises that and opens private repositories. On the Models page
-the repositories' jars are listed under **On GitHub**, with **Fetch from GitHub** in their menu.
+hour; `token` in `AMP/github.json` or `GITHUB_TOKEN` raises that and opens private repositories. Without a token a
+private repository answers as if it were empty, so its jars are reported as not found. On the Models page the
+repositories' jars are listed under **On GitHub**, with **Fetch from GitHub** in their menu.
+
+A jar reaches samging/jar-jar through a pull request that adds it at the top of the repository. The repository's
+**Check jars** workflow checks every jar the way amie checks a download, with the same rules as above and without
+running any code of the jar. A second step then opens each jar as `packages.test` does: it calls `run()` with every
+declared test and then `close()`, each jar in a JVM of its own. A class without `List<String> run(String)` and `close()` fails; missing metadata is a note. Once merged, a plain
+`initMod("x.jar")` finds it; a machine that already has an older copy in `AMP/pluginDir` takes the new one through a
+`github:` open. [The amie guide](../amie/README.md#packages-from-github) has the steps.
 
 The package class is the one the jar's metadata names (below) when it satisfies the contract, else the manifest's
 `Main-Class` when it does, else a class implementing an interface named `AmiePackage`, else the first class in the
-jar that does. `run` executes on the calling thread with
-the jar's class loader as context loader, and what it returns is shown one line per element. Open package sessions
+jar that does. `run` executes on amie's `amie-package-call` thread with the jar's class loader as context loader while the caller
+waits; stopping the script interrupts that thread. What it returns is shown one line per element. Open package sessions
 also appear under **Sessions** on the [Models page](models-page.md).
 
 ### What a jar needs: metadata, configuration and test runs
@@ -390,7 +403,8 @@ The runtime reads it before the jar is opened (`pluginEngine/PackageMeta.kt`, `J
   for the jar; and a public **`configure(File)`**, `configure(Path)`, `configure(String)` or
   `configure(Map<String, String>)` method of the package class, when it has one, is called with the folder right
   after the constructor (the map holds `dir` and each file in the folder by name). `importPlugin("x.jar")` loads a
-  jar the same way, but it isn't refused as below.
+  jar the same way, but it isn't refused as below. `amie packages setup <x.jar>` asks for each key at the terminal,
+  and `amie packages config <x.jar> key=value` sets one, so the files need no editor.
 - **`initMod` refuses a jar that lacks what it says it needs**, before any instance is made: a required config file
   that is missing, a required one that still equals its template (the template is for the person to fill in, so
   mark a config whose template works as it stands `"required": false`), or a required `env` variable that is not
@@ -499,7 +513,8 @@ outcome) stay in `ModelBuildProgress.history`; the console strip's tooltip names
 
 ## Saved states
 
-Signed in with Keycloak, a script can keep small JSON documents on the Amie backend, which stores them as
+Not available yet: accounts, Keycloak and the Amie backend are off, so these calls print one Error line and do
+nothing until `AMIE_ACCOUNTS=1` turns them on. Signed in then, a script can keep small JSON documents on the Amie backend, which stores them as
 `uploads/<user>/state/<name>.json` next to your packages (your devices live there as `devices`). The calls block
 like a package fetch and print one line each; a failure (a guest, an unreachable backend, a bad name) is one Error
 line and `loadState` then returns null. A name matches `[A-Za-z0-9._-]{1,64}`, a document is at most 1 MiB.

@@ -4,7 +4,11 @@ import org.example.project.components.terminal.integrations.amiePilot.Interactio
 import org.example.project.components.terminal.window.controller.LogLevel
 import org.example.project.components.terminal.window.controller.console.MemoryWatch
 import org.example.project.components.terminal.window.controller.console.logInternal
+import org.example.project.components.terminal.window.controller.console.openSessions
 import org.example.project.components.terminal.window.controller.modelLoaders.ManagedSession
+import org.example.project.components.terminal.window.controller.models.KIND_ONNX
+import org.example.project.components.terminal.window.controller.models.KIND_SHARED
+import org.example.project.components.terminal.window.controller.models.SessionInfo
 import org.example.project.components.terminal.window.controller.modelLoaders.imported.DjlModel
 import org.example.project.components.terminal.window.controller.pluginEngine.JarPackageSession
 import org.example.project.components.terminal.window.controller.runtime.ModelSession
@@ -17,10 +21,11 @@ import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * What the blocks of a script hold: `ortClosable { }` closes what its block opened when the block ends, however it
- * ends. The other three keep what their block opens across runs, under a name, until `ortScopes.free("name")`,
- * `ortScopes.freeAll()` or Terminate: `ortStatic("name") { }` for good, `ortTimed("name", idleSeconds) { }` until
- * nothing has used it for that long (the block run again, or a session it holds asked), `ortLimited("name", max) { }`
- * at most [max] sessions, the oldest closed first when one more is opened. What is opened outside every block stays
+ * ends. The others keep what their block opens across runs, under a name, until `ortScopes.free("name")`,
+ * `ortScopes.freeAll()` or Terminate: `ortStatic("name") { }` for good, `ortRequired("name") { }` while anything else
+ * is in session (freed once nothing else is open, opened again by its block when next run), `ortLimited("name", max) { }`
+ * at most [max] sessions, the oldest closed first when one more is opened. The timed kind, freed once nothing has used
+ * it for a while, is the app's own now (the assistant's model), no longer a script function. What is opened outside every block stays
  * open as it always has.
  *
  * The block in force belongs to the thread: blocks nest, the innermost decides, and work another thread does inside
@@ -33,8 +38,10 @@ import java.util.concurrent.atomic.AtomicInteger
  * calling thread too, and serve("x") inside a closable must not lose it.
  *
  * A name is one scope: asking for it again with another block function, or other settings, makes that scope the new
- * kind with what it holds, and says so. The timed scopes share one daemon timer, set to the nearest deadline and
- * looked at when it is due: a scope whose sessions ran since then counts as used and gets its time again.
+ * kind with what it holds, and says so. The timed and required scopes share one daemon timer, set to the nearest
+ * deadline, or a couple of seconds on while a required scope holds something: a timed scope whose sessions ran since
+ * the last look counts as used and gets its time again; a required scope whose holdings are all that is in session,
+ * none of them running, is freed.
  *
  * When memory runs short, MemoryWatch asks for the oldest idle session of the timed and limited scopes, one at a time
  * ([freeOldestIdle]). Those only keep something to save opening it again; a static scope was told to keep it.
@@ -43,9 +50,16 @@ object OrtScopes {
     private enum class Kind(val word: String, val call: String, val keeps: Boolean, val yields: Boolean = false) {
         CLOSABLE("closable", "ortClosable", false),
         STATIC("static", "ortStatic", true),
-        TIMED("timed", "ortTimed", true, yields = true),
+        TIMED("timed", "timed scope", true, yields = true),
         LIMITED("limited", "ortLimited", true, yields = true),
+        REQUIRED("required", "ortRequired", true);
+
+        /** Whether the timer looks at scopes of this kind: a timed one for its deadline, a required one for what else is open */
+        val looks: Boolean get() = this == TIMED || this == REQUIRED
     }
+
+    /** How often a required scope looks whether anything else is still in session */
+    private const val REQUIRED_LOOK_MS = 2000L
 
     private class Scope(var kind: Kind, val name: String, var idleSeconds: Int = 0, var max: Int = 0) {
         // What ends the templates started in an ortClosable block; the last started goes first
@@ -65,6 +79,7 @@ object OrtScopes {
         fun label(held: Int): String = when (kind) {
             Kind.TIMED -> "$named, ${secondsLeft()}s left"
             Kind.LIMITED -> "$named, $held of $max"
+            Kind.REQUIRED -> "$named, while anything else is in session"
             else -> named
         }
 
@@ -146,9 +161,16 @@ object OrtScopes {
     internal fun <T> static(name: String, block: () -> T): T = within(kept(Kind.STATIC, name), block)
 
     internal fun <T> timed(name: String, idleSeconds: Int, block: () -> T): T {
-        require(idleSeconds > 0) { "ortTimed '$name': idleSeconds must be at least 1, not $idleSeconds" }
+        require(idleSeconds > 0) { "timed scope '$name': idleSeconds must be at least 1, not $idleSeconds" }
         return within(kept(Kind.TIMED, name, idleSeconds = idleSeconds), block)
     }
+
+    /**
+     * Kept like static while anything else is in session: a model, package, group, template or background job the
+     * required scopes don't hold themselves. Once nothing else is open, what it holds is freed, and the block opens it
+     * again when next run
+     */
+    internal fun <T> required(name: String, block: () -> T): T = within(kept(Kind.REQUIRED, name), block)
 
     internal fun <T> limited(name: String, max: Int, block: () -> T): T {
         require(max > 0) { "ortLimited '$name': max must be at least 1, not $max" }
@@ -227,6 +249,7 @@ object OrtScopes {
                     entries += Held(scope, what, handle, close, closed, ort, runs, busy)
                     when {
                         before != null -> "$what moved here from ${before.scope.named}, which no longer closes it"
+                        new && scope.kind == Kind.REQUIRED -> "$what is kept while anything else is in session"
                         new -> "$what is kept until it is freed or terminated"
                         else -> "$what was open already, it is kept here now"
                     }
@@ -236,7 +259,7 @@ object OrtScopes {
                     null
                 }
                 else -> "$what was open already, so it is used and left open"
-            }.also { if (scope.kind == Kind.TIMED || before?.scope?.kind == Kind.TIMED) rearm() }
+            }.also { if (scope.kind.looks || before?.scope?.kind?.looks == true) rearm() }
         }
         said?.let { logInternal("${scope.kind.call} '${scope.name}': $it") }
         evict(scope)
@@ -258,7 +281,7 @@ object OrtScopes {
     private fun take(which: (Held) -> Boolean): List<Held> = synchronized(this) {
         entries.filter(which).also { taken ->
             entries.removeAll { it in taken }
-            if (taken.any { it.scope.kind == Kind.TIMED }) rearm()
+            if (taken.any { it.scope.kind.looks }) rearm()
         }
     }
 
@@ -279,12 +302,27 @@ object OrtScopes {
         entries.removeAll { it.scope.kind.keeps && it.closed() }
     }
 
-    // Sets the one alarm to the nearest deadline of the timed scopes that hold something; under the lock
+    // Sets the one alarm to the nearest deadline of the timed scopes that hold something, or the next look of a
+    // required scope that does; under the lock
     private fun rearm() {
         alarm?.cancel(false)
         alarm = null
-        val next = entries.filter { it.scope.kind == Kind.TIMED }.minOfOrNull { it.scope.deadline } ?: return
+        val timed = entries.filter { it.scope.kind == Kind.TIMED }.minOfOrNull { it.scope.deadline }
+        val required = if (entries.any { it.scope.kind == Kind.REQUIRED }) System.currentTimeMillis() + REQUIRED_LOOK_MS else null
+        val next = listOfNotNull(timed, required).minOrNull() ?: return
         alarm = timer.schedule(::expire, (next - System.currentTimeMillis()).coerceAtLeast(0) + 50, TimeUnit.MILLISECONDS)
+    }
+
+    /**
+     * Whether a session the required scopes don't hold themselves, [required], is open: what they stay up for. Outside
+     * the lock, since the listing reads every registry of sessions, each under a lock of its own
+     */
+    private fun othersInSession(required: List<Held>): Boolean {
+        fun own(session: SessionInfo) = required.any { it.handle === session.handle || it.ort() === session.handle }
+        // A shared encoder, and the BERT encoder session an intent model runs on, are open for the models that take
+        // them, never on their own
+        fun part(session: SessionInfo) = session.kind == KIND_SHARED || session.kind == KIND_ONNX && session.owner.startsWith("bert:")
+        return openSessions().any { !part(it) && !own(it) }
     }
 
     // The alarm: a timed scope whose sessions ran since the last look, or that is in use now, was used; one idle past
@@ -306,7 +344,19 @@ object OrtScopes {
             }
             due.forEach { (scope, held) ->
                 val closed = close(held)
-                logInternal("ortTimed '${scope.name}': nothing used it for ${scope.idleSeconds}s, $closed closed")
+                logInternal("timed scope '${scope.name}': nothing used it for ${scope.idleSeconds}s, $closed closed")
+            }
+            // A required scope stays while anything else is in session; otherwise it goes, unless its block is still
+            // going, or what it holds runs or has a job on it
+            val required = synchronized(this) { forgetClosed(); entries.filter { it.scope.kind == Kind.REQUIRED } }
+            val orphaned = if (required.isEmpty() || othersInSession(required)) emptyList() else synchronized(this) {
+                entries.filter { it.scope.kind == Kind.REQUIRED }.groupBy { it.scope }
+                    .filter { (scope, held) -> scope.inside.get() == 0 && held.none { it.busy() || ModelJobs.touch(it.handle) } }
+                    .keys.map { scope -> scope to take { it.scope === scope } }
+            }
+            orphaned.forEach { (scope, held) ->
+                val closed = close(held)
+                logInternal("ortRequired '${scope.name}': nothing else is in session, $closed closed; its block opens it again when next run")
             }
         } finally {
             synchronized(this) { rearm() }
@@ -344,6 +394,7 @@ object OrtScopes {
                     "${scope.name}: ${held.joinToString { it.what }}" + when (scope.kind) {
                         Kind.TIMED -> " (timed, ${scope.secondsLeft()}s left)"
                         Kind.LIMITED -> " (limited, ${held.size} of ${scope.max})"
+                        Kind.REQUIRED -> " (required: freed once nothing else is in session)"
                         else -> ""
                     }
                 }
@@ -359,13 +410,13 @@ object OrtScopes {
     fun free(name: String): Int {
         val wanted = name.trim()
         val scope = synchronized(this) { kept[wanted] }
-            ?: return 0.also { logInternal("ortScopes: no static, timed or limited scope '$wanted'", LogLevel.ERROR) }
+            ?: return 0.also { logInternal("ortScopes: no static, required or limited scope '$wanted'", LogLevel.ERROR) }
         return close(take { it.scope === scope }).also { logInternal("ortScopes: '$wanted' freed, $it closed") }
     }
 
     /** Closes what every kept scope holds, the last opened first; how many were closed */
     fun freeAll(): Int =
-        close(take { it.scope.kind.keeps }).also { logInternal("ortScopes: every static, timed and limited scope freed, $it closed") }
+        close(take { it.scope.kind.keeps }).also { logInternal("ortScopes: every kept scope freed, $it closed") }
 
     /** The words the row of [session] gives what holds it, such as `static search` or `closable`; null when nothing does */
     internal fun scopeOf(session: Any): String? = synchronized(this) {

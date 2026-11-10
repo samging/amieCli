@@ -366,14 +366,46 @@ weather
 
 <h2 id="packages">Packages</h2>
 <p>A package is a jar with a class that answers text, kept in <code>AMP/pluginDir</code>. It is opened like a model, by its file name, and asked with <code>run</code> or <code>answer</code>, since it has no labels of its own:</p>
-<pre>$ amie packages add ~/build/greeter.jar
+<pre>$ amie packages search google
+6 jars in samging/jar-jar matching 'google'
+$ amie packages add spotify.jar
+$ amie packages add ~/build/greeter.jar
 greeter.jar: Greeter 1.2, a package class found
 $ amie packages test greeter.jar
-$ amie packages info greeter.jar</pre>
+$ amie packages info greeter.jar
+$ amie packages setup spotify.jar
+    clientId: 
+    clientSecret: </pre>
+<p>A jar's settings are files in <code>AMP/pluginDir/config/&lt;jar&gt;/</code>. <code>amie packages setup</code> asks for each key with the hint the file gives, Enter keeping a value, and offers the values another jar already has, so one Google client fills every Google package. <code>amie packages config spotify.jar clientId=abc</code> sets a key from a script, <code>--all-jars</code> sets it for every jar with that file, and <code>amie packages config</code> alone shows every jar's files and whether each is filled in.</p>
 <pre>&gt;&gt;&gt; val greeter = initMod("greeter.jar")
 &gt;&gt;&gt; greeter.answer("hello")
 Hello to you</pre>
 <p><code>add</code> checks that the jar has a package class before copying it in. <code>test</code> runs the tests the jar declares in <code>META-INF/amie/package.json</code>, or one call with "hello" when it declares none. <code>info</code> says what the jar is, where it came from, whether it opens here and how its last test went.</p>
+<h3 id="writing-packages">Writing a package: run and close</h3>
+<p>A package class fulfils the <code>AmiePackage</code> interface: <code>List&lt;String&gt; run(String)</code> and <code>close()</code>, both required, and a public no-arg constructor. Implementing the interface is the easiest way, but any class with the same methods qualifies, so a jar needs no amie library to compile against:</p>
+<table>
+  <tr><th>Member</th><th>What amie does with it</th></tr>
+  <tr><td>The no-arg constructor</td><td>Every <code>initMod("x.jar")</code> makes a new instance, in a class loader of its own</td></tr>
+  <tr><td><code>configure(File dir)</code>, if there</td><td>Called after the constructor with <code>AMP/pluginDir/config/&lt;jar&gt;/</code>; <code>Path</code>, <code>String</code> and <code>Map</code> work too</td></tr>
+  <tr><td><code>List&lt;String&gt; run(String text)</code></td><td>What <code>.run</code> and <code>.answer</code> call; each element is one line</td></tr>
+  <tr><td><code>void close()</code></td><td>Called once, by <code>.close()</code>, <code>:terminate</code> or the end of a scope, to release what <code>run</code> opened; then the class loader is dropped</td></tr>
+</table>
+<pre>public class Greeter {
+    public java.util.List&lt;String&gt; run(String text) {
+        return java.util.List.of("Hello to you");
+    }
+
+    public void close() {}
+}</pre>
+<p>Two sessions of one jar never share an instance or a static field. <code>run</code> runs on amie's <code>amie-package-call</code> thread while the script waits; Ctrl-C interrupts it, and an exception it throws becomes the script's error. The classes must be compiled for Java 21 or older, and a Kotlin package can rely on amie's own standard library. When a jar has several classes that fit, <code>"entry"</code> in its <code>META-INF/amie/package.json</code> names the one.</p>
+<h3 id="github-packages">Packages from GitHub</h3>
+<p>A script asks for a jar in a GitHub repository with <code>github:</code>. amie downloads it, checks it as <code>packages add</code> does, and keeps it in <code>AMP/pluginDir</code> with where it came from:</p>
+<pre>&gt;&gt;&gt; val notes = initMod("github:samging/jar-jar/memory.jar")
+&gt;&gt;&gt; notes.answer("help")
+remember &lt;text&gt;  keeps it
+&gt;&gt;&gt; val files = initMod("files.jar")</pre>
+<p>A plain name like <code>files.jar</code> is looked for in the env, <code>AMP/pluginDir</code>, as a path, and last in the repositories of <code>AMP/github.json</code>, which starts with <code>samging/jar-jar</code>. <code>@main</code>, a tag or a commit after the name pins a version, and a release's assets are found too. A <code>github:</code> open downloads again only when the file changed; a plain name uses the copy already in <code>AMP/pluginDir</code>. A private repository needs <code>GITHUB_TOKEN</code> or a <code>"token"</code> in <code>AMP/github.json</code>; without one the jar is reported as not found. <code>amie packages search</code> lists what those repositories hold, and <code>amie packages add &lt;x.jar&gt;</code> downloads one by its name.</p>
+<p>To upload a jar, check it with <code>amie packages add</code> and <code>amie packages test</code>, then open a pull request that adds it at the top of samging/jar-jar. Its Check jars workflow first checks every jar the way amie checks a download, running none of its code, then opens each one as <code>amie packages test</code> does: it calls <code>run()</code> with every test the jar declares and then <code>close()</code>. The jar is there for everyone once the pull request is merged.</p>
 <h3>Maven packages</h3>
 <p>A library from Maven Central goes into the env, so a script can import it:</p>
 <pre>$ amie packages maven org.jsoup:jsoup:1.17.2
@@ -521,7 +553,7 @@ Das Haus ist wunderbar.</pre>
   <tr><th>Block</th><th>What it opens is</th></tr>
   <tr><td><code>ortClosable { }</code></td><td>Closed with the block</td></tr>
   <tr><td><code>ortStatic("name") { }</code></td><td>Kept across runs under that name</td></tr>
-  <tr><td><code>ortTimed("name", 60) { }</code></td><td>Freed when idle for that many seconds</td></tr>
+  <tr><td><code>ortRequired("name") { }</code></td><td>Kept while anything else is in session, freed once nothing else is open; its block opens it again</td></tr>
   <tr><td><code>ortLimited("name", 3) { }</code></td><td>Capped at that many</td></tr>
   <tr><td><code>ortAsync { }</code></td><td>Run in the background</td></tr>
 </table>
@@ -585,7 +617,7 @@ Das Haus ist wunderbar.</pre>
   <tr><td><code>group</code></td><td>The models of a group asked together</td></tr>
   <tr><td><code>huggingFace</code>, <code>importModel</code></td><td>A model of the Hub; one by its path. An encoder and decoder pair opens as <code>.encoder</code> and <code>.decoder</code> (<a href="#pairs">pairs</a>)</td></tr>
   <tr><td><code>serve</code>, <code>stopServing</code></td><td>A model over HTTP</td></tr>
-  <tr><td><code>ortClosable</code>, <code>ortStatic</code>, <code>ortTimed</code>, <code>ortLimited</code>, <code>ortAsync</code></td><td>How long what a block opens lives</td></tr>
+  <tr><td><code>ortClosable</code>, <code>ortStatic</code>, <code>ortRequired</code>, <code>ortLimited</code>, <code>ortAsync</code></td><td>How long what a block opens lives</td></tr>
   <tr><td><code>database</code>, <code>shell</code>, <code>shellScript</code></td><td>Postgres; the login shell</td></tr>
   <tr><td><code>implementation</code>, <code>environment</code></td><td>A Maven package into the env; the env to run in</td></tr>
   <tr><td><code>coroutineTemplate</code>, <code>template</code>, <code>input</code>, <code>output</code></td><td>A template in the background, and the two ends of its conversation</td></tr>
