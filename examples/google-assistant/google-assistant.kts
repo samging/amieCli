@@ -1,37 +1,26 @@
-import java.io.File
-import org.example.project.getDirectory
-
-// A Google assistant in one script: a model trained to tell which service a request is for, its metrics, then each
-// request answered by that package: google-calendar, google-tasks, google-drive, gmail-reader, google-translate and
-// browser. A package that isn't set up says how to set it up; nothing is created, changed or deleted
+// A Google assistant on the amie API: a model routes each request to the package that answers it, google-calendar,
+// google-tasks, google-drive, gmail-reader, google-translate or the browser. Every command only reads.
+// It answers the requests below, then each line typed at the terminal; a script can call it as a function:
+//   val assistant by template("google-assistant"); log(assistant("translate good morning to german"))
 val model = "assistant-router"
 val minScore = 0.6
 
-// 1. The data: requests written for each action, kept here and written to AMP once
-val amp = File(getDirectory().toString())
-fun writeCsv(name: String, rows: Map<String, List<String>>) {
-    val file = File(amp, name)
-    if (!file.isFile) file.writeText("text,label\n" + rows.flatMap { (label, texts) -> texts.map { "\"$it\",$label\n" } }.joinToString(""))
-}
-writeCsv("assistant-train.csv", trainRows())
-writeCsv("assistant-test.csv", testRows())
-val train = source("assistant-train.csv")
-log(train)
-relate(train, "assistant-test.csv")
+// 1. The model, built once from the rows at the bottom: the default heads compared over 5 folds.
+// amie model remove assistant-router builds it again
+if (!hasModel(model)) modelBuilder(model, buildOptions(folds = 5)) { trainRows() }
 
-// 2. The model: the bge encoder with a small head, the best of the default heads by macro F1 on the test file;
-// five folds put a range on the scores and find the rows that look mislabeled
-modelBuilder(model, train, buildOptions(folds = 5))
-
-// 3. Its metrics
+// 2. Its metrics, then the rows it never saw
 validateMetrics(model)
 metricsChart(model)
 confusionMatrix(model)
 calibrationChart(model)
 mistakes(model)
 suspects(model)
+val held = testRows().flatMap { (label, texts) -> texts.map { it to label } }
+val right = quietly { sessionMod(model) { held.count { (text, label) -> predict(text) == label } } }
+log("held-out requests: $right of ${held.size} routed right")
 
-// 4. The assistant: each request goes to the package of the action the model gives, with the command it understands
+// 3. What each action asks its package. A jar that isn't in AMP/pluginDir is fetched from GitHub by initMod
 class Route(val jar: String, val command: (String) -> String)
 
 val languages = listOf("spanish", "french", "german", "italian", "portuguese", "japanese", "chinese", "korean", "dutch",
@@ -61,33 +50,35 @@ val routes = mapOf(
     "news" to Route("browser.jar", ::newsCommand),
 )
 
-val requests = listOf(
-    "what's on my calendar this week",
-    "show my to-do list",
-    "any new emails today",
-    "find the spreadsheet called budget in my drive",
-    "translate good morning to german",
-    "how do you say thank you very much in japanese",
-    "who was ada lovelace",
-    "latest news about artificial intelligence",
-    "play some jazz music",
-)
+// 4. The assistant. ortClosable closes the model and every package it opened when the block ends
+ortClosable("assistant") {
+    val router = sessionMod(model)
+    fun answer(request: String): String {
+        val (action, score) = quietly { router.scores(request).entries.first() }
+        if (score < minScore) return "\"$request\" -> not sure (%s %.2f, under %.2f); no package asked".format(action, score, minScore)
+        val route = routes.getValue(action)
+        val command = route.command(request)
+        val lines = handleBy({ listOf("needs setup: amie package setup ${route.jar}") }) {
+            initMod(route.jar).run(command).take(3).map { it.take(160) }
+        }
+        return "\"$request\" -> $action %.2f -> ${route.jar} \"$command\"\n  ".format(score) + lines.joinToString("\n  ")
+    }
 
-val router = sessionMod(model)
-for (request in requests) {
-    val (action, score) = quietly { router.scores(request).entries.first() }
-    if (score < minScore) {
-        log("\"$request\" -> not sure (${action} %.2f, under %.2f); no package asked".format(score, minScore))
-        continue
-    }
-    val route = routes.getValue(action)
-    val command = route.command(request)
-    log("\"$request\" -> $action %.2f -> ${route.jar} \"$command\"".format(score))
-    val answer = handleBy({ e -> listOf("  needs setup: " + (e.message ?: "").substringAfter("can't run: ").substringBefore(" · ") +
-        "; amie package setup ${route.jar}") }) {
-        initMod(route.jar).let { pkg -> try { pkg.run(command).take(3).map { "  " + it.take(160) } } finally { pkg.close() } }
-    }
-    answer.forEach(::log)
+    listOf(
+        "what's on my calendar this week",
+        "show my to-do list",
+        "any new emails today",
+        "find the spreadsheet called budget in my drive",
+        "translate good morning to german",
+        "how do you say thank you very much in japanese",
+        "who was ada lovelace",
+        "latest news about artificial intelligence",
+        "play some jazz music",
+    ).forEach { log(answer(it)) }
+
+    // Then requests typed at the terminal, or sent by a script through template(); end of input (Ctrl-D) ends it
+    log("Type a request, Ctrl-D to end")
+    while (true) output(answer(input() ?: break))
 }
 
 fun trainRows(): Map<String, List<String>> = mapOf(
