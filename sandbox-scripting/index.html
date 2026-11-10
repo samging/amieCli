@@ -2372,8 +2372,8 @@ sidecar and add to the jar's own.</p>
   for the jar; and a public <strong><code>configure(File)</code></strong>, <code>configure(Path)</code>, <code>configure(String)</code> or
   <code>configure(Map&lt;String, String&gt;)</code> method of the package class, when it has one, is called with the folder right
   after the constructor (the map holds <code>dir</code> and each file in the folder by name). <code>importPlugin("x.jar")</code> loads a
-  jar the same way, but it isn't refused as below. <code>amie packages setup &lt;x.jar&gt;</code> asks for each key at the terminal,
-  and <code>amie packages config &lt;x.jar&gt; key=value</code> sets one, so the files need no editor. In a script, <code>packages.config("x.jar")</code> reads the keys
+  jar the same way, but it isn't refused as below. <code>amie package setup &lt;x.jar&gt;</code> asks for each key at the terminal,
+  and <code>amie package config &lt;x.jar&gt; key=value</code> sets one, so the files need no editor. In a script, <code>packages.config("x.jar")</code> reads the keys
   and <code>packages.setConfig("x.jar", "key" to "value")</code> sets them; at the prompt, <code>:config</code> and <code>:setup</code> do the same.</li>
 <li><strong><code>initMod</code> refuses a jar that lacks what it says it needs</strong>, before any instance is made: a required config file
   that is missing, a required one that still equals its template (the template is for the person to fill in, so

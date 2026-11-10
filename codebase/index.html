@@ -1749,7 +1749,7 @@ was the controller behind the app's terminal window. Below, <code>C/</code> stan
 <tr>
 <td><code>C/export</code></td>
 <td>2 095</td>
-<td><code>amie templates export</code>: a script packed with its models, env jars (or <code>require.txt</code> naming them with <code>--no-jars</code>) and a secrets manifest into a bundle that runs on its own; <code>ScriptScan</code>, the static scan of what a script uses, which the prompt also uses to size a line's memory</td>
+<td><code>amie template export</code>: a script packed with its models, env jars (or <code>require.txt</code> naming them with <code>--no-jars</code>) and a secrets manifest into a bundle that runs on its own; <code>ScriptScan</code>, the static scan of what a script uses, which the prompt also uses to size a line's memory</td>
 <td><code>ScriptExporter.kt</code>, <code>ScriptScan.kt</code>, <code>CompiledScripts.kt</code>, <code>BundleRunner.kt</code>, <code>ExportCommand.kt</code></td>
 </tr>
 <tr>
@@ -1953,7 +1953,7 @@ ONNX Runtime or DJL (an <code>encoder_model.onnx</code> with <code>decoder_model
 <li><code>BundledModels.root</code> is where the encoder lives: <code>amie.models.dir</code>, <code>AMIE_MODELS_DIR</code>, else <code>AMP/models/bert</code>
    with the bge encoder in <code>bge/</code>. <code>scripts/setup.sh</code> downloads both.</li>
 <li><code>OrtScopes.opened</code> registers the session with an enclosing <code>ortClosable { }</code> block when there is one, and
-   <code>ScriptRuns.opened("model:&lt;id&gt;")</code> records it on the run, which is what <code>:sessions</code> lists and <code>:terminate</code> closes.</li>
+   <code>ScriptRuns.opened("model:&lt;id&gt;")</code> records it on the run, which is what <code>:session</code> lists and <code>:terminate</code> closes.</li>
 </ol>
 <p><code>modelBuilder(name, data)</code> is <code>SandboxLogger.modelBuilder</code> → <code>parseLabeledData</code> → <code>JetBuilder.buildClassifier</code>:
 preprocess, embed through the encoder (cache in <code>AMP/cache/embeddings</code>), train and score candidate heads, validate and
@@ -2007,12 +2007,12 @@ the same at the <code>INTERNAL</code> level, which <code>Output.print</code> dro
 <tr>
 <td><code>env/&lt;name&gt;/</code></td>
 <td>an env: <code>env.lock.json</code>, <code>libs/</code>, <code>groups.json</code>; <code>env/caches/</code> the shared Maven cache</td>
-<td><code>envs new</code>, a script's <code>environment(...)</code></td>
+<td><code>env new</code>, a script's <code>environment(...)</code></td>
 </tr>
 <tr>
 <td><code>templates/</code></td>
 <td>the starters and saved scripts</td>
-<td><code>amie examples</code>, <code>templates</code></td>
+<td><code>amie example</code>, <code>amie template</code></td>
 </tr>
 <tr>
 <td><code>projects/&lt;name&gt;/main.kts</code></td>

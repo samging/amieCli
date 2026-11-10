@@ -1923,7 +1923,7 @@ closed object throws. Sessions do not survive a restart of the app: it starts wi
 </tr>
 <tr>
 <td><code>Package 'x.jar' can't run: key.properties: still its template, fill it in; $API_KEY: not set and required. Its config folder is …</code></td>
-<td>The package lacks something its metadata says it needs, so no instance of it was made; the message names all of it and the folder. <code>initMod</code> and <strong>Test run</strong> refuse when a required config file is missing, when a required one still equals its template (written there on that first open, for you to fill in) or when a required environment variable is not set. Fill it in with <code>amie packages setup x.jar</code>, or <code>amie packages config x.jar key=value</code>, and open it again. A package that declares nothing runs as before, and its panel's <strong>REQUIREMENTS</strong> shows the same verdict</td>
+<td>The package lacks something its metadata says it needs, so no instance of it was made; the message names all of it and the folder. <code>initMod</code> and <strong>Test run</strong> refuse when a required config file is missing, when a required one still equals its template (written there on that first open, for you to fill in) or when a required environment variable is not set. Fill it in with <code>amie package setup x.jar</code>, or <code>amie package config x.jar key=value</code>, and open it again. A package that declares nothing runs as before, and its panel's <strong>REQUIREMENTS</strong> shows the same verdict</td>
 </tr>
 <tr>
 <td><code>Package x.jar not found: not in the env, AMP/pluginDir, as a path, or in the GitHub repositories of AMP/github.json</code></td>

@@ -1307,27 +1307,31 @@
 </thead>
 <tbody>
 <tr>
-<td><code>models</code></td>
+<td><code>model</code></td>
 <td><code>list</code>, <code>build &lt;csv&gt; --name n [--test csv]</code>, <code>validate &lt;n&gt;</code>, <code>serve &lt;n&gt; [--port]</code>, <code>info &lt;n&gt;</code></td>
 </tr>
 <tr>
-<td><code>groups</code></td>
+<td><code>group</code></td>
 <td><code>list</code>, <code>add &lt;group&gt; &lt;models&gt;</code>, <code>remove &lt;group&gt; [model]</code>, <code>open &lt;group&gt; [texts]</code>; <code>--env</code> for another env</td>
 </tr>
 <tr>
-<td><code>packages</code></td>
+<td><code>package</code></td>
 <td><code>list</code>, <code>search [query]</code>, <code>add &lt;jar&gt;</code>, <code>maven &lt;coordinate&gt;</code>, <code>test &lt;jar&gt;</code>, <code>info &lt;jar&gt;</code>, <code>config [jar] [key=value]</code>, <code>setup &lt;jar&gt;</code></td>
 </tr>
 <tr>
-<td><code>envs</code></td>
+<td><code>env</code></td>
 <td><code>list</code>, <code>new &lt;name&gt;</code>, <code>use &lt;name&gt;</code>, <code>show &lt;name&gt;</code></td>
 </tr>
 <tr>
-<td><code>templates</code></td>
-<td><code>list</code>, <code>show &lt;name&gt;</code>, <code>run &lt;name&gt;</code>, <code>export &lt;name&gt; --out &lt;folder&gt;</code></td>
+<td><code>template</code></td>
+<td><code>list</code>, <code>new &lt;name&gt; [--project p]</code>, <code>show &lt;name&gt;</code>, <code>run &lt;name&gt;</code>, <code>edit &lt;name&gt;</code>, <code>save &lt;name&gt; &lt;file&gt;</code>, <code>delete &lt;name&gt;</code>, <code>export &lt;name&gt; --out &lt;folder&gt;</code></td>
 </tr>
 <tr>
-<td><code>sessions</code></td>
+<td><code>project</code></td>
+<td><code>list</code>, <code>show &lt;p&gt;</code>, <code>new &lt;p&gt; [templates]</code>, <code>add &lt;p&gt; &lt;templates&gt; [--at n]</code>, <code>remove &lt;p&gt; &lt;template&gt;</code>, <code>run &lt;p&gt;</code>, <code>edit &lt;p&gt;</code></td>
+</tr>
+<tr>
+<td><code>session</code></td>
 <td><code>list</code>, <code>runs</code>, <code>terminate &lt;name \| #id \| all&gt;</code></td>
 </tr>
 <tr>

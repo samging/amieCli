@@ -1102,6 +1102,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#next-projects-of-templates-and-one-name-per-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Next: projects of templates, and one name per command
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#110-encoders-and-decoders-projects-and-the-templates-three-verbs" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1442,6 +1453,17 @@
 
 
 <h1 id="whats-new">What's new<a class="headerlink" href="#whats-new" title="Permanent link">&para;</a></h1>
+<h2 id="next-projects-of-templates-and-one-name-per-command">Next: projects of templates, and one name per command<a class="headerlink" href="#next-projects-of-templates-and-one-name-per-command" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Projects group templates.</strong> <code>amie template new &lt;name&gt; [--project p]</code> makes a template and opens it in <code>$VISUAL</code> or
+  <code>$EDITOR</code>. A project (<code>amie new p [templates]</code>) keeps an ordered list of templates in <code>AMP/projects/p/templates.txt</code>,
+  and <code>amie run p</code> runs them one after another in the env <code>p</code>, then the project's <code>main.kts</code>, stopping at the first that
+  fails. <code>amie project list</code>, <code>show</code>, <code>add</code> (<code>--at n</code> to place or move one), <code>remove</code>, <code>run</code> and <code>edit</code>. See
+  <a href="../learn/#projects">Templates grouped into a project</a>.</li>
+<li><strong>Every command is singular.</strong> <code>amie model</code>, <code>group</code>, <code>package</code>, <code>env</code>, <code>template</code>, <code>project</code>, <code>session</code> and
+  <code>example</code>; at the prompt <code>:session</code>. The plural names are gone.</li>
+<li><strong><code>:docs</code> opens the book</strong>, <code>amie docs</code> from the shell; <code>:learn</code> and <code>amie learn</code> are gone.</li>
+</ul>
 <h2 id="110-encoders-and-decoders-projects-and-the-templates-three-verbs">1.1.0: encoders and decoders, projects, and the templates' three verbs<a class="headerlink" href="#110-encoders-and-decoders-projects-and-the-templates-three-verbs" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Encoder and decoder pairs.</strong> A sequence-to-sequence export (T5, BART, Marian translation, Whisper) is two ONNX
@@ -1458,9 +1480,9 @@
   <code>m.startTokens(encoded, "de", "translate")</code> gives the decoder's first ids from the config's forced tokens, each
   replaceable by a name the config knows, Whisper's language detected when none is given. A script's own part is the
   twelve-line greedy loop. Whisper tiny transcribes a spoken wav exactly, and a quantized T5 translates.</li>
-<li><strong><code>amie models remove &lt;name&gt;</code>.</strong> Removes a model's folder whatever its kind, an intent, text, speech or imported
+<li><strong><code>amie model remove &lt;name&gt;</code>.</strong> Removes a model's folder whatever its kind, an intent, text, speech or imported
   model, closing a session of it first. Paths are printed as a shell takes them, <code>Application\ Support</code>.</li>
-<li><strong><code>amie models info</code> on an imported model</strong> lists its files by role (the encoder, the decoders, or the model and the
+<li><strong><code>amie model info</code> on an imported model</strong> lists its files by role (the encoder, the decoders, or the model and the
   files beside it), the config and tokenizer files with their sizes, the start and end tokens, its labels, and how
   <code>initMod</code> opens it.</li>
 <li><strong><code>ortRequired</code> in place of <code>ortTimed</code>.</strong> <code>ortRequired("name") { }</code> keeps what its block opens while anything else is
@@ -1472,14 +1494,14 @@
   and a blank line between them, as wide as the terminal; <code>:help</code> wraps the same way.</li>
 <li><strong>Projects.</strong> <code>amie new &lt;name&gt;</code> makes <code>AMP/projects/&lt;name&gt;/main.kts</code> to start from, in an env of the same name;
   <code>amie run &lt;name&gt;</code> runs it.</li>
-<li><strong>Export without the jars.</strong> <code>amie templates export &lt;name&gt; --out &lt;folder&gt; --no-jars</code> leaves the env's Maven jars and
+<li><strong>Export without the jars.</strong> <code>amie template export &lt;name&gt; --out &lt;folder&gt; --no-jars</code> leaves the env's Maven jars and
   the package jars out of the bundle and writes <code>require.txt</code>, one line a file with the path to put it at under the
   bundle; the README has the same table. <code>run.jar --check</code> says which are still missing. A run with a Maven jar missing
   fetches it from Maven Central when it can reach it, and with a package jar missing stops and names it. Compiled
   bundles from <code>amie</code> now carry the app's own classes: before this the runner was missing from <code>run.jar</code>.</li>
-<li><strong>Templates: save, edit, delete.</strong> <code>amie templates save &lt;name&gt; &lt;file&gt;</code> keeps a script file, a project or a starter as a
-  template (a name taken is saved again, its id kept); <code>amie templates edit &lt;name&gt;</code> opens its file in <code>$VISUAL</code> or
-  <code>$EDITOR</code> and takes the edit, or prints the path when neither is set; <code>amie templates delete &lt;name&gt;</code> removes it.</li>
+<li><strong>Templates: save, edit, delete.</strong> <code>amie template save &lt;name&gt; &lt;file&gt;</code> keeps a script file, a project or a starter as a
+  template (a name taken is saved again, its id kept); <code>amie template edit &lt;name&gt;</code> opens its file in <code>$VISUAL</code> or
+  <code>$EDITOR</code> and takes the edit, or prints the path when neither is set; <code>amie template delete &lt;name&gt;</code> removes it.</li>
 <li><strong>Piper voices import ready to speak.</strong> A Piper voice from the Hub (<code>rhasspy/piper-voices</code>, a path to one voice) lands
   in <code>AMP/models/speech</code>, laid out as sherpa-onnx wants it, its ONNX metadata added when the export lacks it. A path
   that names no voice is refused instead of another voice being taken in its place.</li>
@@ -1488,8 +1510,8 @@
 <li><strong>Fixes at the prompt.</strong> <code>:help</code> lists every command line of amie, each as <code>amie &lt;command&gt; --help</code> when it has more
   than one action, with no example line repeated. The line editor no longer expands <code>!!</code> as shell history, which broke
   Kotlin's non-null assertion in a pasted block. A name <code>initMod</code> can't find says every folder it looked in and names
-  <code>amie models list</code> and <code>amie hf import</code>. A tokenizer with an empty "Precompiled" normalizer (Marian's) no longer
-  aborts the process. <code>amie models list</code> wraps a model's labels instead of running off the row, and a pair shows none.</li>
+  <code>amie model list</code> and <code>amie hf import</code>. A tokenizer with an empty "Precompiled" normalizer (Marian's) no longer
+  aborts the process. <code>amie model list</code> wraps a model's labels instead of running off the row, and a pair shows none.</li>
 </ul>
 <h2 id="less-said-twice">Less said twice<a class="headerlink" href="#less-said-twice" title="Permanent link">&para;</a></h2>
 <ul>
