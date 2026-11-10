@@ -1,0 +1,1545 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="How to use the Amie desktop app and the amie command line - the sandbox, scripting, packages, models and metrics">
+      
+      
+      
+        <link rel="canonical" href="https://samging.github.io/amieCli/pi5/">
+      
+      
+        <link rel="prev" href="../troubleshooting/">
+      
+      
+        <link rel="next" href="../source-layout/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Raspberry Pi 5 - Amie desktop app</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#raspberry-pi-5" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Amie desktop app" class="md-header__button md-logo" aria-label="Amie desktop app" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Amie desktop app
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Raspberry Pi 5
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/samging/amieCli" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    samging/amieCli
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Amie desktop app" class="md-nav__button md-logo" aria-label="Amie desktop app" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Amie desktop app
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/samging/amieCli" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    samging/amieCli
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start here
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start here
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How the app works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The components
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup-tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set up a new Mac
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://samging.github.io/amieCli/learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The amie book
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working in the app
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working in the app
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sandbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The sandbox
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sandbox-scripting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scripting API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook, scripts to copy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models and metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../serving/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Serving a model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../amp-folder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The AMP folder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models-page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models page
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raspberry Pi 5
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raspberry Pi 5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-was-measured-and-what-that-is-not" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What was measured, and what that is not
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Results
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-changed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What changed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-was-left-alone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What was left alone
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-it-on-a-raspberry-pi-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running it on a Raspberry Pi 5
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source-layout/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where the code is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../codebase/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The code of amie, what is where and why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-was-measured-and-what-that-is-not" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What was measured, and what that is not
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Results
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-changed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What changed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-was-left-alone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What was left alone
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-it-on-a-raspberry-pi-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running it on a Raspberry Pi 5
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="raspberry-pi-5">Raspberry Pi 5<a class="headerlink" href="#raspberry-pi-5" title="Permanent link">&para;</a></h1>
+<p>How the app was measured for a Raspberry Pi 5, what that measurement can and cannot say, what it changed, and the
+one command that measures a real Pi 5.</p>
+<h2 id="what-was-measured-and-what-that-is-not">What was measured, and what that is not<a class="headerlink" href="#what-was-measured-and-what-that-is-not" title="Permanent link">&para;</a></h2>
+<p>The app has a headless benchmark: <code>--bench</code> starts it with no window, measures the parts a person waits for, prints one
+<code>bench:</code> line for each and writes the same as JSON next to the AMP folder. It runs on a scratch AMP folder
+(<code>AMIE_AMP_DIR</code>), never on yours.</p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jvm start to main</td>
+<td>The JVM's start up to the app's <code>main</code></td>
+</tr>
+<tr>
+<td>onnx runtime loaded</td>
+<td>ONNX Runtime's native library, loaded by the first session</td>
+</tr>
+<tr>
+<td>encoder loaded, first predict</td>
+<td>The bge encoder opened and shared, then the first answer of the dummy model through it</td>
+</tr>
+<tr>
+<td>100 predicts</td>
+<td>The median and the 95th percentile of a hundred answers, with the threads the app was given and with one</td>
+</tr>
+<tr>
+<td>1,000 rows embedded</td>
+<td>What a build does with its rows, in batches of rows of one token count</td>
+</tr>
+<tr>
+<td>readSnapshot with 20 models</td>
+<td>The Models page's read of twenty models with ten runs each, the first time and again; the plots it leaves to a thread of its own are timed on a line of their own</td>
+</tr>
+<tr>
+<td>script engine, first compile and run</td>
+<td>The Kotlin compiler a first Run waits for, with a small script compiled and run</td>
+</tr>
+<tr>
+<td>8 background templates</td>
+<td>Eight templates started at once, each with an engine of its own, and how long until all ended</td>
+</tr>
+<tr>
+<td>compiled bundle</td>
+<td>A script exported compiled to classes (the export), then <code>java -jar run.jar</code> in a JVM of its own (the run)</td>
+</tr>
+<tr>
+<td>peak resident, peak heap</td>
+<td>The most the process held, sampled four times a second; heap against its limit</td>
+</tr>
+</tbody>
+</table>
+<p><strong>What the numbers on this page are.</strong> They were taken on an Apple M5 Mac with 16 GB and a warm file cache, with the JVM
+held to a Pi 5's budget as far as a JVM allows: <code>-XX:ActiveProcessorCount=4</code> (the JVM sees four cores, and sizes its
+thread pools, its JIT threads and the app's ONNX threads by four) and <code>-Xmx2g</code> or <code>-Xmx4g</code>, which are the heaps the 4 GB
+and the 8 GB model get. <strong>They are not a Pi 5's numbers.</strong> A Pi 5's four Cortex-A76 cores at 2.4 GHz are slower than this Mac's
+cores for this kind of work (by how much, this page cannot say), so every time here is a floor for the Pi, not a forecast of it. The
+figures that are about the app's shape (which part costs most, how much memory it holds, how a change moved a part)
+carry over; the absolute milliseconds do not.</p>
+<p>What cannot be imitated on this Mac:</p>
+<ul>
+<li><strong>Slower cores.</strong> The Mac's cores are faster, and the cap above limits how many the JVM uses, not how quick they are.
+  The encoder's 14 ms answer and 2 ms per row will be longer on a Pi.</li>
+<li><strong>The SD card.</strong> Here the encoder (415 MB) and the libraries came from a warm cache on an NVMe disk. A Pi reads them
+  from an SD card or an SSD, cold on the first start, and the first load of the encoder will be seconds there.
+  Everything below that is "loaded" is the warm figure.</li>
+<li><strong>Memory pressure and swap.</strong> The Mac has 16 GB, so nothing was swapped. The peak resident of 1.7 to 2.0 GB is the
+  figure to hold against a 4 GB Pi's RAM, with the system and the window on top of it.</li>
+<li><strong>No GPU, and the window.</strong> The benchmark has no window. Compose on a Pi's graphics stack (software rendering or
+  the Mesa driver, Skiko's arm64 Linux build) is not exercised, so how the window feels is not measured here.</li>
+<li><strong>Thermals and the governor.</strong> A Pi 5 without a cooler throttles under the load of a build; the script below prints
+  <code>vcgencmd get_throttled</code> and the governor so a throttled run can be told.</li>
+</ul>
+<h2 id="results">Results<a class="headerlink" href="#results" title="Permanent link">&para;</a></h2>
+<p>Each run was a fresh JVM, one at a time. The first column of figures is the app as it was before the changes below (the
+two switches that turn them off were set), the second is after them, both with <code>-XX:ActiveProcessorCount=4 -Xmx2g</code>;
+the third is <code>-Xmx4g</code>. "After" is a second start on the same AMP folder, which is what a Pi does every time but its first.</p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th style="text-align: right;">Before, 2 GB</th>
+<th style="text-align: right;">After, 2 GB</th>
+<th style="text-align: right;">After, 4 GB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jvm start to main</td>
+<td style="text-align: right;">151 ms</td>
+<td style="text-align: right;">165 ms</td>
+<td style="text-align: right;">165 ms</td>
+</tr>
+<tr>
+<td>onnx runtime loaded</td>
+<td style="text-align: right;">1,106 ms</td>
+<td style="text-align: right;">36 ms</td>
+<td style="text-align: right;">897 ms (first start)</td>
+</tr>
+<tr>
+<td>encoder loaded</td>
+<td style="text-align: right;">4,924 ms</td>
+<td style="text-align: right;">775 ms</td>
+<td style="text-align: right;">798 ms</td>
+</tr>
+<tr>
+<td>first predict</td>
+<td style="text-align: right;">33 ms</td>
+<td style="text-align: right;">35 ms</td>
+<td style="text-align: right;">29 ms</td>
+</tr>
+<tr>
+<td>100 predicts, 4 threads (median, p95)</td>
+<td style="text-align: right;">14.2, 15.2 ms</td>
+<td style="text-align: right;">14.1, 17.9 ms</td>
+<td style="text-align: right;">14.1, 15.2 ms</td>
+</tr>
+<tr>
+<td>100 predicts, 1 thread (median, p95)</td>
+<td style="text-align: right;">47.4, 47.7 ms</td>
+<td style="text-align: right;">47.4, 47.6 ms</td>
+<td style="text-align: right;">47.3, 47.7 ms</td>
+</tr>
+<tr>
+<td>1,000 rows embedded</td>
+<td style="text-align: right;">12,517 ms</td>
+<td style="text-align: right;">12,675 ms</td>
+<td style="text-align: right;">12,320 ms</td>
+</tr>
+<tr>
+<td>readSnapshot, 20 models, first</td>
+<td style="text-align: right;">259 ms</td>
+<td style="text-align: right;">242 ms</td>
+<td style="text-align: right;">259 ms</td>
+</tr>
+<tr>
+<td>readSnapshot, again</td>
+<td style="text-align: right;">4 ms</td>
+<td style="text-align: right;">4 ms</td>
+<td style="text-align: right;">4 ms</td>
+</tr>
+<tr>
+<td>plots drawn in the background</td>
+<td style="text-align: right;">1,761 ms</td>
+<td style="text-align: right;">1,761 ms</td>
+<td style="text-align: right;">1,768 ms</td>
+</tr>
+<tr>
+<td>script engine, first compile and run</td>
+<td style="text-align: right;">2,175 ms</td>
+<td style="text-align: right;">2,095 ms (365 ms warmed, see below)</td>
+<td style="text-align: right;">2,094 ms</td>
+</tr>
+<tr>
+<td>a second engine, compile and run</td>
+<td style="text-align: right;">222 ms</td>
+<td style="text-align: right;">242 ms</td>
+<td style="text-align: right;">225 ms</td>
+</tr>
+<tr>
+<td>8 background templates, started, finished</td>
+<td style="text-align: right;">36 ms, 1,842 ms</td>
+<td style="text-align: right;">34 ms, 1,596 ms</td>
+<td style="text-align: right;">33 ms, 1,570 ms</td>
+</tr>
+<tr>
+<td>compiled bundle: export (20 MB)</td>
+<td style="text-align: right;">3,304 ms</td>
+<td style="text-align: right;">3,300 ms</td>
+<td style="text-align: right;">3,485 ms</td>
+</tr>
+<tr>
+<td>compiled bundle: <code>java -jar run.jar</code></td>
+<td style="text-align: right;">220 ms</td>
+<td style="text-align: right;">216 ms</td>
+<td style="text-align: right;">224 ms</td>
+</tr>
+<tr>
+<td>peak resident</td>
+<td style="text-align: right;">1.74 GB</td>
+<td style="text-align: right;">1.99 GB</td>
+<td style="text-align: right;">2.03 GB</td>
+</tr>
+<tr>
+<td>peak heap</td>
+<td style="text-align: right;">628 MB of 2 GB</td>
+<td style="text-align: right;">805 MB of 2 GB</td>
+<td style="text-align: right;">602 MB of 4 GB</td>
+</tr>
+<tr>
+<td>total</td>
+<td style="text-align: right;">35.3 s</td>
+<td style="text-align: right;">29.9 s</td>
+<td style="text-align: right;">30.6 s</td>
+</tr>
+</tbody>
+</table>
+<p>A run with <code>-Xmx1g -XX:+UseSerialGC -Damie.ort.threads=3</code> (what the troubleshooting page suggests for a 4 GB Pi) held
+455 MB of its 990 MB heap at the peak and 1.67 GB resident; its answers took 18.1 ms at the median and its rows 14.1 ms
+each, against 14 and 12.7 ms with four threads. Eight templates still fit in that heap.</p>
+<p>Where the time goes, from these runs: <strong>the encoder's compute is what costs most.</strong> A build spends 12.4 ms of every
+row in ONNX Runtime (a hundred answers took 1.4 s with four threads and 4.7 s with one), so a thousand rows take 12 of
+the benchmark's 30 seconds. After it come the first script compile (2.1 s) and the export of a compiled bundle (3.3 s,
+which happens once per export, not per run). The Models page's read, the answers and the bundle's run are small.</p>
+<h2 id="what-changed">What changed<a class="headerlink" href="#what-changed" title="Permanent link">&para;</a></h2>
+<p>Each of these was measured before and after on the runs above. The switch in the last column turns it off, which is how
+the "before" column was taken.</p>
+<table>
+<thead>
+<tr>
+<th>Change</th>
+<th style="text-align: right;">Before</th>
+<th style="text-align: right;">After</th>
+<th>Switch off</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>No call home from DJL's tokenizer.</strong> The tokenizer library, on the first tokenizer, asks the EC2 metadata address who it runs on and then reports to an S3 bucket. Off AWS the first call waits for its connection to time out, which held the encoder's load. The app now sets DJL's own switch (<code>OPT_OUT_TRACKING</code>) before any tokenizer is made, unless the machine set it.</td>
+<td style="text-align: right;">encoder loaded 4,924 ms</td>
+<td style="text-align: right;">775 to 823 ms</td>
+<td><code>-Damie.djl.telemetry=true</code></td>
+</tr>
+<tr>
+<td><strong>ONNX Runtime's native library is unpacked once</strong> into <code>AMP/cache/ort/</code>, not into the temp folder on every start (13 MB on a Pi, 26 MB on this Mac, with the JNI library beside it). A Pi on an SD card wrote and read those megabytes before its first session at every start.</td>
+<td style="text-align: right;">onnx runtime loaded 1,106 ms</td>
+<td style="text-align: right;">36 ms from the second start (about 920 ms on the first)</td>
+<td><code>-Damie.ort.cache=false</code></td>
+</tr>
+<tr>
+<td><strong>The script engine is warmed in the background</strong> four seconds after the window shows, at the lowest thread priority, so the first Run finds the compiler loaded.</td>
+<td style="text-align: right;">first compile 2,095 ms</td>
+<td style="text-align: right;">365 ms (measured with <code>--bench --prewarm</code>; it cost the answers running beside it about 1.5 ms at the median)</td>
+<td><code>-Damie.prewarm=false</code></td>
+</tr>
+</tbody>
+</table>
+<p>The first of these is also a privacy change: the app no longer sends anything to Amazon's telemetry bucket through
+DJL. Setting <code>OPT_OUT_TRACKING=false</code> in the environment or as a property keeps DJL's behaviour.</p>
+<p>Also in this branch, from the earlier slow-hardware work: ONNX threads that sleep when idle, plots drawn off the page's
+read, one-vector-per-row builds and the 35% heap limit (see <a href="../troubleshooting/#slow-hardware">Troubleshooting</a>).</p>
+<h2 id="what-was-left-alone">What was left alone<a class="headerlink" href="#what-was-left-alone" title="Permanent link">&para;</a></h2>
+<p>Each of these needs a real Pi to judge, or changes results:</p>
+<ul>
+<li><strong>Batching the rows of a build</strong> (several texts per ONNX run). It may raise throughput on four cores and may not on a
+  Pi's memory bandwidth; the vectors differ in the last digits. Try it on the Pi.</li>
+<li><strong>An int8 or fp16 encoder.</strong> Likely the biggest win on ARM, and it changes the vectors every model is trained on.</li>
+<li><strong>Other ONNX session options</strong> (arena off, a saved optimized graph, ORT's defaults) were measured against the app's
+  options on this Mac and made no difference in the answer time (13.1 to 13.6 ms); the load time of a saved graph is a
+  cold-disk question this Mac cannot answer.</li>
+<li><strong>JIT and class loading flags</strong> (<code>-XX:TieredStopAtLevel=1</code>, class data sharing for the script compiler's 2 seconds,
+  <code>-XX:CICompilerCount</code>): their value depends on the Pi's cores.</li>
+<li><strong>The thread count of the encoder</strong> (<code>-Damie.ort.threads</code>): three threads were slower here (18.1 ms against 14.1 ms, with a 1 GB serial-GC heap beside it); on a Pi, with the
+  window needing a core, it may be better. The benchmark prints both the app's count and one thread.</li>
+<li><strong>The installed package's layout.</strong> The Pi command below uses the DEB's jars under <code>/opt/amie-pilot/lib/app</code>; that
+  layout was not checked on a Pi, and neither was the compiled bundle step with the jars loaded that way. If that step
+  fails the benchmark says so on its line and goes on.</li>
+</ul>
+<h2 id="running-it-on-a-raspberry-pi-5">Running it on a Raspberry Pi 5<a class="headerlink" href="#running-it-on-a-raspberry-pi-5" title="Permanent link">&para;</a></h2>
+<p>On a 64-bit Raspberry Pi OS, with the arm64 DEB of the app installed (see <a href="../getting-started/">Getting started</a>), or in a
+checkout of this repository:</p>
+<div class="highlight"><pre><span></span><code>./scripts/pi-bench.sh
+</code></pre></div>
+<p>That one command installs a JDK 21 if the Pi has none (<code>apt</code>, else Temurin 21 from adoptium.net into <code>~/amie-bench/jdk</code>),
+picks <code>-Xmx2g</code> on a Pi with under 6 GB and <code>-Xmx4g</code> otherwise, and runs
+<code>java -Xmx2g -cp '/opt/amie-pilot/lib/app/*' org.example.project.MainKt --bench</code> on a scratch AMP folder in
+<code>~/amie-bench/amp</code>. Without the DEB it builds the classes from the checkout with Gradle first and stops Gradle's daemon
+so it is not in the memory being measured. It prints the Pi's model, cores, RAM, governor and throttling state, then
+the <code>bench:</code> lines, and keeps them in <code>~/amie-bench/result-&lt;time&gt;.txt</code> with the JSON next to the AMP folder.</p>
+<p>To run it by hand, with the JDK installed (<code>sudo apt install openjdk-21-jdk-headless</code>, or Temurin 21):</p>
+<div class="highlight"><pre><span></span><code><span class="nv">AMIE_AMP_DIR</span><span class="o">=</span><span class="nv">$HOME</span>/amie-bench/amp<span class="w"> </span>java<span class="w"> </span>-Xmx2g<span class="w"> </span>-Dcompose.application.resources.dir<span class="o">=</span>/opt/amie-pilot/lib/app/resources<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-cp<span class="w"> </span><span class="s1">'/opt/amie-pilot/lib/app/*'</span><span class="w"> </span>org.example.project.MainKt<span class="w"> </span>--bench
+</code></pre></div>
+<p>Options after <code>--bench</code>: <code>--stand-in</code> (a small head stands in for the encoder), <code>--no-bundle</code> (skip the export and
+its run), <code>--rows N</code>, <code>--predicts N</code>, <code>--prewarm</code>. With <code>AMIE_JVM_ARGS="-Xmx1g -XX:+UseSerialGC -Damie.ort.threads=3"</code> the
+script runs the flags of a 4 GB Pi from the troubleshooting page instead. Run it twice: the first run unpacks ONNX
+Runtime's library and reads the encoder cold, the second is what every start after it costs. Cool the Pi first, and
+send back the <code>throttled</code> line with the numbers.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

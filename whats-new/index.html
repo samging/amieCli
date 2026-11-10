@@ -1,0 +1,1862 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="How to use the Amie desktop app and the amie command line - the sandbox, scripting, packages, models and metrics">
+      
+      
+      
+        <link rel="canonical" href="https://samging.github.io/amieCli/whats-new/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>What's new - Amie desktop app</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#whats-new" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Amie desktop app" class="md-header__button md-logo" aria-label="Amie desktop app" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Amie desktop app
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              What's new
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/samging/amieCli" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    samging/amieCli
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Amie desktop app" class="md-nav__button md-logo" aria-label="Amie desktop app" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Amie desktop app
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/samging/amieCli" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    samging/amieCli
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start here
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start here
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How the app works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The components
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup-tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set up a new Mac
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://samging.github.io/amieCli/learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The amie book
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working in the app
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working in the app
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sandbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The sandbox
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sandbox-scripting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scripting API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook, scripts to copy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models and metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../serving/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Serving a model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../amp-folder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The AMP folder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models-page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models page
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pi5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raspberry Pi 5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source-layout/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where the code is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../codebase/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The code of amie, what is where and why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#110-encoders-and-decoders-projects-and-the-templates-three-verbs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1.0: encoders and decoders, projects, and the templates' three verbs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#less-said-twice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Less said twice
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hugging-face-tasks-one-new-model-and-two-hues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hugging Face tasks, one New model, and two hues
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-error-terminals-lines-go-to-handleby" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The error terminal's lines go to handleBy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#models-from-hugging-face" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models from Hugging Face
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pytorch-and-tensorflow-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PyTorch and TensorFlow models
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quicker-builds-where-a-turns-time-goes-and-setup-in-ampsetup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quicker builds, where a turn's time goes, and setup in AMP/setup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-app-says-what-it-waits-for" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The app says what it waits for
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#darker-and-a-console-like-an-ides" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Darker, and a console like an IDE's
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#talk-to-amie-on-models-the-app-manages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Talk to Amie, on models the app manages
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#update-of-1-november-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update of 1 November 2026
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Update of 1 November 2026">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-sandbox-looks-and-works-like-an-ide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The sandbox looks and works like an IDE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#templates-end-with-the-block-that-called-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Templates end with the block that called them
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Function templates
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scripts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Scripts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scope-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scope functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionmod" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sessionMod
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#background-templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Background templates
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-several-saved-templates-at-once" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run several saved templates at once
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delegate-to-a-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Delegate to a template
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shell-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shell commands
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exporting-a-script-compiled" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exporting a script, compiled
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resources-for-every-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resources for every run
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#autocomplete-for-block-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Autocomplete for block functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modules-that-miss-something-are-refused" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modules that miss something are refused
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The app
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packages
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sandbox-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sandbox layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="whats-new">What's new<a class="headerlink" href="#whats-new" title="Permanent link">&para;</a></h1>
+<h2 id="110-encoders-and-decoders-projects-and-the-templates-three-verbs">1.1.0: encoders and decoders, projects, and the templates' three verbs<a class="headerlink" href="#110-encoders-and-decoders-projects-and-the-templates-three-verbs" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Encoder and decoder pairs.</strong> A sequence-to-sequence export (T5, BART, Marian translation, Whisper) is two ONNX
+  files, <code>encoder_model.onnx</code> with <code>decoder_model.onnx</code>, which no single run answers. <code>amie hf import</code> now takes the pair
+  whole: it lists every encoder and decoder of the folder, the full variant marked, to pick with the arrow keys (space
+  takes or leaves the file under the cursor, Enter imports, <code>n</code> leaves; <code>--take</code> names them for a pipe or a script), with
+  the config, tokenizer and preprocessor files alongside. Any repo with several files that run here is picked the same
+  way, the file <code>hf info</code> says an import takes already marked. <code>hf info</code> marks the pair's files. <code>initMod("&lt;name&gt;")</code> opens both sessions as <code>.encoder</code> and
+  <code>.decoder</code> (<code>.decoderWithPast</code> when exported), with <code>.tokens(text)</code>, <code>.text(ids)</code>, <code>.startToken</code> and <code>.endToken</code> from
+  the files beside them. See <a href="../sandbox-scripting/#encoder-and-decoder-pairs">Encoder and decoder pairs</a>.</li>
+<li><strong>The encoder's input made for you.</strong> <code>m.encode(text)</code> runs the tokenizer and the encoder; <code>m.encode(file)</code> reads the
+  model's <code>preprocessor_config.json</code> and turns a wav or aiff into Whisper's log-mel spectrogram, or an image into
+  normalized pixels, then runs the encoder. <code>m.decoderFeeds(encoded, ids)</code> fills the decoder's inputs by name, and
+  <code>m.startTokens(encoded, "de", "translate")</code> gives the decoder's first ids from the config's forced tokens, each
+  replaceable by a name the config knows, Whisper's language detected when none is given. A script's own part is the
+  twelve-line greedy loop. Whisper tiny transcribes a spoken wav exactly, and a quantized T5 translates.</li>
+<li><strong><code>amie models remove &lt;name&gt;</code>.</strong> Removes a model's folder whatever its kind, an intent, text, speech or imported
+  model, closing a session of it first. Paths are printed as a shell takes them, <code>Application\ Support</code>.</li>
+<li><strong><code>amie models info</code> on an imported model</strong> lists its files by role (the encoder, the decoders, or the model and the
+  files beside it), the config and tokenizer files with their sizes, the start and end tokens, its labels, and how
+  <code>initMod</code> opens it.</li>
+<li><strong><code>ortRequired</code> in place of <code>ortTimed</code>.</strong> <code>ortRequired("name") { }</code> keeps what its block opens while anything else is
+  in session, a model, package, group, template or background job, and frees it within a couple of seconds once
+  nothing else is open; its block opens it again when next run, as lazily as <code>ortStatic</code>. For what other models need
+  beside them. <code>ortTimed</code> is gone from scripts: a saved script that calls it no longer compiles. The starter <strong>Scope
+  functions</strong> is brought up to date in every AMP folder where it was never saved over.</li>
+<li><strong>Help that reads.</strong> <code>amie &lt;command&gt; --help</code> puts every action on its own line with its description wrapped beneath
+  and a blank line between them, as wide as the terminal; <code>:help</code> wraps the same way.</li>
+<li><strong>Projects.</strong> <code>amie new &lt;name&gt;</code> makes <code>AMP/projects/&lt;name&gt;/main.kts</code> to start from, in an env of the same name;
+  <code>amie run &lt;name&gt;</code> runs it.</li>
+<li><strong>Templates: save, edit, delete.</strong> <code>amie templates save &lt;name&gt; &lt;file&gt;</code> keeps a script file, a project or a starter as a
+  template (a name taken is saved again, its id kept); <code>amie templates edit &lt;name&gt;</code> opens its file in <code>$VISUAL</code> or
+  <code>$EDITOR</code> and takes the edit, or prints the path when neither is set; <code>amie templates delete &lt;name&gt;</code> removes it.</li>
+<li><strong>Piper voices import ready to speak.</strong> A Piper voice from the Hub (<code>rhasspy/piper-voices</code>, a path to one voice) lands
+  in <code>AMP/models/speech</code>, laid out as sherpa-onnx wants it, its ONNX metadata added when the export lacks it. A path
+  that names no voice is refused instead of another voice being taken in its place.</li>
+<li><strong>Installing on a machine without Java.</strong> <code>install.sh</code> finds a JDK 21 or installs one: Homebrew's on a Mac, apt's on
+  Debian and Ubuntu, else a Temurin build from Adoptium into <code>~/.local/lib/jdk-21</code>; <code>--no-jdk</code> leaves that out.</li>
+<li><strong>Fixes at the prompt.</strong> <code>:help</code> lists every command line of amie, each as <code>amie &lt;command&gt; --help</code> when it has more
+  than one action, with no example line repeated. The line editor no longer expands <code>!!</code> as shell history, which broke
+  Kotlin's non-null assertion in a pasted block. A name <code>initMod</code> can't find says every folder it looked in and names
+  <code>amie models list</code> and <code>amie hf import</code>. A tokenizer with an empty "Precompiled" normalizer (Marian's) no longer
+  aborts the process. <code>amie models list</code> wraps a model's labels instead of running off the row, and a pair shows none.</li>
+</ul>
+<h2 id="less-said-twice">Less said twice<a class="headerlink" href="#less-said-twice" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>System usage on the Sessions tab.</strong> The line over the sessions says what the process holds of the machine's RAM
+  and how much of that is the encoders, the heap, the native memory, the cpu, the threads and what the sessions weigh,
+  and "near the limit" when it is. The memory strip at the foot of the window is gone, and so is Memory in the rail;
+  the strip shows only while something runs.</li>
+<li><strong>TensorFlow on the Hub.</strong> The Hugging Face search for TensorFlow asks for the <code>tf-keras</code> tag, where the SavedModels
+  are, as well as <code>tf</code>, whose repos are nearly all Keras <code>.h5</code> weights that don't run here; an empty answer says so.</li>
+<li><strong>A package's manual.</strong> The package panel opens with <strong>Manual</strong>: the description of the jar's metadata, which says
+  what the package does and the texts it answers, with its notes. <strong>Copy script</strong> beside Opens with puts a three-line
+  script on the clipboard: open the package, call it with its first test's text, close it.</li>
+<li><strong>Paths only in Settings.</strong> The package panel's Where, Page, Download and File lines are gone, and so is the config
+  folder's path; Settings has a <strong>Package folders</strong> group with every jar's path and config folder, Copy path, Reveal
+  jar and Reveal config. The Model folders rows say the encoder's path; About names the encoder. A group's panel no
+  longer says where groups.json is, and the New model form shows the chosen file's name.</li>
+<li><strong>Created moved to Settings.</strong> When a model was made is on its row under Settings, Model folders, with its kind and
+  its folder; the About tab's Details no longer say it.</li>
+<li><strong>Three labels, and how many more.</strong> About's Labels line names the three labels with the most training rows, "chat,
+  weather, list_files and 7 more"; the rows per label stay on the Data tab, which is also the only place that says
+  what the preprocessor did to the rows.</li>
+<li><strong>Templates and Console in the header.</strong> The Sandbox's two toggles sit at the left of the header strip, before the +
+  for a new template; the strip no longer names main.kts, and the Models page's New model is a + with the words in its
+  tooltip.</li>
+</ul>
+<h2 id="hugging-face-tasks-one-new-model-and-two-hues">Hugging Face tasks, one New model, and two hues<a class="headerlink" href="#hugging-face-tasks-one-new-model-and-two-hues" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Every kind of model the Hub has.</strong> The Hugging Face search has a task menu beside its format chips: <strong>Text to speech</strong>,
+  <strong>Speech recognition</strong>, <strong>Text classification</strong>, <strong>Token classification</strong>, <strong>Feature extraction</strong>, <strong>Text generation</strong>, <strong>Audio
+  classification</strong> and <strong>Image classification</strong>, or <strong>Any task</strong>. A task alone lists the Hub's most downloaded models of it.
+  A looked-up repo says its task, model type and the labels of its <code>config.json</code> before anything is downloaded, and the
+  labels and the task are written into the imported model's <code>source.json</code>, shown on its row and panel, and found by the
+  filter. A speech model's voices, tokens, lexicon and phoneme data, and a Piper voice's <code>.onnx.json</code>, come along with it.
+  In a script, <code>huggingFace.search("", task = "text-to-speech")</code> (or <code>tts</code>, <code>ner</code>, <code>embeddings</code>…). See <a href="../models-page/#from-hugging-face">From Hugging
+  Face</a>.</li>
+<li><strong>One New model.</strong> The Models page's <strong>New model</strong> opens one form whose first line says where the model comes from, <strong>A
+  csv</strong> or <strong>Hugging Face</strong>; the cloud chip is gone, and the list, the rule and the panel sit closer. See <a href="../models-page/#new-model">New
+  model</a>.</li>
+<li><strong>Blue and green.</strong> The app is no longer gray alone: a dark blue fills the one primary button of a place, a lighter blue
+  draws links, the focus ring, a focused field, the open tab's bar, a selected row's edge and the line of a build or a
+  download, and a faint blue washes what is selected; the muted green marks what runs, succeeded or is done, the bar of a
+  notice included. Accents, never floods; every word keeps 4.5:1 and every mark 3:1 (<code>ContrastTest</code>). See
+  <a href="../components/#colour">Colour</a>.</li>
+</ul>
+<h2 id="the-error-terminals-lines-go-to-handleby">The error terminal's lines go to handleBy<a class="headerlink" href="#the-error-terminals-lines-go-to-handleby" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Pull the console's error lines, and hand them to <code>handleBy</code>.</strong> <code>errorLog()</code> is the error terminal's log: the last error lines the console showed, oldest first, a run's failures, what a command printed on stderr and why it failed, the app's own. <code>handleBy()</code> hands the last ten of them to the local text model with main.kts and the env, so after a failed command or run one call asks about what the console showed in red; <code>handleBy(lines)</code> takes any list, and <code>shell("x").patchBy(::handleBy)</code> asks about what the one command said the moment it fails. Clear, ⌘K and a new run empty it. See <a href="../sandbox-scripting/#the-api">Scripting API</a>.</li>
+</ul>
+<h2 id="models-from-hugging-face">Models from Hugging Face<a class="headerlink" href="#models-from-hugging-face" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Add from Hugging Face.</strong> The cloud chip after <strong>New model</strong> on the Models page searches the Hub, in every format <code>initMod</code> opens or one of them (ONNX, TorchScript, TensorFlow, TFLite), and also takes a repo id or a huggingface.co address. It lists the repo's runnable files by format with their sizes and says why the weights-only files won't run. It picks a plain <code>model.onnx</code> with its config and tokenizer files and downloads the pick into <code>AMP/models/imported/&lt;name&gt;</code>, with progress and Cancel. Leaving the page doesn't stop the download. The files only take their names once their sizes check, so a closed app never leaves a half file, and the next download resumes. See <a href="../models-page/#from-hugging-face">From Hugging Face</a>.</li>
+<li><strong>Imported models are listed.</strong> They have their own fold, <strong>Imported</strong>, showing each model's format, source repo and size, with a Delete that asks first.</li>
+<li><strong><code>huggingFace("owner/name")</code> in a script</strong> downloads the model the first time and returns its local name, so <code>initMod(huggingFace("owner/name"))</code> works; <code>huggingFace.search("bert", format = "onnx")</code> returns repo ids. A gated or private repo reads <code>HF_TOKEN</code> from the environment, and the token is never logged or stored. See <a href="../sandbox-scripting/#the-api">Scripting API</a>.</li>
+<li><strong>Model folders in one place.</strong> The full path of a model's folder is gone from its page (the About tab's block is <strong>Details</strong> now) and from an imported model's panel; Settings lists every model's folder in <strong>Model folders</strong>, by kind, with Copy path and Reveal</li>
+<li><strong>A language model answers in text.</strong> Logits like GPT-2's <code>[1, 1, 50257]</code> were shown as "hidden state [1, 1, 50257]"; they are a score for every token at every place, and an imported language model now decodes them: one that continues text gives the text it goes on with (greedy, up to 24 tokens) and its 5 likeliest next tokens, one that fills a mask the likeliest tokens at <code>[MASK]</code></li>
+</ul>
+<h2 id="pytorch-and-tensorflow-models">PyTorch and TensorFlow models<a class="headerlink" href="#pytorch-and-tensorflow-models" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong><code>initMod</code> opens models made elsewhere.</strong> <code>initMod("&lt;name&gt;")</code> opens <code>AMP/models/imported/&lt;name&gt;</code>, a Hugging Face repo or a folder copied in, and <code>initMod("/path/model.pt")</code> or the new <code>importModel(path)</code> a model by its path: ONNX on the bundled runtime, TorchScript (<code>.pt</code>, <code>.pth</code>, <code>.torchscript</code>) on PyTorch, a TensorFlow SavedModel folder on TensorFlow. A folder of several formats opens its ONNX, else the one its <code>source.json</code> names, else the first that runs here, and says which. See <a href="../sandbox-scripting/#models-from-outside">Models from outside</a>.</li>
+<li><strong>Tensors in and out.</strong> A model from a file says what it takes and gives (<code>.inputs</code>, <code>.outputs</code>: name, shape, type) and runs on numbers: <code>.run(floatArrayOf(…))</code>, <code>.run(longArrayOf(…))</code>, <code>.run(mapOf("input_ids" to ids))</code>. Text still goes in when a <code>tokenizer.json</code> is next to it, and the labels come from its <code>config.json</code>. <code>importModelOnnx</code> models answer the same calls.</li>
+<li><strong>Natives on first use.</strong> PyTorch and TensorFlow come as DJL engines whose jars are small; their native libraries (about 40 MB for PyTorch on an Apple Silicon Mac, 130 to 150 MB for TensorFlow) are downloaded into <code>~/.djl.ai</code> the first time one of their models is opened, which the console says once. Offline, the first open says what it wanted.</li>
+<li><strong>Refused, with what would work.</strong> TFLite (DJL has no TFLite engine since 0.28), frozen TensorFlow graphs, PyTorch weights saved with <code>torch.save</code>, and weights alone (safetensors, <code>pytorch_model.bin</code>, gguf, h5) are refused, naming every file and the way to ONNX or TorchScript. PyTorch has no natives for Intel Macs, and TensorFlow 2 is in the lightweight build only, since the full build's TensorFlow 1.15 clashes with it.</li>
+<li><strong>Listed and closed like the others.</strong> Each one is a row of the Sessions tab with Terminate, closed with the <code>ortClosable</code> block around it, and <code>hasModel("name")</code> is true for an imported model. <code>importModelTensorflow</code> is <code>importModel</code> now, and the old TensorFlow 1.15 and TFLite loaders, which did nothing, are gone.</li>
+<li><strong>An Apple Silicon Mac builds the lightweight app.</strong> TensorFlow 1.15 has no natives for it, and its classes kept TensorFlow 2 out, so a Mac like that now builds without it, as a Raspberry Pi does: about 700 MB less, and <code>initMod</code> opens TensorFlow SavedModels there. <code>-Pamie.lightweight=false</code> builds the full one</li>
+</ul>
+<h2 id="quicker-builds-where-a-turns-time-goes-and-setup-in-ampsetup">Quicker builds, where a turn's time goes, and setup in AMP/setup<a class="headerlink" href="#quicker-builds-where-a-turns-time-goes-and-setup-in-ampsetup" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>The editor marks wrong calls as you type.</strong> A moment after typing stops, a call to the script API with too few or too many arguments, a named argument the function hasn't, a literal of the wrong type (<code>initMod(12)</code>) or an unknown member (<code>amie.lgo("x")</code>) gets a red wavy line and a dot by its line number; the pointer on it says what is wrong. See <a href="../sandbox/#the-editor">The editor</a>.</li>
+<li><strong><code>handleBy("error")</code> asks the local text model, and the AI pane is gone.</strong> <code>handleBy("Unresolved reference: dumy")</code> (or <code>handleBy(e)</code> for what was thrown, as in <code>handleBy({ e -&gt; handleBy(e) }) { … }</code>) asks a text model of <code>AMP/models/text</code> what is wrong and how to fix it, with main.kts and the env in its prompt, prints the answer and returns it. It only answers: the script stays as it is. The sparkle on the rail, ⌘2 and the pane that wrote whole scripts went, as a small model's whole scripts were often wrong</li>
+<li><strong>The console remembers.</strong> The lines of script typed at <code>&gt;&gt;&gt;</code> share one interpreter: <code>val x = 12</code>, then <code>log(x)</code> prints 12, and a <code>fun</code>, <code>class</code> or <code>import</code> stays for the next line. A line that ends in a value prints it. A block can go over several lines: <code>for (x in 0..10)</code> waits at a <code>...</code> prompt until <code>{</code>, <code>log(x)</code> and <code>}</code> make it whole, then runs once. A blank line sends a block whose brackets are closed, Ctrl+C drops it (or stops a line that runs), and <code>reset</code> forgets the definitions. Lines run in the order they were typed.</li>
+<li><strong><code>shell</code> prints at the internal level.</strong> <code>shell("ls -l")</code> shows the command and what it prints as internal lines, its stderr as errors, so a script's own info lines aren't buried under a listing. Turn <em>Internal</em> on to see them; <code>.out</code>, <code>.lines</code> and <code>.err</code> keep everything.</li>
+<li><strong>The editor's list offers each name once.</strong> <code>info</code>, <code>log</code>, <code>error</code>, <code>data</code>, <code>output</code>, <code>import</code>, <code>initMod</code>, <code>sessionMod</code> and the rest with overloads were listed once per overload (<code>info(message: String)</code> and <code>info(message: Any?)</code>); each is one row now, the form a script writes most: <code>initMod("")</code>, <code>info("")</code>, <code>import("")</code>.</li>
+<li><strong>The sandbox's bar reads as IntelliJ's.</strong> The env is a flat run-configuration widget (a small box, its name, a chevron), and Run, Stop and export are thin outlined icons, a green triangle, a red square and an arrow, all of one size.</li>
+<li><strong>Gray, not blue, as IntelliJ's dark chrome.</strong> Every background, border and text gray is neutral now (the editor #0E0E0E, the panels and bars #151515, the borders #242424, the text #BFBFBF), at the same steps of lightness, so every word still reaches 4.5:1. The primary button (New model, Open session, Validate, Build) is filled light gray with dark words in place of blue, and while disabled is a plain gray chip. A selected model is a gray step with a brighter edge, the chosen completion a gray step, the open tab's underline and the keyboard's focus ring are light gray, the editor's selection is a gray band as the IDE's inactive selection, and the Metrics charts and the confusion matrix are grays told apart by lightness and by each series' mark. Text selected in any field is the same gray. The code's colours are as they were, and the flags named slate and blue keep their hues.</li>
+<li><strong>A line between the line numbers and the code.</strong> The editor's gutter ends in a thin gray line down its full height, as in IntelliJ, so the numbers no longer run into the text.</li>
+<li><strong>Darker still.</strong> Every surface is a step darker (the editor from #131417 to #0D0E10, the panels and bars from #1B1C20 to #141518, the borders from #2B2D32 to #222428), the text a little dimmer and the editor's colours less bright; every word still reaches 4.5:1.</li>
+<li><strong>Full screen fills the screen on a Mac.</strong> The window drew its own frame, and macOS moves such a window into a full screen Space without making it bigger, so it sat at its old size in black. On a Mac the window is now the system's, its title bar see-through under the header: the red, yellow and green buttons are at the header's left, the green one or <strong>View → Enter Full Screen</strong> (⌃⌘F) gives full screen at the screen's size, and the window resizes from any edge as any Mac window does. Windows and Linux keep the header's − □ × (F11 for full screen). The app also starts with <code>--add-exports=java.desktop/com.apple.eawt=ALL-UNNAMED</code>, without which Java 21 refused the request.</li>
+<li><strong>One bar at the top, the page's own.</strong> As in an IDE, the window's bar is the page's toolbar: the sandbox's main.kts, <strong>+</strong>, env, Run and export; the Models page's tabs; Settings' back arrow and its sections as tabs, which scroll to them. The row the window had over each page is gone, 31dp back on every page, and there is no title.</li>
+<li><strong>Fewer words.</strong> A template is one line in the Templates pane, its about line and tags in the name's tooltip, Load an icon; Running in the background shows only with a run in it. Settings rows are a name and a control, the rest in their tooltips. The Metrics charts have short titles (Per label, Confusion matrix, Training by epoch, Calibration…) and no legend in sentences, which the Guide tab has; the Try line says <em>Ask it something</em>; the sidebar's tips are the pages' names. The About tab's Reveal folder stands at the end of the Where line again, however long the path.</li>
+<li><strong>The console reads from the top down, as a terminal does.</strong> The <code>&gt;&gt;&gt;</code> prompt is on the line after the output, not in a bar at the foot of the pane: a fresh console is the greeting and the prompt at the top, each line pushes the prompt down, and once the pane is full it scrolls with the prompt at its foot. A click under the prompt puts the cursor in it. The prompt has no hint in it, only a blinking block cursor (an outline while the console hasn't the keyboard); the hint is the tooltip of <code>&gt;&gt;&gt;</code>, and the send arrow is gone: Enter sends.</li>
+<li><strong>The console greets you as Python does.</strong> <code>Amie pilot 1.0.0 (default, Nov 06 2026, 02:23:55) [Kotlin 2.1.0, JDK 21.0.11] on darwin</code>, then <code>Type "help", "sessions", "terminate all" or log("hi") for more information.</code>; the input line's prompt is <code>&gt;&gt;&gt;</code>. Clear and a run leave it there.</li>
+<li><strong>Run details, off by default.</strong> The console strip shows only its level toggles, Find, Details and Clear: no <code>Finished in 0s</code>, no memory line under it. Settings → Editor → Console → <strong>Run details</strong> brings them back, over the editor too while the console is hidden.</li>
+<li><strong>+ beside main.kts.</strong> A new template in one click: the editor is emptied (the script in it kept under Previous scripts), the Templates window opens on the save form with the cursor in Name.</li>
+<li><strong>A double click on Load no longer loads twice.</strong> The second click could land on another row, often a Previous script, which put back the script just replaced, so a loaded template seemed to jump back. A Load within a second of another is ignored.</li>
+<li><strong>The console shows only what the script logs.</strong> <code>Running pluginDir/main.kts</code>, <code>Finished in 0s</code> and the <code>Resources:</code> line are at the internal level now, off at start: the strip over the console already says how the run went and what it used. A script that logs nothing leaves the console closed. A session the script left open is still named, at info.</li>
+<li><strong><code>log</code> takes any value.</strong> <code>log(pkg.run("scan"))</code> was a type mismatch, since a package answers a list; <code>log</code>, <code>info</code>, <code>error</code>, <code>data</code> and <code>output</code> now take any value, a list or an array one element a line, a map <code>key: value</code>.</li>
+<li><strong>New template.</strong> The Templates window has a <strong>New template</strong> button at the top: it starts a new, empty script (the one in the editor is kept under Previous scripts) and opens the save form with the cursor in Name. It used to keep the script in the editor, which made copies of whatever was open.</li>
+<li><strong>Talk to Amie exports.</strong> Its Whisper and voice were taken for intent models and stopped the export; they now go along with <code>speech.jar</code>, and a script that opens only speech or text models carries no encoder.</li>
+<li><strong>Export from a script.</strong> <code>exportJvm("main.kts")</code> writes the same bundle as <strong>Export…</strong>; <code>planOnly = true</code> only says what would go in. See <a href="../sandbox-scripting/#the-api">Scripting API</a>.</li>
+<li><strong><code>ortAsync</code> and <code>handleBy</code>.</strong> <code>ortAsync("warm") { }</code> is <code>ortClosable</code> on a thread of its own, returning a job that ends with the script; <code>handleBy({ e -&gt; "" }) { }</code> gives the handler's value when the block throws, never for a stop or a cancel. See <a href="../sandbox-scripting/#the-api">Scripting API</a>. A running block is a row of the Sessions tab, <em>Background block</em>, with Terminate.</li>
+<li><strong>The export panel after writing.</strong> Show it stands alone: the export button, which had nothing left to write into that folder, no longer squeezes in beside it.</li>
+<li>
+<p><strong>Words level with their icons, badges that fit their words.</strong> Text that named no line height took Material's 24sp, and Compose Desktop put that line's room nearly all above an 11-13sp word, so words sat low: under the icon of a button or a list row, at the bottom of a badge. Such text now has its font's own line. A list row's icon sits on its name's line, the flags and the meta under the name. The UI goldens are now taken in the app's theme, as the window shows it; before, they never had the 24sp line, so they never saw this.</p>
+</li>
+<li>
+<p><strong>Builds embed about five times quicker.</strong> The encoder takes the rows 32 at a time, each batch rows of the same number of tokens, so 1,000 rows take about 2.1 s instead of 11 on a Mac and the benchmark ends in 17 s instead of 26. The vectors are the same to the bit as one row at a time, so a model trains exactly as before; rows of different lengths are never mixed, because padding them moved the vectors by a few millionths.</p>
+</li>
+<li><strong>The encoder stops copying what nobody reads.</strong> Every answer used to copy its whole hidden state into a list that nothing read.</li>
+<li><strong><code>setup.sh</code> is in <code>AMP/setup/</code>.</strong> It sets up the whole AMP folder, not only the voice, so it moved out of <code>voice/</code>: run <code>./AMP/setup/setup.sh</code> from the repository.</li>
+<li><strong>Talk to Amie says where a turn's time went.</strong> <code>Took … ms: hearing …, intent …, Llama …, voice …, playing …</code> in the console after each turn, so a slow answer shows which part was slow. See <a href="../voice/#what-happens-to-what-you-say">What happens to what you say</a>.</li>
+</ul>
+<h2 id="the-app-says-what-it-waits-for">The app says what it waits for<a class="headerlink" href="#the-app-says-what-it-waits-for" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Nothing loads blank any more.</strong> A list that is still reading says "Reading the models…" with three soft dots instead of "No models yet"; a button whose work runs keeps its word, "Opening…", with the dots alive after it; the console's last line shows them while a text model loads or the builder embeds and fits; the thin line under the console and the build line of the Models list are the same line. Nothing shows for the first 150 ms, so a quick read never flickers. One component draws all of it, <code>Loading.kt</code>, listed in <a href="../components/#loading-loadingkt">the components</a>.</li>
+<li><strong>Every model is under <code>AMP/models/</code>.</strong> <code>bert/</code> as before, <code>intents/</code> for the trained intent models (was <code>modules/</code>), <code>text/</code> for Llama and Qwen (was <code>textModels/</code>), <code>speech/</code> for Whisper and the voices (was <code>pluginDir/config/speech/models/</code>). The app moves an older install there when it starts, one rename a folder, nothing copied, nothing deleted; with both an old and a new folder there it reads the new one and says in the console which to tidy. <code>speech.properties</code> is pointed at the new folder. See <a href="../amp-folder/#the-models-folder">The AMP folder</a>.</li>
+</ul>
+<h2 id="darker-and-a-console-like-an-ides">Darker, and a console like an IDE's<a class="headerlink" href="#darker-and-a-console-like-an-ides" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Easier on the eyes.</strong> Every surface is darker (the editor went from #1E1F22 to #131417, the panels from #2B2D30 to #1B1C20), no words are pure white any more, and the accents are calmer. Sign-in's white button is the app's blue, and right-click menus are dark on every page.</li>
+<li><strong>The console works like an IDE's terminal.</strong> ⌘F finds in the output, ⌘K clears, the arrow keys bring back what you typed, a copy over several lines keeps them apart, a <code>main.kts:12</code> or a web address anywhere on a line is a link, and ANSI colours are drawn. See <a href="../sandbox/#the-output-console">the output console</a>.</li>
+</ul>
+<h2 id="talk-to-amie-on-models-the-app-manages">Talk to Amie, on models the app manages<a class="headerlink" href="#talk-to-amie-on-models-the-app-manages" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Models answer in the background.</strong> <code>val job = model.inBackground("text")</code> returns at once, and <code>job.await()</code>, <code>job.done</code> and <code>job.cancel()</code> follow it. Only so many run at once, the rest wait their turn on the Sessions tab, and when memory runs short the app closes idle <code>ortTimed</code> and <code>ortLimited</code> sessions first.</li>
+<li><strong>Text models run inside the app.</strong> ONNX Runtime GenAI exports in <code>AMP/models/text/&lt;name&gt;</code> open with <code>initMod("name")</code>, on the app's own ONNX Runtime (1.31.1 now). They are in Still open, count in a run's memory, end with Terminate and with the <code>ortClosable</code> around them.</li>
+<li><strong>Stop stops.</strong> A call of a package runs on a thread of its own, so Stop ends a script at once even when the package reads a device for seconds, and a loop can't go round again after it.</li>
+<li><strong>Scripts can wait to be called.</strong> <code>input()</code> in main.kts now reads what is typed in the console, and standard input in an exported bundle, so a script with a <code>main()</code> loads nothing until you ask. <code>eof</code> ends its input and Stop ends the wait. Exports now carry text models.</li>
+<li><strong>Amie is less dumb.</strong> It listens until you stop talking, understands many more ways of asking, and when unsure lets Llama read your words, so it picks out sites, files and days, and says when it didn't catch you instead of guessing. Web questions are answered from Wikipedia and the news, and <code>files.jar</code> opens, creates, reads and finds files.</li>
+<li><strong>The window keeps up.</strong> It is no longer see-through, which it never needed, so the Mac has less to do for each frame. The face draws on its own thread, and only copies its finished picture to the window. If the window's thread still stalls, the log says where.</li>
+<li><strong>Stopping a model can't take the app down.</strong> Closing a session or pressing Stop while a model is running used to free memory the run was still using, which crashed the whole app. A stopped run now ends first, and its session closes after it.</li>
+<li><strong>Amie answers sooner.</strong> Supertonic 3 is the voice now: it speaks about five times faster than Kokoro did, so a one-sentence reply starts in about 0.6 s instead of 2 s. Its model is under OpenRAIL-M. <code>speaker=</code> picks one of ten voices and <code>steps=</code> trades speed for quality; Kokoro and Piper still work with <code>use</code>.</li>
+<li><strong>Amie plays music.</strong> <code>spotify.jar</code> plays, pauses, skips and says what is on in the Spotify app, so "play Daft Punk" and "what song is this" work by voice. Without keys a name opens as a search in Spotify; with a <code>clientId</code> and <code>clientSecret</code> of your own in its settings, it plays straight away.</li>
+<li><strong>Amie does more by voice.</strong> Say "turn it up", "dark mode", "take a screenshot", "how much space is left", "close this tab" or "what are my newest files". It tells you how many emails are unread, and the face falls asleep when you stay quiet.</li>
+<li><strong>The jars do more.</strong> Mail counts, shows and marks read. The browser reads news and lists or closes tabs. Mac sets dark mode, takes screenshots and reads disk space. Files appends, renames and moves. Memory lists what's recent. The face is happy, sad, surprised or asleep.</li>
+<li><strong>Speech models are models.</strong> <code>initMod("whisper")</code> and <code>initMod("voice")</code> open them by name. They show on the Sessions tab under that name, and blocks and Terminate handle them like any other model. This needs the new <code>speech.jar</code>.</li>
+<li><strong>Ask a model what it can do.</strong> <code>model.can("chat")</code>, <code>can("classify")</code>, <code>can("fineTune")</code>, <code>can("hear")</code> or <code>can("speak")</code> tell you before you call it.</li>
+<li><strong>The app lands in half the time.</strong> The sandbox draws in about a second and freezes for much less on the way, on a start after the first. The editor's line numbers exist only near what's on screen, the app goes straight to the sandbox, and <code>./gradlew run</code> keeps a class archive in <code>build/</code>. Packaged apps don't get the archive yet.</li>
+<li><strong>Amie has a face.</strong> <code>face.jar</code> shows an animated face over your windows that smiles, listens, thinks, loads and talks. A script sets the mood with <code>face.run("think")</code>.</li>
+<li><strong>Closing keeps it running.</strong> Close the window while a script runs and it goes on in the background. The face in the menu bar opens the window again or quits.</li>
+<li><strong>Amie is a companion.</strong> It greets you, remembers what you tell it, reads your email, drafts replies and sends them only after you say yes, opens the browser and apps, and handles volume, the calendar and reminders, through four new jars with no keys.</li>
+<li><strong>The console runs script.</strong> Type <code>log("hi")</code> with nothing running and it runs in the background. It keeps going while you work or close the sandbox, and <code>terminate console</code> ends it.</li>
+<li><strong>The console reads like a Run window.</strong> While a script waits at <code>input()</code>, what you type is its input, shown in green, and the hint says so. Every red line now starts with the exception's name, or with Error.</li>
+<li><strong>The editor follows the caret.</strong> The arrow keys and typing move the page, so the caret never leaves the view.</li>
+<li><strong>The console has colours.</strong> Who wrote a line, strings, paths, numbers, session ids, and words like done, failed and warning each stand out. The words themselves stay as they were.</li>
+<li><strong><code>patchBy</code> handles a failed command.</strong> <code>shell("x").patchBy { error -&gt; ... }</code> sends what a failed command said to anything: a model, a voice, the console.</li>
+<li><strong>Talk to Amie runs without Python.</strong> <code>speech.jar</code> hears with Whisper and speaks with Kokoro, a natural voice with 11 speakers, set up in the Packages tab. It can now also open a terminal, close all of them, edit a file, open one in vim and run <code>brew install</code>, and it says out loud why a command failed.</li>
+<li><strong>Talk to Amie</strong> starts when you type <code>talk</code> in the console. It hears you, picks what to do with a BERT intent model, then gets the weather, lists or finds files, looks something up, or answers. See <a href="../voice/">voice.md</a>.</li>
+</ul>
+<h2 id="update-of-1-november-2026">Update of 1 November 2026<a class="headerlink" href="#update-of-1-november-2026" title="Permanent link">&para;</a></h2>
+<h3 id="the-sandbox-looks-and-works-like-an-ide">The sandbox looks and works like an IDE<a class="headerlink" href="#the-sandbox-looks-and-works-like-an-ide" title="Permanent link">&para;</a></h3>
+<p>The app now uses the fonts and dark colours of the JetBrains IDEs: JetBrains Mono for code, Inter for everything else. The
+editor paints Kotlin as the IDE does, with functions, properties, named arguments, and what <code>${}</code> holds in a string each in
+their own colour. The script API is in italics.</p>
+<p>The templates and the console are tool windows that stand side by side, opened from an icon rail or with ⌘1 and ⌘4. Nothing
+closes one to show the other. Drag a window's header to the left, right or bottom edge to move it, and the line at its edge
+to size it; both are kept. The console's Recent runs and Still open are tabs, and it ends in a one-line prompt. See
+<a href="../sandbox/">The sandbox</a>.</p>
+<p>Long titles are cut with an ellipsis and read whole in their tooltip, so they no longer push other labels away. A narrow
+model header puts its buttons on their own line, and tabs that don't fit go to a second line.</p>
+<h3 id="templates-end-with-the-block-that-called-them">Templates end with the block that called them<a class="headerlink" href="#templates-end-with-the-block-that-called-them" title="Permanent link">&para;</a></h3>
+<p>A template called in an <code>ortClosable</code> block now ends when that block ends, and what it opened closes with it. Before, it
+went on running after the block, and its session stayed open. This holds at any depth, so a template called by a template
+ends too, and a delegate used again in a later block starts a new run.</p>
+<div class="highlight"><pre><span></span><code><span class="n">ortClosable</span><span class="p">(</span><span class="s">"one question"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">label</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">template</span><span class="p">(</span><span class="s">"Function: label a text"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">log</span><span class="p">(</span><span class="n">label</span><span class="p">(</span><span class="s">"turn the lights on"</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="c1">// The template has ended here, and its model session is closed</span>
+</code></pre></div>
+<h3 id="function-templates">Function templates<a class="headerlink" href="#function-templates" title="Permanent link">&para;</a></h3>
+<p>A new Functions group of starters are templates you call like functions. Each takes a line of input and answers with a
+line: <strong>Function: clean a text</strong>, <strong>Function: count words</strong>, <strong>Function: label a text</strong> and <strong>Function: label and
+score</strong>. Four more show how to combine them: <strong>Function: clean, then label</strong>, <strong>Functions: a pipeline in ortClosable</strong>,
+<strong>Functions: keep the model between calls</strong> and <strong>Functions: a command as a function</strong>. An existing <code>AMP</code> folder gets
+them once. See <a href="../sessions/#scope-functions">Scope functions</a>.</p>
+<p>What landed in the update of 31 October 2026, and where to read more about each part.</p>
+<h2 id="scripts">Scripts<a class="headerlink" href="#scripts" title="Permanent link">&para;</a></h2>
+<h3 id="scope-functions">Scope functions<a class="headerlink" href="#scope-functions" title="Permanent link">&para;</a></h3>
+<p><code>ortClosable</code>, <code>ortStatic</code>, <code>ortTimed</code> and <code>ortLimited</code> take a block and decide how long what it opens stays open.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Closed when the block ends, however it ends: a one-time use</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ortClosable</span><span class="p">(</span><span class="s">"one time"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">initMod</span><span class="p">(</span><span class="s">"dummy"</span><span class="p">).</span><span class="na">predict</span><span class="p">(</span><span class="s">"turn the lights on"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// Stays open across runs, under a name you can free</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">search</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ortStatic</span><span class="p">(</span><span class="s">"search"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">initMod</span><span class="p">(</span><span class="s">"dummy"</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+<span class="n">log</span><span class="p">(</span><span class="n">search</span><span class="p">.</span><span class="na">predict</span><span class="p">(</span><span class="s">"what's the weather"</span><span class="p">))</span>
+
+<span class="c1">// Stays while it is used: freed by itself once nothing has asked it for 40 seconds</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">recent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ortTimed</span><span class="p">(</span><span class="s">"recent"</span><span class="p">,</span><span class="w"> </span><span class="m">40</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">initMod</span><span class="p">(</span><span class="s">"dummy"</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+
+<span class="c1">// At most three package instances under the name, the oldest closed when a fourth is opened</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">pool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ortLimited</span><span class="p">(</span><span class="s">"pool"</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">initMod</span><span class="p">(</span><span class="s">"echo-1.0.jar"</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+
+<span class="n">ortScopes</span><span class="p">.</span><span class="na">print</span><span class="p">().</span><span class="na">forEach</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="nb">it</span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w">     </span><span class="c1">// what each scope holds</span>
+<span class="n">ortScopes</span><span class="p">.</span><span class="na">free</span><span class="p">(</span><span class="s">"search"</span><span class="p">)</span><span class="w">                  </span><span class="c1">// closes what search holds</span>
+</code></pre></div>
+<ul>
+<li><code>ortTimed(name, idleSeconds) { }</code> keeps what its block opens like <code>ortStatic</code>, and frees it once nothing has used it
+  for that long: the block not run again, no session it holds asked. One daemon timer serves every timed scope, and the
+  <strong>Sessions</strong> tab counts down on its rows, as in <em>timed recent, 40s left</em>.</li>
+<li><code>ortLimited(name, max) { }</code> keeps at most <code>max</code> sessions under the name, freeing the oldest first when one more is
+  opened; the tab says <em>limited pool, 2 of 3</em>.</li>
+<li><code>ortForever</code> is <code>ortStatic</code> now. A saved script that calls it still runs, the console says the new name, and the
+  editor no longer offers it.</li>
+</ul>
+<p>The Models page, <strong>Sessions</strong> tab, says which scope holds a session, as in <em>static search</em>. The whole starter is
+<strong>Scope functions: ortClosable and ortStatic</strong> in the sandbox's Templates pane; an existing <code>AMP</code> folder gets it once,
+and one that has it under its old title gets it renamed and brought up to date, as long as it is still the starter.
+See <a href="../sessions/#scope-functions">Scope functions</a>.</p>
+<h3 id="sessionmod">sessionMod<a class="headerlink" href="#sessionmod" title="Permanent link">&para;</a></h3>
+<p><code>sessionMod("name")</code> is a model to ask and nothing more: a snapshot of the head it has now. It can't train or change the
+model, leaves no trace in its log, and stays on its head when the model is trained again. It was called <code>sharedModel</code>
+until now; a saved script that says so still runs, and the console says the new name.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sessionMod</span><span class="p">(</span><span class="s">"dummy"</span><span class="p">)</span><span class="w">                  </span><span class="c1">// an object</span>
+<span class="n">log</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="na">predict</span><span class="p">(</span><span class="s">"turn the lights on"</span><span class="p">))</span>
+
+<span class="kd">val</span><span class="w"> </span><span class="nv">same</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">sessionMod</span><span class="p">(</span><span class="s">"dummy"</span><span class="p">)</span><span class="w">              </span><span class="c1">// the same thing, as a delegate</span>
+
+<span class="kd">val</span><span class="w"> </span><span class="nv">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sessionMod</span><span class="p">(</span><span class="s">"dummy"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">            </span><span class="c1">// for one block, gone when the block ends</span>
+<span class="w">    </span><span class="n">predict</span><span class="p">(</span><span class="s">"turn the lights on"</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>See <a href="../sessions/#ask-without-touching-the-model-sessionmod">Ask without touching the model</a>.</p>
+<h3 id="background-templates">Background templates<a class="headerlink" href="#background-templates" title="Permanent link">&para;</a></h3>
+<p><code>coroutineTemplate</code> starts a saved template in the background while the script goes on. <code>main.kts</code> feeds it lines, the
+template reads them with <code>input()</code> and answers with <code>output(text)</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">job</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">coroutineTemplate</span><span class="p">(</span><span class="s">"Background template: a reader"</span><span class="p">)</span><span class="w">   </span><span class="c1">// starts the saved template and goes on</span>
+<span class="n">job</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="s">"turn the lights on"</span><span class="p">)</span><span class="w">           </span><span class="c1">// a line for its input()</span>
+<span class="n">log</span><span class="p">(</span><span class="n">job</span><span class="p">.</span><span class="na">receive</span><span class="p">())</span><span class="w">                       </span><span class="c1">// its next output()</span>
+<span class="n">job</span><span class="p">.</span><span class="na">closeInput</span><span class="p">()</span><span class="w">                         </span><span class="c1">// no more input is coming</span>
+<span class="n">log</span><span class="p">(</span><span class="n">job</span><span class="p">.</span><span class="na">await</span><span class="p">())</span><span class="w">                         </span><span class="c1">// waits for the end</span>
+</code></pre></div>
+<p>Each background run shows on the <strong>Sessions</strong> tab, keeps running after the run that started it, and says what it used
+when it ends. The two halves are starters in the Templates pane: <strong>Background templates: coroutineTemplate</strong>, which
+you load and Run, and <strong>Background template: a reader</strong>, the template it starts; an existing <code>AMP</code> folder gets them
+once. See <a href="../sandbox-scripting/#templates-in-the-background">Scripting API</a>.</p>
+<h3 id="run-several-saved-templates-at-once">Run several saved templates at once<a class="headerlink" href="#run-several-saved-templates-at-once" title="Permanent link">&para;</a></h3>
+<p><strong>Run in background</strong>, the play icon on each row of the Templates pane, starts a saved template beside the script in
+the editor. The pane counts what runs, and each run has its live figures and <strong>Stop</strong>. Before a start, memory is
+checked: too little and it is refused, saying what is short and what to close. See
+<a href="../sandbox/#templates-in-the-background">Templates in the background</a>.</p>
+<h3 id="delegate-to-a-template">Delegate to a template<a class="headerlink" href="#delegate-to-a-template" title="Permanent link">&para;</a></h3>
+<p><code>template("name")</code> calls a saved template like a function, on one run:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">reader</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">template</span><span class="p">(</span><span class="s">"reader"</span><span class="p">)</span>
+<span class="n">log</span><span class="p">(</span><span class="n">reader</span><span class="p">(</span><span class="s">"turn the lights on"</span><span class="p">))</span><span class="w">         </span><span class="c1">// starts it, sends the line, returns its next output()</span>
+<span class="n">log</span><span class="p">(</span><span class="n">reader</span><span class="p">(</span><span class="s">"what is the weather"</span><span class="p">))</span><span class="w">        </span><span class="c1">// the same run</span>
+<span class="n">reader</span><span class="p">.</span><span class="na">close</span><span class="p">()</span><span class="w">                            </span><span class="c1">// closes its input and waits</span>
+</code></pre></div>
+<p>A failed template makes the call throw. When the script ends its <code>template</code> values are closed for it. <strong>Stop</strong> on a
+script, and <code>cancel()</code> or <strong>Terminate</strong> on a run, now end what it started, nested runs included; a template can't start
+itself. See <a href="../sandbox-scripting/#delegating-to-a-template">Scripting API</a>.</p>
+<h3 id="shell-commands">Shell commands<a class="headerlink" href="#shell-commands" title="Permanent link">&para;</a></h3>
+<p><code>shell</code> and <code>shellScript</code> run commands and script files on this computer, in your login shell.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shell</span><span class="p">(</span><span class="s">"du -sh ~/Documents"</span><span class="p">)</span>
+<span class="n">log</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="na">out</span><span class="p">)</span>
+<span class="n">shellScript</span><span class="p">(</span><span class="s">"~/bin/backup.sh"</span><span class="p">,</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span><span class="s">"--dry-run"</span><span class="p">))</span>
+</code></pre></div>
+<p>The output follows in the console as it arrives. A command that fails turns the console's error level on, so its reason
+is in view. A command stops at its timeout, 120 seconds unless you give another, and when the app exits. Only a script
+in the sandbox can run one: the HTTP endpoints have no way to. See <a href="../sandbox-scripting/">Scripting API</a>.</p>
+<h3 id="exporting-a-script-compiled">Exporting a script, compiled<a class="headerlink" href="#exporting-a-script-compiled" title="Permanent link">&para;</a></h3>
+<p>The export square on the strip over the editor (<strong>⌘E</strong>) makes a folder that runs the script with plain <code>java</code>, and by
+default the script and its templates go in compiled to classes: no compiler in the bundle, no compile at start, Java 21
+or newer. The pane lists every saved template to take along; <code>java -jar run.jar --template "name"</code> runs one, <code>--list</code>
+says what there is, and templates called with <code>template("name")</code> or <code>coroutineTemplate</code> go along and call each other in
+the bundle as they do here. A script that calls two templates comes to 20 MB, starts and ends in 0.3 s and peaks at
+87 MB, where the old way took 189 MB, 4.3 s and 430 MB. The pane ends on the bundle's path, its size and the exact
+<code>java -jar</code> line, with <strong>Copy</strong>. <strong>Script</strong> keeps the old way, the text with the compiler beside it. A script that
+doesn't compile is refused with its errors and nothing is written. See <a href="../sandbox/#exporting-a-script">Exporting a script</a>.</p>
+<h3 id="resources-for-every-run">Resources for every run<a class="headerlink" href="#resources-for-every-run" title="Permanent link">&para;</a></h3>
+<p>Each run ends with what it used: memory and its peak, heap, CPU time and ONNX Runtime calls, then the sessions left open.
+<strong>Recent runs</strong> shows a short form of the same line, and background templates print it too. A background template's line
+doesn't count its own run, or the runs that hold it, among the sessions left open.</p>
+<div class="highlight"><pre><span></span><code>Resources: memory 1.20 GB, peak 1.40 GB, 180.0 MB more than before · heap 340.0 MB of 4.00 GB · cpu 2.10 s · ort 12 runs in 640 ms · sessions 3 opened, 2 closed, 1 still open
+Still open: web-ample #3 (static search)
+</code></pre></div>
+<p>See <a href="../sandbox/">The sandbox</a>.</p>
+<p>The Models page, <strong>Sessions</strong> tab, has a <strong>Scripts</strong> section too: each script and template that ran, what it holds, its
+answers, its CPU and what it allocated; while main.kts runs, what its meter reads so far is under it.</p>
+<p>Every session's row has a resources line under it, in file sizes, since ONNX Runtime doesn't say what it holds: a
+model session its head and its encoder (<code>head 9 KB · encoder 415.6 MB, shared by 3 · 12 ms a run · last used 3s ago</code>;
+the encoder is named once with how many share it), a package its jar, a bare ONNX session its file, a group the sum of
+its heads, and a background template what its meter reads right now (<code>memory 1.20 GB, peak 1.40 GB · heap 340.0 MB of
+4.00 GB · cpu 2.10 s · ort 12 runs in 640 ms</code>). Over the rows, a totals line: what the process holds, how much of that
+is the encoders, the heap against its limit, and how many sessions are open and what they weigh together
+(<code>Process 1.85 GB, of which encoders 415.6 MB · heap 340.0 MB of 4.00 GB · 20 sessions weigh 436.0 MB</code>). See
+<a href="../sessions/#see-what-a-script-uses">Running sessions</a>.</p>
+<h3 id="autocomplete-for-block-functions">Autocomplete for block functions<a class="headerlink" href="#autocomplete-for-block-functions" title="Permanent link">&para;</a></h3>
+<p>The editor offers every block function with its braces, as a script writes it, with the caret inside: <code>ortClosable {  }</code>,
+<code>sessionMod("") {  }</code>. After <code>m.</code> on a model, and inside a <code>sessionMod</code> block, it offers that model's own functions.</p>
+<h3 id="modules-that-miss-something-are-refused">Modules that miss something are refused<a class="headerlink" href="#modules-that-miss-something-are-refused" title="Permanent link">&para;</a></h3>
+<p><code>initMod</code> no longer opens a model or package that lacks something. It stops before anything opens and names what is
+missing: an encoder file, a head, labels that don't match, or a package config still holding its template. The same
+check backs the requirements list on the Models page. See <a href="../sessions/">Running sessions</a>.</p>
+<h2 id="the-app">The app<a class="headerlink" href="#the-app" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Memory is watched while templates run, not only when they start</strong>: a light watch (a thread that exists only while a template goes in the background, one look a second) stops the newest template when the free heap stays under 32 MB for three looks and a collection doesn't bring it back, one at a time and newest first, with a plain console line saying which and why. <code>main.kts</code> is never stopped for it; it gets a warning line. See <a href="../sandbox/#templates-in-the-background">Background templates</a>.</li>
+<li><strong><code>main.kts</code>'s Resources line no longer lists its own delegates as still open</strong>: the templates it called with <code>template(...)</code> are being closed at the moment the line is written, so it waits a moment for them and leaves them out; one started with <code>coroutineTemplate</code> goes on by design and is still listed (a background template's own line got the same fix earlier). See <a href="../sandbox/#running">Resources</a>.</li>
+<li><strong>A running script survives leaving the sandbox page</strong>: going to Models or Settings used to end <code>main.kts</code> with <code>Stopped after</code>. The run now belongs to the app, held apart from the page as the console's width and panes are, so it goes on while you look at Packages and Sessions, its lines keep reaching the console, and coming back shows it still running with its live status and a working <strong>Stop</strong>. See <a href="../sandbox/#running">Running</a>.</li>
+<li><strong>What runs, in the strip at the foot of the window</strong>: while <code>main.kts</code> or a template in the background goes, the strip's left end says how many (<code>2 running</code>). A click opens a small panel over it with a line for each: the name, its own figures (<code>holds 416.5 MB · allocated 878.3 MB · cpu 1.39 s</code>) and how long it has gone, and its own <strong>Stop</strong>. The cpu and the allocation are those of the thread its script runs on, and what it holds is the weight of the sessions it opened, an encoder shared with another run counted once, so a busy template and an idle one read differently. The Templates pane's rows show the same. With nothing running the strip is the one calm line it was, and its ✕ works as before. The figures are read off the UI thread. See <a href="../sandbox/#templates-in-the-background">Running in the background</a>.</li>
+<li><strong>Cloud save</strong>: in the sandbox's Templates pane, under the save form, a logged-out person sees <em>Saved here only</em> and a quiet <strong>Log in to save to the cloud</strong>, which opens the log in page and comes back to the pane. Logged in, what you save (your templates, <code>settings.json</code> and <code>main.kts</code>, nothing else) is also kept in your account, a moment later from the background, and the pane says <em>Saved here and to the cloud</em>, or <em>Saved here. Not saved to the cloud:</em> with why. A failed send never touches the local save and is tried again on the next save and at the next login. At login, what the account has and this Mac doesn't comes down; where both changed, the newer stays in place and the other is kept under <code>AMP/pluginDir/backup</code>. Local saving works as before, logged in or not, and with the server down. See <a href="../sandbox/#cloud-save">Cloud save</a>.</li>
+<li><strong>Performance tests</strong>: <code>org.example.project.perf</code> measures start-up, the Models page over 60 models, what sessions, shared models and background runs hold and give back, every page and the command palette opened and closed over and over, the console under 40000 printed lines (it keeps between 18000 and 20000 of the newest, the file keeps all and is rotated at 20 MB), the console's commands including <code>terminate all</code>, and the figures on a run's Resources line, each against a budget. See <a href="../troubleshooting/#performance-tests">Troubleshooting</a>.</li>
+<li><strong>Console</strong> at its 20000-line cap drops its oldest 2000 lines at once, not one per new line: a script printing at the cap no longer makes the window compose every line again for each batch (1.2 s a batch of 100 lines became 0.2 s on average).</li>
+<li><strong>Appearance</strong> follows VS Code's Dark Modern: near-black panels with a slightly lighter sidebar and header, thin gray
+  borders in place of filled blocks, one blue for the primary action, and red only on what ends or removes something.
+  Buttons have 4px corners and two heights; the sidebar's items carry their names.</li>
+<li><strong>Layout polish</strong>: Settings is built like VS Code's, a title over a card of rows with the controls at the right, from
+  the same buttons and toggles as the other pages. Every confirmation (destroy a model, delete a template or a file,
+  restore a backup) and the error dialog share one box: 480 dp wide, a title, one muted line, and two 28 dp buttons at
+  the right, the one that changes nothing first and the red one last. A template's name is cut with an ellipsis and its
+  tags show only when they fit whole, so <strong>Load</strong> is never over them; the export of a template keeps its title in place
+  while the page scrolls, and a package's flags are faint outlines with the same corners as the rest.</li>
+<li><strong>Status strip</strong>: the memory figure moved from the Models page to one strip across the foot of the window, on every
+  page. Its ✕ hides it until the app closes, and <strong>Memory</strong> in the sidebar brings it back.</li>
+<li><strong>UI scale</strong> stops at 150%. A saved scale above that is brought down to it. See <a href="../settings/">Settings</a>.</li>
+<li><strong>Text</strong> starts with a capital and goes on in normal case everywhere. No label is in all capitals, apart from real
+  acronyms such as ONNX and HTTP.</li>
+<li><strong>Stop</strong>: while a script runs the play square is a red stop square. Pressing it, or ⌘., interrupts the script, and
+  the strip and <strong>Recent runs</strong> say <em>Stopped after</em>, neither finished nor failed. What the script opened stays open.</li>
+<li><strong>Left arrow</strong> closes the Templates panel as well as the console, and a second click brings them back as they were.</li>
+<li><strong>The status strip</strong> says nothing before a first run. The hint under the empty console is gone too.</li>
+<li><strong>Package repository</strong>: the search moved from Settings to the Models page, as the <strong>Repository</strong> section under the
+  installed packages on the Packages tab. Settings keeps the account, the settings and the files. See
+  <a href="../models-page/#repository">Models page</a>.</li>
+<li><strong>Live resources</strong>: while a script runs a line under the console strip reads <code>memory 1.20 GB, peak 1.40 GB · heap
+  340.0 MB of 4.00 GB · cpu 2.10 s · ort 12 runs</code>, read every second, so a script that grows is seen before it ends;
+  the last run's figures stay there until the next run.</li>
+<li><strong>Still open</strong>: a fold under Recent runs lists every open session with Terminate, Free on one a kept scope holds,
+  and Free all; the console's <code>Still open:</code> line opens it. The Sessions tab has Free on those rows too.</li>
+<li><strong>Console commands</strong>: <code>free search</code>, <code>free all</code>, <code>terminate #3</code>, <code>terminate all</code>, <code>sessions</code>, <code>scopes</code>, <code>help</code> and
+  <code>clear</code> typed into the console's input run without a script. See <a href="../sandbox/#the-command-line">The sandbox</a>.</li>
+<li><strong>Console tooltips</strong>: every control on the console strip says what it is for, which way it is now and what a click
+  does; the level toggles say how many lines they hide.</li>
+<li><strong>Editor crash</strong>: a long script at a high UI scale no longer crashes the editor pane.</li>
+<li><strong>Editor highlighting</strong>: a <code>//</code> or a <code>#</code> inside a string, an apostrophe, an escaped quote or a raw string no longer
+  shifts the colours of everything after it onto the wrong characters; the editor reads strings and comments itself.
+  A console place in a script with CRLF line endings lands before the <code>\r</code>.</li>
+<li><strong>Editor margins</strong>: a script longer or wider than its view no longer loses its margins when the editor takes the
+  keyboard; the first letter of every line was cut off under the gutter and line 1 was half under the top edge.</li>
+<li><strong>Line numbers</strong> stand on the baseline of their lines. They sat a little above the text, and below it on line 1.</li>
+<li><strong>ONNX threads</strong> sleep when their session is idle instead of spinning, so an encoder, heads and a group open together
+  don't take the cores of a Raspberry Pi between requests. <code>-Damie.ort.threads=N</code> sets how many threads a session gets.
+  See <a href="../troubleshooting/#slow-hardware">Troubleshooting</a>.</li>
+<li><strong>Builds on a small heap</strong>: the rows are embedded one at a time and only each row's sentence vector is kept, so ten
+  thousand rows take 30 MB of heap instead of 2 GB.</li>
+<li><strong>The Models page opens on its models, not on their plots</strong>: the plots are drawn on a thread of their own and shown
+  as they are ready, where the first read drew every model's before showing anything; a serving model's plots are drawn
+  again at most every ten seconds instead of after every answer.</li>
+<li><strong>The Models page on a slow disk</strong> waits three times as long as its last read took before reading again, decodes a
+  model's metrics history once per version of its file, and reads the process's memory from <code>/proc</code> on Linux and from one
+  <code>ps</code> a second at most elsewhere.</li>
+<li><strong>Background templates</strong> run eight at a time on a heap of 512 MB or more and fewer on a smaller one, one per 64 MB.</li>
+<li><strong>Memory</strong>: the heap may grow to 35% of the machine's RAM; <code>AMIE_JVM_ARGS</code> adds JVM flags for one machine. An encoder
+  that would not load, and an out of memory error nobody caught, each leave a console line saying what to do.</li>
+<li><strong>Startup timing</strong>: <code>-Damie.timing=true</code> prints when the window was composed and when the Models page had its first read.</li>
+<li><strong>Raspberry Pi 5 benchmark</strong>: <code>--bench</code> runs the app with no window and prints what each part costs on this machine
+  (<code>./scripts/pi-bench.sh</code> on a Pi). Three things it found are fixed: the encoder's load no longer waits 4 seconds on
+  DJL's call home (4.9 s to 0.8 s on a Mac, and nothing is sent to DJL's telemetry bucket any more), ONNX Runtime's
+  library is unpacked once into <code>AMP/cache/ort/</code> instead of at every start, and the script engine is warmed in the
+  background so the first Run answers in a moment. See <a href="../pi5/">Raspberry Pi 5</a>.</li>
+</ul>
+<h2 id="packages">Packages<a class="headerlink" href="#packages" title="Permanent link">&para;</a></h2>
+<p><code>google-sheets.jar</code> and <code>google-docs.jar</code> join the other Google packages in <code>jar-jar</code>, on the shared Google code from
+<code>amie-packages</code>. <code>janitor-ai.jar</code> asks any OpenAI-compatible chat API over plain REST.</p>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Commands</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>google-sheets.jar</code></td>
+<td><code>tabs</code>, <code>read</code>, <code>write</code>, <code>append</code>, <code>create</code></td>
+</tr>
+<tr>
+<td><code>google-docs.jar</code></td>
+<td><code>read</code>, <code>create</code>, <code>append</code>, <code>replace</code></td>
+</tr>
+<tr>
+<td><code>janitor-ai.jar</code></td>
+<td><code>ask</code> (the default: a prompt, or a chat completions request as JSON), <code>raw</code>, <code>models</code></td>
+</tr>
+</tbody>
+</table>
+<p>Both Google packages need <code>google.properties</code> filled in, so <code>initMod</code> refuses them until it is. To set them up, enable
+the Sheets and Docs APIs in your Google project, copy the jars to <code>AMP/pluginDir</code>, and authorize unless an
+<code>authorize --all</code> token already covers them:</p>
+<div class="highlight"><pre><span></span><code>java<span class="w"> </span>-jar<span class="w"> </span>google-sheets.jar<span class="w"> </span>authorize<span class="w"> </span><span class="s2">"&lt;pluginDir&gt;/config/google-sheets"</span>
+</code></pre></div>
+<p><code>janitor-ai.jar</code> speaks the OpenAI chat completions format (<code>POST /chat/completions</code>, <code>GET /models</code>) with the JDK's
+HTTP client and nothing else: no SDK, no dependency. Copy it to <code>AMP/pluginDir</code>; the first <code>initMod("janitor-ai.jar")</code>
+writes <code>AMP/pluginDir/config/janitor-ai/janitor-ai.properties</code> and refuses the jar until the file is filled in. Paste
+the URL and the key there: <code>url=</code> takes the base URL ending in <code>/v1</code>, or the full <code>.../chat/completions</code> address, the
+same thing JanitorAI's API settings take; <code>key=</code> the API key (sent as <code>Authorization: Bearer</code>, kept on this machine,
+never logged); <code>model=</code> the model name (<code>models</code> lists what the server offers); <code>system=</code> an optional system prompt.
+It works with any OpenAI-compatible server, a local one included: <code>http://localhost:11434/v1</code> for Ollama or
+<code>http://localhost:1234/v1</code> for LM Studio, with <code>key=</code> left empty. <code>run(prompt)</code> answers the assistant's text only, so
+<code>answer(prompt)</code> is the reply; an error names the HTTP status and what to do (401: the key, 404: the URL, 429: wait).</p>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">ai</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">initMod</span><span class="p">(</span><span class="s">"janitor-ai.jar"</span><span class="p">)</span>
+<span class="n">log</span><span class="p">(</span><span class="n">ai</span><span class="p">.</span><span class="na">answer</span><span class="p">(</span><span class="s">"say hi in three words"</span><span class="p">))</span>
+<span class="n">ai</span><span class="p">.</span><span class="na">close</span><span class="p">()</span>
+</code></pre></div>
+<h2 id="sandbox-layout">Sandbox layout<a class="headerlink" href="#sandbox-layout" title="Permanent link">&para;</a></h2>
+<p>The rule beside the editor now moves in a small window or at a large UI scale, and stays under the pointer after it
+overshoots. The console and templates stay as you left them when you come back from the Models or Settings page. See
+<a href="../sandbox/">the sandbox</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

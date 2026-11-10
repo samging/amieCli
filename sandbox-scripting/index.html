@@ -1,0 +1,2733 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="How to use the Amie desktop app and the amie command line - the sandbox, scripting, packages, models and metrics">
+      
+      
+      
+        <link rel="canonical" href="https://samging.github.io/amieCli/sandbox-scripting/">
+      
+      
+        <link rel="prev" href="../sessions/">
+      
+      
+        <link rel="next" href="../cookbook/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Scripting API - Amie desktop app</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#scripting-api" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Amie desktop app" class="md-header__button md-logo" aria-label="Amie desktop app" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Amie desktop app
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Scripting API
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/samging/amieCli" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    samging/amieCli
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Amie desktop app" class="md-nav__button md-logo" aria-label="Amie desktop app" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Amie desktop app
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/samging/amieCli" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    samging/amieCli
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start here
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start here
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How the app works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The components
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup-tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set up a new Mac
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://samging.github.io/amieCli/learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The amie book
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working in the app
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working in the app
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sandbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The sandbox
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scripting API
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scripting API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#running-a-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running a script
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Running a script">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#run-phases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run phases
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The API
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#models-from-outside" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models from outside
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Models from outside">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#encoder-and-decoder-pairs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Encoder and decoder pairs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading-a-prediction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading a prediction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#building-a-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Building a model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packages
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Packages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jars-from-github" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jars from GitHub
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-a-jar-needs-metadata-configuration-and-test-runs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a jar needs: metadata, configuration and test runs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#session-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session logs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#building-a-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Building a package
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-modelbuilder-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What modelBuilder does
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-progress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build progress
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#saved-states" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Saved states
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shell-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shell commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#templates-in-the-background" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Templates in the background
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Templates in the background">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-script-that-waits-to-be-called" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A script that waits to be called
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delegating-to-a-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Delegating to a template
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#serving-a-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serving a model
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook, scripts to copy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models and metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../serving/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Serving a model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../amp-folder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The AMP folder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models-page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models page
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pi5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raspberry Pi 5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source-layout/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where the code is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../codebase/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The code of amie, what is where and why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#running-a-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running a script
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Running a script">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#run-phases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run phases
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The API
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#models-from-outside" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models from outside
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Models from outside">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#encoder-and-decoder-pairs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Encoder and decoder pairs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading-a-prediction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading a prediction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#building-a-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Building a model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packages
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Packages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jars-from-github" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jars from GitHub
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-a-jar-needs-metadata-configuration-and-test-runs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a jar needs: metadata, configuration and test runs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#session-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session logs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#building-a-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Building a package
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-modelbuilder-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What modelBuilder does
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-progress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build progress
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#saved-states" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Saved states
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shell-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shell commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#templates-in-the-background" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Templates in the background
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Templates in the background">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-script-that-waits-to-be-called" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A script that waits to be called
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delegating-to-a-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Delegating to a template
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#serving-a-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serving a model
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="scripting-api">Scripting API<a class="headerlink" href="#scripting-api" title="Permanent link">&para;</a></h1>
+<p>Complete scripts for every call below, ready to paste, are in the <a href="../cookbook/">Cookbook</a>.</p>
+<p>The sandbox is a Kotlin script editor (<code>main.kts</code>) with a console (how to use the editor, the completion dropdown and
+the console filters is in <a href="../sandbox/">The sandbox</a>). The script runs inside the app with the sandbox API bound to
+it; everything it logs shows in the console on the right and is appended to <code>AMP/logs.txt</code>.</p>
+<p>Every function below can be called <strong>directly</strong> (<code>source("x.csv")</code>) or through the <code>amie</code> object
+(<code>amie.source("x.csv")</code>). The only difference is <code>amie.import</code>: without the prefix write
+<code>implementation("group:module:version")</code> or <code>dependency(...)</code> for a package and <code>environment(SettingsEnv(...))</code> for
+an environment, since a bare <code>import(...)</code> reads as a Kotlin import.</p>
+<h2 id="running-a-script">Running a script<a class="headerlink" href="#running-a-script" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Type in the editor. The script is saved to <code>AMP/pluginDir/main.kts</code> as you type.</li>
+<li>Press <strong>Run</strong> over the editor or <strong>⌘↵</strong> (Ctrl+Enter elsewhere) inside it.</li>
+<li>While the script runs the console strip reads <code>running 12s</code> (with the model build's phase and progress when
+   <code>modelBuilder</code> is working) and the Run button reads <em>Running…</em>; pressing Run again only logs "Script is
+   already running".</li>
+<li>When it ends the strip shows <code>finished in 41s</code> or <code>failed after 3s</code>, and the console gets the same line.</li>
+</ol>
+<p>Started with <code>AMIE_AUTORUN=1</code>, the app opens the sandbox and runs the saved <code>main.kts</code>
+once, as if Run was pressed (the model site's <code>ample.sh</code> does this for the gateway). Without a saved <code>main.kts</code>
+nothing runs.</p>
+<p>The level toggles on the console strip (internal, error, data, info) filter what is shown; only <strong>info</strong> is on at
+start, the counts on the others say what is hidden. <strong>Clear</strong> empties the view, the log file keeps it all.</p>
+<h3 id="run-phases">Run phases<a class="headerlink" href="#run-phases" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Configuration.</strong> <code>implementation("group:module:version")</code> / <code>amie.import("...")</code> and
+  <code>environment(SettingsEnv("env", "profile"))</code> / <code>amie.import(SettingsEnv(...))</code> calls are read from the script text <em>before</em> it compiles, the packages are resolved from Maven Central (cached under
+  <code>AMP/env/caches</code>) and put on the script's classpath. Each env (<code>AMP/env/&lt;name&gt;/env.lock.json</code>) keeps what was ever
+  imported into it, like a virtualenv.</li>
+<li><strong>Execution.</strong> The script's own <code>import</code> lines are moved to the top (a trailing <code>//</code> comment on one is fine),
+  <code>LogLevel</code> is imported for you, then <code>val amie = bindings["logger"] as ScriptLogger</code>
+  and a prelude of top-level functions delegating to it (<code>fun source(path: String) = amie.source(path)</code>, …) are
+  inserted before the rest of the code, and the whole is evaluated with the Kotlin JSR-223 engine on a background
+  thread. The prelude is generated from one list (<code>SandboxApi.kt</code>), which also feeds the editor's completion dropdown.</li>
+</ul>
+<h2 id="the-api">The API<a class="headerlink" href="#the-api" title="Permanent link">&para;</a></h2>
+<p>Defined in <code>ScriptLogger.kt</code>. The most used calls (prefix <code>amie.</code> optional):</p>
+<table>
+<thead>
+<tr>
+<th>Call</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>log("...")</code>, <code>info</code>, <code>error</code>, <code>data</code></td>
+<td>Any value, so <code>log(pkg.run("x"))</code> prints every answer: a list, a set or an array one element a line, a map <code>key: value</code>. Console lines at the given level: <strong>info</strong> for the script's own output (the only level on at start), <strong>data</strong> for what it produced (every model answer is one), <strong>error</strong> (turns itself on when a run fails), <strong>internal</strong> for the app's own lines</td>
+</tr>
+<tr>
+<td><code>source("train.csv")</code></td>
+<td>Reads a labeled CSV (text and label columns are inferred from headers like <code>text</code>, <code>label</code>, <code>intent</code>). Looked up as given, then in <code>AMP/</code>, then <code>AMP/pluginDir/</code></td>
+</tr>
+<tr>
+<td><code>relate(train, "test.csv")</code></td>
+<td>Attaches a test file to a training source; the model validates on it instead of a split. Remembered in <code>AMP/relations.json</code></td>
+</tr>
+<tr>
+<td><code>sourceFile("file.csv", column = "")</code></td>
+<td>Raw rows keyed by index, optionally one column</td>
+</tr>
+<tr>
+<td><code>hasModel("name")</code></td>
+<td>Whether AMP has that model: built, a text model, a speech model or one imported into <code>AMP/models/imported</code></td>
+</tr>
+<tr>
+<td><code>modelBuilder("name", data)</code></td>
+<td>Trains and exports an intent classifier (below)</td>
+</tr>
+<tr>
+<td><code>initMod("llama3.2-3b")</code></td>
+<td>A text generation model of <code>AMP/models/text</code>, run on the app's own ONNX Runtime and managed as any other session; <code>.answer(text)</code> answers (<a href="../voice/">voice.md</a>)</td>
+</tr>
+<tr>
+<td><code>modelBuilder("name") { ... }</code>, <code>modelBuilder("name", buildOptions(...)) { ... }</code></td>
+<td>Same, the lambda returns the data; the second with your own options</td>
+</tr>
+<tr>
+<td><code>modelBuilder("name", data, buildOptions(...))</code></td>
+<td>The same build with your own options: <code>architecture(hidden, epochs, batchSize, learningRate, activation)</code> candidates, <code>pickBy</code> (<code>macroF1</code> or <code>accuracy</code>), <code>preprocess</code>, <code>validationFraction</code>, <code>seed</code>, <code>balanceClasses</code>, <code>keepTexts</code> (false for a model trained on other people's data: no row text reaches the console or <code>dropped.csv</code>, and its sessions log each text's length instead of the text), <code>folds</code> (cross-validate every head over 2 to 10 folds and find rows that look mislabeled), <code>calibrate</code> (fold a temperature into the head so the scores mean what they say), <code>cacheEmbeddings</code> (keep the vectors on disk, on by default), <code>keepMistakes</code>. See <a href="../models/#your-own-head">Models and metrics</a></td>
+</tr>
+<tr>
+<td><code>architecture(..., weightDecay, dropout, labelSmoothing, schedule, warmupEpochs, patience, name)</code></td>
+<td>A head with what keeps it from memorising, a <code>cosine</code> or <code>linear</code> rate with a warm-up, and early stopping after <code>patience</code> epochs without progress; all off unless given. See <a href="../models/#against-memorising-regularisation-schedules-early-stopping">Against memorising</a></td>
+</tr>
+<tr>
+<td><code>searchSpace(hidden, learningRates, epochs, batchSizes, activations, dropouts, weightDecays, patience, trials, seed)</code></td>
+<td>The candidates of a search: every combination of the values, or <code>trials</code> of them at random. <code>buildOptions(candidates = searchSpace(...), folds = 5)</code></td>
+</tr>
+<tr>
+<td><code>fineTune("name", data, fineTuneOptions(...))</code></td>
+<td>Teaches a trained model more: rows of labels it knows correct it, a label it doesn't know gets an output of its own, and its earlier data is replayed so it keeps what it knew. The data is what <code>modelBuilder</code> takes; the model before stays a version. Returns what <code>modelBuilder</code> returns. See <a href="../models/#fine-tuning-teaching-a-model-more">Fine-tuning</a></td>
+</tr>
+<tr>
+<td><code>fineTuneOptions(epochs, learningRate, batchSize, stayNear, replay, replayPerLabel, freeze, …)</code></td>
+<td>How a fine-tune goes; the table is in <a href="../models/#fine-tuning-teaching-a-model-more">Fine-tuning</a></td>
+</tr>
+<tr>
+<td><code>calibrate("name", data)</code></td>
+<td>Fits a temperature on labeled rows the model hasn't seen (at least 10) so its scores mean what they say; the answers stay the same; a new version</td>
+</tr>
+<tr>
+<td><code>versions("name")</code>, <code>rollback("name", 2)</code></td>
+<td>The heads the model had (the current one first, the ten before it kept in <code>versions/</code>), and an earlier one made the model again as a new version; <code>rollback</code> returns true when it did</td>
+</tr>
+<tr>
+<td><code>textsToLabel("name", path = "asked.txt", limit = 50, diverse = false)</code></td>
+<td>The texts the model is least sure about (a csv's text column or a text file's lines; without a path, what it was asked over HTTP) written with its guess to <code>AMP/&lt;name&gt;-to-label.csv</code>, under the rows labeled in that file already; returns the file's path. <code>diverse = true</code> picks texts unlike each other among its closest calls (<a href="../models/#what-to-label-next">What to label next</a>)</td>
+</tr>
+<tr>
+<td><code>teach("name", "text", "label")</code></td>
+<td>A text the model answers wrongly with the label it should give, written labeled at the top of its queue (<code>AMP/&lt;name&gt;-to-label.csv</code>), as the chips under the Try line do; the next fine-tune on the queue learns it. The label in the model's spelling; a text the queue has gets the label instead. Returns the queue's path, null when it isn't written (a model that keeps no texts has no queue; the console says why, never with the text)</td>
+</tr>
+<tr>
+<td><code>queue("name")</code></td>
+<td>The rows of its queue in order, labeled or not: <code>.text</code>, <code>.label</code> (empty while unlabeled), <code>.labeled</code>, <code>.guess</code>, <code>.score</code>, <code>.runnerUp</code>; printed as a table (an internal line). None for a model that keeps no texts</td>
+</tr>
+<tr>
+<td><code>planFineTune("name", data = null, fineTuneOptions(...))</code></td>
+<td>What a fine-tune on the data would do, worked out without training, in the words of the plan strip: the rows, the labels they are and add, the earlier rows it replays, what it drops, what is worth a second look and what keeps it from starting (an internal line, and an error line when it would not start). Without data, on the labeled rows of its queue. <code>.ok</code> says whether <code>fineTune</code> would start; <code>.rows</code>, <code>.known</code>, <code>.newLabels</code>, <code>.tooFew</code>, <code>.nearMisses</code>, <code>.replayRows</code>, <code>.problems</code></td>
+</tr>
+<tr>
+<td><code>regradeQueue("name")</code></td>
+<td>What the model answers now to every text of its queue, as the Models page grades it after a fine-tune, rollback or calibration: each row's guess, score and runner-up written again, the labels kept; returns the rows. The console says how many labeled texts it answers right</td>
+</tr>
+<tr>
+<td><code>embeddingCache.print()</code>, <code>embeddingCache.clear()</code>, <code>embeddingCache.sizeOnDisk()</code></td>
+<td>The sentence vectors kept in <code>AMP/cache/embeddings</code>, so a text is embedded once, and the bytes they take</td>
+</tr>
+<tr>
+<td><code>checkData(data)</code></td>
+<td>The preprocessor alone, without training: what it would clean, drop and refuse, and whether a build could start (returns true then)</td>
+</tr>
+<tr>
+<td><code>initMod("name")</code></td>
+<td>The session of an exported model: the one already open, else a new one (listed on the Models page, terminable there); <code>.predict("text")</code> returns the predicted label, <code>.scores("text")</code> every label with its score (best first), <code>.inference("text")</code> the raw <code>label:probability</code> lines sorted best first; <code>.close()</code>. <code>initMod("dummy")</code> works on a fresh checkout. An encoder and decoder pair (a T5 or BART export, <code>encoder_model.onnx</code> with <code>decoder_model.onnx</code>) opens as two sessions a script wires itself: <code>.encoder.run(mapOf("input_ids" to t.ids, "attention_mask" to t.mask))</code> gives the hidden states, <code>.decoder.run(...)</code> the next token's logits for the ids so far (<code>.decoder.inputs</code> names its tensors), <code>.decoderWithPast</code> the decoder that takes the past state back when the export has one, <code>.tokens(text)</code> the ids and mask, <code>.text(ids)</code> the words, <code>.startToken</code> and <code>.endToken</code> the ids the decoding starts from and stops at (from the config files). See <a href="#encoder-and-decoder-pairs">Encoder and decoder pairs</a>. A model that lacks something it needs is refused before anything opens, with all of it <a href="../sessions/#when-something-is-off">in the message</a>. How sessions live and die: <a href="../sessions/">Running sessions</a></td>
+</tr>
+<tr>
+<td><code>sessionMod("name")</code></td>
+<td>A model to ask and nothing more: a snapshot of the head it has now, in memory. <code>.predict</code>, <code>.scores</code>, <code>.predictions</code>, <code>.run</code>, <code>.answer</code>, <code>.inference</code>, and <code>.version</code>, <code>.labels</code>, <code>.name</code>. It can't train or change the model, writes nothing to its <code>sessions.log</code>, needs nothing else open and stays on that head through a fine-tune or a rollback. Everything that asks for the same head shares one snapshot. It goes when the run ends, or with <code>.close()</code>; <code>val m by sessionMod("name")</code> works too. A jar is refused. See <a href="../sessions/#ask-without-touching-the-model-sessionmod">Running sessions</a></td>
+</tr>
+<tr>
+<td><code>sessionMod("name") { ... }</code></td>
+<td>The same for one block, the model's functions at hand: <code>sessionMod("name") { predict("text") }</code>. It goes when the block ends and the call returns the block's value</td>
+</tr>
+<tr>
+<td><code>model.inBackground("text")</code></td>
+<td>Asks any model a script holds on a thread of its own and returns at once with a job: <code>job.await()</code> is every raw answer, <code>job.await(millis)</code> waits that long at most and gives null if it isn't done, <code>job.done</code>, <code>job.state</code> (queued, running, finished, cancelled or failed), <code>job.cancel()</code>. At most <code>-Damie.model.jobs=N</code> run at once, half the cores by default, the rest wait first in, first out; calls made directly never wait. A job ends with the script that started it, however it ends, with the <code>ortClosable</code> block it was started in, which waits for it, and with its model; <code>await</code> throws when it was cancelled or failed. It is on the Sessions tab, queued or running, with Terminate; the tab lists the first 100</td>
+</tr>
+<tr>
+<td><code>initMod()</code></td>
+<td>The bundled BERT NER model, kept open: <code>.inference("text")</code> is one tag per token</td>
+</tr>
+<tr>
+<td><code>group("name")</code></td>
+<td>The swarm of a model group of the env: the models asked together as one session (the one already open on the group, else a new one, listed on the Models page as a <em>model group</em> session). <code>.predict("text")</code> is the label with the best score across the models, <code>.scores("text")</code> each label's best score, <code>.vote("text")</code> the label most models give, <code>.each("text")</code> every model's own label, <code>.ask("text")</code> every model's raw lines, <code>.combined("text")</code> all of it from one asking (<code>.each</code> every model's labels and scores, <code>.merged</code> the labels with their best scores, <code>.vote</code>, as the page's Try line shows them); <code>.close()</code> closes the sessions it opened. When one of its models was terminated meanwhile (on the page, or a script's <code>.close()</code>), <code>group("name")</code> opens a new swarm in its place rather than handing out one that lacks that model. Groups are made on the Models page (a model's ⋯ menu) or with <code>groups</code></td>
+</tr>
+<tr>
+<td><code>huggingFace("owner/name")</code></td>
+<td>A model of the Hugging Face Hub as <code>AMP/models/imported/&lt;name&gt;</code>, by its repo id or its huggingface.co address. It returns the local name, so <code>initMod(huggingFace("onnx-community/all-MiniLM-L6-v2"))</code> opens it. The first call downloads what the Models page would pick, a plain <code>model.onnx</code> when there is one, with the config and tokenizer files beside it (<code>amie hf import</code> at a terminal offers every file that runs here as a list picked with the arrow keys, that one under the cursor; <code>--take 3</code> picks for a pipe); an encoder and decoder pair takes its marked encoder and decoders, the menu <code>amie hf import</code> offers at a terminal said first. Once the folder is there, a call asks nothing of the network. <code>huggingFace("owner/name", "my-name")</code> picks the folder's name, which is the repo's last part by default. A private or gated repo needs <code>HF_TOKEN</code> in the app's environment. A repo that can't be read, has nothing that runs here or doesn't fit on the disk is refused with the reason. See <a href="../models-page/#from-hugging-face">From Hugging Face</a></td>
+</tr>
+<tr>
+<td><code>huggingFace.search("bert", format = "onnx", task = "any")</code></td>
+<td>Searches the Hub for models in a format <code>initMod</code> opens and returns their repo ids, the most downloaded first, printing each with its task, downloads and formats. <code>format</code> is <code>onnx</code>, <code>torchscript</code>, <code>tensorflow</code>, <code>tflite</code> or <code>all</code> (the default), <code>task</code> a Hugging Face task (<code>text-to-speech</code>, <code>automatic-speech-recognition</code>, <code>text-classification</code>, <code>token-classification</code>, <code>feature-extraction</code>, <code>text-generation</code>, <code>audio-classification</code>, <code>image-classification</code>, or a word for one: <code>tts</code>, <code>asr</code>, <code>ner</code>, <code>embeddings</code>, <code>labels</code>) or <code>any</code> (the default), and <code>limit</code> sets how many (20). Blank text with a task lists the most downloaded of that task. Formats are read off each repo's files, so weights-only repos are left out. Pass an id to <code>huggingFace("…")</code></td>
+</tr>
+<tr>
+<td><code>groups</code></td>
+<td>The model groups of the envs: <code>groups.print()</code>, <code>groups.names()</code>, <code>groups.create("name", listOf("a", "b"))</code> (in the env the script is sourced in), <code>groups.add("name", "model")</code>, <code>groups.remove("name", "model")</code>, <code>groups.delete("name")</code>, <code>groups.closeAll()</code>. A group belongs to an env: it is kept in <code>AMP/env/&lt;env&gt;/groups.json</code>, <code>group("name")</code> looks in the script's env first, and <code>internalEnv()</code> lists them with the packages</td>
+</tr>
+<tr>
+<td><code>initAmie("text")</code></td>
+<td>Named entities in one text with the same NER model, opened and closed for the call: the tags are printed and returned. For many texts use <code>initMod()</code></td>
+</tr>
+<tr>
+<td><code>initMod("whisper")</code>, <code>initMod("voice")</code></td>
+<td>The speech models <code>speech.properties</code> names, or <code>initMod("whisper-base.en")</code> for one by its folder. Whisper's <code>.answer(wav)</code> is what was said, a voice's <code>.answer(text)</code> is the file it spoke into. One session each, held by a block around it, on the Sessions tab, ended by Terminate</td>
+</tr>
+<tr>
+<td><code>model.can("chat")</code></td>
+<td>Whether a model can do something before you call it: <code>chat</code> and <code>generate</code> for a text model, <code>classify</code> and <code>fineTune</code> for a built one, <code>tag</code> for <code>initMod()</code>, <code>hear</code> and <code>speak</code> for speech, <code>run</code> for all</td>
+</tr>
+<tr>
+<td><code>initMod("name.jar")</code></td>
+<td>A new instance of a package jar: <code>.run("text")</code> calls its <code>run(text)</code> and returns every answer, <code>.answer("text")</code> the first (null when none), <code>.close()</code> its <code>close()</code>. <code>predict</code>, <code>scores</code> and <code>predictions</code> throw on a package: it has no labels. Looked up in the env, <code>AMP/pluginDir</code>, as a path, then fetched from the repositories in <code>AMP/github.json</code>; <code>initMod("github:owner/repo/x.jar@ref")</code> takes it from that repository (below)</td>
+</tr>
+<tr>
+<td><code>validateMetrics("name", labels = listOf(...))</code></td>
+<td>Prints the stored validation table of a model, with the range of its accuracy and macro F1 when the run kept them, and returns it: <code>.accuracy</code>, <code>.macroF1</code>, <code>.accuracyRange</code> and <code>.macroF1Range</code> (<code>low</code>, <code>high</code>; null for a run from before)</td>
+</tr>
+<tr>
+<td><code>metricsChart("name", labels = listOf(...))</code></td>
+<td>ASCII bars: accuracy, macro F1 and the F1 of each label with precision, recall and support</td>
+</tr>
+<tr>
+<td><code>metricsHistory("name")</code></td>
+<td>ASCII line chart of accuracy and macro F1 across every build</td>
+</tr>
+<tr>
+<td><code>confusionMatrix("name")</code></td>
+<td>The last validation's confusion matrix as a shaded ASCII grid</td>
+</tr>
+<tr>
+<td><code>mistakes("name")</code>, <code>suspects("name")</code></td>
+<td>The validation rows the last run got wrong, the surest first; the training rows a cross-validated build doubts. Texts only when the model keeps texts</td>
+</tr>
+<tr>
+<td><code>calibrationChart("name")</code>, <code>trainingCurves("name")</code></td>
+<td>How often each score bin is right and what a score gate keeps; loss and accuracy by epoch</td>
+</tr>
+<tr>
+<td><code>forwardContext("text") { ids -&gt; }</code></td>
+<td>Runs the encoder and returns the hidden state <code>[batch][token][hidden]</code></td>
+</tr>
+<tr>
+<td><code>importModelOnnx("path.onnx")</code></td>
+<td>Any ONNX model behind the <code>inference / getStatus / close</code> interface</td>
+</tr>
+<tr>
+<td><code>importModel("path")</code></td>
+<td>Any model by its path: an <code>.onnx</code> file, a TorchScript file (<code>.pt</code>, <code>.pth</code>, <code>.torchscript</code>), a TensorFlow SavedModel folder, or a folder holding one such as a Hugging Face repo. Text in with its <code>tokenizer.json</code>, labels from its <code>config.json</code>, tensors through <code>.inputs</code>, <code>.outputs</code> and <code>.run(...)</code>. Never throws: what can't be opened is one error line with what would work, and null. See <a href="#models-from-outside">Models from outside</a></td>
+</tr>
+<tr>
+<td><code>initMod("bert-onnx")</code>, <code>initMod("/path/model.pt")</code></td>
+<td>A model of <code>AMP/models/imported/&lt;name&gt;</code> (a Hugging Face repo or a folder copied in), or a model by its path, after every kind above: opened as <code>importModel</code> opens it, held by the block around it, on the Sessions tab with Terminate. A refusal throws, with all it lacks in the message</td>
+</tr>
+<tr>
+<td><code>sessions.print()</code>, <code>sessions.cancel("name")</code>, <code>sessions.cancelAll()</code>, <code>ortSessions()</code></td>
+<td>The open ORT sessions; <code>ortSessions()</code> returns them as the lines <code>sessions.print()</code> prints</td>
+</tr>
+<tr>
+<td><code>ortClosable(name) { }</code></td>
+<td>What the block opens is for that block alone: closed when it ends, however it ends, the last opened first, so a handle kept past it fails as closed. A session open before the block is used and left open. A template started in the block works inside it and ends with it. Returns the block's value. See <a href="../sessions/#scope-functions">Scope functions</a></td>
+</tr>
+<tr>
+<td><code>ortAsync(name) { }</code></td>
+<td><code>ortClosable</code> run in the background: the block runs on a thread of its own and the call returns a job at once. What the block opens is closed when it ends, however it ends, and a template started in it ends with it. Its log lines go to the script's console. The job ends with the script, however it ends (done, stopped or terminated), and with an <code>ortClosable</code> block around the call, which waits for it: it is cancelled and what it opened is closed. <code>job.await()</code> is the block's value and rethrows its failure, <code>job.await(millis)</code> waits that long at most and gives null if it hasn't ended, <code>job.done</code>, <code>job.state</code> (running, finished, cancelled or failed), <code>job.cancel()</code>, which interrupts the block as Stop does a script. The name is <code>async</code> unless given. <code>val job = ortAsync("warm") { initMod("dummy").predict("turn the lights on") }</code>, then <code>log(job.await())</code></td>
+</tr>
+<tr>
+<td><code>ortStatic(name) { }</code></td>
+<td>What the block opens stays open across runs until it is terminated or freed, and a session open before the block is kept too. Returns the block's value. See <a href="../sessions/#scope-functions">Scope functions</a>. <code>ortForever</code> is its old name: a saved script that calls it still runs, and the console says the new name</td>
+</tr>
+<tr>
+<td><code>ortRequired(name) { }</code></td>
+<td>Kept like <code>ortStatic</code> while anything else is in session: a model, package, group, template or background job that no required scope holds. The encoders models share, and an intent model's BERT encoder, don't count. Once nothing else is open it is freed within a couple of seconds, unless its block is still going or what it holds is running, and the block opens it again when next run. For what other models need beside them, an encoder they share, say. Returns the block's value</td>
+</tr>
+<tr>
+<td><code>ortLimited(name, max) { }</code></td>
+<td>Kept like <code>ortStatic</code>, at most <code>max</code> sessions under the name: when one more is opened the oldest is closed first. Returns the block's value</td>
+</tr>
+<tr>
+<td>Memory running short</td>
+<td>Below 32 MB of free heap or 512 MB of free RAM, the app closes the idle sessions of <code>ortLimited</code> scopes and the model <code>handleBy</code> opened, oldest first, one at a time, with a console line for each. It never closes what is running, what a block still going holds, what has a <code>model.inBackground</code> job on it, or anything in <code>ortStatic</code>. A script that keeps such a session gets an error on its next call, as after <code>ortScopes.free</code></td>
+</tr>
+<tr>
+<td><code>ortScopes.print()</code>, <code>ortScopes.free("name")</code>, <code>ortScopes.freeAll()</code></td>
+<td>What each static, required and limited scope holds; closing what one holds, or what all of them hold, which return how many were closed</td>
+</tr>
+<tr>
+<td><code>handleBy(handler) { }</code></td>
+<td>Runs the block and returns its value; when it throws, the handler's value for what it threw instead, and the run goes on: <code>val text = handleBy({ e -&gt; log("failed: ${e.message}"); "" }) { initMod("dummy").predict("hi") }</code>. A stop, a cancel (Stop, Terminate, a template's or a job's cancel) and an Error such as <code>OutOfMemoryError</code> are never handled: they go on as they would</td>
+</tr>
+<tr>
+<td><code>handleBy("message")</code> / <code>handleBy(e)</code></td>
+<td>What the local text model (<code>AMP/models/text</code>, the one <code>assistantModel</code> in settings.json names, else the first) makes of an error: what is wrong and how to fix it, from the message, main.kts and the env, printed and returned. It only answers; the script stays as it is. <code>handleBy({ e -&gt; handleBy(e) }) { source(Path("intents.csv")) }</code> asks about what the block threw. Without a text model, or short of RAM to open one, an error line says why and the answer is <code>""</code>. The model stays open five idle minutes, as <strong>handleBy</strong> under Still open</td>
+</tr>
+<tr>
+<td><code>errorLog(last = 20)</code>, <code>handleBy()</code>, <code>handleBy(lines)</code></td>
+<td>The error terminal's log: the last error lines the console showed, oldest first, as it has them: a run's failures, what a command printed on stderr and why it failed, the app's own error lines. Emptied with the console, which a run does when it starts, so they are the run's. <code>handleBy()</code> hands the last ten of them to the local text model with main.kts and the env, so one call after a failed command or run asks about what the console showed in red; <code>handleBy(lines)</code> takes any list of lines. With nothing there it says so and asks nothing</td>
+</tr>
+<tr>
+<td><code>importModelTensorflow(Path.of("…"))</code></td>
+<td><code>importModel</code> under its old name: a saved script still runs, and the console says the new name</td>
+</tr>
+<tr>
+<td><code>packages.available()</code>, <code>packages.fetch("x.jar")</code>, <code>packages.print()</code>, <code>packages.closeAll()</code>, <code>packages.github()</code>, <code>packages.check("x.jar")</code>, <code>packages.meta("x.jar")</code>, <code>packages.test("x.jar")</code></td>
+<td>The package jars the GitHub repositories offer, a download into <code>AMP/pluginDir</code>, the open package sessions; the jars of the GitHub repositories in <code>AMP/github.json</code>; the check <code>initMod</code> and a fetch make, a jar's metadata, and its tests run (below)</td>
+</tr>
+<tr>
+<td><code>saveState("name", json)</code>, <code>loadState("name")</code>, <code>listStates()</code></td>
+<td>A JSON text kept per user on the Amie backend (signed in): store it under a name, read it back (null when absent), list the names. The sandbox has no state that outlives a run; this is how a script remembers a choice across runs and machines</td>
+</tr>
+<tr>
+<td><code>database(name = "main")</code></td>
+<td>A Postgres database from <code>AMP/databases.json</code>: <code>.query(sql, params…)</code> rows as maps, <code>.scalar</code>, <code>.execute</code> for changes, <code>.print(sql)</code> a table in the console, <code>.tables()</code>, <code>.close()</code>. Failures are one Error line and a <code>DatabaseException</code></td>
+</tr>
+<tr>
+<td><code>databases.print()</code>, <code>databases.names()</code>, <code>databases.closeAll()</code></td>
+<td>The configured databases</td>
+</tr>
+<tr>
+<td><code>shell("du -sh ~/Documents")</code></td>
+<td>Runs a command in your login shell and returns what it printed: <code>.ok</code>, <code>.exit</code>, <code>.out</code>, <code>.err</code>, <code>.lines</code>. <code>dir</code>, <code>timeoutSeconds</code> and <code>env</code> are optional (<a href="#shell-commands">Shell commands</a>)</td>
+</tr>
+<tr>
+<td><code>shellScript("~/bin/lookup.sh", listOf("arg one", "arg two"))</code></td>
+<td>Runs a script file with its arguments passed one by one; returns what <code>shell</code> returns</td>
+</tr>
+<tr>
+<td><code>exportJvm("main.kts", to = "~/bundles/talk")</code></td>
+<td>Exports a script as a bundle that runs without the app, as <strong>Export…</strong> does (<a href="../sandbox/#exporting-a-script">Exporting a script</a>): main.kts, a template's name or id, or a file, into a new or empty folder, the first free one under <code>~/amie-bundles</code> when <code>to</code> is empty. What can't be included stops it unless <code>anyway = true</code>; <code>planOnly = true</code> only says what would go in; <code>compiled = false</code> carries the text and the compiler. The console says what goes in and where it went; returns the bundle's folder, null when nothing was written</td>
+</tr>
+<tr>
+<td><code>serve("name", port = 8765)</code></td>
+<td>Serves the model over HTTP like the Models page's Listen; returns the predict URL or null. <code>minScore = 0.75</code> makes it abstain under that score, answering <code>fallbackLabel</code> or no label (<a href="../serving/#answering-only-when-it-is-sure">Serving a model</a>); <code>minScore = 0.0</code> and <code>fallbackLabel = ""</code> take saved ones away, and a min score outside 0 to 1 doesn't start it. <code>stopServing("name")</code>, <code>servingUrl("name")</code>, <code>accessLog("name", last = 20)</code> (the last requests of its <a href="../serving/">access log</a>, printed and returned)</td>
+</tr>
+<tr>
+<td><code>importPlugin("plugin.jar")</code></td>
+<td>Runs a static <code>run()</code> or <code>main</code> of a plugin jar once (not a package session; open packages with <code>initMod("x.jar")</code>), found in the env, <code>AMP/pluginDir</code>, as a path or in the GitHub repositories; never throws: a missing jar, a jar without an entry point or a plugin that fails is one Error line and the script goes on</td>
+</tr>
+<tr>
+<td><code>implementation("group:module:version")</code>, <code>dependency("…")</code>, <code>amie.import("...")</code></td>
+<td>Add a package to the script's environment (<code>dependency</code> is another name for <code>implementation</code>) (the Models page's <strong>Add → From Maven Central…</strong> does the same with a search)</td>
+</tr>
+<tr>
+<td><code>implementation("my.jar")</code>, <code>amie.import("my.jar")</code></td>
+<td>Add a jar file to the environment</td>
+</tr>
+<tr>
+<td><code>environment(SettingsEnv("name", "profile"))</code>, <code>amie.import(SettingsEnv(...))</code></td>
+<td>Select the script environment (must be written literally)</td>
+</tr>
+<tr>
+<td><code>internalEnv()</code></td>
+<td>Print what the environment contains</td>
+</tr>
+<tr>
+<td><code>implementation(BuildSettings(...))</code></td>
+<td>Evaluates Gradle build settings in the background</td>
+</tr>
+<tr>
+<td><code>coroutineTemplate("name", input = listOf(...))</code></td>
+<td>Starts a saved template in the background and the script goes on; the run it returns answers to <code>.send(text)</code>, <code>.receive()</code>, <code>.closeInput()</code>, <code>.await()</code>, <code>.cancel()</code> and <code>.state</code>. See <a href="#templates-in-the-background">Templates in the background</a></td>
+</tr>
+<tr>
+<td><code>input()</code>, <code>output("text")</code></td>
+<td>The next line of input, waiting for one, null once input is closed; and an answer for <code>receive()</code>. In a template the line comes from <code>.send</code>; in main.kts it is typed in the console, or read from standard input in an exported bundle, and <code>output</code> logs</td>
+</tr>
+<tr>
+<td><code>templateRuns.print()</code>, <code>templateRuns.cancelAll()</code></td>
+<td>What runs in the background, and cancelling all of it</td>
+</tr>
+</tbody>
+</table>
+<h2 id="models-from-outside">Models from outside<a class="headerlink" href="#models-from-outside" title="Permanent link">&para;</a></h2>
+<p><code>initMod("&lt;name&gt;")</code> opens the folder <code>AMP/models/imported/&lt;name&gt;</code>, and <code>initMod("/path/to/model")</code> or
+<code>importModel("/path/to/model")</code> a model file or folder anywhere. The kinds <code>initMod</code> knew before come first: an
+intent model, a text model or a speech model of that name is opened as ever, then an imported name, then a path.</p>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Files</th>
+<th>Runs on</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ONNX</td>
+<td><code>*.onnx</code>, also a repo's <code>onnx/model.onnx</code></td>
+<td>The ONNX Runtime the app ships</td>
+</tr>
+<tr>
+<td>TorchScript</td>
+<td><code>*.pt</code>, <code>*.pth</code>, <code>*.torchscript</code> saved with <code>torch.jit.trace</code> or <code>torch.jit.script</code></td>
+<td>PyTorch 2.5.1 through DJL 0.31</td>
+</tr>
+<tr>
+<td>TensorFlow</td>
+<td>A SavedModel folder: <code>saved_model.pb</code> and <code>variables/</code></td>
+<td>TensorFlow 2.16.1 through DJL 0.31, in the lightweight build</td>
+</tr>
+<tr>
+<td>TFLite</td>
+<td><code>*.tflite</code></td>
+<td>Refused: DJL dropped TFLite after 0.27. Convert it with <code>python -m tf2onnx.convert --tflite model.tflite --output model.onnx</code></td>
+</tr>
+</tbody>
+</table>
+<p>Refused with what would work: a frozen TensorFlow graph (any <code>.pb</code> but <code>saved_model.pb</code>), PyTorch weights saved with
+<code>torch.save</code> (a <code>.pt</code> or <code>.pth</code> with no code in it), and weights alone: <code>*.safetensors</code>, <code>pytorch_model.bin</code>,
+<code>*.gguf</code>, <code>*.h5</code>, <code>*.keras</code>. No engine runs those without the model's Python code, so export the model to ONNX
+(<code>optimum-cli export onnx --model &lt;repo&gt; &lt;folder&gt;</code>) or TorchScript, or take the repo's <code>onnx/</code> folder when it has one.</p>
+<p>A folder with several formats opens its ONNX first, since it runs on the bundled runtime; otherwise the format its
+<code>source.json</code> names (<code>"format": "onnx|torchscript|tensorflow|tflite"</code>, which a Hugging Face import writes); otherwise
+the first that runs on this machine. Whenever there was a choice, the console says which was taken. Of several files
+of one format, <code>model.onnx</code> comes before <code>onnx/model.onnx</code>, and a full model before a quantized or fp16 one.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">bert</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">initMod</span><span class="p">(</span><span class="s">"distilbert-sst2"</span><span class="p">)</span><span class="w">                 </span><span class="c1">// AMP/models/imported/distilbert-sst2, its onnx/model.onnx</span>
+<span class="n">log</span><span class="p">(</span><span class="n">bert</span><span class="p">.</span><span class="na">predict</span><span class="p">(</span><span class="s">"what a lovely day"</span><span class="p">))</span><span class="w">                </span><span class="c1">// POSITIVE, from its config.json id2label</span>
+<span class="n">log</span><span class="p">(</span><span class="n">bert</span><span class="p">.</span><span class="na">inputs</span><span class="p">)</span><span class="w">                                      </span><span class="c1">// [input_ids int64 [-1, -1], attention_mask int64 [-1, -1]]</span>
+
+<span class="kd">val</span><span class="w"> </span><span class="nv">resnet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">importModel</span><span class="p">(</span><span class="s">"~/models/resnet18.pt"</span><span class="p">)</span><span class="w">      </span><span class="c1">// TorchScript on PyTorch, which declares no shapes: give one</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Tensor</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="n">FloatArray</span><span class="p">(</span><span class="m">3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="m">224</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="m">224</span><span class="p">),</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="m">224</span><span class="p">,</span><span class="w"> </span><span class="m">224</span><span class="p">)</span>
+<span class="n">log</span><span class="p">(</span><span class="n">resnet</span><span class="o">?.</span><span class="na">run</span><span class="p">(</span><span class="n">mapOf</span><span class="p">(</span><span class="s">"image"</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">image</span><span class="p">))</span><span class="o">?.</span><span class="na">values</span><span class="o">?.</span><span class="na">first</span><span class="p">())</span><span class="w">   </span><span class="c1">// output0 float32 [1, 1000]: …</span>
+
+<span class="kd">val</span><span class="w"> </span><span class="nv">tf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">initMod</span><span class="p">(</span><span class="s">"/models/classifier/saved_model"</span><span class="p">)</span><span class="w">    </span><span class="c1">// a SavedModel folder, lightweight build</span>
+<span class="n">log</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">mapOf</span><span class="p">(</span><span class="s">"input_1"</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">floatArrayOf</span><span class="p">(</span><span class="m">0.1f</span><span class="p">,</span><span class="w"> </span><span class="m">0.2f</span><span class="p">,</span><span class="w"> </span><span class="m">0.3f</span><span class="p">,</span><span class="w"> </span><span class="m">0.4f</span><span class="p">))))</span>
+</code></pre></div>
+<ul>
+<li><strong>Text</strong> goes in when a <code>tokenizer.json</code> is next to the model or in a folder above it, up to the imported folder: the
+  token ids, the attention mask and the token type ids fill the inputs of those names (a TorchScript model, which
+  names none, gets the ids and the mask in that order). Without one, <code>predict("0.1, 0.2, 0.3")</code> reads the text as
+  numbers. The labels come from <code>config.json</code>'s <code>id2label</code>.</li>
+<li><strong>A language model</strong> (GPT-2, Llama, BERT for masks: logits <code>[1, tokens, vocab]</code>, such as <code>[1, 1, 50257]</code>, which is a score for every token of the vocabulary at every place, not a hidden state) answers in text. One that continues text (<code>…LMHeadModel</code>, <code>…ForCausalLM</code> in its <code>config.json</code>) goes on greedily, a run a token, up to 24 tokens or its end token: <code>answer(text)</code> and <code>predict(text)</code> are that text, the rest of <code>run(text)</code> its 5 likeliest next tokens as <code>token:probability</code> (<code>scores(text)</code>). One that fills a mask (<code>…ForMaskedLM</code>) gives the likeliest tokens at <code>[MASK]</code>. An export that wants its key and value cache (<code>past_key_values</code> inputs) gives its first token only</li>
+<li><strong>Tensors</strong>: <code>.inputs</code> and <code>.outputs</code> are each tensor's name, shape (<code>-1</code> for a size left open) and type. TensorFlow
+  and ONNX say them as soon as the model is open, TorchScript after its first run. <code>.run(floatArrayOf(…))</code> and
+  <code>.run(longArrayOf(…))</code> feed the one input, in its shape with a batch of one (one row when the model says no shape);
+  <code>.run(mapOf("name" to values))</code> feeds each by name, a value being an array or <code>Tensor.of(values, 2, 3)</code> for a shape of
+  your own. TorchScript takes its inputs in the map's order, whatever their names. Every output comes back by
+  name as a <code>Tensor</code>: <code>.shape</code>, <code>.type</code>, <code>.floats()</code>, <code>.longs()</code>.</li>
+<li><strong>Natives</strong>: PyTorch's and TensorFlow's native libraries are downloaded from publish.djl.ai into <code>~/.djl.ai</code>
+  (<code>DJL_CACHE_DIR</code> moves it) the first time a model of theirs is opened on a machine, which the console says once with
+  the size: PyTorch about 40 MB on an Apple Silicon Mac, 65 MB on a Raspberry Pi 5, 110 MB on Linux x86-64; TensorFlow
+  130 to 150 MB. The CPU build is taken unless <code>PYTORCH_FLAVOR</code> says otherwise. Offline, the first open fails saying
+  what it wanted; after that they are read from the cache. DJL's telemetry is turned off as it is for the tokenizers.</li>
+<li><strong>Where each runs</strong>: PyTorch on macOS arm64, Linux arm64 and x86-64 and Windows x86-64, not on an Intel Mac.
+  TensorFlow everywhere, but only in the lightweight build (<code>-Pamie.lightweight=true</code>, the default on an Apple
+  Silicon Mac and arm64 Linux): the full build carries
+  TensorFlow 1.15 for KotlinDL, whose classes clash with TensorFlow 2's. A model that can't run on the machine or in
+  the build is refused naming what is missing.</li>
+<li><strong>Lifetime</strong>: every call opens a new model. It is held like <code>importModelOnnx</code>'s: closed with the <code>ortClosable</code> block
+  around the call, kept by a static, timed or limited one, listed on the Sessions tab (an <em>Imported model</em> row for
+  PyTorch and TensorFlow, an <em>ONNX session</em> row for ONNX) with Terminate, and <code>.close()</code> gives its natives back once the
+  runs in flight are done. <code>importModelTensorflow(path)</code> is <code>importModel</code> under its old name.</li>
+</ul>
+<h3 id="encoder-and-decoder-pairs">Encoder and decoder pairs<a class="headerlink" href="#encoder-and-decoder-pairs" title="Permanent link">&para;</a></h3>
+<p>A sequence-to-sequence export (T5, BART, Marian translation, Whisper) is two ONNX files in one folder,
+<code>encoder_model.onnx</code> with <code>decoder_model.onnx</code> and often <code>decoder_with_past_model.onnx</code>. Neither answers a text alone:
+the encoder turns the input into hidden states, the decoder takes those with the ids written so far and gives the
+next token's scores, one step at a time. <code>amie hf import</code> offers every encoder and decoder of the folder at the terminal, picked with the arrow keys, the
+default marked (the full variant, the merged decoder left out when the plain and the with-past ones are there): space
+takes or leaves the file under the cursor (the quantized ones, say), Enter imports, <code>n</code> leaves; <code>--take "2 6 8"</code> picks
+for a pipe. <code>huggingFace("…")</code> in a script takes the marked files.
+<code>initMod("&lt;name&gt;")</code> then opens both sessions, and a script wires them. <code>.inference(text)</code>, <code>.predict</code> and <code>.answer</code>
+refuse on a pair, saying how.</p>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>What it is</th>
+<th>Comes from</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>m.encoder</code></td>
+<td>The encoder session, run with tensors: <code>.inputs</code>, <code>.outputs</code>, <code>.run(mapOf(…))</code></td>
+<td><code>encoder_model.onnx</code></td>
+</tr>
+<tr>
+<td><code>m.decoder</code></td>
+<td>The decoder session, the same way</td>
+<td><code>decoder_model.onnx</code></td>
+</tr>
+<tr>
+<td><code>m.decoderWithPast</code></td>
+<td>The decoder that takes the past attention state back, or null when the export has none</td>
+<td><code>decoder_with_past_model.onnx</code></td>
+</tr>
+<tr>
+<td><code>m.tokens(text)</code></td>
+<td>The token ids and the attention mask of a text, as <code>.ids</code> and <code>.mask</code></td>
+<td><code>tokenizer.json</code> beside the models</td>
+</tr>
+<tr>
+<td><code>m.text(ids)</code></td>
+<td>The words of a list of ids</td>
+<td>The same tokenizer</td>
+</tr>
+<tr>
+<td><code>m.startToken</code></td>
+<td>The id the decoder starts from, or null when no config names one</td>
+<td><code>decoder_start_token_id</code>, else <code>bos_token_id</code>, of <code>generation_config.json</code>, then <code>config.json</code></td>
+</tr>
+<tr>
+<td><code>m.endToken</code></td>
+<td>The id that ends the decoding, or null</td>
+<td><code>eos_token_id</code> of the same files</td>
+</tr>
+<tr>
+<td><code>m.encode(text)</code>, <code>m.encode(file)</code></td>
+<td>The encoder run: a text through the tokenizer, or an audio or image file through the preprocessor; <code>.hidden</code> the states, <code>.mask</code> the text's mask</td>
+<td><code>tokenizer.json</code>, or <code>preprocessor_config.json</code></td>
+</tr>
+<tr>
+<td><code>m.decoderFeeds(encoded, ids)</code></td>
+<td>The decoder's inputs for one step: the ids so far, the hidden states, and the encoder's mask when the decoder names one</td>
+<td><code>m.decoder.inputs</code></td>
+</tr>
+<tr>
+<td><code>m.startTokens(encoded?, vararg tokens)</code></td>
+<td>The ids the decoder starts from: the start id and the forced ones after it, each replaceable by a name the config knows: a language (<code>"de"</code>), a task (<code>"translate"</code>, <code>"transcribe"</code>), <code>"timestamps"</code> or <code>"notimestamps"</code>. A language left open and not named is detected from the encoding, else English</td>
+<td><code>forced_decoder_ids</code>, <code>lang_to_id</code>, <code>task_to_id</code>, <code>no_timestamps_token_id</code> of the config files</td>
+</tr>
+<tr>
+<td><code>m.preprocessor</code></td>
+<td>The <code>preprocessor_config.json</code> as JSON: sampling rate, mel bins, image size, mean and std</td>
+<td>That file</td>
+</tr>
+<tr>
+<td><code>m.abilities</code></td>
+<td><code>encoder</code>, <code>decoder</code>, and <code>decoderWithPast</code>, <code>tokens</code>, <code>startToken</code> when the folder has them; <code>text</code>, <code>audio</code> or <code>image</code> for what the encoder takes</td>
+<td>The folder</td>
+</tr>
+<tr>
+<td><code>m.getStatus()</code></td>
+<td>Each session's status, by name</td>
+<td>Both sessions</td>
+</tr>
+<tr>
+<td><code>m.close()</code></td>
+<td>Closes every session of the pair</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>What the encoder takes is read off the folder: a text pair has no <code>preprocessor_config.json</code> and takes text through its
+tokenizer; one whose file names a feature extractor (Whisper) takes an audio file, wav or aiff at any rate, turned into
+the log-mel spectrogram that file describes (80 bins, 16 kHz, 30 seconds, padded with silence or cut); one naming an
+image processor (TrOCR, Donut, Nougat) takes an image file, resized to <code>size</code>, rescaled and normalized by <code>image_mean</code>
+and <code>image_std</code>. <code>encode</code> does whichever applies, and <code>decoderFeeds</code> fills the decoder's inputs by their names, Marian's
+<code>encoder_attention_mask</code> among them. The same greedy loop then translates or transcribes:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">initMod</span><span class="p">(</span><span class="s">"t5-small"</span><span class="p">)</span><span class="w">                                   </span><span class="c1">// or "whisper-tiny", with a wav in place of the text</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="na">encode</span><span class="p">(</span><span class="s">"translate English to German: The house is wonderful."</span><span class="p">)</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">starts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="na">startTokens</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="w">                                 </span><span class="c1">// Whisper: start, language (detected, or startTokens(e, "de")), transcribe, no timestamps</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">ids</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">starts</span><span class="p">.</span><span class="na">toMutableList</span><span class="p">()</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1.</span><span class="p">.</span><span class="m">40</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">logits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="na">decoder</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="na">decoderFeeds</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="w"> </span><span class="n">ids</span><span class="p">.</span><span class="na">toLongArray</span><span class="p">())).</span><span class="na">getValue</span><span class="p">(</span><span class="s">"logits"</span><span class="p">)</span><span class="w">   </span><span class="c1">// [1, ids so far, vocabulary]</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">vocab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">logits</span><span class="p">.</span><span class="na">shape</span><span class="p">.</span><span class="na">last</span><span class="p">().</span><span class="na">toInt</span><span class="p">()</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">last</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">logits</span><span class="p">.</span><span class="na">floats</span><span class="p">().</span><span class="na">takeLast</span><span class="p">(</span><span class="n">vocab</span><span class="p">)</span><span class="w">                 </span><span class="c1">// the scores at the last place</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">best</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">last</span><span class="p">.</span><span class="na">indices</span><span class="p">.</span><span class="na">maxBy</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">last</span><span class="o">[</span><span class="nb">it</span><span class="o">]</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">best</span><span class="p">.</span><span class="na">toLong</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="na">endToken</span><span class="p">)</span><span class="w"> </span><span class="k">break</span>
+<span class="w">    </span><span class="n">ids</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">best</span><span class="p">.</span><span class="na">toLong</span><span class="p">())</span>
+<span class="p">}</span>
+<span class="n">log</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="na">text</span><span class="p">(</span><span class="n">ids</span><span class="p">.</span><span class="na">drop</span><span class="p">(</span><span class="n">starts</span><span class="p">.</span><span class="na">size</span><span class="p">).</span><span class="na">toLongArray</span><span class="p">()))</span><span class="w">              </span><span class="c1">// Das Haus ist wunderbar.</span>
+<span class="n">m</span><span class="p">.</span><span class="na">close</span><span class="p">()</span>
+</code></pre></div>
+<p>Under <code>encode</code>, the sessions are still there for a script that wants them raw: <code>m.tokens(text)</code> and
+<code>m.encoder.run(mapOf("input_ids" to t.ids, "attention_mask" to t.mask))</code> are what <code>encode(text)</code> does, and
+<code>m.encoder.inputs</code> names what a file becomes (<code>input_ids</code>, <code>input_features</code>, <code>pixel_values</code>).</p>
+<p>Running the whole id list each step is simple, not fast. A faster loop runs <code>m.decoder</code> once, then <code>m.decoderWithPast</code>
+with each step's <code>present.*</code> outputs fed back as its <code>past_key_values.*</code> inputs, which its <code>.inputs</code> name.</p>
+<h2 id="reading-a-prediction">Reading a prediction<a class="headerlink" href="#reading-a-prediction" title="Permanent link">&para;</a></h2>
+<p>Every model session, whatever opened it (<code>initMod("name")</code>, <code>importModelOnnx(...)</code>, <code>group("name")</code>), answers
+through the same three calls on top of <code>inference</code>. A package (<code>initMod("x.jar")</code>) has no labels and refuses them:
+call it with <code>run(text)</code> / <code>answer(text)</code> instead. A <code>sessionMod("name")</code> answers through the same calls.</p>
+<table>
+<thead>
+<tr>
+<th>Call</th>
+<th>Returns</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>predict("text")</code></td>
+<td>The predicted label: the best answer of <code>inference</code> without its score (the argmax of a classifier). Throws when the model answers nothing</td>
+<td><code>"lights"</code></td>
+</tr>
+<tr>
+<td><code>scores("text")</code></td>
+<td>Every label with its score, best first, as a <code>Map&lt;String, Float&gt;</code>. Answers without a score are left out</td>
+<td><code>{lights=0.67, weather=0.50, greeting=0.33}</code></td>
+</tr>
+<tr>
+<td><code>predictions("text")</code></td>
+<td>The raw answers parsed into <code>Prediction(label, score)</code>, in the model's order; <code>score</code> is null when the answer had none</td>
+<td><code>[lights:0.67, weather:0.50, …]</code></td>
+</tr>
+<tr>
+<td><code>inference("text")</code></td>
+<td>The raw lines a model answers: <code>label:score</code> for a classifier, one tag per token for the NER model, whatever <code>run(text)</code> returned for a package</td>
+<td><code>["lights:0.67", "weather:0.50", …]</code></td>
+</tr>
+<tr>
+<td><code>run("text")</code></td>
+<td>The same raw answers, the name to use for a package</td>
+<td><code>["lights:0.67", "weather:0.50", …]</code></td>
+</tr>
+<tr>
+<td><code>answer("text")</code></td>
+<td>The first raw answer as it came, scores and all; null when there was none</td>
+<td><code>"lights:0.67"</code></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">initMod</span><span class="p">(</span><span class="s">"intents"</span><span class="p">)</span>
+<span class="n">log</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="na">predict</span><span class="p">(</span><span class="s">"turn the lights on"</span><span class="p">))</span><span class="w">                        </span><span class="c1">// lights</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">scores</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="na">scores</span><span class="p">(</span><span class="s">"turn the lights on"</span><span class="p">)</span><span class="w">                 </span><span class="c1">// {lights=0.97, weather=0.02, greeting=0.01}</span>
+<span class="n">log</span><span class="p">(</span><span class="s">"confidence </span><span class="si">${</span><span class="n">scores</span><span class="p">.</span><span class="na">values</span><span class="p">.</span><span class="na">first</span><span class="p">()</span><span class="si">}</span><span class="s">"</span><span class="p">)</span><span class="w">                  </span><span class="c1">// 0.97</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">scores</span><span class="p">.</span><span class="na">values</span><span class="p">.</span><span class="na">first</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="m">0.5f</span><span class="p">)</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="s">"not sure"</span><span class="p">,</span><span class="w"> </span><span class="n">LogLevel</span><span class="p">.</span><span class="na">ERROR</span><span class="p">)</span>
+<span class="n">m</span><span class="p">.</span><span class="na">predictions</span><span class="p">(</span><span class="s">"turn the lights on"</span><span class="p">).</span><span class="na">forEach</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="s">"</span><span class="si">${</span><span class="n">p</span><span class="p">.</span><span class="na">label</span><span class="si">}</span><span class="s"> </span><span class="si">${</span><span class="n">p</span><span class="p">.</span><span class="na">score</span><span class="si">}</span><span class="s">"</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p>Each call is logged as a Data line in the console in the shape it was asked: <code>predict</code> logs the text and the one
+label with its score (<code>intents "turn the lights on" -&gt; lights 0.970</code>), <code>scores</code> and <code>inference</code> the text and every
+label with its score. Each of the three calls runs the model once, so ask once and keep the result instead of
+calling <code>predict</code> and <code>scores</code> on the same text. A package (<code>initMod("x.jar")</code>) has no labels: <code>predict</code>, <code>scores</code> and
+<code>predictions</code> throw on it, so ask it with <code>run</code> or <code>answer</code>.</p>
+<h2 id="building-a-model">Building a model<a class="headerlink" href="#building-a-model" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">train</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">source</span><span class="p">(</span><span class="s">"intents.csv"</span><span class="p">)</span><span class="w">          </span><span class="c1">// columns: text,label</span>
+<span class="n">relate</span><span class="p">(</span><span class="n">train</span><span class="p">,</span><span class="w"> </span><span class="s">"intents-test.csv"</span><span class="p">)</span><span class="w">          </span><span class="c1">// optional test file</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">modelBuilder</span><span class="p">(</span><span class="s">"intents"</span><span class="p">,</span><span class="w"> </span><span class="n">train</span><span class="p">)</span>
+<span class="n">model</span><span class="p">.</span><span class="na">modelStatus</span><span class="p">()</span><span class="w">                        </span><span class="c1">// the stored validation table</span>
+<span class="n">model</span><span class="p">.</span><span class="na">modelChart</span><span class="p">()</span><span class="w">                         </span><span class="c1">// bars, build history and confusion matrix</span>
+
+<span class="kd">val</span><span class="w"> </span><span class="nv">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">initMod</span><span class="p">(</span><span class="s">"intents"</span><span class="p">)</span>
+<span class="n">log</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="na">predict</span><span class="p">(</span><span class="s">"turn the lights on"</span><span class="p">))</span><span class="w">                 </span><span class="c1">// lights</span>
+<span class="n">log</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="na">scores</span><span class="p">(</span><span class="s">"turn the lights on"</span><span class="p">).</span><span class="na">toString</span><span class="p">())</span><span class="w">       </span><span class="c1">// {lights=0.97, weather=0.02, greeting=0.01}</span>
+<span class="n">m</span><span class="p">.</span><span class="na">close</span><span class="p">()</span>
+</code></pre></div>
+<p>The charts are described with examples in <a href="../models/#reading-the-metrics">Models and metrics</a>.</p>
+<h2 id="packages">Packages<a class="headerlink" href="#packages" title="Permanent link">&para;</a></h2>
+<p>A package is a jar with one public class that fulfils the backend's <code>AmiePackage</code> interface: a public no-arg
+constructor, <code>run(input: String): List&lt;String&gt;</code> and <code>close()</code>, both required. That is the contract the website
+checks on upload and the samging/jar-jar workflow checks on every jar; implementing the interface is the easiest way
+to get there, and any class with the same methods qualifies. amie's own loader is more lenient (any non-void <code>run</code>,
+<code>close()</code> optional), so such a jar opens locally but cannot be uploaded. <a href="https://github.com/samging/amieCli/blob/main/amie/README.md#writing-a-package-run-and-close">The amie
+guide</a> has the whole contract with an example.
+Packages are bottles: every <code>initMod("name.jar")</code> makes a fresh instance in its own class loader, so two sessions
+on the same jar never share state, and <code>close()</code> releases that instance and its loader. The jar is looked up in the
+active env, then <code>AMP/pluginDir</code>, then as a path; when it is nowhere local it is fetched from the GitHub
+repositories of <code>AMP/github.json</code> (below) and stored in <code>AMP/pluginDir</code>, so the next open is local. The Amie server
+(the website's <code>/api/jar-download</code>, else the S3 service's <code>/api/aws/jars/&lt;name&gt;</code>) is off, like accounts and Keycloak,
+until <code>AMIE_ACCOUNTS=1</code> turns them on. Next to it, <code>AMP/pluginDir/&lt;name&gt;.source.json</code> records where
+it came from: the exact download URL, the website page that lists and describes it (<code>&lt;site&gt;/downloads</code>), version,
+size, publish date and fetch time. <code>getStatus()</code> of a package session carries the <code>url</code> and <code>page</code>, and the
+Models page shows them behind the <strong>i</strong> toggle of the package.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">echo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">initMod</span><span class="p">(</span><span class="s">"echo-1.0.jar"</span><span class="p">)</span><span class="w">        </span><span class="c1">// fetched from GitHub when it is not local</span>
+<span class="n">echo</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="s">"hello there"</span><span class="p">).</span><span class="na">forEach</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="nb">it</span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w">   </span><span class="c1">// every answer of its run(text); echo.answer(...) the first</span>
+<span class="n">log</span><span class="p">(</span><span class="n">echo</span><span class="p">.</span><span class="na">getStatus</span><span class="p">().</span><span class="na">toString</span><span class="p">())</span><span class="w">          </span><span class="c1">// jar, class, source, runs</span>
+<span class="n">echo</span><span class="p">.</span><span class="na">close</span><span class="p">()</span>
+
+<span class="n">packages</span><span class="p">.</span><span class="na">available</span><span class="p">().</span><span class="na">forEach</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="s">"</span><span class="si">${</span><span class="nb">it</span><span class="p">.</span><span class="na">name</span><span class="si">}</span><span class="s"> </span><span class="si">${</span><span class="nb">it</span><span class="p">.</span><span class="na">size</span><span class="si">}</span><span class="s">"</span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w">   </span><span class="c1">// what the repositories list</span>
+<span class="n">packages</span><span class="p">.</span><span class="na">print</span><span class="p">()</span><span class="w">                                                   </span><span class="c1">// open package sessions</span>
+</code></pre></div>
+<h3 id="jars-from-github">Jars from GitHub<a class="headerlink" href="#jars-from-github" title="Permanent link">&para;</a></h3>
+<p>A jar can come from a GitHub repository. <code>initMod("github:owner/repo/x.jar")</code> takes it from that repository's
+default branch; <code>github:owner/repo/libs/x.jar@v1.2</code> names a folder and a branch, tag or commit, and a github.com
+file address (<code>https://github.com/owner/repo/blob/main/x.jar</code>) works too. A name that is not a file of the
+repository is looked for among the assets of its latest release (or of the release tagged with the ref). A plain
+<code>initMod("x.jar")</code> that is nowhere local is looked for in the repositories listed in
+<code>AMP/github.json</code> (<code>{"repos": ["samging/jar-jar"], "token": null}</code>, written on first use).</p>
+<div class="highlight"><pre><span></span><code><span class="n">packages</span><span class="p">.</span><span class="na">github</span><span class="p">()</span><span class="w">                                       </span><span class="c1">// the jars of the repositories in AMP/github.json</span>
+<span class="n">packages</span><span class="p">.</span><span class="na">github</span><span class="p">(</span><span class="s">"samging/jar-jar"</span><span class="p">)</span><span class="w">                      </span><span class="c1">// one repository's</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">tr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">initMod</span><span class="p">(</span><span class="s">"github:samging/jar-jar/google-translate.jar"</span><span class="p">)</span>
+<span class="n">log</span><span class="p">(</span><span class="n">tr</span><span class="p">.</span><span class="na">answer</span><span class="p">(</span><span class="s">"to de: good morning"</span><span class="p">))</span><span class="w">                   </span><span class="c1">// Guten Morgen</span>
+<span class="n">packages</span><span class="p">.</span><span class="na">check</span><span class="p">(</span><span class="s">"google-translate.jar"</span><span class="p">)</span><span class="w">                  </span><span class="c1">// package class com.amie.translate.GoogleTranslate (run(String) and close() by shape)</span>
+</code></pre></div>
+<p><strong>Every downloaded jar is checked before it is kept</strong> (from GitHub, and from the Amie server when accounts are on): it must read as
+a jar, its classes must load on this app's Java, its metadata's <code>java</code> must hold, and a class must satisfy the
+package contract (public, a no-arg constructor, <code>run(String)</code> returning the answer, <code>close()</code>; implementing
+<code>AmiePackage</code> is the easiest way), and when the metadata names the <code>entry</code> class, that class must be it. The check
+loads classes without initializing them, so no code of the jar runs. A jar that fails is not kept (a copy already
+in <code>AMP/pluginDir</code> stays) and the reason is the error. The check is about the contract, not about trust: only open
+jars from repositories you trust.</p>
+<p>A jar from GitHub lands in <code>AMP/pluginDir</code> with its origin beside it (<code>repo</code>, <code>sha</code>, page). A <code>github:</code> open asks
+GitHub for the file's current version and downloads it only when it changed; when GitHub cannot be reached, the
+copy already there is used. A jar of the same name that came from elsewhere is replaced only when its bytes are the
+repository's (same git blob sha); otherwise the open fails and says so. Without a token GitHub allows 60 requests an
+hour; <code>token</code> in <code>AMP/github.json</code> or <code>GITHUB_TOKEN</code> raises that and opens private repositories. Without a token a
+private repository answers as if it were empty, so its jars are reported as not found. On the Models page the
+repositories' jars are listed under <strong>On GitHub</strong>, with <strong>Fetch from GitHub</strong> in their menu.</p>
+<p>A jar reaches samging/jar-jar through a pull request that adds it at the top of the repository. The repository's
+<strong>Check jars</strong> workflow checks every jar the way amie checks a download, with the same rules as above and without
+running any code of the jar. A second step then opens each jar as <code>packages.test</code> does: it calls <code>run()</code> with every
+declared test and then <code>close()</code>, each jar in a JVM of its own. A class without <code>List&lt;String&gt; run(String)</code> and <code>close()</code> fails; missing metadata is a note. Once merged, a plain
+<code>initMod("x.jar")</code> finds it; a machine that already has an older copy in <code>AMP/pluginDir</code> takes the new one through a
+<code>github:</code> open. <a href="https://github.com/samging/amieCli/blob/main/amie/README.md#packages-from-github">The amie guide</a> has the steps.</p>
+<p>The package class is the one the jar's metadata names (below) when it satisfies the contract, else the manifest's
+<code>Main-Class</code> when it does, else a class implementing an interface named <code>AmiePackage</code>, else the first class in the
+jar that does. <code>run</code> executes on amie's <code>amie-package-call</code> thread with the jar's class loader as context loader while the caller
+waits; stopping the script interrupts that thread. What it returns is shown one line per element. Open package sessions
+also appear under <strong>Sessions</strong> on the <a href="../models-page/">Models page</a>.</p>
+<h3 id="what-a-jar-needs-metadata-configuration-and-test-runs">What a jar needs: metadata, configuration and test runs<a class="headerlink" href="#what-a-jar-needs-metadata-configuration-and-test-runs" title="Permanent link">&para;</a></h3>
+<p>A jar can say what it requires in <code>META-INF/amie/package.json</code> (or <code>amie-package.json</code> at its root). For a jar
+that ships none, <code>AMP/pluginDir/&lt;jar&gt;.package.json</code> beside it says the same (<strong>⋯ &gt; Write metadata template</strong> on
+the Models page writes one to fill in); when both exist, the sidecar's fields override the jar's. The shape:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"weather"</span><span class="p">,</span><span class="w"> </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.2"</span><span class="p">,</span><span class="w"> </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"answers with the forecast for a place"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"java"</span><span class="p">:</span><span class="w"> </span><span class="mi">21</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"entry"</span><span class="p">:</span><span class="w"> </span><span class="s2">"com.example.Weather"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"config"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="nt">"file"</span><span class="p">:</span><span class="w"> </span><span class="s2">"weather.properties"</span><span class="p">,</span><span class="w"> </span><span class="nt">"required"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"the API key"</span><span class="p">,</span><span class="w"> </span><span class="nt">"template"</span><span class="p">:</span><span class="w"> </span><span class="s2">"apiKey=\n"</span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"env"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"WEATHER_PROXY"</span><span class="p">,</span><span class="w"> </span><span class="nt">"required"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"an HTTP proxy, if one is needed"</span><span class="p">}],</span>
+<span class="w">  </span><span class="nt">"tests"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a known place"</span><span class="p">,</span><span class="w"> </span><span class="nt">"input"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Paris"</span><span class="p">,</span><span class="w"> </span><span class="nt">"contains"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Paris"</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"answers in one line"</span><span class="p">,</span><span class="w"> </span><span class="nt">"input"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Berlin"</span><span class="p">,</span><span class="w"> </span><span class="nt">"lines"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"exact"</span><span class="p">,</span><span class="w"> </span><span class="nt">"input"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ping"</span><span class="p">,</span><span class="w"> </span><span class="nt">"expect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pong"</span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"notes"</span><span class="p">:</span><span class="w"> </span><span class="s2">"free text for whoever runs it"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"flags"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"stable"</span><span class="p">,</span><span class="w"> </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"green"</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"v2 api"</span><span class="p">,</span><span class="w"> </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"blue"</span><span class="p">}]</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>flags</code> are coloured tags the Models page shows on the jar's row and panel beside its version, Java, language and
+test flags; the colour is one of slate, green, amber, red, violet, blue. Flags added on the page go to the
+sidecar and add to the jar's own.</p>
+<p>The runtime reads it before the jar is opened (<code>pluginEngine/PackageMeta.kt</code>, <code>JarPackages.open</code>):</p>
+<ul>
+<li><strong>Configuration lives in <code>AMP/pluginDir/config/&lt;jar without .jar&gt;/</code>.</strong> The folder is made on the first open,
+  and every declared <code>config</code> file that is missing is written from its <code>template</code>, so the person finds a file to
+  fill in instead of a stack trace. The package finds the folder three ways: it is the <strong>first root of the jar's
+  class loader</strong>, so <code>getClass().getClassLoader().getResource("weather.properties")</code> (or <code>getResourceAsStream</code>)
+  resolves there, ahead of a default copy inside the jar; the system properties <strong><code>amie.package.config</code></strong> (the
+  folder) and <code>amie.package.name</code> (the jar) are set while it is opened, with <code>amie.package.config.&lt;jar&gt;</code> kept
+  for the jar; and a public <strong><code>configure(File)</code></strong>, <code>configure(Path)</code>, <code>configure(String)</code> or
+  <code>configure(Map&lt;String, String&gt;)</code> method of the package class, when it has one, is called with the folder right
+  after the constructor (the map holds <code>dir</code> and each file in the folder by name). <code>importPlugin("x.jar")</code> loads a
+  jar the same way, but it isn't refused as below. <code>amie packages setup &lt;x.jar&gt;</code> asks for each key at the terminal,
+  and <code>amie packages config &lt;x.jar&gt; key=value</code> sets one, so the files need no editor.</li>
+<li><strong><code>initMod</code> refuses a jar that lacks what it says it needs</strong>, before any instance is made: a required config file
+  that is missing, a required one that still equals its template (the template is for the person to fill in, so
+  mark a config whose template works as it stands <code>"required": false</code>), or a required <code>env</code> variable that is not
+  set. The message names every problem and the config folder, and the template is written first, so there is
+  something to fill in. A jar that declares nothing runs as before.</li>
+<li><strong><code>java</code></strong> is checked against the Java this app runs: a jar that needs a newer one is refused with the reason.</li>
+<li><strong><code>entry</code></strong> picks the package class when the jar has more than one candidate.</li>
+<li><strong><code>tests</code></strong> are the jar's own test runs: <code>packages.test("x.jar")</code> in a script, or <strong>Test run</strong> on the Models
+  page, opens a fresh session as <code>initMod</code> would (configuration included), sends each <code>input</code> through <code>run</code>,
+  checks the answer against <code>expect</code> (the whole answer), <code>contains</code> (some line) and <code>lines</code> (how many), closes
+  the session, prints the report and keeps it as <code>AMP/pluginDir/&lt;jar&gt;.tests.json</code>. A test with none of the three
+  passes when <code>run</code> does not throw. With no tests declared the run is one call with <code>"hello"</code> that must answer.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">packages</span><span class="p">.</span><span class="na">meta</span><span class="p">(</span><span class="s">"weather.jar"</span><span class="p">)</span><span class="o">?.</span><span class="na">let</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="s">"needs Java </span><span class="si">${</span><span class="nb">it</span><span class="p">.</span><span class="na">java</span><span class="si">}</span><span class="s">, files </span><span class="si">${</span><span class="nb">it</span><span class="p">.</span><span class="na">config</span><span class="p">.</span><span class="na">map</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="na">file</span><span class="w"> </span><span class="p">}</span><span class="si">}</span><span class="s">"</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">report</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">packages</span><span class="p">.</span><span class="na">test</span><span class="p">(</span><span class="s">"weather.jar"</span><span class="p">)</span><span class="w">          </span><span class="c1">// the console gets one line per test</span>
+<span class="n">log</span><span class="p">(</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">report</span><span class="p">.</span><span class="na">ok</span><span class="p">)</span><span class="w"> </span><span class="s">"all </span><span class="si">${</span><span class="n">report</span><span class="p">.</span><span class="na">passed</span><span class="si">}</span><span class="s"> passed"</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s">"</span><span class="si">${</span><span class="n">report</span><span class="p">.</span><span class="na">failed</span><span class="si">}</span><span class="s"> failed"</span><span class="p">)</span>
+</code></pre></div>
+<p>The Models page shows all of it on the jar's panel: <strong>Requirements</strong> (Java, package class, metadata, config
+folder, every config file and variable, the last test run, each marked met or not, with the verdict <code>initMod</code>
+gives), <strong>Config</strong> (the folder with
+<strong>Reveal folder</strong>, the files and their state) and <strong>Tests</strong> (what is declared, and the last run's answers).</p>
+<h3 id="session-logs">Session logs<a class="headerlink" href="#session-logs" title="Permanent link">&para;</a></h3>
+<p>(How to work with sessions day to day, keep them warm between runs and close them is in <a href="../sessions/">Running sessions</a>.)</p>
+<p>Every session of a model or a package keeps a log of what it was asked and answered: an <code>open</code> line, one <code>run</code>
+line per <code>inference</code> call with the text, the first answers and the time it took, an <code>error</code> line when the call
+threw, and a <code>close</code> line with the number of runs. The Models page shows it behind <strong>Log</strong> on the session, and the
+same lines are appended to <code>AMP/models/intents/&lt;name&gt;/sessions.log</code> for a model and <code>AMP/pluginDir/&lt;jar&gt;.sessions.log</code>
+for a package (<code>runtime/SessionLog.kt</code>), so a terminated session's history stays readable:</p>
+<div class="highlight"><pre><span></span><code>2026-10-14T17:40:02.118Z dummy #3 open  opened as session #3
+2026-10-14T17:40:05.402Z dummy #3 run   "turn the lights on" -&gt; lights:0.61, weather:0.22, greeting:0.17 (14 ms)
+2026-10-14T17:41:10.009Z dummy #3 close closed after 1 runs
+</code></pre></div>
+<h3 id="building-a-package">Building a package<a class="headerlink" href="#building-a-package" title="Permanent link">&para;</a></h3>
+<p>The <strong>Packages</strong> tab of the Models page reads a jar's classes and resources, the Java it needs (from the class
+file version) and what built it (the manifest), so a jar can be checked before a script opens it. The shape of a
+build that produces one:</p>
+<div class="highlight"><pre><span></span><code><span class="n">plugins</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">kotlin</span><span class="p">(</span><span class="s">"jvm"</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">"2.1.0"</span><span class="w"> </span><span class="p">}</span>
+<span class="n">repositories</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">mavenCentral</span><span class="p">()</span><span class="w"> </span><span class="p">}</span>
+<span class="n">kotlin</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">jvmToolchain</span><span class="p">(</span><span class="m">17</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+<span class="n">tasks</span><span class="p">.</span><span class="na">jar</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">archiveFileName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"echo-1.0.jar"</span>
+<span class="w">    </span><span class="n">manifest</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">attributes</span><span class="p">(</span><span class="s">"Main-Class"</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="s">"org.example.Echo"</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">package</span><span class="w"> </span><span class="nn">org.example</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">Echo</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="n">text</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">):</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span><span class="s">"echo: </span><span class="si">$</span><span class="n">text</span><span class="s">"</span><span class="p">)</span>
+<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">close</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The app runs on Java 21, so a jar compiled for Java 21 or older loads; the page says so next to the class file version.</p>
+<p>Accepted data shapes: a <code>DataSource</code> from <code>source</code>, <code>List&lt;Pair&lt;text, label&gt;&gt;</code>, <code>Map&lt;label, List&lt;text&gt;&gt;</code>, or
+rows of <code>[text, ..., label]</code>.</p>
+<h3 id="what-modelbuilder-does">What modelBuilder does<a class="headerlink" href="#what-modelbuilder-does" title="Permanent link">&para;</a></h3>
+<p><code>buildClassifier</code> in <code>jetbrainDLBuilder/JetBuilder.kt</code>:</p>
+<ol>
+<li><strong>checking data</strong>: the preprocessor (<code>jetbrainDLBuilder/Preprocessor.kt</code>) cleans the rows, unifies label
+   spellings, drops empty, junk, repeated and conflicting rows with a reason each, measures the set and refuses one
+   a classifier cannot come out of; every line goes to the console and <code>metrics.json</code>. The reasons are listed in
+   <a href="../models/#before-training-the-preprocessor">Models and metrics</a>.</li>
+<li><strong>embedding</strong>: every text goes through the BERT encoder once; the hidden states are mean-pooled into one vector
+   each. A text embedded before comes from <code>AMP/cache/embeddings</code> (<code>EmbeddingCache.kt</code>).</li>
+<li><strong>training</strong>: every candidate head (<code>Architecture.kt</code>; by default linear, <code>dense[16]</code>, <code>dense[32]</code>, <code>dense[64, 16]</code>,
+   or what <code>buildOptions</code> names) is trained with Adam on plain Kotlin arrays (<code>DenseNet.kt</code>, any number of hidden
+   layers, relu or tanh; weight decay, dropout, label smoothing, rate schedules and early stopping when a head asks
+   for them) on the same rows, scored on the same validation rows, and the best by macro F1 (or accuracy) is kept;
+   with <code>folds</code> the heads are compared over the folds instead (<code>TrainingKit.kt</code>, <code>Search.kt</code>). The comparison and
+   every head's learning curve are stored with the build.</li>
+<li><strong>validating</strong>: the chosen head on the related test file, or on a stratified 20% split; precision, recall, F1 per
+   label, then the calibration error and its gates, the rows it got wrong, and with <code>calibrate</code> a temperature folded
+   into the last layer (<code>Calibration.kt</code>).</li>
+<li><strong>exporting</strong>: the layers are written by hand as ONNX (opset 13) to <code>AMP/models/intents/&lt;name&gt;/model.onnx</code> with
+   <code>module.json</code> (encoder, dims, labels, version) and <code>metrics.json</code> (one entry per build); the head it replaces is
+   kept under <code>versions/</code> (<code>modules/ModelVersions.kt</code>). <code>fineTune</code> (<code>FineTune.kt</code>) and <code>calibrate</code>
+   (<code>ModelCalibration.kt</code>) end the same way.</li>
+</ol>
+<h3 id="build-progress">Build progress<a class="headerlink" href="#build-progress" title="Permanent link">&para;</a></h3>
+<p><code>ModelBuildProgress</code> (<code>jetbrainDLBuilder/BuildProgress.kt</code>) is a <code>StateFlow</code> the builder updates at every phase and
+step: text <em>n</em> of <em>N</em> while embedding, epoch <em>n</em> of 150 while training, each validation sample, then export. Phases are
+weighted (embedding 60%, training 30%, ...) into one fraction that drives:</p>
+<ul>
+<li>the <strong>console strip</strong> (<code>running 12s · modelBuilder 'intents' training 72/150 · epoch 72 loss 0.3102 accuracy 0.912 · 48%</code>, with a thin bar under it),</li>
+<li>the build line at the top of the Models page's list, with its thin bar.</li>
+</ul>
+<p>Every 25 epochs the loss and accuracy are also logged to the console. Finished builds (with their duration and
+outcome) stay in <code>ModelBuildProgress.history</code>; the console strip's tooltip names the last one while idle.</p>
+<h2 id="saved-states">Saved states<a class="headerlink" href="#saved-states" title="Permanent link">&para;</a></h2>
+<p>Not available yet: accounts, Keycloak and the Amie backend are off, so these calls print one Error line and do
+nothing until <code>AMIE_ACCOUNTS=1</code> turns them on. Signed in then, a script can keep small JSON documents on the Amie backend, which stores them as
+<code>uploads/&lt;user&gt;/state/&lt;name&gt;.json</code> next to your packages (your devices live there as <code>devices</code>). The calls block
+like a package fetch and print one line each; a failure (a guest, an unreachable backend, a bad name) is one Error
+line and <code>loadState</code> then returns null. A name matches <code>[A-Za-z0-9._-]{1,64}</code>, a document is at most 1 MiB.</p>
+<div class="highlight"><pre><span></span><code><span class="n">saveState</span><span class="p">(</span><span class="s">"labels"</span><span class="p">,</span><span class="w"> </span><span class="s">"""{"intents": ["greet", "bye"]}"""</span><span class="p">)</span><span class="w">   </span><span class="c1">// PUT /state/labels</span>
+<span class="n">listStates</span><span class="p">().</span><span class="na">forEach</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="nb">it</span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w">                                 </span><span class="c1">// devices, labels, ...</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">labels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loadState</span><span class="p">(</span><span class="s">"labels"</span><span class="p">)</span><span class="w">                                 </span><span class="c1">// the JSON text, null when there is none</span>
+</code></pre></div>
+<h2 id="shell-commands">Shell commands<a class="headerlink" href="#shell-commands" title="Permanent link">&para;</a></h2>
+<p>A script can run commands and script files on the computer and use what they print.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shell</span><span class="p">(</span><span class="s">"ls -la ~/Documents | head"</span><span class="p">)</span><span class="w">      </span><span class="c1">// runs it, the console shows it as it runs, then returns</span>
+<span class="n">log</span><span class="p">(</span><span class="s">"exit </span><span class="si">${</span><span class="n">r</span><span class="p">.</span><span class="na">exit</span><span class="si">}</span><span class="s">, </span><span class="si">${</span><span class="n">r</span><span class="p">.</span><span class="na">lines</span><span class="p">.</span><span class="na">size</span><span class="si">}</span><span class="s"> lines"</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="na">ok</span><span class="p">)</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="na">out</span><span class="p">)</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="n">error</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="na">err</span><span class="p">)</span>
+
+<span class="n">shell</span><span class="p">(</span><span class="s">"du -sh ."</span><span class="p">,</span><span class="w"> </span><span class="n">dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"~/Documents"</span><span class="p">,</span><span class="w"> </span><span class="n">timeoutSeconds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">60</span><span class="p">,</span><span class="w"> </span><span class="n">env</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapOf</span><span class="p">(</span><span class="s">"A"</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="s">"1"</span><span class="p">))</span>
+<span class="n">shellScript</span><span class="p">(</span><span class="s">"~/bin/lookup.sh"</span><span class="p">,</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span><span class="s">"arg one"</span><span class="p">,</span><span class="w"> </span><span class="s">"arg two"</span><span class="p">))</span>
+</code></pre></div>
+<p><code>shell</code> runs the command through your login shell (<code>$SHELL -lc</code>, so your PATH and tools work; <code>/bin/sh -c</code> when
+<code>SHELL</code> is not set and <code>cmd /c</code> on Windows). A login shell reads <code>.zprofile</code> or <code>.profile</code>, not <code>.zshrc</code>, so a tool set
+up only in <code>.zshrc</code> is not found. <code>shellScript</code> runs a file: directly when it is executable, through the shell
+otherwise. Its arguments go to it one by one and are never joined into a command line, so spaces and quotes arrive as
+they are. A relative path starts from <code>dir</code>.</p>
+<table>
+<thead>
+<tr>
+<th>On the result</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.ok</code></td>
+<td>The exit was 0 and it was neither timed out nor cancelled</td>
+</tr>
+<tr>
+<td><code>.exit</code></td>
+<td>Its exit code, -1 when it could not start</td>
+</tr>
+<tr>
+<td><code>.out</code>, <code>.err</code></td>
+<td>What it printed, without the line breaks at the end. As text the result is <code>.out</code>: <code>"${shell("whoami")}"</code></td>
+</tr>
+<tr>
+<td><code>.lines</code></td>
+<td><code>.out</code> as a list of lines</td>
+</tr>
+<tr>
+<td><code>.timedOut</code>, <code>.cancelled</code></td>
+<td>How it was stopped</td>
+</tr>
+<tr>
+<td><code>.command</code></td>
+<td>What ran, as the console showed it</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>A command that fails is not an exception. A non-zero exit gives <code>ok = false</code> and an error line with the exit code,
+  so the script decides. A command that can't start, a missing script file and a missing <code>dir</code> are the same, with exit
+  -1 and the reason in <code>.err</code>.</li>
+<li><code>.patchBy { error -&gt; ... }</code> runs when the command failed, with what it said, and gives the result back. The function can send it anywhere: <code>.patchBy(::log)</code>, a voice, <code>llama.answer(error)</code>, a template, or <code>.patchBy(::handleBy)</code> for the local text model. A command stopped with its script doesn't count.</li>
+<li>What a command printed on stderr, and why it failed, are the error terminal's lines too: <code>errorLog()</code> pulls the last ones and <code>handleBy()</code> hands them to the local text model, with main.kts and the env, as <code>.patchBy(::handleBy)</code> hands what the one command said the moment it fails.</li>
+<li>A relative path for <code>shellScript</code> that isn't there is looked for under <code>AMP/</code> and <code>AMP/pluginDir</code>, so <code>shellScript("voice/weather.sh")</code> finds a script of AMP and an export carries it.</li>
+<li>Each command is printed to the console before it runs, and what it prints follows as it arrives, both at the
+  internal level: turn <strong>Internal</strong> on in the console strip to see them, so a script that runs commands keeps the
+  console for what it logs itself. stderr comes as error lines. A command that
+  fails turns the error level on, as a failed run does, so its reason is in view. All of it also goes to
+  <code>AMP/logs.txt</code>. None of this goes to the error log on the backend, unlike other error lines.</li>
+<li><code>dir</code> is where it runs; without it, your home folder, where a new terminal starts. <code>~/</code> works in <code>dir</code> and in a
+  script's path.</li>
+<li><code>timeoutSeconds</code> is 120 unless given, and 0 means no limit. After it the command and everything it started are
+  stopped and <code>.timedOut</code> is true. Interrupting the script's thread does the same, with <code>.cancelled</code>, and the thread
+  stays interrupted. Commands still running when the app exits are stopped too. A command that puts something in the
+  background and ends (<code>server &amp;</code>) has ended, so what it left running stays, as from a terminal.</li>
+<li>Standard input is closed, so a command waiting for input fails instead of hanging.</li>
+<li><code>.out</code> and <code>.err</code> keep the last 1 MB of each stream; past that the first line says how much was cut. The console
+  shows the first 1000 lines of a command, each cut at 4 KB, and says how many it left out.</li>
+</ul>
+<p>A script could already run any JVM code, so this adds convenience, not power. There is no confirmation and no list of
+allowed commands, and a template loaded from someone else runs its commands with your rights: read it before you press
+Run. Only script code reaches <code>shell</code>; no route of a served model does. Text that came from outside, such as what was
+sent to <code>/teach</code>, goes to <code>shellScript</code> as an argument, never into the command line of <code>shell</code>, where the shell would
+read it as a command.</p>
+<h2 id="templates-in-the-background">Templates in the background<a class="headerlink" href="#templates-in-the-background" title="Permanent link">&para;</a></h2>
+<p>A saved template (see <a href="../sandbox/#templates">Templates</a>) can run beside the script that starts it, and the two can talk:
+<code>coroutineTemplate</code> starts it and the script goes on, the template reads with <code>input()</code> and answers with <code>output(text)</code>.
+The two halves are starters in the Templates pane: <strong>Background templates: coroutineTemplate</strong>, the caller, which you
+load and Run, and <strong>Background template: a reader</strong>, the template it starts.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Starts the saved template "Background template: a reader" beside this script and talks to it: send gives it a</span>
+<span class="c1">// line for its input(), receive waits for what its output(...) answers. Meanwhile Models &gt; Sessions lists the run</span>
+<span class="c1">// under Scripts with what it holds, and the Templates pane's fold says it is running.</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">job</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">coroutineTemplate</span><span class="p">(</span><span class="s">"Background template: a reader"</span><span class="p">)</span>
+<span class="n">job</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="s">"turn the lights on"</span><span class="p">)</span>
+<span class="n">log</span><span class="p">(</span><span class="s">"the reader answered </span><span class="si">${</span><span class="n">job</span><span class="p">.</span><span class="na">receive</span><span class="p">()</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+<span class="n">job</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="s">"what is the weather"</span><span class="p">)</span>
+<span class="n">log</span><span class="p">(</span><span class="s">"the reader answered </span><span class="si">${</span><span class="n">job</span><span class="p">.</span><span class="na">receive</span><span class="p">()</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+<span class="n">templateRuns</span><span class="p">.</span><span class="na">print</span><span class="p">()</span><span class="w">                                 </span><span class="c1">// every run in the background, this one among them</span>
+
+<span class="c1">// No more input is coming: the reader's input() turns null, its loop ends and the run ends with it.</span>
+<span class="n">job</span><span class="p">.</span><span class="na">closeInput</span><span class="p">()</span>
+<span class="n">log</span><span class="p">(</span><span class="s">"the reader ended: </span><span class="si">${</span><span class="n">job</span><span class="p">.</span><span class="na">await</span><span class="p">()</span><span class="si">}</span><span class="s">"</span><span class="p">)</span><span class="w">              </span><span class="c1">// finished, or failed: and the reason</span>
+
+<span class="c1">// When the run ends it prints its own resources line, as a run of main.kts does: memory, cpu, sessions. The dummy</span>
+<span class="c1">// session it opened stays open, as with any script; Models &gt; Sessions shows it until it is closed or terminated.</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1">// The template half of a pair. The starter "Background templates: coroutineTemplate" starts this one in the</span>
+<span class="c1">// background, feeds it lines with send and reads its answers with receive. Run by itself it reads the console:</span>
+<span class="c1">// each line typed there is one input(), and eof ends it.</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">initMod</span><span class="p">(</span><span class="s">"dummy"</span><span class="p">)</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input</span><span class="p">()</span><span class="w"> </span><span class="o">?:</span><span class="w"> </span><span class="k">break</span><span class="w">          </span><span class="c1">// waits for the caller's next line; null once its input is closed</span>
+<span class="w">    </span><span class="n">output</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="na">predict</span><span class="p">(</span><span class="n">text</span><span class="p">))</span><span class="w">          </span><span class="c1">// the label goes to the caller's receive(), and to the console</span>
+<span class="p">}</span>
+<span class="n">log</span><span class="p">(</span><span class="s">"input is closed, the reader ends"</span><span class="p">)</span>
+</code></pre></div>
+<p><code>coroutineTemplate("name", input = listOf("a", "b"))</code> starts one with those lines already waiting for its <code>input()</code>.</p>
+<h3 id="a-script-that-waits-to-be-called">A script that waits to be called<a class="headerlink" href="#a-script-that-waits-to-be-called" title="Permanent link">&para;</a></h3>
+<p>In main.kts <code>input()</code> waits for a line typed in the console, so a script can load nothing until it is asked. Give it a
+main entry point:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">fun</span><span class="w"> </span><span class="nf">work</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ortClosable</span><span class="p">(</span><span class="s">"work"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">initMod</span><span class="p">(</span><span class="s">"dummy"</span><span class="p">)</span>
+<span class="w">    </span><span class="n">log</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="na">predict</span><span class="p">(</span><span class="s">"hello"</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="kd">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">log</span><span class="p">(</span><span class="s">"Type go in the console to start"</span><span class="p">)</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">when</span><span class="w"> </span><span class="p">(</span><span class="n">input</span><span class="p">()</span><span class="o">?.</span><span class="na">trim</span><span class="p">()</span><span class="w"> </span><span class="o">?:</span><span class="w"> </span><span class="k">break</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s">"go"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">work</span><span class="p">()</span>
+<span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="s">"go starts it"</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+<p>It works as a Run window does: while the script waits, every line typed is its input, and the console's commands wait
+until it reads no more. <code>eof</code> gives it the null of a closed input, and Stop ends it where it waits. A line typed while it
+isn't waiting isn't kept: it counts as a console command or, like <code>log("hi")</code>, as a line of script that runs in the
+background, and the console says when it is neither.</p>
+<p>An exported bundle has no console, so there <code>input()</code> reads standard input: type at <code>./run.sh</code>, or pipe lines in with
+<code>echo go | ./run.sh</code>. When standard input ends, <code>input()</code> is null. It works the same with <code>--template</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Call</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>coroutineTemplate("name")</code></td>
+<td>Starts the template and returns at once. The name is matched in any case, or give its id; a name no template has is an error that lists the templates</td>
+</tr>
+<tr>
+<td><code>coroutineTemplate("name", input = listOf("a", "b"))</code></td>
+<td>The same, with those lines waiting for its <code>input()</code></td>
+</tr>
+<tr>
+<td><code>job.send("text")</code></td>
+<td>Gives the template a line of input. It never waits: what is sent stays until the template reads it. False when the line can't reach it, input being closed or the run ended</td>
+</tr>
+<tr>
+<td><code>job.receive()</code></td>
+<td>The template's next output, waiting for it; null once it has ended and everything it said was read</td>
+</tr>
+<tr>
+<td><code>job.receive(5000)</code></td>
+<td>The same, waiting five seconds at most; null then too, and <code>job.state</code> tells the two apart</td>
+</tr>
+<tr>
+<td><code>job.closeInput()</code></td>
+<td>No more input is coming: the template's <code>input()</code> is null once it has read what was sent</td>
+</tr>
+<tr>
+<td><code>job.await()</code></td>
+<td>Waits for the end and returns how it ended</td>
+</tr>
+<tr>
+<td><code>job.cancel()</code></td>
+<td>Ends the run (below)</td>
+</tr>
+<tr>
+<td><code>job.state</code></td>
+<td>How it stands: <code>running</code>, <code>finished</code>, <code>cancelled</code>, or <code>failed:</code> and the reason. <code>.running</code> and <code>.failed</code> say so as true or false, <code>.reason</code> is the reason</td>
+</tr>
+<tr>
+<td><code>job.name</code>, <code>job.id</code>, <code>job.startedAt</code>, <code>job.endedAt</code></td>
+<td>Which run it is, and when it began and ended (<code>endedAt</code> is null while it runs)</td>
+</tr>
+<tr>
+<td><code>template("name")</code></td>
+<td>A template to call like a function: see <a href="#delegating-to-a-template">Delegating to a template</a></td>
+</tr>
+<tr>
+<td><code>templateRuns.print()</code></td>
+<td>An internal line for each run and for the last three that ended (<code>#3 Reader running 4s</code>); the lines are returned too</td>
+</tr>
+<tr>
+<td><code>templateRuns.cancelAll()</code></td>
+<td>Cancels every run and returns how many there were</td>
+</tr>
+</tbody>
+</table>
+<p>A template is an ordinary script with the whole API, and what it opens stays open as with any script. Its console
+lines start with its name, and <code>output(text)</code> logs the text as well as handing it over. Run in the foreground (loaded
+into the editor, say) <code>input()</code> returns null at once, with one line saying nothing feeds it, and <code>output</code> only logs,
+so a template can be tried with <strong>Run</strong>.</p>
+<p><strong>How long a run lives.</strong> A run of <code>coroutineTemplate</code> outlives a script that ends by itself, until it ends, is
+cancelled, or the app closes. <strong>Stop</strong> on the script ends it too, with whatever it started in turn. At most eight run at
+once, fewer on a small heap; a ninth is an error that says so. A start also needs the memory for it, or it is refused
+with what is short and what to close (<a href="../sandbox/#templates-in-the-background">The sandbox</a>). The fold in the Templates pane and the <strong>Sessions</strong> tab of the Models page list them
+(<a href="../sandbox/#templates-in-the-background">The sandbox</a>).</p>
+<p><strong>Output nobody reads.</strong> A run never waits at <code>output</code>. The newest 1024 answers are kept for <code>receive()</code>, and the
+console says it once when older ones are dropped, so a run started with <strong>Run in background</strong> neither stops nor fills
+the memory.</p>
+<p><strong>Cancelling.</strong> <code>job.cancel()</code>, <strong>Stop</strong> in the Templates pane and <strong>Terminate</strong> on the Sessions tab are the same, and
+each reaches what the run started, however deep, also through a run that has ended. A
+blocked <code>input()</code> or a sleep ends at once. A busy script ends at its next <code>log</code>, <code>info</code>, <code>error</code>, <code>data</code>, <code>input</code> or
+<code>output</code>, each of which throws <code>CancellationException</code> once the run is cancelled; until then the pane reads <em>Stopping</em>
+and the run still counts as one of the eight. A cancel during its compile takes effect when the compile ends: every
+compile in the app reads the classpath through one shared file system, and interrupting one breaks the compiles beside
+it, <code>main.kts</code> included.</p>
+<p><strong>When it fails.</strong> The run ends <code>failed</code>, and the script that started it goes on. The reason names the template's own
+file and line (<code>failed: reader.kts:3: java.lang.IllegalStateException: boom</code>), and the console has a line for each
+problem. <code>job.await()</code> returns that state rather than throwing.</p>
+<p><strong>The env.</strong> A run stays in the env that is current when it starts, and changes nothing of it. A template with
+<code>environment(SettingsEnv("other"))</code>, or with an <code>implementation("...")</code> this env doesn't have, is refused:
+<code>coroutineTemplate</code> throws an error that says what to do instead. Another env's class loader could be had, but the API
+a script calls looks up the current env (<code>group()</code>, jars), so the template would run half in one env and half in the
+other. A template that names no env runs in the current one, and an import that only happens as the template runs is
+an error line, the env left as it is.</p>
+<p><strong>Each run has an engine of its own</strong>, made for the run and dropped when it ends, so a run begins with a compile of a
+few hundred milliseconds. This is what lets <code>main.kts</code> wait in <code>receive()</code> while the template runs: an eval holds the
+lock of the engine state in its bindings to its end, so a template evaluated on the bindings of <code>main.kts</code> would wait
+for <code>main.kts</code>, and <code>main.kts</code> for it.</p>
+<h3 id="delegating-to-a-template">Delegating to a template<a class="headerlink" href="#delegating-to-a-template" title="Permanent link">&para;</a></h3>
+<p><code>template("name")</code> gives you a saved template to call like a function, for when all you want from it is an answer:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Delegation: a saved template called like a function. The first call starts "Background template: a reader", gives</span>
+<span class="c1">// it the line and returns what its output(...) answers; the next calls go to the same run.</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">reader</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">template</span><span class="p">(</span><span class="s">"Background template: a reader"</span><span class="p">)</span>
+<span class="n">log</span><span class="p">(</span><span class="s">"the reader answered </span><span class="si">${</span><span class="n">reader</span><span class="p">(</span><span class="s">"</span><span class="n">turn</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">lights</span><span class="w"> </span><span class="n">on</span><span class="s">"</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+<span class="n">log</span><span class="p">(</span><span class="s">"the reader answered </span><span class="si">${</span><span class="n">reader</span><span class="p">(</span><span class="s">"</span><span class="n">what</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">weather</span><span class="s">"</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+<span class="n">log</span><span class="p">(</span><span class="s">"run #</span><span class="si">${</span><span class="n">reader</span><span class="p">.</span><span class="na">run</span><span class="p">.</span><span class="na">id</span><span class="si">}</span><span class="s"> is </span><span class="si">${</span><span class="n">reader</span><span class="p">.</span><span class="na">run</span><span class="p">.</span><span class="na">state</span><span class="si">}</span><span class="s">"</span><span class="p">)</span><span class="w">      </span><span class="c1">// reader.run is the run behind it</span>
+
+<span class="c1">// A template that fails makes the call throw, with its name and its error, so a failure never passes for an answer.</span>
+<span class="c1">// close ends its input and waits. A script that doesn't is closed for when it ends, and Stop ends the reader with it.</span>
+<span class="n">reader</span><span class="p">.</span><span class="na">close</span><span class="p">()</span>
+<span class="n">log</span><span class="p">(</span><span class="s">"the reader ended: </span><span class="si">${</span><span class="n">reader</span><span class="p">.</span><span class="na">run</span><span class="p">.</span><span class="na">state</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Call</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>val reader by template("name")</code></td>
+<td>Nothing starts yet. <code>val reader = template("name")</code> is the same</td>
+</tr>
+<tr>
+<td><code>reader("text")</code></td>
+<td>The first call starts the template. Each call gives it the line and returns its next <code>output(...)</code>, on the same run</td>
+</tr>
+<tr>
+<td><code>reader.close()</code></td>
+<td>No more input is coming, and it waits for the end</td>
+</tr>
+<tr>
+<td><code>reader.run</code></td>
+<td>The run behind it, a <code>TemplateRun</code> as <code>coroutineTemplate</code> returns; asking for it starts the template</td>
+</tr>
+</tbody>
+</table>
+<p><strong>When it fails.</strong> A template that failed makes the call throw, with its name and its error
+(<code>Template 'reader' failed: reader.kts:3: java.lang.IllegalStateException: boom</code>). One that ended without answering, or
+was cancelled, throws as well, so the call never returns null. A start that was refused, for memory say, throws
+the reason, and the next call tries again.</p>
+<p><strong>When the script ends.</strong> A script that ends, however it ends, has its <code>template</code> values closed for it: their input
+closes, and a run still going ten seconds later is cancelled. A template's own <code>template</code> values are closed when it
+ends in the same way. <code>coroutineTemplate</code> is the one that carries on.</p>
+<p><strong>Nesting.</strong> A template can start templates. One that would start itself, directly or through another, is refused with
+a line naming the way round (<code>Not started: template 'a' would be calling itself: a &gt; b &gt; a</code>), and they nest four deep
+at most. <strong>Stop</strong> on a script cancels everything below it.</p>
+<h2 id="serving-a-model">Serving a model<a class="headerlink" href="#serving-a-model" title="Permanent link">&para;</a></h2>
+<p>Open the Models page, expand a model, set host, port, path and methods, save, and switch <strong>Listen for incoming data</strong>
+on. Then:</p>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://127.0.0.1:8765/models/intents/predict<span class="w"> </span>-d<span class="w"> </span><span class="s1">'{"text":"turn the lights on"}'</span>
+curl<span class="w"> </span><span class="s1">'http://127.0.0.1:8765/models/intents/predict?text=turn+the+lights+on'</span>
+</code></pre></div>
+<p>Every request is appended to <code>AMP/models/intents/&lt;name&gt;/incoming.jsonl</code> and counted on the Models page. Models that were
+listening when the app closed start again on the next launch.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

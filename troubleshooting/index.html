@@ -1,0 +1,1458 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="How to use the Amie desktop app and the amie command line - the sandbox, scripting, packages, models and metrics">
+      
+      
+      
+        <link rel="canonical" href="https://samging.github.io/amieCli/troubleshooting/">
+      
+      
+        <link rel="prev" href="../settings/">
+      
+      
+        <link rel="next" href="../pi5/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Troubleshooting - Amie desktop app</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#troubleshooting" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Amie desktop app" class="md-header__button md-logo" aria-label="Amie desktop app" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Amie desktop app
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Troubleshooting
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/samging/amieCli" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    samging/amieCli
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Amie desktop app" class="md-nav__button md-logo" aria-label="Amie desktop app" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Amie desktop app
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/samging/amieCli" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    samging/amieCli
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start here
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start here
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How the app works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The components
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup-tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set up a new Mac
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://samging.github.io/amieCli/learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The amie book
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working in the app
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working in the app
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sandbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The sandbox
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sandbox-scripting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scripting API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook, scripts to copy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models and metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../serving/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Serving a model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../amp-folder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The AMP folder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models-page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models page
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sign-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sign-in
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sandbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sandbox
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#models-page-and-backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models page and backend
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#slow-hardware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Slow hardware
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pi5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raspberry Pi 5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source-layout/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where the code is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../codebase/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The code of amie, what is where and why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sign-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sign-in
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sandbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sandbox
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#models-page-and-backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models page and backend
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#slow-hardware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Slow hardware
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h1>
+<h2 id="sign-in">Sign-in<a class="headerlink" href="#sign-in" title="Permanent link">&para;</a></h2>
+<p><strong>I am signed out every time the app starts.</strong> Before 2026-10-14 the app only had Keycloak's normal refresh token, which
+the realm expires after 30 minutes without use, and a Keycloak that was not reachable at start also deleted the
+session. Now every sign-in asks for an offline token, and a Keycloak that is unreachable or answers with an error of
+its own keeps the session. If Account in Settings still shows you signed out: check <code>AMP/logs.txt</code> for lines starting with <code>auth:</code>. "Keycloak refused the saved session" means
+the realm revoked it (sign in again); "couldn't refresh … kept, will retry" means Keycloak is down, see below.</p>
+<p><strong>"Couldn't renew your session, Keycloak isn't answering".</strong> You are still signed in; the access token expired and
+Keycloak can't renew it right now. Start Keycloak and try again; there is no need to sign in.</p>
+<p><strong>"Keycloak is not reachable" on the login page.</strong> Run <code>docker ps</code>. The Keycloak container restarts in a loop while
+its Postgres container is down:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>start<span class="w"> </span>my-ubuntu-image-postgresql-1
+docker<span class="w"> </span>start<span class="w"> </span>my-ubuntu-image-keycloak-1
+curl<span class="w"> </span>-s<span class="w"> </span>http://localhost:8080/realms/master/.well-known/openid-configuration<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-c<span class="w"> </span><span class="m">100</span>
+</code></pre></div>
+<p><strong>"Wrong username or password" with the right password.</strong> Use the username; the realm does not log in by email.</p>
+<p><strong>"Client 'amie' rejected".</strong> The client is confidential: put its secret in <code>AMP/keycloak.json</code> or
+<code>KEYCLOAK_CLIENT_SECRET</code>.</p>
+<p><strong>The browser sign-in hangs.</strong> The realm's frontend URL points at an old LAN address. Fix it under Realm settings →
+General in the admin console (see <a href="../authentication/#stale-frontend-url">Keycloak setup</a>).</p>
+<p><strong>Port in use when signing in with the browser.</strong> Change <code>redirectPort</code> in <code>AMP/keycloak.json</code> and add
+<code>http://localhost:&lt;port&gt;/*</code> to the client's redirect URIs.</p>
+<h2 id="sandbox">Sandbox<a class="headerlink" href="#sandbox" title="Permanent link">&para;</a></h2>
+<p><strong><code>import("…")</code> without the prefix does not compile.</strong> Kotlin reads it as an import statement. Use
+<code>implementation("group:module:version")</code>, <code>dependency("…")</code>, <code>environment(SettingsEnv(…))</code> or <code>amie.import("…")</code>.</p>
+<p><strong>"env '<name>' must be selected with a literal environment(SettingsEnv("<name>", ...)) or amie.import(SettingsEnv(...)) to be sourced".</strong> The environment call must be written
+literally in the script (<code>environment(SettingsEnv("name", "profile"))</code> or <code>amie.import(SettingsEnv(...))</code>); it is
+read from the text before the script compiles.</p>
+<p><strong>modelBuilder fails to embed.</strong> The encoder folder is missing; see <a href="../getting-started/#what-you-need">Getting started</a>.</p>
+<p><strong>metricsChart says there are no metrics.</strong> The model was never built in this <code>AMP/</code>, or its name differs from the
+folder under <code>AMP/models/intents/</code>.</p>
+<h2 id="models-page-and-backend">Models page and backend<a class="headerlink" href="#models-page-and-backend" title="Permanent link">&para;</a></h2>
+<p><strong>"The backend rejected the Keycloak token (401)".</strong> The backend was started without the Keycloak verifier
+settings, or its <code>KEYCLOAK_ISSUER</code> does not match the realm's frontend URL. See <a href="../backend-integration/">Amie backend</a>.</p>
+<p><strong>"Connection refused: ensure the Amie backend is running".</strong> Nothing listens at the address in <code>AMP/backend.json</code>.
+With Keycloak on 8080, run the backend with <code>AMIE_BACKEND_PORT=8090</code>: the app moves a <code>baseUrl</code> on 8080 to 8090
+by itself (and saves it) when 8090 answers; set it by hand only when the backend is somewhere else.</p>
+<p><strong>Publish reads <em>Publish (sign in)</em>.</strong> You are a guest; pressing it opens Account in Settings, where you sign in. Publishing uploads under your account, so it needs a Keycloak sign-in;
+the metrics and statistics on the page do not.</p>
+<h2 id="performance-tests">Performance tests<a class="headerlink" href="#performance-tests" title="Permanent link">&para;</a></h2>
+<p><code>desktopApp/src/test/kotlin/org/example/project/perf/</code> measures the app and asserts each figure under a budget about
+three times what it measured on the Mac it was written on; the budget and that measurement stand beside each other in
+the test. Every figure is printed as <code>perf &lt;name&gt;: &lt;value&gt; (budget …)</code>, so a run on a slower machine says what it got.
+The tests that open a model use the real bge encoder with <code>AMIE_E2E_ENCODER=1</code> (seconds to load, hundreds of MB
+outside the heap) and a stand-in model without it, so the figures are of the app around the model either way.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>amieApplication
+./gradlew<span class="w"> </span>:desktopApp:test<span class="w"> </span>--tests<span class="w"> </span><span class="s1">'org.example.project.perf.*'</span><span class="w"> </span>--no-configuration-cache<span class="w"> </span>--rerun
+<span class="nv">AMIE_E2E_ENCODER</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>./gradlew<span class="w"> </span>:desktopApp:test<span class="w"> </span>--tests<span class="w"> </span><span class="s1">'org.example.project.perf.*'</span><span class="w"> </span>--no-configuration-cache<span class="w"> </span>--rerun
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What is measured</th>
+<th>Budget</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>StartupPerfTest</code></td>
+<td><code>main</code>'s root composed off screen: the first frame, and the sandbox on screen after the start route sends on</td>
+<td>4 s, 12 s</td>
+</tr>
+<tr>
+<td></td>
+<td><code>BundledModels.root</code> and <code>SharedEncoders</code> when first touched; with the encoder, its first load, a second acquire, the last release</td>
+<td>50 ms each; 10 s, 50 ms, 2 s</td>
+</tr>
+<tr>
+<td><code>ModelsPagePerfTest</code></td>
+<td><code>readSnapshot(remote = false)</code>, what the page reads every 1.5 s, with 1, 20 and 60 models in <code>AMP/models/intents</code>; it may grow linearly in the count and no worse</td>
+<td>150 ms, 400 ms, 1 s; 60 at most 3.5× what 20 added</td>
+</tr>
+<tr>
+<td></td>
+<td>The Models page composed on an empty cache with 60 models: its first frame, the first model on screen</td>
+<td>5 s, 8 s</td>
+</tr>
+<tr>
+<td><code>MemoryPerfTest</code></td>
+<td>A session opened, asked and closed 20 times: heap drift after <code>System.gc()</code>, the encoder's holder count back where it was, no ORT session left</td>
+<td>24 MB</td>
+</tr>
+<tr>
+<td></td>
+<td>Two models on one encoder folder load it once: the second open costs its head only</td>
+<td>first 10 s, second 1 s</td>
+</tr>
+<tr>
+<td></td>
+<td><code>sharedModel("dummy")</code> taken ten times: one snapshot with ten holders, freed by the last close, the heap and the encoder back</td>
+<td>24 MB drift</td>
+</tr>
+<tr>
+<td></td>
+<td>Eight background template runs at once: started, all ready on their own engines, the heap they hold, the ninth refused, what stays once they end</td>
+<td>2 s, 45 s, 900 MB or 85 % of the heap, 150 MB</td>
+</tr>
+<tr>
+<td></td>
+<td><em>Terminate all</em> in the page's order: no model session, shared model, package, ORT session or run left, no encoder loaded</td>
+<td>3 s</td>
+</tr>
+<tr>
+<td><code>WindowsPerfTest</code></td>
+<td>Sandbox → Models → the model's detail panel → back → Settings → back, ten rounds through the real sidebar and header: no exception in the log, threads not climbing after the second round, at most the status strip's own two or three <code>SystemStats.read()</code> calls in five seconds once the Models page is away</td>
+<td>first round 15 s, median 9 s, 6 threads, 4 reads</td>
+</tr>
+<tr>
+<td></td>
+<td>The whole window opened and closed ten times (each start composes the Devices dashboard on its way to the sandbox); no read of the process once they are closed</td>
+<td>first 12 s, median 5 s, 6 threads, 1 read</td>
+</tr>
+<tr>
+<td><code>PopupsPerfTest</code></td>
+<td>The command palette (a popup of its own over 300 entries) opened and closed 40 times: no popup left, its hold on the page's keys given back each time, no thread; a query over 5000 entries</td>
+<td>first 10 s, median 3 s, 6 threads; 1 s</td>
+</tr>
+<tr>
+<td><code>ConsolePerfTest</code></td>
+<td>A script printing 40000 lines from a thread of its own: the console stays between 18000 and 20000 lines with the newest, <code>logs.txt</code> has all of them, the heap is back after clearing</td>
+<td>produce 20 s, drain 30 s, 40 MB</td>
+</tr>
+<tr>
+<td></td>
+<td>Eight threads of 2000 lines: every line in the file and the console, each thread's in order; 15 megabyte lines pass 20 MB and <code>logs.txt</code> moves to <code>logs.1.txt</code>; <code>clearConsole</code> over 10000 lines</td>
+<td>20 s; 30 s; 500 ms</td>
+</tr>
+<tr>
+<td><code>ConsoleCapViewPerfTest</code></td>
+<td>A full console shown and followed takes 3000 more lines in thirty batches of 100: the oldest 2000 go at once when the cap is passed (one by one, every batch composed all 20000 lines again: 1.2 s a batch), the view stays at the newest</td>
+<td>compose 40 s, mean batch at the cap 600 ms</td>
+</tr>
+<tr>
+<td><code>ConsoleCommandsPerfTest</code></td>
+<td><code>scopes</code>, <code>clear</code>, the aliases (<code>open</code>, <code>still</code>, <code>close</code>, <code>?</code>) in any case, <code>terminate</code> by name closing every session of that name; 300 commands in a row answered with no thread left; <code>terminate all</code> over ten models, a bare ORT session and three background templates</td>
+<td>20 s, 6 threads; 5 s</td>
+</tr>
+<tr>
+<td><code>RunResourcesPerfTest</code></td>
+<td>The Resources line of a run that burns CPU and opens and closes a session: memory within the machine's RAM, peak at least the end, heap within its limit, CPU between a quarter of the burn and every core, one session opened and closed; a run that holds 192 MB says at least 48 MB more and a heap of 60 MB</td>
+<td>the machine's own limits</td>
+</tr>
+<tr>
+<td><code>RunMeterPerfTest</code></td>
+<td>A run that sleeps two seconds: the CPU the meter's own thread spends on its three readings (the <code>ps</code> child's own CPU is outside the JVM)</td>
+<td>1 % of a core</td>
+</tr>
+<tr>
+<td></td>
+<td>30 runs started and stopped: no <code>amie-run-meter</code> thread left</td>
+<td>6 s</td>
+</tr>
+</tbody>
+</table>
+<p>A figure over budget fails the test with the line it printed. On a machine slower than the budgets allow, the printed
+figures say by how much; the budgets are in the tests, next to the measurement they were taken from.</p>
+<h2 id="slow-hardware">Slow hardware<a class="headerlink" href="#slow-hardware" title="Permanent link">&para;</a></h2>
+<p>To see what the app costs on a machine, start it with <code>--bench</code> (on a Pi: <code>./scripts/pi-bench.sh</code>); <a href="../pi5/">Raspberry Pi 5</a> has what it measures and what it found.</p>
+<p>The app runs on a Raspberry Pi (4 GB, four cores, an SD card) and on older Macs with 8 GB. What costs most there is
+the encoder: bge is 800 MB on disk and about 1.2 GB once ONNX Runtime has loaded it, outside the Java heap, and it
+is loaded once and shared by every session, listener, validation and build on it.</p>
+<p><strong>What to set.</strong> The heap may grow to 35% of the machine's RAM (<code>-XX:MaxRAMPercentage=35</code> in the build: 1.4 GB on a
+4 GB Pi, 2.8 GB with 8 GB). To change that for one machine, set <code>AMIE_JVM_ARGS</code> where the app is built or run, as
+in <code>AMIE_JVM_ARGS="-Xmx2g" ./gradlew :desktopApp:run</code>; a DEB or MSI built with the variable set carries the flags in
+its launcher.</p>
+<ul>
+<li>An 8 GB Mac: the defaults, or <code>AMIE_JVM_ARGS="-Xmx2g"</code> when the machine swaps with the app open. That leaves the
+  encoder, the system and a browser room.</li>
+<li>A 4 GB Raspberry Pi: <code>AMIE_JVM_ARGS="-Xmx1g -XX:+UseSerialGC -Damie.ort.threads=3"</code>. One gigabyte of heap is enough for
+  the page, scripts and a build of some thousand rows; the serial collector keeps the JVM's own threads off the four
+  cores; three ONNX threads leave one core for the window. An 8 GB Pi takes <code>-Xmx2g</code> and the default threads.</li>
+<li><code>-Damie.timing=true</code> prints, on standard output, when the window was composed and when the Models page had its first
+  read, counted from the JVM's start, so a slow start can be placed.</li>
+<li><code>-Damie.ort.threads=N</code> sets how many threads each ONNX session gets (one per core by default), and
+  <code>-Damie.ort.default=true</code> opens sessions with ONNX Runtime's own options, to compare.</li>
+</ul>
+<p><strong>What the app does on its own.</strong> The threads of an ONNX session sleep when the session is idle instead of spinning
+for more work, so an encoder, a few heads and a group open at once don't take the cores between requests (an idle
+encoder went from 8 ms to 2 ms of CPU in two seconds on a Mac). A build runs the rows through the encoder 32 at a time, each batch rows of the same number of tokens, which gives the very vectors one row at a time gives about five times quicker (2 ms a row instead of 11 on a Mac). It keeps only each row's sentence vector (3 KB), not its whole hidden
+state (about 200 KB), so ten thousand rows take 30 MB of heap where they took 2 GB. The Models page reads the models
+again every 1.5 seconds and the status strip every 2, and when a read takes long on a slow disk the next one waits
+three times as long; a model's metrics history is decoded once and kept until its file changes; the process's memory is
+read from <code>/proc</code> on Linux and from one <code>ps</code> a second at most elsewhere. The plots of the models are drawn on a thread of
+their own, at the lowest priority, and shown as they are ready, where the page's first read used to draw every one before
+showing anything (1.3 of its 1.9 seconds with twelve models on a Mac); the plots that follow a serving model's log are
+drawn again at most every ten seconds instead of after every answer. Background templates run at most eight at a
+time on a heap of 512 MB or more and fewer on a smaller one (one per 64 MB), each holding a Kotlin script engine of its
+own, measured at 32 to 49 MB.</p>
+<p><strong>When memory is short.</strong> The status strip at the foot of the window turns red when the process holds over 85% of the RAM or the
+heap is over 90% full: close the sessions and stop the listeners you don't need (a listener keeps its encoder; <strong>Terminate
+all</strong> closes sessions and templates but not listeners, which load the encoder again on their next request). An encoder
+that would not load leaves a line in the console starting <code>encoder: couldn't load</code>, with what the process held and
+what the machine had free. An out of memory error nobody caught leaves a line starting <code>Out of memory on thread</code>, with
+the heap limit it ran into; the app goes on, and what that thread was doing (a build, a page's read) is lost and can be
+started again. A template that can't start because the cap is reached says so with the heap it was counted against.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

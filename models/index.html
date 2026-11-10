@@ -1,0 +1,2407 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="How to use the Amie desktop app and the amie command line - the sandbox, scripting, packages, models and metrics">
+      
+      
+      
+        <link rel="canonical" href="https://samging.github.io/amieCli/models/">
+      
+      
+        <link rel="prev" href="../cookbook/">
+      
+      
+        <link rel="next" href="../serving/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Models and metrics - Amie desktop app</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#models-and-metrics" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Amie desktop app" class="md-header__button md-logo" aria-label="Amie desktop app" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Amie desktop app
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Models and metrics
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/samging/amieCli" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    samging/amieCli
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Amie desktop app" class="md-nav__button md-logo" aria-label="Amie desktop app" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Amie desktop app
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/samging/amieCli" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    samging/amieCli
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start here
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start here
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How the app works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The components
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup-tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set up a new Mac
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://samging.github.io/amieCli/learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The amie book
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working in the app
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working in the app
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sandbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The sandbox
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sandbox-scripting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scripting API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook, scripts to copy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models and metrics
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models and metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#building-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Building one
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Building one">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#before-training-the-preprocessor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before training: the preprocessor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#after-validating-what-the-scores-say" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        After validating: what the scores say
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#which-head-the-architecture-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which head: the architecture search
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#training-again" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Training again
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#your-own-head" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Your own head
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#against-memorising-regularisation-schedules-early-stopping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Against memorising: regularisation, schedules, early stopping
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cross-validation-and-searching-heads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cross-validation and searching heads
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scores-you-can-trust-calibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scores you can trust: calibration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mistakes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistakes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-embedding-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The embedding cache
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fine-tuning-teaching-a-model-more" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fine-tuning: teaching a model more
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#versions-and-rollback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Versions and rollback
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-to-label-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What to label next
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validating-without-training" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validating without training
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading-the-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading the metrics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reading the metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#in-the-console-as-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        In the console, as tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-far-the-scores-hold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How far the scores hold
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rows-it-learned-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rows it learned from
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#in-the-console-as-ascii-charts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        In the console, as ASCII charts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on-the-models-page" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        On the Models page
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-a-model-from-a-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using a model from a script
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-model-card" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The model card
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#publishing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publishing
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../serving/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Serving a model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../amp-folder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The AMP folder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models-page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models page
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pi5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raspberry Pi 5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source-layout/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where the code is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../codebase/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The code of amie, what is where and why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#building-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Building one
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Building one">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#before-training-the-preprocessor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before training: the preprocessor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#after-validating-what-the-scores-say" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        After validating: what the scores say
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#which-head-the-architecture-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which head: the architecture search
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#training-again" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Training again
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#your-own-head" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Your own head
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#against-memorising-regularisation-schedules-early-stopping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Against memorising: regularisation, schedules, early stopping
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cross-validation-and-searching-heads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cross-validation and searching heads
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scores-you-can-trust-calibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scores you can trust: calibration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mistakes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistakes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-embedding-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The embedding cache
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fine-tuning-teaching-a-model-more" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fine-tuning: teaching a model more
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#versions-and-rollback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Versions and rollback
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-to-label-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What to label next
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validating-without-training" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validating without training
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading-the-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading the metrics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reading the metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#in-the-console-as-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        In the console, as tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-far-the-scores-hold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How far the scores hold
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rows-it-learned-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rows it learned from
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#in-the-console-as-ascii-charts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        In the console, as ASCII charts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on-the-models-page" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        On the Models page
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-a-model-from-a-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using a model from a script
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-model-card" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The model card
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#publishing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publishing
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="models-and-metrics">Models and metrics<a class="headerlink" href="#models-and-metrics" title="Permanent link">&para;</a></h1>
+<p>A model is an intent classifier: a small dense network trained on BERT embeddings of your texts. Everything about
+a model lives in <code>AMP/models/intents/&lt;name&gt;/</code>, so building, inspecting and serving one needs no account; only publishing
+does. A fresh checkout starts with a fixed <strong>dummy</strong> model (labels <code>greeting</code>, <code>lights</code>, <code>weather</code>) that is written
+when <code>AMP/models/intents</code> is empty, so <code>initMod("dummy")</code> and the Models page work before any training.</p>
+<h2 id="building-one">Building one<a class="headerlink" href="#building-one" title="Permanent link">&para;</a></h2>
+<p>From the Models page: <strong>New model</strong>, pick the csv (or <strong>Sample data</strong>, <code>AMP/sample-intents.csv</code>), Build. From
+a script:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">train</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">source</span><span class="p">(</span><span class="s">"intents.csv"</span><span class="p">)</span><span class="w">        </span><span class="c1">// columns: text,label (header names like text/label/intent are detected)</span>
+<span class="n">relate</span><span class="p">(</span><span class="n">train</span><span class="p">,</span><span class="w"> </span><span class="s">"intents-test.csv"</span><span class="p">)</span><span class="w">        </span><span class="c1">// optional: validate on this file instead of a 20% split</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">modelBuilder</span><span class="p">(</span><span class="s">"intents"</span><span class="p">,</span><span class="w"> </span><span class="n">train</span><span class="p">)</span>
+<span class="n">model</span><span class="p">.</span><span class="na">modelStatus</span><span class="p">()</span><span class="w">                      </span><span class="c1">// the validation table</span>
+<span class="n">model</span><span class="p">.</span><span class="na">modelChart</span><span class="p">()</span><span class="w">                       </span><span class="c1">// bars, history and confusion matrix</span>
+</code></pre></div>
+<p><code>modelBuilder</code> runs the <strong>preprocessor</strong> over the rows, embeds every text once, trains <strong>every candidate head</strong>
+on the same rows, keeps the best one by macro F1 on the validation rows, and exports it:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>model.onnx</code></td>
+<td>The trained layers, written as ONNX (opset 13)</td>
+</tr>
+<tr>
+<td><code>module.json</code></td>
+<td>Encoder path, input and output sizes, pooling, the label list, the data file it was trained on</td>
+</tr>
+<tr>
+<td><code>metrics.json</code></td>
+<td><strong>One entry per build</strong>: accuracy and macro F1 (with how far they hold, <a href="#how-far-the-scores-hold">below</a>), per-label precision / recall / F1 / support, the confusion matrix, warnings, what it was validated on</td>
+</tr>
+<tr>
+<td><code>serving.json</code></td>
+<td>Host, port, path, methods and whether it listens</td>
+</tr>
+<tr>
+<td><code>incoming.jsonl</code></td>
+<td>Every request the served model received</td>
+</tr>
+<tr>
+<td><code>versions/v&lt;N&gt;/</code></td>
+<td>The heads it had before, with their <code>module.json</code> and scores: the ten newest, for a <a href="#versions-and-rollback">rollback</a></td>
+</tr>
+</tbody>
+</table>
+<p>Accepted data shapes: a <code>DataSource</code> from <code>source(...)</code>, <code>List&lt;Pair&lt;text, label&gt;&gt;</code>, <code>Map&lt;label, List&lt;text&gt;&gt;</code>, or
+rows of <code>[text, …, label]</code>.</p>
+<h3 id="before-training-the-preprocessor">Before training: the preprocessor<a class="headerlink" href="#before-training-the-preprocessor" title="Permanent link">&para;</a></h3>
+<p>Nothing is embedded before the rows are cleaned and measured. The preprocessor writes what it did to the console
+(the <strong>info</strong> lines that begin with <code>modelBuilder:</code>), keeps the same lines with the model (<code>metrics.json</code>,
+shown under <strong>About → Training</strong> on the Models page), and stops the build when the set cannot give a usable
+classifier. What it does, in order:</p>
+<ol>
+<li><strong>Cleans every row.</strong> Control characters go, runs of whitespace become one space, text and label are trimmed.</li>
+<li><strong>Unifies label spellings.</strong> <code>Lights</code> and <code>lights</code> are one label; the more frequent spelling wins and the console
+   says <code>label 'Lights' read as 'lights'</code>.</li>
+<li><strong>Drops rows that cannot be learned from</strong>, each with its reason: an empty text, an empty label, a text with no
+   letters or digits (<code>???</code>), a single character.</li>
+<li><strong>Drops repeats and conflicts.</strong> The same text twice under one label keeps one copy (<code>repeated row</code>). The same
+   text under two labels keeps the label with the majority (<code>same text under another label, kept as 'lights'</code>);
+   with no majority both rows go, because neither label can be right.</li>
+<li><strong>Measures what is left</strong>: rows per label, distinct texts per label, words per text and the spread of lengths.</li>
+</ol>
+<p>A build stops, with the sentence below in red and the model not written, when:</p>
+<table>
+<thead>
+<tr>
+<th>The console says</th>
+<th>Why training would be pointless</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>no labeled rows at all</code></td>
+<td>Nothing came out of the data shape</td>
+<td>Return rows of <code>[text, label]</code>, pairs, or a map; check the csv's header names</td>
+</tr>
+<tr>
+<td><code>almost every row has its own label (… labels for … rows): the text and label columns are probably swapped</code></td>
+<td>A classifier learns a few labels from many texts, not the reverse</td>
+<td>Swap the columns, or name them <code>text</code> and <code>label</code></td>
+</tr>
+<tr>
+<td><code>label '…' is … characters long, which looks like a text</code></td>
+<td>Same as above, seen from the label's side</td>
+<td>Same</td>
+</tr>
+<tr>
+<td><code>a classifier needs at least 2 labels</code></td>
+<td>With one label there is nothing to decide</td>
+<td>Add rows of another label</td>
+</tr>
+<tr>
+<td><code>label 'x' has 3 rows after cleaning, at least 5 are needed</code></td>
+<td>Too few to train on <strong>and</strong> hold some out to validate</td>
+<td>Add rows of that label, or drop the label</td>
+</tr>
+<tr>
+<td><code>label 'x' has only 1 distinct text; the rest differ only in case or punctuation</code></td>
+<td>The encoder sees one sentence; the head would memorise it, not the label</td>
+<td>Write different sentences for that label</td>
+</tr>
+<tr>
+<td><code>nothing is left after cleaning</code></td>
+<td>Every row was empty, repeated or in conflict</td>
+<td>Look at the dropped lines above it</td>
+</tr>
+<tr>
+<td><code>embeddings are nearly identical</code> (after embedding)</td>
+<td>The encoder cannot tell the texts apart, so no head can tell the labels apart</td>
+<td>Use texts that differ in more than a word</td>
+</tr>
+</tbody>
+</table>
+<p>Softer problems become <strong>warnings</strong>, stored with the metrics and printed, and training goes on: labels
+imbalanced more than 10×, texts of under two words on average, texts longer than 1000 characters (the encoder
+reads the first 512 tokens), many texts that differ only in case or punctuation, every text of the same length.</p>
+<p><code>buildOptions(preprocess = false)</code> skips the cleaning; only the hard checks of the old builder run then.</p>
+<p>For a model that keeps no texts (<code>buildOptions(keepTexts = false)</code>) the lines count the dropped rows without
+quoting them, and a label longer than 60 characters, which is a text when the columns are swapped, is named by its
+length alone (<code>a label is 87 characters long, which looks like a text</code>); with the columns swapped no line names a
+label at all, for any model.</p>
+<p>The dropped rows are written to <code>AMP/models/intents/&lt;name&gt;/dropped.csv</code> (<code>text,label,reason</code>), so they can be fixed in the
+source file. A related test file is cleaned the same way, and a test row whose text also appears in the training
+rows is left out of the validation (the console says how many), because it would be scored on what was memorised.</p>
+<p><strong>Check before building.</strong> <code>checkData(source("intents.csv"))</code> in a script runs the preprocessor alone and prints
+the same report, ending with whether a build could start; on the Models page the <strong>New model</strong> form has
+<strong>Check data</strong> next to Build, which shows the report under the fields.</p>
+<h3 id="after-validating-what-the-scores-say">After validating: what the scores say<a class="headerlink" href="#after-validating-what-the-scores-say" title="Permanent link">&para;</a></h3>
+<p>Once the chosen head is validated, a few more lines are added to the warnings (printed, and kept with the build):</p>
+<table>
+<thead>
+<tr>
+<th>The console says</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>the validation has only 7 rows; its scores are rough</code></td>
+<td>Each row moves accuracy by a seventh; add rows or a test file before trusting a number</td>
+</tr>
+<tr>
+<td><code>labels with fewer than 2 validation rows: weather</code></td>
+<td>That label's precision and recall come from one row</td>
+</tr>
+<tr>
+<td><code>the head fits the training rows much better than the validation rows (0.99 vs 0.80): it memorises</code></td>
+<td>Overfitting: more varied rows, or a smaller head (<code>architecture(hidden = emptyList())</code>), would generalise better</td>
+</tr>
+<tr>
+<td><code>accuracy 0.62 is barely above always answering 'lights' (0.58)</code></td>
+<td>The head learned little beyond the majority label; the texts may not separate the labels</td>
+</tr>
+<tr>
+<td><code>label 'weather' is weak (F1 0.40); it is mostly taken for 'lights' (4 of 6 rows)</code></td>
+<td>The confusion matrix's worst row in a sentence; those two labels need more distinct examples</td>
+</tr>
+<tr>
+<td><code>3 of 48 validation rows repeat a training row (2 the same text, ignoring case and punctuation; 1 nearly the same to the encoder): scores on rows it learned from flatter it</code></td>
+<td>Those rows test what it remembers, not what it learned: <a href="#rows-it-learned-from">rows it learned from</a></td>
+</tr>
+</tbody>
+</table>
+<p>Two more options help with awkward data: <code>buildOptions(balanceClasses = true)</code> weights the loss so every label
+counts the same, which lifts a rare label the head would otherwise learn last; <code>buildOptions(seed = 7)</code> changes the
+split, the initial weights and the shuffles (the same data and seed always give the same model, so a comparison
+between two runs is a comparison of the data or the options, not of luck).</p>
+<h3 id="which-head-the-architecture-search">Which head: the architecture search<a class="headerlink" href="#which-head-the-architecture-search" title="Permanent link">&para;</a></h3>
+<p>On top of the encoder's 768 numbers per text sits a small head. By default four are trained on the same
+training rows and scored on the same validation rows, and the best macro F1 wins (ties: the better accuracy,
+then the smaller head):</p>
+<table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Head</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>linear</code></td>
+<td><code>dense[768 -&gt; labels] softmax</code></td>
+</tr>
+<tr>
+<td><code>dense[16]</code></td>
+<td>one hidden layer of 16 relu units</td>
+</tr>
+<tr>
+<td><code>dense[32]</code></td>
+<td>one of 32</td>
+</tr>
+<tr>
+<td><code>dense[64, 16]</code></td>
+<td>two hidden layers</td>
+</tr>
+</tbody>
+</table>
+<p>As each head finishes the console shows its accuracy, macro F1, train accuracy, loss and parameter count, then
+its F1, precision and recall per label, then what the diagnostics make of it (memorising, barely above the
+majority label, a weak label and what it is taken for), and the Models page lists it under the build line at once.
+Once every head is in, one line ranks them (<code>compared 4 heads by macro F1: dense[16] 0.950 · dense[32] 0.912 …</code>)
+and <code>chosen: dense[16], the best macro F1 on the validation rows (next: dense[32] 0.912)</code> says which is kept.
+The chosen head is then validated once more on every validation row (the Validating phase), so what is stored,
+charted and exported is that head's own run. The comparison is kept with the build in <code>metrics.json</code>
+(<code>candidates</code>, with <code>perLabelF1</code> and <code>insights</code> per head; <strong>Heads compared</strong> on the Metrics tab) and in one line
+of the manifest (<code>search</code>, shown as <strong>heads tried</strong> under About → Training). Each candidate costs its epochs; on a
+few hundred rows the whole search takes seconds.</p>
+<h3 id="training-again">Training again<a class="headerlink" href="#training-again" title="Permanent link">&para;</a></h3>
+<p><code>modelBuilder("intents", train)</code> with the name of a model that exists trains it again in place, which is how a
+model follows its data: add or fix rows in the csv and build under the same name. Nothing that runs on the old
+head is cut off: the session open on it and its listener each open the new head beside the old one, swap it in
+once their answers in flight are done, and close the old one after, under the same session id and on the same
+port (a script holding the session, a swarm over it or a client of the listener sees the old answers up to the
+swap and the new ones from it; <code>sessions.log</code> has a <code>swap</code> line, <code>access.log</code> too). The icon, the guide and the
+description (unless the build gives one) are kept, and <code>metrics.json</code> keeps every earlier run, so the runs show
+whether the new rows helped. Only a model that stops keeping texts closes its session instead, so no log goes on
+keeping them. A fine-tune and a rollback swap the same way. The Models page's <strong>Retrain</strong> does the same. The head it replaces is kept under
+<code>versions/</code> (<a href="#versions-and-rollback">Versions and rollback</a>); to add a label or a few corrections without
+training from scratch, <a href="#fine-tuning-teaching-a-model-more">fine-tune</a> instead.</p>
+<h3 id="your-own-head">Your own head<a class="headerlink" href="#your-own-head" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buildOptions</span><span class="p">(</span>
+<span class="w">    </span><span class="n">candidates</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span>
+<span class="w">        </span><span class="n">architecture</span><span class="p">(</span><span class="n">hidden</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span><span class="m">32</span><span class="p">,</span><span class="w"> </span><span class="m">16</span><span class="p">),</span><span class="w"> </span><span class="n">epochs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">200</span><span class="p">,</span><span class="w"> </span><span class="n">learningRate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.005</span><span class="p">),</span>
+<span class="w">        </span><span class="n">architecture</span><span class="p">(</span><span class="n">hidden</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">emptyList</span><span class="p">(),</span><span class="w"> </span><span class="n">epochs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100</span><span class="p">),</span><span class="w">              </span><span class="c1">// a linear head</span>
+<span class="w">        </span><span class="n">architecture</span><span class="p">(</span><span class="n">hidden</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span><span class="m">64</span><span class="p">),</span><span class="w"> </span><span class="n">activation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Tanh"</span><span class="p">),</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">    </span><span class="n">pickBy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"accuracy"</span><span class="p">,</span><span class="w">            </span><span class="c1">// or "macroF1" (the default)</span>
+<span class="w">    </span><span class="n">validationFraction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.25</span><span class="p">,</span><span class="w">       </span><span class="c1">// how much is held out when there is no related test file</span>
+<span class="p">)</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">built</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">modelBuilder</span><span class="p">(</span><span class="s">"intents"</span><span class="p">,</span><span class="w"> </span><span class="n">train</span><span class="p">,</span><span class="w"> </span><span class="n">options</span><span class="p">)</span>
+</code></pre></div>
+<p><code>architecture(...)</code> takes the hidden layer widths (an empty list is a linear head), <code>epochs</code>, <code>batchSize</code>,
+<code>learningRate</code> and the hidden activation (<code>Relu</code> or <code>Tanh</code>); a wrong value is refused when the line runs, not
+after the embedding. One candidate means no comparison, just that head. The Models page's <strong>New model</strong> uses the
+defaults.</p>
+<h3 id="against-memorising-regularisation-schedules-early-stopping">Against memorising: regularisation, schedules, early stopping<a class="headerlink" href="#against-memorising-regularisation-schedules-early-stopping" title="Permanent link">&para;</a></h3>
+<p><code>architecture(...)</code> takes more than the layers. Every setting below is off unless it is given, so a head that
+leaves them out trains exactly as it always has:</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>What it does</th>
+<th>When it helps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>weightDecay = 0.01</code></td>
+<td>AdamW's decoupled weight decay: every step pulls the weights (not the biases) a little towards zero</td>
+<td>The head memorises: its train accuracy is far above the validation's</td>
+</tr>
+<tr>
+<td><code>dropout = 0.2</code></td>
+<td>Switches off that share of the hidden units for each row while training; a linear head has none</td>
+<td>A wide head (<code>dense[128]</code>) on a few hundred rows</td>
+</tr>
+<tr>
+<td><code>labelSmoothing = 0.1</code></td>
+<td>Spreads that share of each target over every label, so the head is less sure of rows like its training rows</td>
+<td>Scores near 1.0 on everything, noisy labels</td>
+</tr>
+<tr>
+<td><code>schedule = "cosine"</code></td>
+<td>The rate eases from its value down to a hundredth of it over the epochs (<code>"linear"</code> too; <code>"constant"</code> is the default)</td>
+<td>Long fits, a high starting rate</td>
+</tr>
+<tr>
+<td><code>warmupEpochs = 5</code></td>
+<td>The rate climbs to its value over the first epochs</td>
+<td>A high rate, a deep head</td>
+</tr>
+<tr>
+<td><code>patience = 10</code></td>
+<td>Early stopping: a tenth of the training rows is put aside, the fit stops once their loss hasn't improved for 10 epochs, and the best epoch's weights are kept</td>
+<td>You don't know how many epochs are enough</td>
+</tr>
+<tr>
+<td><code>name = "wide"</code></td>
+<td>Your name for the head in the console and the charts</td>
+<td>A search with many similar heads</td>
+</tr>
+</tbody>
+</table>
+<p>A head with settings of its own is named after them, <code>dense[32] · lr 0.003 · dropout 0.2 · early stop 10</code>, so the
+ranking in the console says which variant won. Early stopping prints <code>stopped early at epoch 17 of 150, keeping
+epoch 7, the lowest loss on the tenth of the training rows put aside</code>.</p>
+<h3 id="cross-validation-and-searching-heads">Cross-validation and searching heads<a class="headerlink" href="#cross-validation-and-searching-heads" title="Permanent link">&para;</a></h3>
+<p>On a small file one 20% split is luck: three validation rows of a label move its F1 by a third. With
+<code>buildOptions(folds = 5)</code> every candidate is also trained five times on four fifths of the training rows and
+scored on the fifth it did not see; the heads are compared by the mean of those five scores (with its spread:
+<code>over 5 folds of the training rows, accuracy 0.872 · macro F1 0.875 ± 0.069</code>), and the chosen one is then trained
+on all the training rows and validated as before. It costs folds + 1 fits per head.</p>
+<p><code>searchSpace(...)</code> makes the candidates from every combination of the values it is given:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buildOptions</span><span class="p">(</span>
+<span class="w">    </span><span class="n">candidates</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">searchSpace</span><span class="p">(</span>
+<span class="w">        </span><span class="n">hidden</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span><span class="n">emptyList</span><span class="p">(),</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span><span class="m">32</span><span class="p">),</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span><span class="m">64</span><span class="p">,</span><span class="w"> </span><span class="m">16</span><span class="p">)),</span>
+<span class="w">        </span><span class="n">learningRates</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span><span class="m">0.01</span><span class="p">,</span><span class="w"> </span><span class="m">0.003</span><span class="p">),</span>
+<span class="w">        </span><span class="n">dropouts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span><span class="m">0.0</span><span class="p">,</span><span class="w"> </span><span class="m">0.2</span><span class="p">),</span>
+<span class="w">        </span><span class="n">patience</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="p">,</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">    </span><span class="n">folds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>That is 2 linear heads (dropout means nothing to them) and 8 others. <code>trials = 12</code> draws 12 of a bigger grid at
+random (<code>seed</code> picks which); a search of more than 64 heads is refused. Without arguments it tries six layer
+shapes, from <code>linear</code> to <code>dense[128, 32]</code>, at two rates.</p>
+<p><strong>Rows that look mislabeled.</strong> In cross-validation every training row is scored by a head that never saw it. A row
+is a <em>suspect</em> when that head is at least 60% sure of another label and gives the row's own label less than the
+rows of that label usually get. After the build the console names three (<code>5 training rows look mislabeled … "lights
+there number 103" is 'weather', they say 'lights' 0.955</code>), and <code>suspects("intents")</code> lists them all, the widest
+disagreement first, with their texts only when the model keeps texts. A suspect is a wrong label or a hard row: fix
+it in the csv, or keep it.</p>
+<h3 id="scores-you-can-trust-calibration">Scores you can trust: calibration<a class="headerlink" href="#scores-you-can-trust-calibration" title="Permanent link">&para;</a></h3>
+<p>A softmax head trained to fit is usually surer than it is right: a score of 0.95 may be right 80% of the time.
+Every run measures this. The <strong>expected calibration error</strong> (ECE) is the gap between how sure the answers are and
+how often they are right, averaged over ten bins of the top score. Every score gate from 0 to 0.95 is measured too:
+how many rows it keeps and how many of those are right. <code>calibrationChart("intents")</code> prints both, and the console
+names a gate worth using (<code>a gate at 0.95 keeps 20% of the rows and 100% of what it keeps is right</code>).</p>
+<p><code>buildOptions(calibrate = true)</code> fits one <strong>temperature</strong> on the validation rows (the scores become the softmax of
+the logits divided by it) and folds it into the last layer. The exported model, <code>initMod</code> and the HTTP server then
+give the calibrated scores without knowing about it. The answers stay the same: dividing every logit by the same
+positive number keeps their order. A model that is built already is calibrated on rows it has not seen:</p>
+<div class="highlight"><pre><span></span><code><span class="n">calibrate</span><span class="p">(</span><span class="s">"intents"</span><span class="p">,</span><span class="w"> </span><span class="n">source</span><span class="p">(</span><span class="s">"intents-holdout.csv"</span><span class="p">))</span><span class="w">   </span><span class="c1">// at least 10 rows; a new version, the same answers</span>
+</code></pre></div>
+<p>This fits the temperature on those rows, reports the error before and after on two halves of them, and writes the
+calibrated head as the next version. Nothing is written when the scores were right already.</p>
+<h3 id="mistakes">Mistakes<a class="headerlink" href="#mistakes" title="Permanent link">&para;</a></h3>
+<p>The validation rows a run got wrong are kept with it, the surest mistakes first (<code>buildOptions(keepMistakes = 25)</code>;
+0 keeps none). <code>mistakes("intents")</code> prints each row's label, the answer, both scores and the text. A model that
+doesn't keep texts keeps the labels and scores without the texts.</p>
+<h3 id="the-embedding-cache">The embedding cache<a class="headerlink" href="#the-embedding-cache" title="Permanent link">&para;</a></h3>
+<p>Embedding is most of a build's time. Every text's vector is kept in <code>AMP/cache/embeddings/&lt;encoder&gt;/vectors.bin</code>
+(the SHA-256 of the text, not the text, and its 768 numbers), so building again, a search or a fine-tune embeds only
+the texts it hasn't seen (<code>fineTune: 40 of 52 texts came from the embedding cache</code>). The store belongs to one
+encoder folder and changes when the encoder's model or tokenizer file changes, so an old vector never answers for
+a new encoder. <code>embeddingCache.print()</code> shows what is kept and <code>embeddingCache.clear()</code> frees it; a store that grows
+past 512 MB starts over. <code>buildOptions(cacheEmbeddings = false)</code> skips it, and a model with <code>keepTexts = false</code>
+never uses it.</p>
+<h2 id="fine-tuning-teaching-a-model-more">Fine-tuning: teaching a model more<a class="headerlink" href="#fine-tuning-teaching-a-model-more" title="Permanent link">&para;</a></h2>
+<p>A new label, or a few rows the model gets wrong, don't need a new build. <code>fineTune</code> starts from the head the model
+has, adds an output for every label it doesn't know, and trains on the new rows together with the rows it learned
+from before:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">tuned</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fineTune</span><span class="p">(</span><span class="s">"intents"</span><span class="p">,</span><span class="w"> </span><span class="n">source</span><span class="p">(</span><span class="s">"music.csv"</span><span class="p">))</span><span class="w">   </span><span class="c1">// or listOf("play some jazz" to "music", …)</span>
+<span class="n">tuned</span><span class="p">.</span><span class="na">modelStatus</span><span class="p">()</span><span class="w">                                    </span><span class="c1">// after, and the head before on the same rows</span>
+<span class="n">versions</span><span class="p">(</span><span class="s">"intents"</span><span class="p">)</span><span class="w">                                    </span><span class="c1">// v2 fine-tune of v1, v1 build</span>
+<span class="n">rollback</span><span class="p">(</span><span class="s">"intents"</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w">                                 </span><span class="c1">// v1's head again, as v3</span>
+</code></pre></div>
+<p>A client of a served model can do the same over HTTP without the page or a script: <code>POST &lt;path&gt;/teach</code> puts a
+sentence and its label in the model's queue, <code>POST &lt;path&gt;/retrain</code> fine-tunes on the queue in the background while
+the model keeps answering, and the new head is swapped in when it is written
+(<a href="../serving/#teaching-a-model-while-it-listens">Teaching a model while it listens</a>).</p>
+<p>What it does, in order (<code>jetbrainDLBuilder/FineTune.kt</code>):</p>
+<ol>
+<li><strong>Maps the labels.</strong> A row's label is the model's label when they match in any case (<code>Lights</code> is <code>lights</code>). A
+   label it doesn't know is a new label and needs at least 3 rows, so one can be held out to check it. A label a
+   letter or a plural away from a known one is flagged (<code>'light' is taken as a new label; if it is meant to be
+   'lights', spell it so in the file</code>). The rows are cleaned as a build cleans them, but one label, or one row of a
+   label it knows, is enough.</li>
+<li><strong>Replays what it learned from.</strong> The rows of its data file, and of the files it was fine-tuned on, are trained
+   on again (up to 200 per label) when they are still in <code>AMP/</code>, so the labels it knows are not forgotten. When a
+   new row's text was learned under another label, the new row wins: that is how a correction is made.</li>
+<li><strong>Grows the head.</strong> Each new label's output starts where it will end up (weight imprinting). Its weights point
+   from where the labels it has sit to the mean of the new label's rows, and its bias is set so it answers its own
+   rows without taking the others'. With nothing to replay (a model downloaded from the website), <em>where the
+   labels it has sit</em> is the mean of the training features the build kept in <code>module.json</code> (<code>featureMean</code>), so a
+   new label still lands in the right place.</li>
+<li><strong>Trains gently.</strong> It runs 40 epochs at a rate of 0.002 (a build runs 150 at 0.01). The loss is weighted so a new
+   label of ten rows counts as much as one of two hundred, and every weight it had is pulled back towards where it
+   started (L2-SP, <code>stayNear = 0.01</code>). The new outputs are free; <code>freeze = 1</code> keeps the first layer as it is.</li>
+<li><strong>Scores before and after</strong> on the same held-out rows: a share of the new rows and of the replayed rows, or the
+   related test file. It prints <code>on the 2 held-out new rows: accuracy 0.000 before, 1.000 after</code>, then the earlier
+   rows, then all of them. An old label whose F1 falls by more than 0.1 is a warning (<code>the fine-tune forgets some
+   of what it knew: 'weather' F1 0.950 → 0.710; replay more earlier rows (replayPerLabel), raise stayNear, or roll
+   back</code>). Labels with no rows among the checked ones are left out of the macro F1.</li>
+<li><strong>Writes the next version.</strong> The head it replaces is kept under <code>versions/</code> and the guide's label list gets the
+   new labels. <code>module.json</code> records <code>kind: fine-tune</code>, <code>parentVersion</code> and <code>fineTunedOn</code>. The run joins
+   <code>metrics.json</code> with its baseline, so the Metrics tab shows before and after.</li>
+</ol>
+<p><code>fineTuneOptions(...)</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>epochs</code>, <code>learningRate</code>, <code>batchSize</code></td>
+<td>40, 0.002, 16</td>
+<td>The fit</td>
+</tr>
+<tr>
+<td><code>stayNear</code></td>
+<td>0.01</td>
+<td>How hard the weights it had are pulled back: higher forgets less and learns the new rows less; 0 lets them go anywhere</td>
+</tr>
+<tr>
+<td><code>replay</code>, <code>replayPerLabel</code></td>
+<td>true, 200</td>
+<td>Train on the earlier rows too, at most this many per label</td>
+</tr>
+<tr>
+<td><code>freeze</code></td>
+<td>0</td>
+<td>The first n layers keep their weights; at least the last one learns</td>
+</tr>
+<tr>
+<td><code>balanceClasses</code></td>
+<td>true</td>
+<td>Every label weighs the same in the loss</td>
+</tr>
+<tr>
+<td><code>validationFraction</code></td>
+<td>0.2</td>
+<td>The share of the new rows, and of the replayed rows, held out to score before and after</td>
+</tr>
+<tr>
+<td><code>patience</code></td>
+<td>0</td>
+<td>Early stopping, as in a build</td>
+</tr>
+<tr>
+<td><code>calibrate</code></td>
+<td>false</td>
+<td>Fit a new temperature on the held-out rows afterwards (a calibrated model's temperature is taken out before training)</td>
+</tr>
+<tr>
+<td><code>minNewLabelRows</code></td>
+<td>3</td>
+<td>The rows a new label needs</td>
+</tr>
+<tr>
+<td><code>cacheEmbeddings</code>, <code>keepMistakes</code>, <code>seed</code>, <code>preprocess</code></td>
+<td>as in a build</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>A fine-tune is refused, and the model left as it was, when the model doesn't exist, the encoder doesn't fit its
+head, a new label has too few rows, or <code>freeze</code> covers every layer. The console says which. One that ends after
+the model got another head meanwhile (rolled back, trained again, or destroyed and built anew under its name)
+writes nothing, so that head isn't lost and no two heads get one number; run it again on the head it has now. A
+calibration does the same.</p>
+<h2 id="versions-and-rollback">Versions and rollback<a class="headerlink" href="#versions-and-rollback" title="Permanent link">&para;</a></h2>
+<p>Every head a model replaces is kept. A build, a fine-tune, a calibration or a rollback copies the head it replaces,
+its <code>module.json</code> and the run it was scored with into <code>AMP/models/intents/&lt;name&gt;/versions/v&lt;N&gt;/</code>; the ten newest are kept.
+<code>versions("intents")</code> lists them, the current one first:</p>
+<div class="highlight"><pre><span></span><code>versions 'intents' · 3 kept
+v3 (current) · v1 brought back · 2026-10-21 10:12 · 3 labels · accuracy 0.933 · macro F1 0.930
+v2 · fine-tune of v1 · 2026-10-21 10:05 · 4 labels · accuracy 0.950 · macro F1 0.948 · fine-tuned v1 on music.csv: 8 new rows, 36 replayed; new label music
+v1 · build · 2026-10-21 09:58 · 3 labels · accuracy 0.933 · macro F1 0.930
+</code></pre></div>
+<p><code>rollback("intents", 1)</code> makes v1's head the model again <em>as a new version</em> (v3), so a rollback can itself be
+undone. The description, icon and guide stay as they are, and v1's scores are appended to <code>metrics.json</code>, so the
+page shows the scores of the head that answers. On the Models page the model's About tab lists its versions under
+<strong>Versions</strong>, each kept one with <strong>Roll back</strong>, and its ⋯ menu rolls back to the newest kept one. <strong>Compare</strong> beside
+it scores that head and the current one on the same csv without changing anything: each label's F1 then and now, the
+confusion change, and (for a model that keeps texts) the rows they answer differently
+(<a href="../models-page/">the Models page</a>; <code>util/VersionCompare.kt</code>, which writes nothing of the model but
+<code>plots/compare.png</code>, and keeps the rows' vectors in the embedding cache only when both heads keep texts). Publishing sends only the current head; the versions stay on this machine.</p>
+<h2 id="what-to-label-next">What to label next<a class="headerlink" href="#what-to-label-next" title="Permanent link">&para;</a></h2>
+<p>Labeling is the expensive part, so label what the model is least sure about:</p>
+<div class="highlight"><pre><span></span><code><span class="n">textsToLabel</span><span class="p">(</span><span class="s">"intents"</span><span class="p">,</span><span class="w"> </span><span class="s">"asked.txt"</span><span class="p">,</span><span class="w"> </span><span class="n">limit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">50</span><span class="p">)</span><span class="w">   </span><span class="c1">// or a csv's text column; without a file, what it was asked over HTTP</span>
+<span class="n">textsToLabel</span><span class="p">(</span><span class="s">"intents"</span><span class="p">,</span><span class="w"> </span><span class="s">"asked.txt"</span><span class="p">,</span><span class="w"> </span><span class="n">limit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">50</span><span class="p">,</span><span class="w"> </span><span class="n">diverse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span><span class="w">   </span><span class="c1">// texts unlike each other among its closest calls</span>
+</code></pre></div>
+<p>This ranks the texts by the gap between the model's two best scores, the closest calls first. It leaves out repeats,
+near-repeats (cosine above 0.98 to one already picked) and the texts it was trained on (a training file that can't be
+read is passed over). The closest calls are often many wordings of one confusion; with <code>diverse = true</code> (<strong>Varied
+close calls</strong> on the Improve tab) it takes the closest calls, five times as many as it is asked for, and picks among
+them one text at a time: first the closest call, then each time the text least like those picked so far (by the
+cosine of the encoder's vectors). They are listed closest call first, as always, and a few labels cover more kinds of
+text. Without it the output is exactly as before. The result goes to
+<code>AMP/intents-to-label.csv</code>: an empty <code>label</code> column beside the model's <code>guess</code>, its <code>score</code> and the <code>runner-up</code>. Fill
+in the labels and run <code>fineTune("intents", source("intents-to-label.csv"))</code>; rows left blank are dropped. Asking
+again keeps the rows you labeled already at the top of the file and doesn't pick their texts a second time, so no
+labeling work is lost. A model that doesn't keep texts writes no such file.</p>
+<p>On the Models page this file is the model's queue, on its <strong>Improve</strong> tab: each text is labeled with a click, a
+wrong answer on the <strong>Try</strong> line goes into it with the right label (<code>teach(model, text, label)</code>; the text the
+queue has already is relabeled, and a label the model knows is written in its spelling), the answers of a batch of
+pasted sentences it was unsure of go into it as rows to label with their guesses (the page's <code>queueGuesses</code> in <code>LabelQueue.kt</code>,
+not part of the script API; after the rows there, leaving a text it has already as it is), and <strong>Fine-tune on <em>n</em> rows</strong> fine-tunes on its labeled
+rows. Before any fine-tune starts, the page shows what it would do: rows per
+label, new labels, what it would replay, and what blocks it (<code>planFineTune(model, rows)</code>, which reads the head
+and the earlier files without training; a test checks that its counts are the ones the fine-tune then uses).
+After a change to the head made on the page, <code>regradeQueue(model)</code> rewrites the queue's <code>guess</code>, <code>score</code> and
+<code>runner-up</code> with the head it has now, keeping the labels, so the page can mark the labeled texts it answers right.</p>
+<p>A script runs the same loop with <code>teach</code>, <code>queue</code>, <code>planFineTune</code> (on the labeled rows of the queue when given no
+data, printed in the strip's words) and <code>regradeQueue</code>; the recipe is in the
+<a href="../cookbook/#14-scores-you-can-trust-cross-validation-calibration-mistakes">cookbook</a>.</p>
+<h2 id="validating-without-training">Validating without training<a class="headerlink" href="#validating-without-training" title="Permanent link">&para;</a></h2>
+<p>A run can be added to <code>metrics.json</code> without rebuilding: on the Models page, <strong>Validate on file</strong> or <strong>Validate
+on sample data</strong> runs the model on every row of a csv and stores accuracy, F1 per label and the confusion
+matrix as one more run, with the file name as the validation set (<code>metrics/ModelValidation.kt</code>). This is how the
+dummy model, which is written rather than trained, gets metrics at all. A validation keeps what a build keeps
+beyond the scores: the calibration error and its gates, and the rows it got wrong.</p>
+<h2 id="reading-the-metrics">Reading the metrics<a class="headerlink" href="#reading-the-metrics" title="Permanent link">&para;</a></h2>
+<p>Metrics are plain local files, so anyone using the app can read them, from the console or from the Models page.</p>
+<h3 id="in-the-console-as-tables">In the console, as tables<a class="headerlink" href="#in-the-console-as-tables" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">validateMetrics</span><span class="p">(</span><span class="s">"intents"</span><span class="p">)</span><span class="w">                          </span><span class="c1">// all labels</span>
+<span class="n">validateMetrics</span><span class="p">(</span><span class="s">"intents"</span><span class="p">,</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span><span class="s">"lights"</span><span class="p">,</span><span class="w"> </span><span class="s">"music"</span><span class="p">))</span><span class="w"> </span><span class="c1">// some labels</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>metrics 'intents' @ 2026-10-14 16:02:11: 240 samples (192 train / 48 validation on split 20%)
+accuracy 0.917 (0.854–0.979)  macro F1 0.905 (0.836–0.966)  (ranges: the middle 95% of 1,000 resamples of its rows)
+label   precision  recall  f1     support
+lights  0.933      0.933   0.933  15
+music   0.875      0.933   0.903  15
+</code></pre></div>
+<h3 id="how-far-the-scores-hold">How far the scores hold<a class="headerlink" href="#how-far-the-scores-hold" title="Permanent link">&para;</a></h3>
+<p>A score on 48 rows is not the score on the next 48. Every run a build, fine-tune, calibration or validation adds
+keeps where its accuracy and macro F1 fell when its rows were drawn again 1,000 times (<code>metrics/ScoreIntervals.kt</code>):
+each draw takes as many rows of each label as the run had, at random and with repeats, and is scored as the run was
+(the same F1 rule, so the labels a fine-tune left out of its macro F1 stay out), and the middle 95% of the draws is
+the range, <code>accuracyRange</code> and <code>macroF1Range</code> in <code>metrics.json</code>. The draws are seeded, so the same rows give the
+same range every time, and they use random numbers of their own, so training never sees them. The narrower the
+range, the more the score can be trusted: 0.917 (0.854–0.979) says that another 48 rows like these could score
+anywhere in there. A run that got every row right, or every row wrong, has no range, since every draw scores the
+same; runs from before the ranges were kept have none either. A rollback's run keeps the ranges its version had.
+The Models page gives them in brackets on the Metrics tab's scores line, and the scores chart draws macro F1's as a
+bar under its mark.</p>
+<h3 id="rows-it-learned-from">Rows it learned from<a class="headerlink" href="#rows-it-learned-from" title="Permanent link">&para;</a></h3>
+<p>A row a run is scored on that is also a row the model learned from tests what it remembers, so it flatters the
+scores. Every run looks for them (<code>jetbrainDLBuilder/Leakage.kt</code>) and says how many it found as a warning of the run,
+printed and kept with it; nothing that is trained changes. A row repeats one it learned from when it is</p>
+<ul>
+<li><strong>the same text</strong>: the same letters and digits, ignoring case, spaces and punctuation (<em>Turn on the lights!</em> and
+  <em>turn on the lights</em>); a text with no letters or digits is like no other;</li>
+<li><strong>nearly the same to the encoder</strong>: its vector within a cosine of 0.98 of a training row's. The run has the vectors
+  already, so this costs no time in the encoder.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Run</th>
+<th>Its rows</th>
+<th>Against</th>
+<th>Looks for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>build</td>
+<td>the validation rows (the split, or the test file)</td>
+<td>the training rows</td>
+<td>both</td>
+</tr>
+<tr>
+<td>fine-tune</td>
+<td>the rows it is scored on (the held-out rows, or the test file)</td>
+<td>the rows it trained on, new and replayed, and the files its head learned from before, as a validation looks in them (replay trains on a sample of them only); a held-out replayed row, there to see what it forgot, only among the rows it trained on</td>
+<td>both, the same text only in those files; a fine-tune with too few rows to hold any out is scored on its training rows and says so instead</td>
+</tr>
+<tr>
+<td>validation</td>
+<td>the file's rows of labels it knows</td>
+<td>the files it learned from: its data and the files fine-tunes taught it, those still in <code>AMP/</code> (one that can't be read is passed over)</td>
+<td>the same text: its rows go through a session, which gives no vectors</td>
+</tr>
+<tr>
+<td>calibration</td>
+<td>its rows</td>
+<td>as a validation</td>
+<td>the same text; past a third of the rows, the warning says the temperature may be too low for new texts instead</td>
+</tr>
+</tbody>
+</table>
+<p>A build or fine-tune already leaves out a test file's rows whose text is a training row's in lowercase (the console
+says how many); the check finds the rows that differ from one in punctuation or that the encoder can hardly tell
+from one. For a model that keeps texts, the build's console gives a few of the pairs, and the run keeps ten in
+<code>metrics.json</code> (<code>leakage</code>), which the Metrics tab shows in the warning's tooltip; a model that keeps no texts keeps
+only the counts.</p>
+<h3 id="in-the-console-as-ascii-charts">In the console, as ASCII charts<a class="headerlink" href="#in-the-console-as-ascii-charts" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">metricsChart</span><span class="p">(</span><span class="s">"intents"</span><span class="p">)</span><span class="w">             </span><span class="c1">// accuracy, macro F1 and the F1 of every label as bars</span>
+<span class="n">metricsChart</span><span class="p">(</span><span class="s">"intents"</span><span class="p">,</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span><span class="s">"lights"</span><span class="p">))</span>
+<span class="n">metricsHistory</span><span class="p">(</span><span class="s">"intents"</span><span class="p">)</span><span class="w">           </span><span class="c1">// accuracy and macro F1 across every build, as a line chart</span>
+<span class="n">confusionMatrix</span><span class="p">(</span><span class="s">"intents"</span><span class="p">)</span><span class="w">          </span><span class="c1">// the last validation's confusion matrix as a shaded grid</span>
+</code></pre></div>
+<p><code>metricsChart</code> draws one bar per row with precision, recall and support beside it:</p>
+<div class="highlight"><pre><span></span><code>metrics 'intents' · build 3 of 3 · 48 validation samples on split 20%
+F1 per label (bar), precision p, recall r, support n
+accuracy ███████████████████████████░░░ 0.917
+macro F1 ███████████████████████████░░░ 0.905
+lights   ████████████████████████████░░ 0.933  p 0.933  r 0.933  n 15
+music    ███████████████████████████░░░ 0.903  p 0.875  r 0.933  n 15
+weather  ██████████████████████████░░░░ 0.880  p 0.917  r 0.846  n 18
+</code></pre></div>
+<p><code>metricsHistory</code> plots every build on one canvas (● accuracy, ○ macro F1, ◆ where they meet) with the build
+numbers under the columns and a dated line per build, so you can see whether a new data file helped.</p>
+<div class="highlight"><pre><span></span><code>history 'intents' · 3 builds
+1.00 ┤            ◆
+     ┤      ●
+     ┤      ○
+0.50 ┤●
+     ┤○
+0.00 ┤
+     └─────────────
+      1     2     3
+      ● accuracy   ○ macro F1   ◆ both
+</code></pre></div>
+<p><code>confusionMatrix</code> prints truth in rows and prediction in columns; the shade of each cell is its share of the row
+and ✓ marks the diagonal.</p>
+<p>Four more read what a run keeps beyond its scores:</p>
+<div class="highlight"><pre><span></span><code><span class="n">mistakes</span><span class="p">(</span><span class="s">"intents"</span><span class="p">)</span><span class="w">            </span><span class="c1">// the validation rows the last run got wrong, the surest first</span>
+<span class="n">suspects</span><span class="p">(</span><span class="s">"intents"</span><span class="p">)</span><span class="w">            </span><span class="c1">// training rows whose label looks wrong (a build with folds)</span>
+<span class="n">calibrationChart</span><span class="p">(</span><span class="s">"intents"</span><span class="p">)</span><span class="w">    </span><span class="c1">// how often each score is right, and what a gate keeps</span>
+<span class="n">trainingCurves</span><span class="p">(</span><span class="s">"intents"</span><span class="p">)</span><span class="w">      </span><span class="c1">// loss and accuracy by epoch of the chosen head, or of the last fine-tune</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>calibration 'intents' · v1 · build · 10 validation rows on split 20%
+expected calibration error 0.176 (0.164 before the temperature 1.623 was folded in); 0 means a score of 0.8 is right 80% of the time
+how often right per top score (bar), how sure on average (sure), answers in the bin (n)
+0.80–0.90 ██████████████████████████████ 1.000  sure 0.896  n 1
+0.90–1.00 █████████████████████████░░░░░ 0.833  sure 0.933  n 6
+answer only from  keeps  right
+0.00              100%  0.900
+0.80               70%  0.857
+0.95               20%  1.000
+a gate at 0.95 keeps 20% of the rows, and 100% of what it keeps is right
+</code></pre></div>
+<p><code>trainingCurves</code> draws the loss and the accuracy by epoch on the training rows (●) and the validation rows (○);
+a validation loss that rises while the training loss falls is a head memorising. The other heads of the build get a
+line each (<code>dense[16]: loss 0.990 → 0.055, validation 0.859 → 0.464, lowest validation loss at epoch 8</code>).</p>
+<p>Each of these returns the report, so they chain: <code>metricsChart("intents").history().confusion()</code>. A model that
+was never built logs an error telling you to run <code>modelBuilder</code> first, and a run kept before the analysis was says
+so (<code>the last run of 'intents' kept no mistakes (it was made before they were kept)</code>).</p>
+<h3 id="on-the-models-page">On the Models page<a class="headerlink" href="#on-the-models-page" title="Permanent link">&para;</a></h3>
+<p>The <strong>Models</strong> page (second sidebar icon) draws the same numbers as charts on the model's <strong>Metrics</strong> tab: the
+scores per label (<strong>Per label</strong>) and the <strong>Confusion matrix</strong> of a validation run (one run at a time, picked with
+the run chips), how the heads of a build (or a fine-tune) learned (<strong>Training by epoch</strong>) and how far a run's scores
+can be trusted (<strong>Calibration</strong>), the scores across the runs (<strong>Scores over runs</strong>), and from the sessions how sure the
+model is (<strong>Confidence by label</strong>) and how long an answer takes (<strong>Answer time</strong>). Each chart has a short title and
+only the figures it alone shows; what a chart means is in the Guide tab. They are read from <code>metrics.json</code> and <code>sessions.log</code>; the
+rows it got wrong and the ones whose label looks wrong are listed under the charts. A heatmap cell's numbers are
+white or black, whichever stands out more from the cell, so they read at 4.5:1 on any shade. The ASCII charts stay
+in the console. Asking a model a sentence and correcting its answer is the <strong>Try</strong> line under its header; fine-tuning,
+calibrating, rolling back and the texts to label are its <strong>Improve</strong> tab (also its ⋯ menu, its About tab's
+<strong>Versions</strong> and its Data tab), and every one of them that changes the head offers <strong>Undo</strong> in its notice. The page also builds a model from a csv (<strong>New model</strong>: name, a sentence about
+it, data file, optional test file), and every model is a component with <strong>Open session</strong>, <strong>Listen</strong>, the serving
+settings behind the gear, and <strong>Publish</strong> (Keycloak sign-in); every open session can be terminated there and its
+log (what it was asked and answered) read. Details in <a href="../models-page/">Models page</a>.</p>
+<h2 id="using-a-model-from-a-script">Using a model from a script<a class="headerlink" href="#using-a-model-from-a-script" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">initMod</span><span class="p">(</span><span class="s">"intents"</span><span class="p">)</span>
+<span class="n">log</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="na">predict</span><span class="p">(</span><span class="s">"turn the lights on"</span><span class="p">))</span><span class="w">             </span><span class="c1">// "lights"</span>
+<span class="n">log</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="na">inference</span><span class="p">(</span><span class="s">"turn the lights on"</span><span class="p">).</span><span class="na">first</span><span class="p">())</span><span class="w">   </span><span class="c1">// "lights:0.97"</span>
+<span class="n">m</span><span class="p">.</span><span class="na">close</span><span class="p">()</span>
+</code></pre></div>
+<p><code>initMod()</code> with no name opens the bundled NER model; <code>importModelOnnx("path.onnx")</code> opens any ONNX model behind
+the same <code>inference / getStatus / close</code> interface. Models made elsewhere open the same way: <code>initMod("&lt;name&gt;")</code> for a
+folder of <code>AMP/models/imported</code> (a Hugging Face repo), <code>importModel("path")</code> or <code>initMod("path")</code> for a file or folder:
+ONNX, TorchScript on PyTorch, or a TensorFlow SavedModel, with text in through its <code>tokenizer.json</code>, labels from its
+<code>config.json</code> and a tensor API (<code>.inputs</code>, <code>.outputs</code>, <code>.run(floatArrayOf(…))</code>). TFLite and weights alone
+(safetensors, <code>pytorch_model.bin</code>, gguf, h5) are refused with the way to ONNX. See
+<a href="../sandbox-scripting/#models-from-outside">Models from outside</a>. Every <code>initMod("name")</code> is a session the Models page lists
+and can terminate; what it was asked and answered is logged per session (behind <strong>Log</strong> on the page and in
+<code>AMP/models/intents/&lt;name&gt;/sessions.log</code>). ORT sessions are also printed with <code>sessions.print()</code>. A blank text has no
+answer (a listener answers <code>400</code> for one): <code>inference</code> gives an empty list, <code>scores</code> an empty map and <code>predict</code>
+fails with "the model answered nothing", and the console says the text was empty.</p>
+<h2 id="the-model-card">The model card<a class="headerlink" href="#the-model-card" title="Permanent link">&para;</a></h2>
+<p>A model's guide (<code>AMP/models/intents/&lt;name&gt;/guide.md</code>, its <strong>Guide</strong> tab, published with it) holds a short model card between
+two marker lines (<code>metrics/ModelCard.kt</code>), written again after every run of the model (a build, fine-tune,
+calibration, validation or rollback) and when the guide is saved on the page:</p>
+<div class="highlight"><pre><span></span><code>&lt;!-- amie:model-card: written again after every run of the model; your own text goes outside these two lines --&gt;
+<span class="gu">## Model card</span>
+
+<span class="k">-</span><span class="w"> </span>version: v2, fine-tune of v1, 2026-10-21
+<span class="k">-</span><span class="w"> </span>data: intents.csv, 45 rows (greeting 15, lights 15, weather 15)
+<span class="k">-</span><span class="w"> </span>fine-tuned on: music.csv, 12 rows (music 12)
+<span class="k">-</span><span class="w"> </span>earlier versions: v1 (build)
+<span class="k">-</span><span class="w"> </span>last run: validation of v2, 2026-10-21, on 45 rows (sample-intents.csv): accuracy 0.933 (0.867–0.978), macro F1 0.931 (0.862–0.977)
+<span class="k">-</span><span class="w"> </span>calibration: none; calibration error 0.041 on the last run
+<span class="k">-</span><span class="w"> </span>mixes up: “lights” taken for “weather” 2×
+<span class="k">-</span><span class="w"> </span>texts: kept; its logs, runs and queue show the texts it is asked and gets wrong
+&lt;!-- /amie:model-card --&gt;
+</code></pre></div>
+<p>The ranges are <a href="#how-far-the-scores-hold">how far the scores hold</a>, shown when the resamples didn't all score the
+same; a last run whose rows repeat rows it learned from says how many (<a href="#rows-it-learned-from">rows it learned from</a>).
+The rows per label are the ones each version learned from, after cleaning, kept with its head when it was made
+(<code>dataRows</code> and <code>fineTunedRows</code> in <code>module.json</code>), so a queue that grew afterwards, an edited csv or a file that isn't
+on this machine doesn't change them; for a model from before they were kept the card counts the file as it is now,
+and names a file that isn't here without its rows. Rows a script gave without a file read <code>10 rows a script gave
+(music 10)</code>. The dates are UTC. The card holds no row texts, only counts and label names, so a model that keeps no
+texts has one too.</p>
+<p>Nothing outside the marker lines is changed: write your own text above or below them. A new guide has the card after
+its description; a guide from before (or written by hand) gets it at its end. What is written between the markers is
+replaced at the next run, and a guide whose markers don't pair up (one deleted, or a second card pasted in) is left as
+it is, with a line in the console. The Guide tab doesn't show the marker lines, and while the guide is being edited
+a run that writes the card leaves what is typed as it is; <strong>Save</strong> then writes it with the card brought up to date.
+Everything that writes the guide (Save, the card, a fine-tune adding its labels to the list, a rename changing the
+title) takes its turn, so none undoes another, and Save never holds the page up while a run writes the card.</p>
+<h2 id="publishing">Publishing<a class="headerlink" href="#publishing" title="Permanent link">&para;</a></h2>
+<p>Signed in with Keycloak, select a model on the Models page and press <strong>Publish</strong>: the model goes up to your package folder on the Amie backend (<code>POST /upload</code>,
+<code>progLanguage=onnx</code>) as <code>&lt;name&gt;.onnx</code>, <code>&lt;name&gt;.module.json</code> and <code>&lt;name&gt;.guide.md</code>, so two models never overwrite
+each other, and the website's dashboard lists them. A guest pressing it is sent to the sign-in page. Requires the backend from
+<a href="../backend-integration/">Amie backend</a>, which stores the files in the Amie S3 bucket. Package jars go the other way: a
+script opens one the server lists with <code>initMod("name.jar")</code> (see <a href="../sandbox-scripting/#packages">Packages</a>).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1696 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="How to use the Amie desktop app and the amie command line - the sandbox, scripting, packages, models and metrics">
+      
+      
+      
+        <link rel="canonical" href="https://samging.github.io/amieCli/architecture/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../components/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>How the app works - Amie desktop app</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#how-the-app-works-today" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Amie desktop app" class="md-header__button md-logo" aria-label="Amie desktop app" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Amie desktop app
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              How the app works
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/samging/amieCli" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    samging/amieCli
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Amie desktop app" class="md-nav__button md-logo" aria-label="Amie desktop app" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Amie desktop app
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/samging/amieCli" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    samging/amieCli
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start here
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start here
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How the app works
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How the app works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Start
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-a-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. A run
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-initmodname-a-name-becomes-a-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. initMod(name): a name becomes a session
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-the-talk-voicetalk-to-amiekts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. The talk: voice/talk-to-amie.kts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-the-models-are-in-amp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where the models are in AMP/
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The components
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup-tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set up a new Mac
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://samging.github.io/amieCli/learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The amie book
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working in the app
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working in the app
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sandbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The sandbox
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sandbox-scripting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scripting API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook, scripts to copy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models and metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../serving/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Serving a model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../amp-folder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The AMP folder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models-page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models page
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pi5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raspberry Pi 5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source-layout/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where the code is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../codebase/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The code of amie, what is where and why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Start
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-a-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. A run
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-initmodname-a-name-becomes-a-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. initMod(name): a name becomes a session
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-the-talk-voicetalk-to-amiekts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. The talk: voice/talk-to-amie.kts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-the-models-are-in-amp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where the models are in AMP/
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="how-the-app-works-today">How the app works today<a class="headerlink" href="#how-the-app-works-today" title="Permanent link">&para;</a></h1>
+<p>Four pictures of what the code does on 2026-11-03: how the app starts, what a Run does, how <code>initMod(name)</code>
+becomes a session, and the talk loop of <code>voice/talk-to-amie.kts</code>. Every box is a file; the table under each
+diagram links it. Paths are under <code>amieApplication/desktopApp/src/main/kotlin/org/example/project/</code> unless
+written in full. The diagrams were checked against a real run (the console's <code>logs.txt</code>), not against a plan.</p>
+<h2 id="1-start">1. Start<a class="headerlink" href="#1-start" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>flowchart TD
+    main["main.kt&lt;br/&gt;main(args)"] --&gt; flags{"--export or --bench?"}
+    flags -- yes --&gt; cmd["ExportCommand / BenchCommand&lt;br/&gt;runs and exits"]
+    flags -- no --&gt; oom["installOutOfMemoryHandler"] --&gt; move["ModelsMigration.runOnce()&lt;br/&gt;modules/, textModels/ and the speech models&lt;br/&gt;renamed into AMP/models/, once"] --&gt; app["application { Window }&lt;br/&gt;undecorated, 85% of the screen"]
+    app --&gt; chrome["AppChrome, FocusVisibility,&lt;br/&gt;UI scale from AppSettings"] --&gt; base["AppBaseTemplate&lt;br/&gt;AmieTheme { Pages() }"]
+    base --&gt; nav["NavHost: start"] --&gt; sandbox["codingSandbox&lt;br/&gt;WindowHeader + CodingSandbox(SandboxPanes.kept)"]
+    nav -. "from the sidebar" .-&gt; models["models: ModelsPage"]
+    nav -. "from the sidebar" .-&gt; settings["settings: SettingsPage"]
+
+    subgraph background ["In the background, as the window shows"]
+        direction TB
+        backend["BackendConfig.resolve()&lt;br/&gt;fixes a backend.json on Keycloak's port"]
+        restore["ModelServer.restore()&lt;br/&gt;models that were listening listen again&lt;br/&gt;(reads models/intents/*/serving.json)"]
+        prewarm["after 4 s: ScriptEngineCache.prewarm()&lt;br/&gt;loads the Kotlin compiler on a low-priority thread"]
+        runs["SandboxRuns.read()&lt;br/&gt;pluginDir/runs.jsonl → Recent runs"]
+        autorun["AMIE_AUTORUN=1: the saved main.kts runs once"]
+    end
+    app -.-&gt; backend
+    base -.-&gt; restore
+    app -.-&gt; prewarm
+    sandbox -.-&gt; runs
+    sandbox -.-&gt; autorun
+    models -.-&gt; poll["readSnapshot every 1.5 s&lt;br/&gt;modules, sessions, packages, groups"]
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Box</th>
+<th>File</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>main(args)</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/main.kt">main.kt</a></td>
+<td>Hands <code>--export</code> and <code>--bench</code> to their commands, installs the out-of-memory handler, opens the window</td>
+</tr>
+<tr>
+<td><code>ModelsMigration.runOnce()</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/amp/ModelsMigration.kt">amp/ModelsMigration.kt</a>, <a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/amp/ModelFolders.kt">amp/ModelFolders.kt</a></td>
+<td>Moves each kind of model into <code>AMP/models/</code> with one atomic rename when its old folder is there and the new one is not; with both there it moves nothing and says which to tidy; it points <code>speech.properties</code> at <code>models/speech</code>. <code>ModelFolders</code> is the one owner of the paths every reader uses</td>
+</tr>
+<tr>
+<td><code>ExportCommand</code>, <code>BenchCommand</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/export/ExportCommand.kt">export/ExportCommand.kt</a>, <a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/bench/BenchCommand.kt">bench/BenchCommand.kt</a></td>
+<td>The command-line modes; no window</td>
+</tr>
+<tr>
+<td><code>application { Window }</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/main.kt">main.kt</a></td>
+<td>The undecorated window, its tray icon when closed while a script runs, the resize edges</td>
+</tr>
+<tr>
+<td><code>AppChrome</code>, <code>FocusVisibility</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/ui/viewport/AppChrome.kt">components/ui/viewport/AppChrome.kt</a>, <a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/ui/viewport/FocusRing.kt">FocusRing.kt</a></td>
+<td>What every page's header gets from the window (drag, minimize, maximize, close) and the keyboard focus ring</td>
+</tr>
+<tr>
+<td><code>AppBaseTemplate</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/render/templates/AppBaseTemplate.kt">components/render/templates/AppBaseTemplate.kt</a></td>
+<td>The theme and the <code>NavHost</code>: <code>start</code> goes straight to <code>codingSandbox</code>; <code>models</code>, <code>settings</code>, <code>login</code> and the device routes are the rest</td>
+</tr>
+<tr>
+<td><code>CodingSandbox</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/sandbox/CodingSandbox.kt">sandbox/CodingSandbox.kt</a></td>
+<td>The sandbox page: editor, console, the tool windows; <code>SandboxPanes.kept</code> holds the run that outlives the page</td>
+</tr>
+<tr>
+<td><code>ModelsPage</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/models/ModelsPage.kt">models/ModelsPage.kt</a></td>
+<td>The Models page, which reads <code>readSnapshot</code> every 1.5 s or slower when a read is slow (<code>pollDelay</code>)</td>
+</tr>
+<tr>
+<td><code>BackendConfig.resolve()</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/backend/BackendConfig.kt">backend/BackendConfig.kt</a></td>
+<td>Corrects <code>AMP/backend.json</code> before any backend call; nothing is called at start</td>
+</tr>
+<tr>
+<td><code>ModelServer.restore()</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/runtime/ModelServer.kt">runtime/ModelServer.kt</a></td>
+<td>Starts the listener of every model whose <code>serving.json</code> says it was listening</td>
+</tr>
+<tr>
+<td><code>ScriptEngineCache.prewarm()</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/script/ScriptRuntime.kt">script/ScriptRuntime.kt</a></td>
+<td>After <code>PREWARM_DELAY_MS</code> (4 s) loads the Kotlin compiler so the first Run answers in a moment; off with <code>-Damie.prewarm=false</code></td>
+</tr>
+<tr>
+<td><code>SandboxRuns.read()</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/sandbox/SandboxRuns.kt">sandbox/SandboxRuns.kt</a></td>
+<td>The last 20 runs for the Recent runs list</td>
+</tr>
+<tr>
+<td><code>AMIE_AUTORUN</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/sandbox/CodingSandbox.kt">sandbox/CodingSandbox.kt</a></td>
+<td>With <code>AMIE_AUTORUN=1</code> the first sandbox shown presses Run once</td>
+</tr>
+<tr>
+<td><code>readSnapshot</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/models/ModelsSnapshot.kt">models/ModelsSnapshot.kt</a></td>
+<td>One read of everything the Models page shows</td>
+</tr>
+</tbody>
+</table>
+<p>What a start marks on standard output with <code>-Damie.timing=true</code>: <code>main entered</code>, <code>window content composed</code>,
+<code>sandbox composed</code>, <code>sandbox drawn</code>, <code>models page read</code> (<a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/StartupTiming.kt">StartupTiming.kt</a>).</p>
+<h2 id="2-a-run">2. A run<a class="headerlink" href="#2-a-run" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>flowchart TD
+    run["Run button or ⌘↵&lt;br/&gt;CodingSandbox"] --&gt; start["MainScriptRun.start(code)&lt;br/&gt;clears the console, starts a RunMeter"]
+    start --&gt; plan["EnvPlan.scan(code)&lt;br/&gt;the env the script names and its imports"]
+    plan --&gt; env["ScriptEnvironments.open(env)&lt;br/&gt;env.source(plan): Maven and local jars → AMP/env/&amp;lt;env&amp;gt;/"]
+    env --&gt; loader["env.classLoader(...)&lt;br/&gt;the jars of the env over the app's classes"]
+    loader --&gt; engine["ScriptEngineCache.engineFor(loader)&lt;br/&gt;one Kotlin engine per class loader"]
+    engine --&gt; assemble["assembleScript(code)&lt;br/&gt;imports, val amie = bindings['logger'],&lt;br/&gt;the SandboxApi prelude, then the script"]
+    assemble --&gt; files["pluginDir/main.kts ← the code&lt;br/&gt;pluginDir/assembly.kts ← the assembled script"]
+    files --&gt; eval["engine.eval(assembly, bindings)&lt;br/&gt;on an IO thread, inside ScriptRuns.track"]
+    eval --&gt; logger["logger = SandboxLogger(env, gradleEngine, scope)&lt;br/&gt;the ScriptLogger the script calls"]
+    logger --&gt; console["logToConsole&lt;br/&gt;the console pane and AMP/logs.txt"]
+    eval -- "template('x') / coroutineTemplate('x')" --&gt; templates["TemplateRuns.start&lt;br/&gt;a saved template in an engine of its own,&lt;br/&gt;input() and output() over two channels"]
+    eval -- "ends, fails or Stop" --&gt; outcome["RunOutcome&lt;br/&gt;Resources line, pluginDir/runs.jsonl"]
+    eval -- "stillOpenAtEnd" --&gt; open["openSessionNames()&lt;br/&gt;what the run left open"]
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Box</th>
+<th>File</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Run</td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/sandbox/CodingSandbox.kt">sandbox/CodingSandbox.kt</a></td>
+<td>The button and the shortcut both call <code>MainScriptRun.start</code></td>
+</tr>
+<tr>
+<td><code>MainScriptRun</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/script/MainScriptRun.kt">script/MainScriptRun.kt</a></td>
+<td>The one run of <code>main.kts</code>; it belongs to the app, so leaving the page does not end it</td>
+</tr>
+<tr>
+<td><code>EnvPlan</code>, <code>ScriptEnvironments</code>, <code>ScriptEnvironment</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/envBuilder/ScriptEnvironment.kt">envBuilder/ScriptEnvironment.kt</a></td>
+<td>The env named by <code>settings { env = … }</code> or the default; its <code>env.lock.json</code>, Maven resolution, the class loader</td>
+</tr>
+<tr>
+<td><code>ScriptEngineCache</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/script/ScriptRuntime.kt">script/ScriptRuntime.kt</a></td>
+<td>One engine per class loader, the Gradle settings engine, <code>prewarm</code></td>
+</tr>
+<tr>
+<td><code>assembleScript</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/script/ScriptRuntime.kt">script/ScriptRuntime.kt</a></td>
+<td>What the engine really evaluates; <code>ScriptErrors</code> maps its line numbers back to <code>main.kts</code></td>
+</tr>
+<tr>
+<td><code>SandboxApi.prelude()</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/script/SandboxApi.kt">script/SandboxApi.kt</a></td>
+<td>One delegate line per API entry, so a script writes <code>initMod(...)</code> and not <code>amie.initMod(...)</code></td>
+</tr>
+<tr>
+<td><code>SandboxLogger</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/script/SandboxLogger.kt">script/SandboxLogger.kt</a></td>
+<td>The <code>ScriptLogger</code> of a run: console lines, <code>input()</code>, the builders</td>
+</tr>
+<tr>
+<td><code>ScriptLogger</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/script/ScriptLogger.kt">script/ScriptLogger.kt</a></td>
+<td>The script API: <code>initMod</code>, <code>sessionMod</code>, <code>group</code>, <code>modelBuilder</code>, <code>fineTune</code>, <code>serve</code>, <code>shell</code>, the <code>ort*</code> blocks</td>
+</tr>
+<tr>
+<td><code>logToConsole</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/console/ConsoleLog.kt">console/ConsoleLog.kt</a></td>
+<td>Every console line, to the pane and to <code>AMP/logs.txt</code></td>
+</tr>
+<tr>
+<td><code>TemplateRuns</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/script/BackgroundTemplates.kt">script/BackgroundTemplates.kt</a></td>
+<td>Background templates: <code>template(name)</code> ends with the run, <code>coroutineTemplate(name)</code> goes on</td>
+</tr>
+<tr>
+<td><code>ScriptRuns</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/runtime/ScriptRuns.kt">runtime/ScriptRuns.kt</a></td>
+<td>Tracks the run's thread: its cpu, allocation and the sessions it opened</td>
+</tr>
+<tr>
+<td><code>RunOutcome</code>, <code>SandboxRuns</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/runtime/RunResources.kt">runtime/RunResources.kt</a>, <a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/sandbox/SandboxRuns.kt">sandbox/SandboxRuns.kt</a></td>
+<td>The figures of the run and the record in <code>pluginDir/runs.jsonl</code></td>
+</tr>
+</tbody>
+</table>
+<p>The console says <code>Running pluginDir/main.kts</code> first, and the Resources line last, both at the internal level, off at
+start, so the console shows only what the script logs. A failure's lines begin with their place in <code>main.kts</code>.</p>
+<h2 id="3-initmodname-a-name-becomes-a-session">3. <code>initMod(name)</code>: a name becomes a session<a class="headerlink" href="#3-initmodname-a-name-becomes-a-session" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>flowchart TD
+    call["initMod(name)&lt;br/&gt;ScriptLogger"] --&gt; jar{"ends in .jar?"}
+    jar -- yes --&gt; open["JarPackages.open(name)&lt;br/&gt;env → AMP/pluginDir → a path → the server"]
+    open --&gt; meta["PackageMetadata.read, prepareConfig&lt;br/&gt;AMP/pluginDir/config/&amp;lt;jar&amp;gt;/ written from templates"]
+    meta --&gt; inst["URLClassLoader(config dir, jar)&lt;br/&gt;new instance, configure(dir)"]
+    inst --&gt; jsession["JarPackageSession&lt;br/&gt;run(text) = the class's run(String), close()"]
+    jar -- no --&gt; speech{"no module, no text model,&lt;br/&gt;but SpeechModels.has(name)?"}
+    speech -- yes --&gt; acquire["SpeechModels.acquire(name)&lt;br/&gt;whisper / voice as speech.properties names them"]
+    acquire --&gt; sjar["JarPackages.open('speech.jar')&lt;br/&gt;run('use &amp;lt;model&amp;gt;')"]
+    sjar --&gt; smodel["SpeechModel&lt;br/&gt;hear &amp;lt;wav&amp;gt; or say &amp;lt;text&amp;gt;"]
+    speech -- no --&gt; ms["ModelSessions.acquire(name)&lt;br/&gt;the open session of that name, else a new one"]
+    ms --&gt; kind{"TextModels.has(name)?"}
+    kind -- yes --&gt; text["TextModels.open(name)&lt;br/&gt;AMP/models/text/&amp;lt;name&amp;gt;/genai_config.json&lt;br/&gt;ONNX Runtime GenAI"]
+    kind -- no --&gt; module["InitMod(name).create()&lt;br/&gt;readModule: AMP/models/intents/&amp;lt;name&amp;gt;/module.json"]
+    module --&gt; encoder["SharedEncoders.acquire(manifest.encoder)&lt;br/&gt;one bge encoder in memory for everyone&lt;br/&gt;the folder module.json names, else BundledModels' bge"]
+    module --&gt; head["OrtSessions.open(model.onnx)&lt;br/&gt;the head: a few KB"]
+    encoder --&gt; model["headModel: InteractionModel&lt;br/&gt;predict, scores, predictions"]
+    head --&gt; model
+    text --&gt; session["ModelSession&lt;br/&gt;#id, name, log, runs"]
+    model --&gt; session
+    jsession --&gt; scope["OrtScopes.opened(...)&lt;br/&gt;ScriptRuns.opened(key)"]
+    smodel --&gt; scope
+    session --&gt; scope
+    scope --&gt; seen["Seen by: the Sessions tab, Still open,&lt;br/&gt;the console's sessions command, Terminate"]
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Box</th>
+<th>File</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>initMod</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/script/ScriptLogger.kt">script/ScriptLogger.kt</a></td>
+<td>The three branches above, in that order</td>
+</tr>
+<tr>
+<td><code>JarPackages.open</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/pluginEngine/JarPackages.kt">pluginEngine/JarPackages.kt</a></td>
+<td>Resolves the jar, checks its metadata, makes the instance, returns the session</td>
+</tr>
+<tr>
+<td><code>PackageMetadata</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/pluginEngine/PackageMeta.kt">pluginEngine/PackageMeta.kt</a></td>
+<td>What a jar says it needs, and the config folder <code>AMP/pluginDir/config/&lt;jar&gt;/</code></td>
+</tr>
+<tr>
+<td><code>JarPackageSession</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/pluginEngine/JarPackages.kt">pluginEngine/JarPackages.kt</a></td>
+<td>The package behind <code>run</code>, <code>answer</code>, <code>getStatus</code>, <code>close</code>; every call is logged to <code>&lt;jar&gt;.sessions.log</code></td>
+</tr>
+<tr>
+<td><code>SpeechModels</code>, <code>SpeechModel</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/runtime/SpeechModels.kt">runtime/SpeechModels.kt</a></td>
+<td>Whisper and the voices as models: each is one session of <code>speech.jar</code></td>
+</tr>
+<tr>
+<td><code>speech.jar</code></td>
+<td><code>/Users/samuel/Documents/GitHub/amie-packages/speech</code></td>
+<td>Reads its models where <code>models=</code> in <code>speech.properties</code> says, which the move keeps at <code>AMP/models/speech</code></td>
+</tr>
+<tr>
+<td><code>ModelSessions</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/runtime/ModelSessions.kt">runtime/ModelSessions.kt</a></td>
+<td>A model has one session: the open one is reused, with a <code>reused</code> line in its log</td>
+</tr>
+<tr>
+<td><code>TextModels</code>, <code>TextModel</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/runtime/TextModels.kt">runtime/TextModels.kt</a></td>
+<td>Llama and Qwen from <code>AMP/models/text/&lt;name&gt;/</code>, generated with ONNX Runtime GenAI</td>
+</tr>
+<tr>
+<td><code>InitMod</code>, <code>headModel</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/integrations/amiePilot/BertBaseNER.kt">integrations/amiePilot/BertBaseNER.kt</a></td>
+<td>Opens an intent model: the manifest, the shared encoder, the head</td>
+</tr>
+<tr>
+<td><code>readModule</code>, <code>modulesDir</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/modules/AmpModules.kt">modules/AmpModules.kt</a></td>
+<td><code>AMP/models/intents/&lt;name&gt;/</code>: <code>model.onnx</code>, <code>module.json</code>, <code>metrics.json</code>, <code>versions/</code></td>
+</tr>
+<tr>
+<td><code>SharedEncoders</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/integrations/amiePilot/SharedEncoders.kt">integrations/amiePilot/SharedEncoders.kt</a></td>
+<td>One loaded encoder per folder, counted holders, closed by the last release</td>
+</tr>
+<tr>
+<td><code>BundledModels</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/integrations/amiePilot/BundledModels.kt">integrations/amiePilot/BundledModels.kt</a></td>
+<td>Where <code>models/bert/</code> and <code>models/bert/bge/</code> are: <code>AMIE_MODELS_DIR</code>, the packaged resources, <code>AMP/models/bert</code>, the checkout's copy. <code>resolveEncoder</code> keeps the folder a manifest names when it exists, else the bundled one of that name</td>
+</tr>
+<tr>
+<td><code>OrtSessions</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/modelLoaders/OrtSessions.kt">modelLoaders/OrtSessions.kt</a></td>
+<td>Every ONNX Runtime session, named, for <code>ortSessions()</code></td>
+</tr>
+<tr>
+<td><code>OrtScopes</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/modules/OrtScopes.kt">modules/OrtScopes.kt</a></td>
+<td><code>ortClosable { }</code> closes what its block opened; <code>ortStatic</code>, <code>ortRequired</code>, <code>ortLimited</code> keep it under a name</td>
+</tr>
+<tr>
+<td><code>ScriptRuns.opened</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/runtime/ScriptRuns.kt">runtime/ScriptRuns.kt</a></td>
+<td>The run notes the key (<code>model:#id</code>, <code>package:#id</code>, <code>group:#id</code>) for its Resources line</td>
+</tr>
+<tr>
+<td>The Sessions tab, Still open</td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/tabs/SessionsTab.kt">tabs/SessionsTab.kt</a>, <a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/console/ConsoleSessions.kt">console/ConsoleSessions.kt</a></td>
+<td><code>openSessions()</code> lists <code>ModelSessions.all</code>, <code>JarPackages.open</code>, the swarms, the snapshots and the jobs; Terminate closes one</td>
+</tr>
+</tbody>
+</table>
+<p><code>sessionMod(name)</code> is not in the picture: it takes a snapshot of the head through <code>SharedModels</code> and opens no
+session. <code>group(name)</code> opens a <code>ModelSwarm</code> over the group's models through <code>ModelGroups</code>.</p>
+<h2 id="4-the-talk-voicetalk-to-amiekts">4. The talk: <code>voice/talk-to-amie.kts</code><a class="headerlink" href="#4-the-talk-voicetalk-to-amiekts" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>flowchart TD
+    typed["Console: talk&lt;br/&gt;input() in main()"] --&gt; block["ortClosable('talk to Amie')"]
+    block --&gt; opens["initMod: face.jar, microphone.jar, whisper, voice,&lt;br/&gt;mail.jar, browser.jar, mac.jar, spotify.jar, files.jar, memory.jar"]
+    opens --&gt; train{"hasModel('amie-intents')?"}
+    train -- no --&gt; build["modelBuilder('amie-intents', source('voice-actions.csv'))&lt;br/&gt;trains once → AMP/models/intents/amie-intents"]
+    train -- yes --&gt; intents["initMod('amie-intents')"]
+    build --&gt; intents
+    intents --&gt; llama["initMod('llama3.2-3b')&lt;br/&gt;'Loading the text model'"]
+    llama --&gt; access{"mic.run('access')"}
+    access -- off --&gt; sorry["speak: turn on the microphone&lt;br/&gt;return"]
+    access -- on --&gt; greet["speak('Good morning…')"]
+    greet --&gt; listen["listen(): face 'listen'&lt;br/&gt;mic.answer('listen turn') → wav or silence"]
+    listen --&gt; hear["hearing.answer(wav)&lt;br/&gt;speech.jar: hear → Whisper"]
+    hear --&gt; guess["intents.predictions(said)&lt;br/&gt;best label and score"]
+    guess --&gt; sure{"score ≥ 0.985?"}
+    sure -- yes --&gt; action["the label is the action"]
+    sure -- no --&gt; decide["decide(said, top 5 labels)&lt;br/&gt;Llama picks 'tool | details'"]
+    decide --&gt; action
+    action --&gt; careful{"brew_install, close_terminals, quit_app&lt;br/&gt;and not sure?"}
+    careful -- yes --&gt; ask["agreed(question): speak, listen"]
+    careful -- no --&gt; doit["when(action):&lt;br/&gt;a jar's run(...), a voice/*.sh script,&lt;br/&gt;or chat(said) through Llama"]
+    ask --&gt; doit
+    doit --&gt; speak["speak(text): face 'think'&lt;br/&gt;voice.answer(text) → speech.jar: say → Supertonic wav&lt;br/&gt;face 'talk', mic.run('play wav'), face 'smile'"]
+    speak --&gt; listen
+    doit -- goodbye --&gt; bye["speak('Talk soon!'), break&lt;br/&gt;the block closes every session"]
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Box</th>
+<th>File</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The template</td>
+<td><a href="https://github.com/samging/amieCli/blob/main/voice/talk-to-amie.kts">voice/talk-to-amie.kts</a></td>
+<td><code>main()</code> waits for <code>talk</code> on the console, <code>talk()</code> is the loop</td>
+</tr>
+<tr>
+<td><code>ortClosable</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/modules/OrtScopes.kt">modules/OrtScopes.kt</a></td>
+<td>Everything opened in the block is closed when it ends, however it ends</td>
+</tr>
+<tr>
+<td><code>face.jar</code></td>
+<td><code>amie-packages/face</code></td>
+<td>The floating face: <code>load</code>, <code>listen</code>, <code>think</code>, <code>talk</code>, <code>smile</code>, <code>sleep</code></td>
+</tr>
+<tr>
+<td><code>microphone.jar</code></td>
+<td><code>amie-packages/microphone</code></td>
+<td><code>access</code>, <code>listen turn</code> (records until a pause; <code>silence</code> when nothing was said), <code>play &lt;wav&gt;</code></td>
+</tr>
+<tr>
+<td><code>whisper</code>, <code>voice</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/runtime/SpeechModels.kt">runtime/SpeechModels.kt</a></td>
+<td>The Whisper and Supertonic sessions of <code>speech.jar</code>, named in <code>speech.properties</code></td>
+</tr>
+<tr>
+<td><code>amie-intents</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/jetbrainDLBuilder/JetBuilder.kt">jetbrainDLBuilder/JetBuilder.kt</a></td>
+<td>Built once from <code>AMP/voice-actions.csv</code> by <code>modelBuilder</code>; after that <code>initMod</code> opens it like any intent model</td>
+</tr>
+<tr>
+<td><code>llama3.2-3b</code></td>
+<td><a href="https://github.com/samging/amieCli/blob/main/amieApplication/desktopApp/src/main/kotlin/org/example/project/components/terminal/window/controller/runtime/TextModels.kt">runtime/TextModels.kt</a></td>
+<td><code>think(system, user, tokens, temperature)</code> sends a chat request as JSON to <code>answer</code></td>
+</tr>
+<tr>
+<td>The actions</td>
+<td><a href="https://github.com/samging/amieCli/blob/main/voice/talk-to-amie.kts">voice/talk-to-amie.kts</a>, <a href="https://github.com/samging/amieCli/blob/main/voice/scripts">voice/scripts</a></td>
+<td><code>mail.jar</code>, <code>browser.jar</code>, <code>mac.jar</code>, <code>spotify.jar</code>, <code>files.jar</code>, <code>memory.jar</code>, and the shell scripts through <code>shellScript(...).patchBy(::explain)</code></td>
+</tr>
+</tbody>
+</table>
+<p>What <code>logs.txt</code> shows of one turn, in this order: <code>Listening</code>, the <code>hear</code> line of <code>speech.jar</code>, <code>You: … -&gt; action</code>,
+the package's <code>run</code> line, <code>Amie: …</code>, the <code>say</code> line of <code>speech.jar</code>, the <code>play</code> line of <code>microphone.jar</code>.</p>
+<h2 id="where-the-models-are-in-amp">Where the models are in <code>AMP/</code><a class="headerlink" href="#where-the-models-are-in-amp" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Folder (since November 2026; the one before in brackets)</th>
+<th>Read by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The NER model and the bge encoder</td>
+<td><code>AMP/models/bert/</code>, <code>AMP/models/bert/bge/</code></td>
+<td><code>BundledModels</code></td>
+</tr>
+<tr>
+<td>Trained intent models</td>
+<td><code>AMP/models/intents/&lt;name&gt;/</code> (<code>AMP/modules/</code>)</td>
+<td><code>AmpModules.modulesDir</code>, from <code>ModelFolders</code></td>
+</tr>
+<tr>
+<td>Llama, Qwen</td>
+<td><code>AMP/models/text/&lt;name&gt;/</code> (<code>AMP/textModels/</code>)</td>
+<td><code>TextModels.dir</code>, from <code>ModelFolders</code></td>
+</tr>
+<tr>
+<td>Whisper, Supertonic</td>
+<td><code>AMP/models/speech/&lt;name&gt;/</code> (<code>AMP/pluginDir/config/speech/models/</code>)</td>
+<td><code>speech.jar</code>, through <code>SpeechModels</code>; <code>speech.properties</code> names the folder</td>
+</tr>
+</tbody>
+</table>
+<p><code>ModelsMigration</code> moves an older install into this layout at start, one rename a kind, as <a href="../amp-folder/#the-models-folder">The AMP folder</a> says. See that page for everything else the app writes.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,2032 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="How to use the Amie desktop app and the amie command line - the sandbox, scripting, packages, models and metrics">
+      
+      
+      
+        <link rel="canonical" href="https://samging.github.io/amieCli/models-page/">
+      
+      
+        <link rel="prev" href="../amp-folder/">
+      
+      
+        <link rel="next" href="../settings/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Models page - Amie desktop app</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#models-page" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Amie desktop app" class="md-header__button md-logo" aria-label="Amie desktop app" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Amie desktop app
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Models page
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/samging/amieCli" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    samging/amieCli
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Amie desktop app" class="md-nav__button md-logo" aria-label="Amie desktop app" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Amie desktop app
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/samging/amieCli" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    samging/amieCli
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start here
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start here
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How the app works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The components
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup-tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set up a new Mac
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://samging.github.io/amieCli/learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The amie book
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working in the app
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working in the app
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sandbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The sandbox
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sandbox-scripting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scripting API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook, scripts to copy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models and metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../serving/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Serving a model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../amp-folder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The AMP folder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models page
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models page
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#finding-your-way" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding your way
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#icons-and-groups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Icons and groups
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#new-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        New model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-hugging-face" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From Hugging Face
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packages
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Packages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Repository
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-a-package-needs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a package needs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-maven-central" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From Maven Central
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Collections
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sessions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sessions
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pi5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raspberry Pi 5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source-layout/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where the code is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../codebase/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The code of amie, what is where and why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#finding-your-way" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding your way
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#icons-and-groups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Icons and groups
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#new-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        New model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-hugging-face" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From Hugging Face
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packages
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Packages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Repository
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-a-package-needs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a package needs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-maven-central" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From Maven Central
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Collections
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sessions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sessions
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="models-page">Models page<a class="headerlink" href="#models-page" title="Permanent link">&para;</a></h1>
+<p>Route <code>models</code>, opened from the second icon in the sidebar (the cube), which the arrow chip at the far left of the
+tab strip, right where the sidebar meets it, hides and shows (the arrow turns round while the sidebar is away) (the choice is kept in <code>AMP/settings.json</code>, as the sandbox's is). It is a full page (not a side panel) in
+<code>components/terminal/window/controller/ModelsPage.kt</code> (its state and what each action does; each area of it is a
+file beside it: <code>ModelsList.kt</code>, <code>ModelDetail.kt</code>, <code>ModelTabs.kt</code>, <code>ModelTry.kt</code>, <code>ModelImprove.kt</code>,
+<code>NewModelPanel.kt</code>, <code>GroupsTab.kt</code> (a group's Try line in <code>GroupTry.kt</code>), <code>PackagesTab.kt</code>, <code>SessionsTab.kt</code>, <code>Notices.kt</code>, <code>ModelIcons.kt</code>,
+<code>ModelsSnapshot.kt</code> for what it reads, <code>ModelsDecisions.kt</code> for what it decides (the list's order, what Improve
+suggests, a queue row's chips, how a plan is worded), <code>FirstSteps.kt</code> for the first steps over the Models tab,
+<code>PageWidgets.kt</code>), and it re-reads its state while open. What it showed last
+is kept for the life of the app (<code>ModelsCache</code>), so coming back to the page shows the models at once; the first
+read after start-up is local only (files, sessions, listeners) and the one slow read, the server's jar listing,
+is fetched right after and cached for a minute by <code>JarPackages</code>. Nothing on the page waits for the network.</p>
+<p>The page keeps to one quiet scheme, the same grays as the sandbox, and everything on it is square: no rounded
+corners anywhere, in the window frame, the sidebar, the header, the chips, the status marks or the charts. There
+are three kinds of button: <strong>one filled dark-blue button per place</strong> for the action
+that creates, builds, validates, opens or fetches (<strong>New model</strong>, <strong>Build</strong>, <strong>Open session</strong>, <strong>Validate</strong>,
+<strong>Add</strong>, <strong>Create</strong>, <strong>Fetch</strong>, <strong>Save</strong>), a <strong>dark-red</strong> one for what ends or removes something (<strong>Stop</strong>,
+<strong>Terminate</strong>, <strong>Destroy</strong>), and <strong>bare text</strong> for everything else (the <strong>Save</strong> under ⚙ too), with a faint square under the pointer. The
+chips that are on or off (methods, run numbers, console scope) are bare text too, lit in the tab strip's gray
+when on; the label chips under a wrong answer and in the queue (and <strong>+ new label</strong>) have a thin outline while
+off, and <strong>⋯</strong> shows a bordered square under the pointer. The icon chips (the sidebar's arrow, and the sandbox's)
+are white icons on no square. Two hues sit on the grays, as accents and never as fills: <strong>blue</strong> for what is primary,
+chosen or focused (the filled button, a link, the focus ring, a focused field's border, the open tab's bar, the selected
+row's edge and its faint wash, the line of a build or a download under way) and <strong>green</strong> for what runs, succeeded or is
+done (the status marks, the Run icon, the bar of a notice that ended well); red stays for what ends, removes or failed.
+Nothing is vivid: the tokens the rest of the app shares (<code>AccentColor</code>, <code>AccentInk</code>, <code>AccentWash</code>, <code>SuccessColor</code>,
+<code>DangerColor</code> in <code>ui/theme/Color.kt</code>) are muted too, so every screen calms down with the page. Muted is not faint, though: every word reaches 4.5:1 against what it is drawn on, and the icons,
+the status marks and the focus ring 3:1 (WCAG 2 AA; <code>ContrastTest</code> holds each colour where it is used, the muted
+words of a lit line one step lighter than the rest). On-screen words are kept short; the explanations live in the
+tooltips.</p>
+<h2 id="finding-your-way">Finding your way<a class="headerlink" href="#finding-your-way" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Every button, tab and status word has a tooltip</strong> (<code>components/ui/viewport/Tooltip.kt</code>, <code>AppTooltip</code>): rest
+  the pointer on it for half a second and a square dark box says what it does, or, on a disabled button, what is
+  still missing. The status words (<code>inferring</code>, <code>2 open</code>, <code>on server</code>, <code>on GitHub</code>, <code>missing</code>) say what they
+  mean for that row (a quiet state such as idle is only the gray mark and its tooltip); the status strip at the foot of the window explains its numbers.</li>
+<li><strong>Almost nothing is reachable only by right-click.</strong> Every model, group and package row has a <strong>⋯</strong> button
+  (shown while the pointer is over the row and on the selected row) and every detail panel header has one at its
+  right end; a session row's <em>Copy log</em> and <em>Copy <code>#id</code></em>, and a Maven Central hit's actions, are on right-click
+  only. Both open the same square
+  menu the right-click opens (<code>SquareContextMenu</code>), with the actions that end or remove something in red. A
+  model's menu groups its actions under small headings (<em>Check</em>, <em>Improve</em>, <em>Groups</em>, <em>Share</em>, <em>Manage</em>). Esc or a
+  click elsewhere closes it.</li>
+<li><strong>Slow actions say so on their button</strong>: <em>Opening…</em>, <em>Starting…</em>, <em>Stopping…</em>, <em>Publishing…</em>, <em>Fetching…</em>,
+  <em>Saving…</em> (then <em>saved</em> for a moment), <em>Rolling back…</em>, <em>Picking…</em>, <em>Asking…</em>, <em>Teaching…</em>, <em>Building…</em>,
+  <em>Terminating…</em>, <em>Comparing…</em>, <em>Queueing…</em>, <em>Testing…</em>, <em>Removing…</em>, <em>Adding…</em>, and the
+  button is disabled until the action ends.</li>
+<li><strong>Notices are readable</strong>: what an action did, or why it failed, appears in a strip under the tabs with the whole
+  text (it wraps and can be selected), a bar at its left edge that is red for a failure, and <strong>Dismiss</strong>. A notice
+  after a change to a model's head (a fine-tune, calibration, retrain or rollback) also has <strong>Undo</strong>, which makes
+  the head before it the model again; that notice has an <strong>Undo</strong> in turn. Destroying a model asks first in the
+  same kind of strip, with the full consequence spelled out and a red <strong>Destroy</strong> button.</li>
+<li><strong>Forms open in the panel, not above the page.</strong> <strong>New model</strong> and <strong>New collection</strong> take the place of the
+  detail panel on the right while they are open, so the list never moves. While New model's form is open its
+  button is a red <strong>Close</strong> (hidden while a build runs), and every form has a red × at the right of its hint
+  line; either brings the selected item back. A form has no title, only a muted line saying what it takes. Everything that closes something inside the
+  page (a form, the Try table, a comparison, a collection's jar list) is red, like the window's own close button,
+  and the window header shows no page title. A build in progress is one line at the top of the list with a thin progress bar; a fine-tune or a
+  calibration shows there the same way (<em>fine-tuning name</em>, <em>calibrating name</em>).</li>
+<li><strong>Empty states say the next step</strong>: a filter that matches nothing names the query and offers <strong>Clear</strong>; the
+  Sessions tab with nothing open says how a session is opened; the server group of the packages list says it is
+  still asking the server; a model without a run says <em>no validation yet</em> beside <strong>Validate</strong>.</li>
+<li><strong>The first steps show someone new where to begin</strong> (<code>FirstSteps.kt</code>): a strip over the Models tab names four,
+  <em>build one from the sample data</em>, <em>ask it something</em>, <em>correct an answer</em> and <em>fine-tune it</em>, and ticks each once
+  AMP shows it done, whatever did it (a script counts as much as the page): a model trained on data or scored (the
+  dummy, only written, doesn't count, even validated); a run line in a model's <code>sessions.log</code> or a request its server
+  answered; a labeled row in a model's queue, or a fine-tune on one; a fine-tuned head (or a fine-tune run, after a
+  rollback past it). A step not done yet is a button that goes where it is done: the first opens <strong>New model</strong> with
+  the sample data chosen, the second and third put the keyboard on the <strong>Try</strong> line of the selected model (the
+  third on one that keeps texts, the only ones that take corrections; the first such in the list when the selected
+  one doesn't), the fourth opens its <strong>Improve</strong> tab. Its tooltip names the model, or says what the step waits for.
+  The strip shows while a step is undone; once all four are done its bar turns green and it says <em>all done</em> until
+  the page closes, so an AMP where everything was done before never shows it (nor are the steps read again on that
+  page, so one coming undone later doesn't bring it back). <strong>Dismiss</strong> hides it for good, kept in
+  <code>AMP/settings.json</code>; Settings shows it again (<em>first steps</em> under <strong>Models page</strong>).</li>
+<li><strong>The command palette finds anything</strong> (<code>CommandPalette.kt</code>): <strong>⌘K</strong> (Ctrl+K), or the icon at the right end of
+  the tab strip, opens one field over the top of the page. What you type picks among every model, group, package
+  and session (choosing one goes to its row; a session goes to its model, group or package, an ONNX session to the
+  Sessions tab) and the actions of the item whose panel is open, the same ones its <strong>⋯</strong> menu lists, which run
+  exactly as from the menu. The letters of each word you type have to come in order (<code>ftf</code> finds <em>Fine-tune on
+  file…</em>), words in any order, and a word may also match the item an action belongs to (<code>file showcase</code>); the start
+  of a name or of a word counts most. Up and Down move the lit line and Enter runs it (the lit line stays on its
+  item while the lists change under it, a model added or a session opened); a click runs the line clicked; Esc or a
+  click outside closes the palette.</li>
+<li><strong>The keyboard reaches the lists, the filters, the Try line and the tabs</strong> (<code>PageKeys.kt</code>). While a text field
+  has the keyboard, the keys it uses stay its own: only Esc and the ⌘ shortcuts reach the page. A click on a row
+  takes the keyboard back to the list, and the tooltips of the tabs and the filters name their shortcut. <strong>Tab</strong>
+  and <strong>Shift+Tab</strong> move between the page's controls, and the one that has the keyboard shows a thin blue square
+  round it (only after Tab: a click leaves none; on a filled button a dark line keeps it apart from the fill); Space
+  or Enter presses it (<code>FocusRing.kt</code>, the same on every page). For a screen reader, an icon that stands alone says
+  what its tooltip says, an icon beside its own words says nothing more, and the filters are called "filter".</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Keys</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Up / Down</td>
+<td>Select the row above or below in the list on show (models, groups or packages); the rows of a folded section are skipped, a package listed twice (in a collection and where it lives) is visited where it first shows, and the selected row scrolls into view once (opening a fold doesn't scroll the list back to it)</td>
+</tr>
+<tr>
+<td>Home / End</td>
+<td>Select the first or the last row of the list</td>
+</tr>
+<tr>
+<td>Enter</td>
+<td>Put the keyboard on the selected model's <strong>Try</strong> line (Models tab), or the selected group's (Groups tab); Enter there asks. On a control Tab moved to, Enter presses that control instead; on text Tab moved to (which presses nothing), it goes to the Try line as before</td>
+</tr>
+<tr>
+<td>Tab / Shift+Tab</td>
+<td>Move the keyboard to the next or the previous control; it shows a thin ring, and Space or Enter presses it</td>
+</tr>
+<tr>
+<td>⌘F (Ctrl+F)</td>
+<td>Put the keyboard on the list's filter; Enter there goes back to the list with the filter kept</td>
+</tr>
+<tr>
+<td>⌘1 to ⌘4 (Ctrl+1 to Ctrl+4)</td>
+<td>Models, Groups, Packages, Sessions</td>
+</tr>
+<tr>
+<td>⌘K (Ctrl+K)</td>
+<td>Open the command palette</td>
+</tr>
+<tr>
+<td>Esc</td>
+<td>Close what is open, one thing per press: a menu; then a strip (the fine-tune plan, a flag, a new group, a rename, a destroy); then a form in the panel (New model, From Hugging Face, New collection, From Maven Central); then the filter's text; then leave the text field</td>
+</tr>
+</tbody>
+</table>
+<h2 id="layout">Layout<a class="headerlink" href="#layout" title="Permanent link">&para;</a></h2>
+<p>The page's tabs are in the window's top bar, as the sandbox's tools are, so there is no row over the page: four tabs
+with their counts, <strong>Models</strong>, <strong>Groups</strong>, <strong>Packages</strong> and <strong>Sessions</strong>, after the arrow chip that hides the sidebar,
+and the command palette's icon at the right end. There is no back button: the sidebar leads to the other pages. Signing in happens under Account in <a href="../settings/#account">Settings</a> and
+on this page is only needed for <strong>Publish</strong>; everything else works without an account. (The website is not opened from the
+page any more; a publish notice names the address that lists what you published.) Each tab but Sessions is a flat list on the left, a 1dp rule that can be dragged to resize the list, and one
+bordered detail panel on the right for the selected item; the Sessions tab is one full-width list. The tab strip already names the section and counts its items,
+so there is no title above the list: its first line is the filter box (its tooltip says what it matches) with
+the one action of the list beside it (<strong>New model</strong>, whose form starts with where the model comes from, a csv or Hugging Face; <strong>New group</strong>; <strong>Add</strong>, which offers a jar from this machine
+or a new collection; <strong>Terminate all</strong> on the Sessions tab, shown while something is open, its filter only past
+four sessions).</p>
+<p>At the foot of the window sits the status strip: what the process holds of the machine's memory, the heap against its
+<code>-Xmx</code> limit, the native memory, and the BERT encoders loaded (the heavy part, shared by every session; one that was
+cancelled is left out until its next text loads it again). It turns red near the limit. Its ✕ hides it until the app
+closes and <strong>Memory</strong> in the sidebar brings it back; while it is hidden nothing reads the memory.</p>
+<h2 id="models">Models<a class="headerlink" href="#models" title="Permanent link">&para;</a></h2>
+<p>The list has one line per module in <code>AMP/models/intents</code>: the name, its last accuracy (or <code>not validated</code>), its version
+once it has more than one (<code>v3</code>), <code>serving :port</code> while it listens, <em>in group…</em> for the groups it is in, its open sessions, the status word at the
+right and the ⋯ button; a running one is
+underlined in green. Models are grouped by the data they were trained on (the csv name the builder records in
+<code>module.json</code>; the dummy sits under <em>written, not trained</em>, older models under <em>unknown data</em>), so the same data
+trained twice sits together. Groups with a running model come first; inside a group the running models come
+first, then the most accurate. The filter box matches the name, a label, the status, the data and the file a
+model was validated on. Clicking a line selects it; the panel on the right shows that model only, with the status
+line (listening address or <em>not serving</em>, the version once there is more than one, the data it was trained on,
+<em>in group1, group2</em>; its tooltip counts
+a listener's requests, abstentions and errors) under its name and
+the actions at the right of the header:</p>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Open session / Terminate session</strong></td>
+<td>The filled button. Loads the model (encoder and head) as a session, the same as <code>initMod("name")</code> in the sandbox, or closes it. A model has one session at most</td>
+</tr>
+<tr>
+<td><strong>Listen on :port / Stop</strong></td>
+<td>Starts or stops the HTTP listener (<code>runtime/ModelServer.kt</code>) with the settings as shown; the label names the port it will use</td>
+</tr>
+<tr>
+<td><strong>⚙</strong></td>
+<td>Opens the serving settings under the header: <strong>Host / Port / Path / Methods</strong>, <strong>Min score</strong> and <strong>Fallback</strong> (under the min score the model abstains, answering the fallback label or none: <a href="../serving/#answering-only-when-it-is-sure">Serving a model</a>), with the min score its last run suggests and <strong>Use</strong>, then <strong>Access</strong>, folded until one of its fields is set: <strong>Key</strong> (shown as dots, with <strong>New key</strong> and <strong>Copy</strong>), <strong>Origins</strong>, <strong>Max bytes</strong> and <strong>Per minute</strong> (<a href="../serving/#who-may-ask-and-how-much">who may ask and how much</a>); <strong>Save</strong> writes them all to <code>AMP/models/intents/&lt;name&gt;/serving.json</code>; a port outside 1–65535, a min score that isn't a number from 0 to 1, an origin that isn't one or a limit under 1 is named and keeps Save and Listen disabled (a min score of 0 is none); the order is Host, Port, Path, Min score (with its suggestion and <strong>Use</strong>), Fallback, <strong>Access</strong>, then Methods (POST/GET) on one row with <strong>Save</strong>, the POST and GET URLs with <strong>Copy</strong> and <strong>Copy curl</strong>, <em>applies after Stop and Listen</em> while it listens, and last <strong>Requests</strong>, folded: the last twelve lines of the model's <code>access.log</code>, newest first (time, status, ms, method and path, outcome), errors in red, the whole line with its request id in the tooltip (<a href="../serving/">Serving a model</a>). The gear stays lit while the block is open</td>
+</tr>
+<tr>
+<td><strong>Publish</strong></td>
+<td>Uploads the model as <code>&lt;name&gt;.onnx</code>, <code>&lt;name&gt;.module.json</code> and <code>&lt;name&gt;.guide.md</code> to the Amie backend (<code>POST /upload</code>, <code>progLanguage=onnx</code>) with the Keycloak token, then asks the website to refresh its listing and says in the notice strip whether <code>/dashboard?username=&lt;you&gt;</code> lists the files, naming that address; a guest is sent to Account in Settings. A backend that cannot be reached ("Host is down", "Connection refused") is an address problem in <code>AMP/backend.json</code>, not a sign-in one</td>
+</tr>
+<tr>
+<td><strong>⋯</strong></td>
+<td>The whole menu: Open session, Listen/Stop; <em>Check</em>: Validate on sample data, Validate on file…; <em>Improve</em>: Fine-tune on file…, Calibrate on file…, Texts to label from file…, Roll back to v<code>&lt;n&gt;</code> (the newest kept head), Retrain on <code>&lt;data&gt;.csv</code>, Retrain on file…; <em>Groups</em>: Add to group …, New group with …; <em>Share</em>: Publish to the website, Remove from the website; <em>Manage</em>: Rename…, Reveal folder, Copy <code>initMod("name")</code>, Terminate model, Destroy model…. Only what applies shows: Open session without a session, <em>Stop listening</em> while it listens, Fine-tune, Calibrate and the two Retrains not during a build, Texts to label only for a model that keeps texts, Roll back only with a kept head, Terminate model only while it runs; for a guest Publish and Remove read <em>(sign in)</em></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Try</strong> is the line under the header, above the tabs (<em>Ask it something</em>): type a sentence and press Enter (or <strong>Ask</strong>). The answer
+shows under it: the label, its score, the next three labels with theirs, and how long it took. The first question
+opens the model's session if none is open (the button says <em>Opening…</em>), as <strong>Open session</strong> does, and the session's
+log keeps the line. When the answer is wrong, the line under it, <em>wrong? it is</em>, has a chip for each of the other
+labels (the likelier first, the rest behind <strong>more</strong>) and <strong>+ new label</strong> for one the model doesn't have yet.
+A chip puts the sentence in the model's queue with that label (<code>teach</code> in <code>jetbrainDLBuilder/LabelQueue.kt</code>), and
+the line then says <em>taught</em>, with <strong>Show the queue</strong>, which opens the Improve tab. A model that doesn't keep
+texts answers the same way but offers no correction, since nothing it is asked may be written down; the line says
+so.</p>
+<p><strong>Several lines pasted</strong> into the Try field at once are a batch, asked one by one: only the lines pasted, not the
+sentence the field held, which stays in the field (less whatever the paste replaced, so a paste over a selection
+takes the selection away); blank lines and repeats are left out, and past 200 lines the rest are too (the line says
+how many). One line pasted goes into the field as text. Lines pasted while a sentence or a batch is still being
+asked start nothing, and <em>still asking: paste once it ends</em> shows beside the field for a moment. The answers show as a table under the field in
+place of a single answer: each sentence with its answer and score, the runner-up and its score, and the
+milliseconds, with <em>unsure</em> beside the answers whose two best scores are less than 0.2 apart (the row's tooltip says
+how far apart). Past eight rows the table scrolls, so the tabs under it stay where they are. The line over it says
+how far it got (<em>asking 4 of 10…</em>, with <strong>Stop</strong>), then how many were asked, how many it was unsure of and the mean
+time of an answer. <strong>Copy as csv</strong> copies the table as <code>text,answer,score,runner-up,runner-up score,ms</code>, quoted
+where needed. For a model that keeps texts, <strong>Queue the 3 unsure</strong> puts those sentences in its queue as rows to
+label, each with its guess, its score and the runner-up, after the rows there; a text the queue has already stays as
+it is. The line then says how many went in, with <strong>Show the queue</strong>. A model that doesn't keep texts is never offered
+this. <strong>×</strong> closes the table, and a sentence asked on its own takes its place. Rename and Destroy wait while a batch
+is asked; Stop ends it, keeping the answers so far, as does Terminate session.</p>
+<p><strong>Rename…</strong> opens a strip at the top of the page with the current name in a field; <strong>Rename</strong> is enabled once the
+new name is a module name (letters, digits, dots, dashes, underscores) no other model has. The folder under
+<code>AMP/models/intents</code> moves, <code>module.json</code>, the guide's title and <code>modules.json</code> say the new name, its queue of texts to
+label (<code>AMP/&lt;name&gt;-to-label.csv</code>) is renamed with it, labels and all, the sessions on it are closed, and a listener
+comes back under the new name (a serving path that was the old default becomes the new default). A trained model can
+be renamed like any other; scripts then open it with <code>initMod("newname")</code>. A name whose queue file is in <code>AMP/</code>
+already, one no model owns (left by hand, or by a model of that name destroyed before destroying removed queues),
+is refused rather than merged: the renamed model would take those labels for its own and fine-tune on them. Move or
+delete that file first.</p>
+<p><strong>Destroy model…</strong> asks first: the strip names the folder that goes, with every run and its logs, and the model's
+queue when it has one. The csv files it was trained on stay in <code>AMP/</code>, since other models may use them.</p>
+<p>Neither is offered in the middle of something: while the model is being built, trained again, fine-tuned,
+calibrated or validated, <strong>Rename…</strong> and <strong>Destroy model…</strong> say to wait for that to end, and so do <strong>Rename</strong> and
+<strong>Destroy</strong> in their strips when one of those began while the strip was open (the strip stays, for once the model
+is free). <strong>Roll back</strong> and a notice's <strong>Undo</strong> wait the same way. Whatever still ends after a rename or a destroy
+(a fine-tune started from a script, a regrade of the queue, texts to label being picked) writes nothing back under
+the old name, so a destroyed model doesn't come back and a renamed one gets no twin; its console line says why. A
+build doesn't write over a model renamed to its name meanwhile either, and a fine-tune or a calibration doesn't
+write over a head the model got meanwhile (rolled back, trained again, or destroyed and built anew).</p>
+<p><strong>Retrain</strong> trains the model again under the same name: on the csv it was trained on as it is now (edit or add
+rows to the file, then retrain), or on another csv (<strong>Retrain on file…</strong>, also <strong>Other file…</strong> on the Data tab).
+Nothing that opens the model has to change: the head is rebuilt in place, the sessions on the old head are
+closed so the next <code>initMod</code> opens the new one, a listener comes back on it, the description, icon and guide stay
+(also ones changed while it trains, as with a fine-tune or a calibration), and the Metrics tab keeps every earlier
+run beside the new one, so the runs show whether the new data helped.
+Only one build runs at a time; the line at the top of the list follows it as for a new model.</p>
+<p><strong>Fine-tune on file…</strong> (⋯ menu, the Improve tab, and at the right of <strong>Files</strong> on the Data tab) teaches the trained
+model more from a csv instead of training it again: a label it doesn't know yet (three rows of it at least) gets an
+output of its own, and rows it got wrong move it towards the right answer, while the rows it learned from before
+are replayed and its weights are held near where they were, so what it knew stays. Nothing starts at once: a strip
+at the top of the page first says what it would do (<code>planFineTune</code> in <code>jetbrainDLBuilder/FineTune.kt</code>, worked out
+without training): the rows and which of its labels they are, the new labels and their rows, the earlier rows it
+would replay and from which files, the rows the preprocessor would drop, and that the version it has now stays.
+It warns about a new label spelled like one it has (<em>light</em> beside <em>lights</em>), rows that give a text it learned
+under another label, and files it was trained on that are gone from <code>AMP/</code> (nothing to replay). A new label with
+fewer than three rows is named in red, and so is anything that keeps the fine-tune from starting; <strong>Fine-tune</strong>
+stays disabled then, and its tooltip says why. <strong>Fine-tune</strong> starts it, <strong>Cancel</strong> changes nothing. The notice
+says the versions and the accuracy before and after on the same held-out rows, with <strong>Undo</strong>, and the Metrics tab
+has the run. It is <code>fineTuneClassifier</code>, the same as <code>fineTune(...)</code> in a script, with its default options
+(<a href="../models/#fine-tuning-teaching-a-model-more">Fine-tuning</a>).</p>
+<p><strong>Calibrate on file…</strong> fits one temperature on labeled rows the model hasn't learned from and folds it into the
+head, so a score of 0.8 is right about 80% of the time; the answers, and so the accuracy, stay the same. The
+notice says the temperature and the calibration error before and after, with <strong>Undo</strong>.</p>
+<p>Every retrain, fine-tune and calibration keeps the head it replaces (the ten newest, in
+<code>AMP/models/intents/&lt;name&gt;/versions/</code>). <strong>Roll back</strong> (on a kept head under <strong>Versions</strong> on the About tab, or <strong>Roll
+back to v<code>&lt;n&gt;</code></strong> in the ⋯ menu for the newest one, and under <strong>Versions</strong> on the Improve tab) makes that head the
+model again as a new version, with the labels and the scores it had; the head that answered is kept in turn, so a
+rollback is undone the same way, which is what the notice's <strong>Undo</strong> does.</p>
+<p><strong>Compare</strong> on a kept head asks it and the head that answers now about the same labeled rows, changing nothing: no
+run is added and no session opened. It offers the csv the model was trained on, the one it was last validated on and
+the ones fine-tunes taught it (those still in <code>AMP/</code>), or <strong>On a file…</strong>. Under the list then: <em>v1 → v3 on 40 rows
+of check.csv</em>, one line with accuracy and macro F1 then and now and how many rows it answers right now that it
+didn't and wrong now that it got right (<em>every row answered as before</em> when none moved), and one figure (<code>plots/compare.png</code>): each label's F1 then (a dark square)
+and now (a light dot) on one axis, with accuracy and macro F1 under them, and the confusion change, how many more or
+fewer rows of each label got each answer (then→now in the cell; on the diagonal more is better, off it fewer). Both
+heads are scored over the labels of both, so a label one of them doesn't have reads <em>new</em> or <em>gone</em>, and its rows
+count as answered wrong by that head; rows of labels neither has are left out and counted. For a model that keeps
+texts the rows answered differently follow, those it gets wrong now first (fifty show; the tooltip has both scores);
+one that keeps no texts gets the counts only. The comparison stays until <strong>×</strong> or until the model's head changes,
+and shows on both tabs. One comparison runs at a time: <strong>Compare</strong> waits while another runs (of any model), while a
+build runs and while the model rolls back, and <strong>Roll back</strong>, <strong>Undo</strong>, <strong>Rename</strong> and <strong>Destroy</strong> wait while a kept
+head of the model is compared. A fine-tune or retrain started meanwhile isn't held up; the comparison, of the head
+before it, then doesn't show. The rows' vectors go to the embedding cache only when both heads keep texts.</p>
+<p><strong>Texts to label</strong> writes the texts the model is least sure about, closest calls first, to
+<code>AMP/&lt;name&gt;-to-label.csv</code> with its guess beside an empty <code>label</code> column: from what it was asked over HTTP (the
+button at the right of <strong>Ran on</strong> on the Data tab, shown once it has requests) or from a csv or txt of texts
+(<strong>Texts to label from file…</strong> in the ⋯ menu, <strong>Find texts to label</strong> on the Improve tab, whose menu also offers
+<strong>Varied close calls</strong>: texts unlike each other among the closest calls, <a href="../models/#what-to-label-next">What to label next</a>). That file is the
+model's queue: the Improve tab lists it to label with a click, and corrections made on the Try line land in it too.
+It also shows under <strong>Files</strong> as <em>to label</em>, with how many rows have a label so far, <strong>Open in viewer</strong> to fill
+them in by hand, and <strong>Fine-tune on it</strong> once at least one has. Rows labeled already stay at the top when you ask
+again. A model that doesn't keep texts has neither action and no queue.</p>
+<p>Under the header the panel has its own tabs, each with a tooltip that says what it holds:</p>
+<table>
+<thead>
+<tr>
+<th>Tab</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>About</strong></td>
+<td>The description (editable; <strong>Save description</strong> appears under it once it has changed and writes <code>module.json</code>), then the <strong>Icon</strong>, <strong>Details</strong>, <strong>Training</strong> and <strong>Versions</strong> blocks (<strong>Icon</strong>: a glyph from the set, or <strong>Upload image</strong>, kept as <code>models/intents/&lt;name&gt;/icon.&lt;ext&gt;</code>; Training also has its validation rows, the heads tried and what the preprocessor did). Every uppercase block title on these tabs is a line that folds its block away and back (open by default): <strong>Details</strong>: created / encoder / head / labels (the model's folder is in Settings, <strong>Model folders</strong>); <strong>Training</strong>: architecture, data, the version and what made it (<em>v3 · fine-tune of v2</em>), the files it was fine-tuned on, the temperature when it is calibrated, whether it keeps texts, rows, epochs, batch size, learning rate, hidden units, final loss, train accuracy; <strong>Versions</strong>: the head that answers now and every kept one, each with what made it, when, its labels and accuracy (the tooltip has its head and note), and <strong>Compare</strong> and <strong>Roll back</strong> on the kept ones</td>
+</tr>
+<tr>
+<td><strong>Improve</strong></td>
+<td>Making the model better in one place; its count is the labeled texts of the queue it still answers otherwise. <strong>What would help</strong> (shown when something would): what its last run and its requests suggest, each with the button that does it: the dummy's fixed weights (<strong>Fine-tune on the sample data</strong>), labels with an F1 under 0.6 (<strong>Fine-tune on file…</strong>), the labels it takes for others (<em>“lights” taken for “weather” 6×</em>: every pair of the last run's confusion matrix off the diagonal with two rows or more, the most first, three named; a model that keeps texts gets <strong>Show the rows</strong>, a menu of the pairs when there are several, which opens the Metrics tab on that run with <strong>answered wrong</strong> open on the pair's rows and brought into view, and a model that keeps none gets the counts and <strong>Fine-tune on file…</strong>), scores that don't say how often it is right (calibration error 0.1 or more and not calibrated: <strong>Calibrate on file…</strong>), requests over HTTP not looked at (<strong>Pick texts to label</strong>), training rows that look mislabeled (<strong>Open</strong> the csv). <strong>Teach it</strong>, with <strong>Find texts to label</strong> (from its requests or from a file, under <strong>Closest calls</strong> or <strong>Varied close calls</strong>, texts unlike each other among them) and <strong>Fine-tune on file…</strong> at the right: the queue, one line per text with what the model guessed and its score, a chip per label (the one it has lit; a click labels it, a second click takes the label away; with many labels only the likely ones are chips and <strong>other label</strong> has the rest), <strong>+ new label</strong>, and <strong>×</strong> to take the text out; the first eight show, then <strong>Show all</strong>. A labeled text the model answers right shows ✓ <em>answers it</em>. Under the queue, how many texts are labeled and how many of them it answers right, and <strong>Fine-tune on <em>n</em> rows</strong>, which fine-tunes on the labeled rows of the queue through the same strip as any fine-tune; once it answers every labeled text right the button steps back to <strong>Fine-tune again</strong>. After every change of the head made on the page (a fine-tune, calibration, retrain, rollback or undo) the queue's guesses are worked out again with the new head (<code>regradeQueue</code>, texts embedded before come from the cache), so the queue shows what the model answers now. <strong>Versions</strong>: the same list as on the About tab, with <strong>Compare</strong> and <strong>Roll back</strong>. <strong>Scores</strong>: whether it is calibrated, its calibration error on the last run, and <strong>Calibrate on file…</strong>. <strong>Retrain</strong>: <strong>Retrain on <code>&lt;data&gt;.csv</code></strong> and <strong>Other file…</strong>. A model that doesn't keep texts has no queue; Teach it says to fine-tune it from a csv</td>
+</tr>
+<tr>
+<td><strong>Guide</strong></td>
+<td><code>AMP/models/intents/&lt;name&gt;/guide.md</code>, the guide shipped inside the model, rendered as light markdown; <strong>Edit</strong> and <strong>Save</strong> change it (<strong>Cancel</strong> while editing; before a guide exists it reads <em>default guide, not saved yet</em> with <strong>Edit and save</strong>), and it goes along when the model is published. It holds the <strong>model card</strong> (version, data and rows per label, earlier versions, the last run's scores, calibration, what it mixes up, its texts), written again after every run and on Save between two marker lines the tab doesn't show (<a href="../models/#the-model-card">the model card</a>); what is being typed stays as typed when a run writes it</td>
+</tr>
+<tr>
+<td><strong>Metrics</strong></td>
+<td>One line: the run chips (the latest first, each chip's tooltip names what made the run, its data, rows, accuracy and time) and <strong>Validate</strong>, which offers <strong>On the sample data</strong> and <strong>On a file…</strong> and adds a run (<code>metrics/ModelValidation.kt</code>). Under it the run: when, <em>made by</em> (build, fine-tune, calibration, validation or rollback, and the version), the rows, the scores (in brackets, where each fell in 1,000 resamples of the rows, so how far it can be trusted: <a href="../models/#how-far-the-scores-hold">how far the scores hold</a>), <em>before</em> for a fine-tune or calibration (the head before it on the same rows), <em>calibration</em> (its calibration error and temperature) and a <em>note</em>, then the run's warnings, a line each (the one about rows that repeat a row it learned from names them in its tooltip, or says that a model that keeps no texts keeps only their count: <a href="../models/#rows-it-learned-from">rows it learned from</a>). A run that came from a build has <strong>Heads compared</strong>: every head the build trained, with accuracy, macro F1, train accuracy and loss on the same validation rows (and <em>cv F1</em>, the mean over the folds ± their spread, when it cross-validated), F1 per label under each, what the diagnostics said of it, and the chosen one marked; a head's tooltip adds its cross-validation and where early stopping stopped. The chosen run's charts follow: scores per label (with macro F1's range as a bar under its mark), the confusion matrix, how the heads learned (every head's accuracy on its training and validation rows, epoch by epoch, the kept epoch outlined) and how far the scores can be trusted (reliability bars against the diagonal, and what answering only above a score keeps), then <strong>answered wrong</strong> (the validation rows it got wrong, the surest first; a run keeps the 25 it was surest about. Opened from <strong>Show the rows</strong> it lists one pair's rows under a chip, <em>lights → weather</em>, that shows them all again, as does choosing another run; when the run kept fewer of the pair's rows than it got wrong, a line says how many) and <strong>labels that look wrong</strong> (training rows the cross-validated heads doubt), both folded, then scores by run and, under its own <strong>From the sessions</strong> block, how sure the model is and how long an answer takes, from the sessions log. While a validation runs, Validate reads <em>validating n/total</em>. The charts are PNG files drawn by <code>metrics/MetricsImages.kt</code> into <code>AMP/models/intents/&lt;name&gt;/plots/</code> whenever the metrics or the log change, in one muted slate hue; a run from before the curves and calibration were kept draws its two charts as before</td>
+</tr>
+<tr>
+<td><strong>Data</strong></td>
+<td><strong>Files</strong>, with <strong>Fine-tune on file…</strong> at the right: the csv files it was trained, validated and fine-tuned on and the queue to label, each with rows per label and text lengths as bars, a folded preview and <strong>Open in viewer</strong>; the trained-on file has <strong>Retrain</strong> (the same name, on the file as it is now) and <strong>Other file…</strong>, the queue to label has how many rows are labeled and <strong>Fine-tune on it</strong>; then <strong>Ran on</strong>: what its sessions answered and what the server served, with <strong>Texts to label</strong> once it has requests</td>
+</tr>
+<tr>
+<td><strong>Requirements</strong></td>
+<td><code>metrics/ModelRequirements.kt</code>: everything it needs to run, checked on this machine, each line marked met / not met / information (the mark's tooltip says which). <code>initMod</code>, <strong>Open session</strong> and Listen refuse a model on the lines about the model itself, the encoder, the head and the labels</td>
+</tr>
+<tr>
+<td><strong>Console</strong></td>
+<td>The console lines that name the model, or with <strong>all models</strong> everything the models, packages and sessions logged; the box's height can be dragged</td>
+</tr>
+<tr>
+<td><strong>Sessions</strong></td>
+<td>The sessions it owns, each with <strong>Log</strong> and <strong>Terminate</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="icons-and-groups">Icons and groups<a class="headerlink" href="#icons-and-groups" title="Permanent link">&para;</a></h3>
+<p>Every model has an icon: the chip by default, or one from a small catalog (lightbulb, cloud, chat, home, music,
+shield, star, bolt, heart, language, science, work, pets, school, cart, hub, groups) chosen under <strong>Icon</strong> on the
+About tab and kept in <code>module.json</code>, or an image of your own: <strong>Upload image</strong> there copies a png, jpg or svg
+into the model's folder as <code>icon.&lt;ext&gt;</code>, which then shows in the list, on the panel header and in groups (and
+goes along when the model is published); <strong>Remove image</strong> goes back to the catalog icon.</p>
+<p>No row says <em>idle</em>, <em>running</em>, <em>stopped</em>, <em>open</em> or <em>closed</em>: the green underline under a row is running (a
+session open, a listener on, a swarm open), its absence idle. Only the other states keep a word (<em>inferring</em>,
+<em>on server</em>, <em>2 open</em>, <em>missing</em>).</p>
+<p>Groups have their own <strong>Groups</strong> tab: every group of every env in a list (icon, how many models, which, the
+underline while its swarm is open), folded by env, and the selected one in the panel. <strong>+ New group</strong> there makes
+an empty one to fill with <strong>Add model</strong>.</p>
+<p>A <strong>group</strong> is a named set of models that are asked together: a swarm. A model's ⋯ menu offers <strong>Add to group
+<name></strong> for every group it is not in and <strong>New group with <model>…</strong>, which opens a strip at the top of the page
+asking for the name and the <strong>env</strong> the group belongs to. Groups live in the env, as packages do: each env keeps
+its own in <code>AMP/env/&lt;env&gt;/groups.json</code>, a script sourced in that env finds them with <code>group("name")</code>
+(the default env first, then any), and <code>internalEnv()</code> lists them with the packages. Selecting a group on the Groups tab shows its panel: <strong>Open swarm</strong> / <strong>Terminate swarm</strong>, the
+models (a row each; <strong>Detach</strong> takes one out; <strong>Add model</strong> adds one), the icon picker, where it lives and, while
+open, the swarm's session with its log. <strong>Remove group</strong> leaves the models alone. A destroyed or renamed model is
+taken out of (or renamed in) every group. A group with a model that keeps no texts keeps what it is asked out of
+every log: its own, its console lines, and those of its other models, which write each text's length instead; a
+text asked of one of those models directly is logged as its own <code>module.json</code> says.</p>
+<p>A group's panel has a <strong>Try</strong> line under its header, as a model's has: a sentence asked of all its models at once,
+the way its swarm asks them (the first question opens the swarm, as <strong>Open swarm</strong> does, and Enter on the list comes
+here). Under it shows the group's answer, each label's best score across its models (what <code>predict</code> and <code>inference</code>
+give in a script) with the three labels after it; then the vote, the label most of its models give (a tie goes to
+the higher best score), with how many give it; then a row per model with its own answer and score and the two
+labels after them. A model that gave none says so: it couldn't be opened, it failed (its Console tab says why), or
+it joined the group after the swarm opened. The answer goes once a model is added to the group or detached from it,
+since its rows and vote were of the models before. A group's answers aren't corrected here; each model is taught on
+its own page.</p>
+<p>Groups are also made by <strong>dragging</strong> on the Models tab: take a model's row and drop it on another model's row
+to open the new-group strip with the two of them, or on the zone that appears over the list while you drag
+("drop here for a new group") for a new group with that one; adding to a group that exists is <strong>Add to group</strong>
+in the ⋯ menu or <strong>Add model</strong> on the Groups tab. The ghost beside the pointer says what
+the drop would do, and the row under it is lit. A click without movement still selects the row.</p>
+<h3 id="new-model">New model<a class="headerlink" href="#new-model" title="Permanent link">&para;</a></h3>
+<p><strong>Check data</strong> next to <strong>Build</strong> runs the preprocessor on the chosen file without training and shows its report
+under the fields: what it would clean, drop (with the reason) and refuse, and whether a build could start. The
+reasons are explained in <a href="../models/#before-training-the-preprocessor">Models and metrics</a>.</p>
+<p><strong>New model</strong> beside the filter box opens the form in the place of the detail panel, and <strong>Close</strong> stands where the
+button was while it is open. The form's first line, <strong>From</strong>, says where the model comes from: <strong>A csv</strong> (the form
+below) or <strong>Hugging Face</strong> (the one in <a href="#from-hugging-face">From Hugging Face</a>); the chip switches the form, and
+while a build runs only Hugging Face is offered. The csv form is open on its own when there are no models: <strong>Name</strong>,
+<strong>About</strong> (a sentence kept in <code>module.json</code>), <strong>Data</strong> (Choose a csv with a text
+column and a label column, or <strong>Sample data</strong> for <code>AMP/sample-intents.csv</code>, 45 rows over <code>greeting</code>, <code>lights</code> and
+<code>weather</code>; the name is filled from the file name) and an optional <strong>Test</strong> file to validate on instead of a 20%
+split. <strong>Options</strong> are chips, all off but <em>keep texts</em>, which is the build as it always was: <strong>cross-validate</strong>
+scores every head over 5 folds and keeps the best mean (and lists the rows whose label the heads doubt),
+<strong>more heads</strong> compares 12 heads instead of 4, <strong>stop early</strong> ends a head's training once it stops improving and
+keeps its best epoch, <strong>calibrate</strong> fits the temperature as part of the build, and turning <strong>keep texts</strong> off
+makes a model that never writes a text down, for one that answers other people. Each chip's tooltip says what it
+costs. As soon as the data file is chosen the form reads it and shows how many samples and which labels it holds,
+with <strong>rows per label</strong> as bars, the most first, so a label with few rows shows before the build.
+While <strong>Build</strong> is disabled the line beside it (and its tooltip) says what is still missing: a data file, a name,
+or a csv without the two columns. <strong>Build</strong> runs the same <code>buildClassifier</code> the sandbox's <code>modelBuilder</code> runs, on
+a background thread; while it runs one line at the top of the list shows the phase, step and a thin progress bar,
+and under it every head scored so far (architecture, accuracy, macro F1, train accuracy, loss, the chosen one
+marked once all are compared; the tooltip of a line has its F1 per label), so the comparison is visible while the
+next head trains. When it ends the new model is selected. Only one build runs at a time. <strong>Close</strong> brings the
+selected model back.</p>
+<p>A csv chosen from anywhere else on the machine (<strong>Data</strong>, <strong>Test</strong>, <strong>Validate on file…</strong>, <strong>Retrain on file…</strong>)
+is copied into <code>AMP/</code> first (a newer copy replaces the one there), so the model finds its data again by its name
+later: the Data tab, the list's grouping and a retrain all look the file up in <code>AMP/</code>. A file already under <code>AMP/</code>
+is used where it is.</p>
+<p>A fresh checkout has one component already: the <strong>dummy</strong> model (<code>modules/AmpModules.kt</code>, <code>ensureDummyModule</code>),
+a fixed one-layer head over the encoder with the labels <code>greeting</code>, <code>lights</code>, <code>weather</code>. It is written when
+<code>AMP/models/intents</code> is empty, so the page always has something to configure and <code>initMod("dummy")</code> works before any
+training. The sample csv (<code>ensureSampleData</code>) has the same labels, so the first thing to try is <strong>Validate on
+sample data</strong> on the dummy (its weights are fixed, so expect poor numbers) and then <strong>+ New model</strong> with
+<strong>Sample data</strong> to see what a trained model's metrics look like.</p>
+<h3 id="from-hugging-face">From Hugging Face<a class="headerlink" href="#from-hugging-face" title="Permanent link">&para;</a></h3>
+<p>The <strong>Hugging Face</strong> chip on the first line of the <strong>New model</strong> form opens this one in the place of the detail panel.</p>
+<p><strong>Search</strong> finds models on the Hub in the formats <code>initMod</code> opens. Under it, a menu picks the task, as the Hub files
+models (<strong>Any task</strong>, the default; <strong>Text classification</strong>, <strong>Token classification</strong>, <strong>Feature extraction</strong>, <strong>Text generation</strong>,
+<strong>Text to speech</strong>, <strong>Speech recognition</strong>, <strong>Audio classification</strong>, <strong>Image classification</strong>), and the chips narrow the
+format: <strong>All supported</strong> (the default), <strong>ONNX</strong>, <strong>TorchScript</strong>, <strong>TensorFlow</strong> and <strong>TFLite</strong>. A task with no words
+lists the most downloaded models of it, so the speech models or the classifiers of the Hub are a click away. The search
+waits until typing pauses (300 ms), and a new search cancels the one under way. Each row is a repo: its id, its task,
+downloads and likes, and at the right the formats it has. The formats are read off the repo's files, so a repo that only has weights is left out. TorchScript has no
+tag of its own on the Hub (<code>pytorch</code> mostly means weights), so a TorchScript search keeps only repos with a <code>.pt</code> or <code>.pth</code>
+file. When the Hub doesn't list a repo's files, the row says <em>Check the files</em>. <strong>Show more</strong> brings the next results. A
+search with no results says so, and so does one that can't reach the Hub. Clicking a row looks that repo up.</p>
+<p><strong>Repo</strong> takes a repo id (<code>owner/name</code>) or a huggingface.co address, including a folder's (<code>/tree/main/onnx</code>) or a file's
+(<code>/blob/main/onnx/model_quantized.onnx</code>). <strong>Look up</strong> asks the Hub what the repo holds at that revision (the default
+branch unless the address names another). Nothing is downloaded at this point, beyond the repo's <code>config.json</code> when
+it has one (read for the model's kind and its labels). The panel then shows:</p>
+<ul>
+<li>the repo, its commit, its <strong>Task</strong> as the Hub files it, and from its config the <strong>Model type</strong> and the <strong>Labels</strong> it
+  answers with (<code>id2label</code>, the first twelve and how many more), so a classifier's labels are known before it is
+  downloaded;</li>
+<li>the runnable files by format, each with its size: <strong>ONNX</strong> (<code>*.onnx</code>, the <code>onnx/</code> folder and the quantized variants,
+  with an ONNX file's external data), <strong>TorchScript</strong> (<code>*.pt</code>, <code>*.pth</code>), <strong>TensorFlow SavedModel</strong> (<code>saved_model.pb</code> with
+  <code>variables/</code>) and <strong>TFLite</strong> (<code>*.tflite</code>);</li>
+<li><strong>Not runnable here</strong>: weights-only files (<code>*.safetensors</code>, <code>pytorch_model.bin</code>, <code>*.gguf</code>, <code>*.h5</code>), each with a short
+  reason, shards counted as one row;</li>
+<li>the default pick, already chosen. That is the file an address named, or else a plain <code>model.onnx</code> (the root's before
+  <code>onnx/</code>'s), a full model before an 8-bit variant and an 8-bit variant before fp16, then the other formats. Click another
+  file to change it. An encoder and decoder pair (<code>encoder_model.onnx</code> with <code>decoder_model.onnx</code>, a T5, BART, Marian or
+  Whisper export) is taken whole, the full variant of each; <code>amie hf import</code> lists every encoder and decoder of the
+  folder to pick with the arrow keys, the default already marked, and <code>initMod</code> opens the pair as two sessions (see <a href="../sandbox-scripting/#encoder-and-decoder-pairs">Encoder and decoder
+  pairs</a>);</li>
+<li><strong>Comes with</strong>: the config and tokenizer files that go along with the pick (<code>config.json</code>, <code>tokenizer.json</code>,
+  <code>tokenizer_config.json</code>, <code>special_tokens_map.json</code>, vocab and merges files, <code>generation_config.json</code>), from its folder
+  and the folders above it, and what a speech or an image model needs besides: a <code>voices/</code> folder (a Kokoro export's
+  voices), the <code>.onnx.json</code> of a Piper voice, <code>tokens.txt</code>, <code>lexicon.txt</code> and <code>espeak-ng-data/</code> of a VITS export, a
+  <code>labels.txt</code> or <code>classes.txt</code>, and a pair's <code>preprocessor_config.json</code>, which says how a sound or an image becomes its
+  encoder's input;</li>
+<li><strong>Name</strong>: the folder under <code>AMP/models/imported</code>, which defaults to the repo's last part, made a folder name.</li>
+</ul>
+<p><strong>Download</strong> runs in the background, apart from the page, so leaving the page leaves it running. A line at the top of the
+list shows the file coming in, how much has come and a progress bar, with <strong>Cancel</strong>, which throws away what came. Each
+file arrives as <code>&lt;path&gt;.part</code> under <code>AMP/models/imported/.incoming/&lt;name&gt;/</code>. Its size is checked against the Hub's before
+it takes its name, and only once every file is in does the folder move to <code>AMP/models/imported/&lt;name&gt;</code>, in one rename. A
+closed app, a lost connection or a full disk never leaves a half file under its real name. The next download of the same
+commit goes on from what came: a whole file isn't asked for again, and a <code>.part</code> is resumed. When the download ends, the
+model is selected and a notice gives its <code>initMod</code> line.</p>
+<p>Each failure says what happened and what to do: no such model or revision, no connection, a gated or private repo (with or
+without <code>HF_TOKEN</code>), nothing that runs here, no room on the disk or a folder that can't be written, a file that came in
+short. A token for a gated or private repo comes from the <code>HF_TOKEN</code> environment variable alone. It goes only to
+huggingface.co, never to the storage a big file is sent on to, and it is never logged, printed or stored.</p>
+<p>Imported models are listed under their own fold, <strong>Imported</strong>, after the intent models. Each row shows the model's
+format, its task when the Hub filed it under one, its source repo and its size, and the filter finds a model by any of
+them or by one of its labels. Its panel shows the task, the labels its <code>config.json</code> names (written into <code>source.json</code> as
+the model came in, so nothing is opened to say them), the commit, when it was downloaded, its folder and every file.
+<strong>Delete</strong> (or <strong>Delete…</strong> in its ⋯ menu) asks first, then removes <code>AMP/models/imported/&lt;name&gt;</code>. A folder put there by
+hand is listed too, its format read off its files.</p>
+<h2 id="packages">Packages<a class="headerlink" href="#packages" title="Permanent link">&para;</a></h2>
+<p>Jars come from six places, each a fold of the list: <code>AMP/pluginDir</code>, the env, Maven Central, the website's
+downloads page (<strong>On the server</strong>), GitHub (<strong>On GitHub</strong>, the repositories in <code>AMP/github.json</code>) and the
+website's <strong>store</strong>: the packages people published under their
+accounts (<code>/api/all-packages</code>), each with its author (<strong>by name</strong> on the row). <strong>Fetch</strong> downloads a store jar
+from the address its listing gives into <code>AMP/pluginDir</code>, as does the first <code>initMod("name.jar")</code>.</p>
+<p>The list has one line per package jar a script can open, first under the <strong>collections</strong> and then under the
+folding groups by place: <strong>In AMP/pluginDir</strong>, <strong>In the env</strong>, <strong>From Maven Central</strong>, <strong>On the server</strong> (the
+website's <code>/api/jars</code>, else the S3 service's <code>/api/aws/jars</code>; a line says so while the server is still being
+asked), <strong>In the store</strong> and <strong>On GitHub</strong>, the last three folded by default. Each line shows the Java the jar
+needs and its version, and at the right <code>2 open</code>, <code>inferring</code>, <code>on server</code> or <code>on GitHub</code> (an idle jar has no
+word) (the tooltip says what that means) and the ⋯ button; an open one is underlined in green. The filter
+box matches the jar name, version, Java, a collection name, the class a session opens on, and any class or
+resource name inside the jar, so a class can be found without knowing which jar holds it. <strong>Add</strong> beside the
+filter box offers <strong>Jar from this machine…</strong> (copied into <code>AMP/pluginDir</code> and imported into the env), <strong>From
+Maven Central…</strong> and <strong>New collection…</strong>.</p>
+<h3 id="repository">Repository<a class="headerlink" href="#repository" title="Permanent link">&para;</a></h3>
+<p>Under the installed packages, the <strong>Repository</strong> section searches what the Amie server offers (<code>JarPackages.listing</code>,
+the jars of the website's downloads page and its store, and of the GitHub repositories in <code>AMP/github.json</code>), by name,
+version or author. <strong>Fetch</strong> on a result downloads the jar into <code>AMP/pluginDir</code>, where a script opens it with
+<code>initMod("x.jar")</code>; a jar already there says <em>on this machine</em>. When the repository can't be reached the section says
+why, naming the addresses it tried, instead of showing an empty list, and <strong>Try again</strong> asks again at once; what could
+be read still shows beside the reason. It needs an account: a guest sees why, with <strong>Sign in to search</strong>, which leads to
+Account in <a href="../settings/#account">Settings</a>, and the repository is asked nothing.</p>
+<h3 id="what-a-package-needs">What a package needs<a class="headerlink" href="#what-a-package-needs" title="Permanent link">&para;</a></h3>
+<p>A package jar's panel has three blocks the libraries do not: <strong>Requirements</strong>, every line marked met, not met or
+information: the Java it needs against the Java this app runs, its package class, whether it ships metadata,
+its config folder, each config file and environment variable it declares, and what its last test run came to. A
+required file that is missing or still its template, or a required variable that is not set, is not met, and
+<code>initMod</code> refuses the jar until it is;
+<strong>Config</strong>, the folder <code>AMP/pluginDir/config/&lt;jar&gt;/</code> with <strong>Reveal folder</strong>, where the package's files are read
+from (as resources, through the <code>amie.package.config</code> property and a <code>configure(...)</code> method; templates for the
+missing files are written on the first open) and the declared files with their state; and <strong>Tests</strong>, the test
+runs the jar declares and the last run's answers, each marked pass or fail. <strong>Test run</strong> in the header (also in
+the ⋯ menu) opens a fresh session with the configuration in place, runs the declared tests (or one call with
+"hello" when there are none), closes it and reports in the notice strip and the block, where every test shows
+what it asked (<code>run("…")</code>) and the whole answer line by line, with the reason when it failed.</p>
+<p>Under the header the jar's <strong>flags</strong> say what it works with at a glance, as coloured tags: its version (blue),
+the Java it needs (slate, red when this app is too old for it), its language (violet) and how its last test run
+went (green or red), then the jar's own flags from its metadata (<code>flags: [{"text": "stable", "color": "green"}]</code>)
+and the ones you add with <strong>Add flag</strong> (also in the ⋯ menu): a word and one of six colours (slate, green, amber,
+red, violet, blue), kept in the sidecar metadata beside the jar and removable from the ⋯ menu. The same flags
+show on the jar's row in the list. A jar with no metadata
+gets <strong>Write metadata template</strong> in its ⋯ menu, which writes <code>AMP/pluginDir/&lt;jar&gt;.package.json</code> to fill in. The
+format is in <a href="../sandbox-scripting/#what-a-jar-needs-metadata-configuration-and-test-runs">Sandbox scripting</a>.</p>
+<h3 id="from-maven-central">From Maven Central<a class="headerlink" href="#from-maven-central" title="Permanent link">&para;</a></h3>
+<p><strong>Add → From Maven Central…</strong> opens a form in the place of the detail panel with one box. Type a name (<code>gson</code>,
+<code>okhttp</code>), a class name, <code>group:artifact</code> for the versions of one artifact, or paste a full
+<code>group:artifact:version</code> as in a Gradle dependency; Maven Central is asked as you type and the hits are ordered
+here, the artifact named like what you typed and the well-known groups first (the server's own order buries
+them). Every hit is a row with
+its newest version and publication date and its own <strong>Add</strong>, which resolves that version and its dependencies
+into the env (<code>AMP/env/&lt;env&gt;/env.lock.json</code>, files under <code>AMP/env/caches</code>), exactly what
+<code>implementation("group:artifact:version")</code> in a script does. A pasted coordinate is the first row. A thin bar
+shows while the library is being resolved, and the form closes itself when it is done: the library then sits
+under <strong>From Maven Central</strong> in the list, selected, with the same Source, Build and Contents sections as any jar
+(the coordinate is in Source), a <strong>Remove</strong> button that takes it out of the env (the files stay cached), and a
+menu that copies the <code>implementation("…")</code> line. A script can import its classes from the next run without
+declaring it. These are libraries, not packages: nothing opens them with <code>initMod</code>.</p>
+<h3 id="collections">Collections<a class="headerlink" href="#collections" title="Permanent link">&para;</a></h3>
+<p>A collection is a folder of jars that belong together, kept in <code>AMP/pluginDir/collections.json</code>
+(<code>pluginEngine/PackageCollections.kt</code>), typically the jars that run on one Java: "jvm21" with every plugin that fits.
+<strong>Add → New collection…</strong> opens the form in the place of the detail panel: a name, the jars to put in (toggles),
+and a <strong>By Java</strong> shortcut per Java version found among the jars (<code>jvm17</code>, <code>jvm21</code>, …) that names the collection
+and picks every jar that runs on that Java or older. Each collection is a fold at the top of the list with its
+jars as rows; moving the pointer over a row shows <strong>Detach</strong>, <strong>Add jar</strong> lists the jars that are not in it yet (and turns into a red <strong>Close</strong> while that list shows),
+and <strong>Delete folder</strong> removes the collection but keeps the jars. A jar can be in several collections, and its panel header says which.</p>
+<p>The detail panel describes the selected jar without running anything (<code>pluginEngine/JarInspector.kt</code>, read once
+per file version). Its header has the status line (status, <code>java 17+</code>, <code>kotlin</code> or <code>java</code>, version), <strong>Fetch</strong>
+(filled) for a jar still on the server or <strong>Publish</strong> for a jar on this machine (uploads it to the website under
+your account; the server refuses a jar without <code>run(String): List</code> and <code>close()</code>, with the reasons in the
+notice), and the ⋯ menu with the same plus <strong>Open its page on the website</strong>, <strong>Reveal file</strong> and Copy
+<code>initMod("name.jar")</code>; its ⋯ also has <strong>Reveal config folder</strong>, <strong>Detach from collection</strong> and <strong>Remove flag …</strong>
+when they apply. Under it a row of the jar's flags, the <code>initMod("name.jar")</code> call, then folding sections, closed
+until opened, except Requirements when something is unmet or the jar ships metadata, Config when it declares files
+and Tests once they ran:</p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Source</strong></td>
+<td>where it is, the website page, the exact download URL, when it was fetched and published (from <code>&lt;jar&gt;.source.json</code>), the file</td>
+</tr>
+<tr>
+<td><strong>Build</strong></td>
+<td>what built it (the manifest's <code>Created-By</code>, <code>Build-Jdk-Spec</code>), the class file version and the Java it needs, whether this app's Java can load it, language, size</td>
+</tr>
+<tr>
+<td><strong>Contents</strong></td>
+<td>the class a session opens on (the one with <code>run(String)</code> and <code>close()</code>) and the <code>Main-Class</code>; a filter box; <strong>Classes</strong> grouped by package and <strong>Resources</strong> grouped by folder, each group folding; the entry class and main class are marked; clicking a line copies its full name</td>
+</tr>
+</tbody>
+</table>
+<p>Then <strong>Sessions</strong>: the sessions open on it, each with <strong>Log</strong> and <strong>Terminate</strong>. There are no Run or Quit
+buttons: a package is a bottle, not something the page controls. A script opens its own instance with
+<code>initMod("name.jar")</code>, calls <code>run(text)</code> (or <code>answer(text)</code>) and <code>close()</code>, and a jar that is only on the server is fetched into
+<code>AMP/pluginDir</code> on first open (see <a href="../sandbox-scripting/#packages">Packages</a>).</p>
+<h2 id="sessions">Sessions<a class="headerlink" href="#sessions" title="Permanent link">&para;</a></h2>
+<p>(What a session is and how to use one from a script is in <a href="../sessions/">Running sessions</a>; this is the tab.)</p>
+<p>The tab lists everything that is open as flat rows named after the owner (<code>dummy  #3</code>, <code>echo-1.0.jar  #1</code>) with
+what it is (intent model, package, model group for a swarm, ONNX session, session model, background template), the script block
+that holds it (<code>static search</code>, <code>timed search, 40s left</code>, <code>closable</code>; see <a href="../sessions/#scope-functions">Scope functions</a>), <em>inferring</em> while it answers (idle is
+the gray mark), how many runs it has done and for how long
+it has been open; with more than a few, a filter box matches owner, kind or <code>#id</code>, and <strong>Terminate all</strong> sits
+at the right of that first line. <strong>Log</strong> unfolds what the
+session was asked and answered: one line per <code>inference</code> call (<code>"turn the lights on" -&gt; lights:0.97,
+weather:0.02 (12 ms)</code>), plus open, close and error lines, with the time of each. The same lines are appended to
+the owner's file, <code>AMP/models/intents/&lt;name&gt;/sessions.log</code> for a model and <code>AMP/pluginDir/&lt;jar&gt;.sessions.log</code> for a
+package, so the history of a terminated session is not lost (<code>runtime/SessionLog.kt</code>). <strong>Terminate</strong> ends a
+session: intent model sessions (from <strong>Open session</strong> or <code>initMod("name")</code>; <code>runtime/ModelSessions.kt</code>), package
+sessions (<code>pluginEngine/JarPackages.kt</code>; terminating calls the package's <code>close()</code> and drops its class loader)
+and ONNX Runtime sessions opened on a bare file with <code>importModelOnnx</code> (<code>modelLoaders/OrtSessions.kt</code>;
+terminating cancels in-flight runs; these keep no log). The ORT session inside a model session is not listed
+twice; it goes with the model session. A <a href="../sandbox/#templates-in-the-background">template running in the background</a>
+has a row as well, with its name and how long it has run, no count of runs and no log; Terminate cancels it.
+<strong>Terminate all</strong> ends all of them, the swarms first. Right-click a row for Terminate, Show log (<em>Hide log</em> once
+shown), Copy log and Copy <code>#id</code>; a session row has no ⋯ button.</p>
+<p>Each row has a resources line under it: for a model its head and its encoder on disk, the encoder said once with how
+many share it, the time a run takes and when it was last used (<code>head 9 KB · encoder 415.6 MB, shared by 3 · 12 ms a run
+· last used 3s ago</code>); for a package its jar, for a bare ONNX session its file, for a group its heads together, and for a
+background template what its meter reads now (<code>memory 1.20 GB, peak 1.40 GB · heap 340.0 MB of 4.00 GB · cpu 2.10 s ·
+ort 12 runs in 640 ms</code>). Over the rows a totals line says what the process holds, how much of it is the encoders, the
+heap against its limit, and how many sessions are open and what they weigh together (<code>Process 1.85 GB, of which
+encoders 415.6 MB · heap 340.0 MB of 4.00 GB · 20 sessions weigh 436.0 MB</code>); what each figure is, in
+<a href="../sessions/#see-what-a-script-uses">Running sessions</a>. A <em>session model</em> is a snapshot from <code>sessionMod("name")</code> (<code>modules/SharedModels.kt</code>): <strong>Terminate</strong> ends it
+for whatever holds it and leaves the model alone. Over the sessions, <strong>Scripts</strong> lists every script running and each
+that left something open (<code>runtime/ScriptRuns.kt</code>), named after the template it is word for word, else <code>main.kts</code>, with
+what it holds, its answers, its CPU and what it allocated, and its sessions under it; what the figures are is in
+<a href="../sessions/#see-what-a-script-uses">Running sessions</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

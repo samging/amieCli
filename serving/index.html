@@ -1,0 +1,1513 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="How to use the Amie desktop app and the amie command line - the sandbox, scripting, packages, models and metrics">
+      
+      
+      
+        <link rel="canonical" href="https://samging.github.io/amieCli/serving/">
+      
+      
+        <link rel="prev" href="../models/">
+      
+      
+        <link rel="next" href="../devices/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Serving a model - Amie desktop app</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#serving-a-model" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Amie desktop app" class="md-header__button md-logo" aria-label="Amie desktop app" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Amie desktop app
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Serving a model
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/samging/amieCli" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    samging/amieCli
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Amie desktop app" class="md-nav__button md-logo" aria-label="Amie desktop app" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Amie desktop app
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/samging/amieCli" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    samging/amieCli
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start here
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start here
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How the app works
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The components
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup-tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set up a new Mac
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://samging.github.io/amieCli/learn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The amie book
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working in the app
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Working in the app
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sandbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The sandbox
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sandbox-scripting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scripting API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cookbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cookbook, scripts to copy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models and metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Serving a model
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Serving a model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#teaching-a-model-while-it-listens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teaching a model while it listens
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#answering-only-when-it-is-sure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answering only when it is sure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#who-may-ask-and-how-much" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Who may ask and how much
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-http-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The HTTP contract
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#from-a-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From a script
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../amp-folder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The AMP folder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models-page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models page
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pi5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raspberry Pi 5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source-layout/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where the code is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../codebase/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The code of amie, what is where and why
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#teaching-a-model-while-it-listens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teaching a model while it listens
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#answering-only-when-it-is-sure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Answering only when it is sure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#who-may-ask-and-how-much" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Who may ask and how much
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-http-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The HTTP contract
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#from-a-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From a script
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="serving-a-model">Serving a model<a class="headerlink" href="#serving-a-model" title="Permanent link">&para;</a></h1>
+<p>Every exported model can answer HTTP requests from inside the app.</p>
+<ol>
+<li>Open <strong>Models</strong> and select the model.</li>
+<li>The gear (⚙) at the right of its header opens the serving settings: <strong>Host</strong> (default <code>127.0.0.1</code>), <strong>Port</strong>,
+   <strong>Path</strong> (default <code>/models/&lt;name&gt;</code>), the <strong>Methods</strong> (POST, GET), <strong>Min score</strong> and <strong>Fallback</strong>
+   (<a href="#answering-only-when-it-is-sure">below</a>), and under <strong>Access</strong> who may ask and how much
+   (<a href="#who-may-ask-and-how-much">below</a>). <strong>Save</strong> writes <code>AMP/models/intents/&lt;name&gt;/serving.json</code>.</li>
+<li><strong>Listen on :port</strong> starts the listener: the header says <code>listening 127.0.0.1:8765</code>, and <strong>Stop</strong> ends it.
+   While the settings hold a value they can't take (a port, a min score, an origin, a limit), Listen and Save wait,
+   and their tooltips say which to fix.</li>
+</ol>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://127.0.0.1:8765/models/intents/predict<span class="w"> </span>-d<span class="w"> </span><span class="s1">'{"text":"turn the lights on"}'</span>
+curl<span class="w"> </span><span class="s1">'http://127.0.0.1:8765/models/intents/predict?text=turn+the+lights+on'</span>
+</code></pre></div>
+<p>The POST and GET URLs are listed under the settings with <strong>Copy</strong> and <strong>Copy curl</strong>.</p>
+<ul>
+<li>Every request is appended to <code>AMP/models/intents/&lt;name&gt;/incoming.jsonl</code> (for a model that keeps no texts, the text's
+  length instead of the text).</li>
+<li>Every request, whatever came of it (answered, 400, 401, 403, 405, 413, 429, 500, a CORS preflight), is also one
+  line of the model's access log, <code>AMP/models/intents/&lt;name&gt;/access.log</code>, tab-separated: time, request id, client address,
+  method, path <strong>without the query</strong> (a GET's text is in it), status, milliseconds, the text's length, the answer's
+  bytes and what came of it, in fixed forms: an 8-hex-digit id, <code>12ms</code>, <code>in 17 chars</code>, <code>out 96B</code>, and the outcome
+(<code>lights 0.912</code>, <code>abstained</code>, <code>refused: …</code>, <code>preflight</code>, the error); status <code>0</code> means no answer was sent. It never holds a text, for any
+  model. Each answer carries its id as the header <code>X-Request-Id</code>, so a client can name its line. Listening and
+  stopping are lines of it too (with what the access settings require, and at the stop <code>stopped after 8 requests
+  (1 failed, 2 refused)</code>). Past 2 MB it
+  moves to <code>access.1.log</code>, the one before that going. The last twelve show under the settings in the <strong>Requests</strong> fold (closed
+  until opened), newest first, errors in red, read again as the file grows. From a script,
+  <code>accessLog("name", last = 20)</code> prints and returns them.</li>
+<li>The header's status tooltip counts what the listener did since it started: <em>8 requests, 5 abstained, 1 error,
+  2 refused</em> (refused: turned away by the <a href="#who-may-ask-and-how-much">access settings</a>).</li>
+<li>Changes to the settings apply after <strong>Stop</strong> and <strong>Listen</strong>; the settings say so while it listens. <strong>Save</strong>
+  meanwhile keeps them for that next start, and Stop leaves what was saved as it is.</li>
+<li>Models that were listening when the app closed start listening again on the next launch.</li>
+<li>A new head of the model (a fine-tune, a build under the same name, a rollback, a <code>/retrain</code> from a client) never
+  stops the listener: the new head is opened beside the one answering, put in its place once the answers in flight
+  are done, and the old one is closed after. Every answer says which head gave it (<code>"version": 3</code>), the access log
+  has a line for the swap, and the header's status tooltip counts the swaps.</li>
+</ul>
+<h2 id="teaching-a-model-while-it-listens">Teaching a model while it listens<a class="headerlink" href="#teaching-a-model-while-it-listens" title="Permanent link">&para;</a></h2>
+<p>A client that sees the model answer wrongly can correct it over the same port, without the Models page, and have
+the model retrained on its corrections while it goes on answering. Two routes stand beside <code>/predict</code> under the
+model's path:</p>
+<table>
+<thead>
+<tr>
+<th>Request</th>
+<th>What it does</th>
+<th>Answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST &lt;path&gt;/teach</code> with <code>{"text": "lamp please", "label": "lights"}</code></td>
+<td>Writes the sentence with its label at the top of the model's queue of texts to label, <code>AMP/&lt;name&gt;-to-label.csv</code>, the same file <strong>Teach</strong> on the page and <code>teach()</code> in a script write to; a text the queue has already gets the new label instead. A label the model knows is taken in its own spelling (<code>Lights</code> is <code>lights</code>); any other label is a new one, which a retrain learns once it has three rows or more</td>
+<td><code>200</code> <code>{"model": "intents", "version": 2, "text": "lamp please", "label": "lights", "queue": "intents-to-label.csv", "labeled": 4}</code></td>
+</tr>
+<tr>
+<td><code>DELETE &lt;path&gt;/teach</code> with <code>{"text": "lamp please"}</code> or <code>?text=lamp+please</code></td>
+<td>Takes the sentence out of the queue, whatever the case it was written in; a sentence that isn't there changes nothing</td>
+<td><code>200</code> <code>{"model": "intents", "text": "lamp please", "removed": true, "label": "lights", "queue": "…", "labeled": 3}</code> (<code>"removed": false</code> and no <code>label</code> when it wasn't there)</td>
+</tr>
+<tr>
+<td><code>GET &lt;path&gt;/teach</code></td>
+<td>The queue as it is: every row with its label (empty while unlabeled), the model's guess, its score and the runner-up</td>
+<td><code>200</code> <code>{"model": "intents", "version": 2, "queue": "…", "labeled": 3, "unlabeled": 5, "rows": [{"text": "…", "label": "lights", "guess": "weather", "score": 0.41, "runnerUp": "lights"}, …]}</code></td>
+</tr>
+<tr>
+<td><code>POST &lt;path&gt;/retrain</code></td>
+<td>Starts a fine-tune on the labeled rows of the queue, in the background, and answers at once. The model keeps answering with the head it has until the new one is written; then the new head is opened, swapped in and the old one closed (<a href="#serving-a-model">above</a>), the queue is graded again with it, and the head before is kept as a version for a rollback. <code>?wait=true</code> or <code>{"wait": true}</code> holds the answer until it is over</td>
+<td><code>202</code> <code>{"model": "intents", "status": "running", "version": 2, "labeled": 3, "from": 2, "rows": 3, "startedAt": "…", "phase": "training 12/40 · …"}</code>; with <code>wait</code>, <code>200</code> with <code>"status": "done"</code>, <code>"to": 3</code>, <code>"detail": "fine-tune v2 → v3 · accuracy 0.900 → 0.967 on …"</code>, or <code>500</code> with <code>"status": "failed"</code> and the reason in <code>detail</code></td>
+</tr>
+<tr>
+<td><code>GET &lt;path&gt;/retrain</code></td>
+<td>How the last retrain went, or <code>"status": "idle"</code> with how many labeled rows wait</td>
+<td><code>200</code> as above</td>
+</tr>
+<tr>
+<td><code>POST &lt;path&gt;/retrain</code> while one runs, while the page builds or fine-tunes anything, or with no labeled row in the queue</td>
+<td>Refused; nothing changes</td>
+<td><code>409</code> <code>{"error": "nothing to learn: intents-to-label.csv has no labeled rows; POST a text and its label to /models/intents/teach first", "status": "idle", …}</code></td>
+</tr>
+<tr>
+<td><code>POST &lt;path&gt;/teach</code> for a model that keeps no texts, or one renamed or destroyed meanwhile</td>
+<td>Refused: no text of another person's lands in a file</td>
+<td><code>409</code> <code>{"error": "…"}</code></td>
+</tr>
+<tr>
+<td><code>POST &lt;path&gt;/teach</code> without a text or a label, <code>DELETE</code> without a text</td>
+<td></td>
+<td><code>400</code> <code>{"error": "send {\"text\": \"...\", \"label\": \"...\"}"}</code></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://127.0.0.1:8765/models/intents/teach<span class="w"> </span>-d<span class="w"> </span><span class="s1">'{"text": "lamp please", "label": "lights"}'</span>
+curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span><span class="s1">'http://127.0.0.1:8765/models/intents/teach?text=lamp+please'</span>
+curl<span class="w"> </span>http://127.0.0.1:8765/models/intents/teach
+curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="s1">'http://127.0.0.1:8765/models/intents/retrain?wait=true'</span>
+curl<span class="w"> </span>http://127.0.0.1:8765/models/intents/retrain
+</code></pre></div>
+<p>What a retrain does is exactly a <a href="../models/#fine-tuning-teaching-a-model-more">fine-tune</a> on the queue with the
+default options, as <strong>Fine-tune on it</strong> under the queue on the page's Improve tab does: the rows it was trained on are replayed so it
+keeps what it knew, a label it doesn't know gets an output of its own, before and after are scored on the same
+held-out rows, and the console and the Metrics tab show the run. The rows stay in the queue after it (graded with
+the new head, so the Improve tab shows which it answers right now); take out of it what the model shouldn't learn
+again. A model that was fine-tuned on its queue names it under <em>fine-tuned on</em>, so the next retrain replays it.</p>
+<p>Lessons go through the <a href="#who-may-ask-and-how-much">access settings</a> as every request does: the key, the origins,
+the size and the minute all apply. Since a lesson changes the model, a request from another machine is answered
+<code>403 teaching from another machine needs a key</code> unless a <strong>Key</strong> is set; this machine's own requests teach as they
+are. One retrain runs at a time, over every model, and none while the page is building, fine-tuning or calibrating
+something (<code>409 busy fine-tuning weather</code>); the lessons meanwhile land in the queue and the next retrain takes
+them. The access log has a line per lesson (<code>taught: lights</code>, <code>forgot: weather</code>, <code>retrain: done v2 → v3</code>), never
+the text.</p>
+<h2 id="answering-only-when-it-is-sure">Answering only when it is sure<a class="headerlink" href="#answering-only-when-it-is-sure" title="Permanent link">&para;</a></h2>
+<p>A model answers every text with its best label, however unsure it is. With <strong>Min score</strong> set, a request whose best
+score is under it is not answered with that label: the model abstains. It answers the <strong>Fallback</strong> label instead
+(such as <code>unknown</code>, scored at the min score), or no label when Fallback is empty, marks the answer
+<code>"abstained": true</code> and moves its own scores to <code>"ranking"</code>, so nothing it said is lost:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">"model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"intents"</span><span class="p">,</span><span class="w"> </span><span class="nt">"predictions"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w"> </span><span class="nt">"score"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.75</span><span class="p">}],</span><span class="w"> </span><span class="nt">"abstained"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w"> </span><span class="nt">"ranking"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"lights"</span><span class="p">,</span><span class="w"> </span><span class="nt">"score"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.41</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"music"</span><span class="p">,</span><span class="w"> </span><span class="nt">"score"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.28</span><span class="p">},</span><span class="w"> </span><span class="err">…</span><span class="p">]}</span>
+</code></pre></div>
+<p>At or over the min score the answer is the model's own with <code>"abstained": false</code>. Without a min score (empty, or 0)
+it is exactly as before, with no <code>abstained</code> key, and <code>serving.json</code> holds no <code>minScore</code> or <code>fallbackLabel</code>.</p>
+<p>Under Min score the settings suggest a value from the model's last run: the lowest score at which its answers were
+right 95% of the time on that run's rows, answering a tenth of them at least (<em>suggested 0.75: 95% right, answers
+90%</em>; its tooltip says more, and <strong>Use 0.75</strong> puts it in the field). The scores tried are the gates the run kept,
+0.05 apart, which the Metrics tab's chart of how far the scores can be trusted shows. A model right 95% of the time
+at any score needs none (<em>97% right at any score</em>), and of one that no score makes that right it says so (<em>no score
+keeps 95% right</em>): fine-tune or calibrate it first. A run of rows like the ones it will be asked suggests best; a
+calibrated model's scores mean what they say, so its min score holds better on new texts.</p>
+<p>Abstentions are counted in the header's status tooltip, the console line says what it would have answered
+(<code>-&gt; unknown (abstained: lights 0.415 under 0.75)</code>), and <code>incoming.jsonl</code> keeps the model's own label and score with
+<code>"abstained": true</code>.</p>
+<h2 id="who-may-ask-and-how-much">Who may ask and how much<a class="headerlink" href="#who-may-ask-and-how-much" title="Permanent link">&para;</a></h2>
+<p>Out of the box a listener answers anyone who can reach its address, which on the default host <code>127.0.0.1</code> is this
+machine alone. Before serving on another host (<code>0.0.0.0</code>, a LAN address) or to a web page, the <strong>Access</strong> fold of
+the gear panel sets four limits. Each is off while its field is empty, and then the listener behaves as it did
+before there were any:</p>
+<table>
+<thead>
+<tr>
+<th>Field (<code>serving.json</code>)</th>
+<th>What it does</th>
+<th>Past it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Key</strong> (<code>apiKey</code>)</td>
+<td>A request must send the key as the header <code>Authorization: Bearer &lt;key&gt;</code>. <strong>New key</strong> puts a random one in the field (32 characters), <strong>Copy</strong> copies it; the field shows it as dots</td>
+<td><code>401</code> <code>{"error": "send the key as the header Authorization: Bearer &lt;key&gt;"}</code>, with <code>WWW-Authenticate: Bearer realm="amie"</code></td>
+</tr>
+<tr>
+<td><strong>Origins</strong> (<code>cors</code>)</td>
+<td>The web pages that may call the model from a browser, as the browser names them: <code>https://app.example.com, http://localhost:3000</code>, or <code>*</code> for any. A request from one of them gets the CORS headers (<code>Access-Control-Allow-Origin</code> with its origin, <code>Vary: Origin</code>, <code>Access-Control-Expose-Headers: Retry-After</code>), on errors too, and its preflight (<code>OPTIONS</code>) a <code>204</code> with the methods and <code>OPTIONS</code>, the <code>Content-Type</code> and <code>Authorization</code> headers allowed and <code>Access-Control-Max-Age: 600</code>. Without Origins an <code>OPTIONS</code> gets <code>405</code></td>
+<td>a browser's request from a page not on the list: <code>403</code> <code>{"error": "the origin https://elsewhere.example is not allowed"}</code>. A request without an <code>Origin</code> header (curl, a server, another program) isn't a browser's and goes on</td>
+</tr>
+<tr>
+<td><strong>Max bytes</strong> (<code>maxBodyBytes</code>)</td>
+<td>The most bytes a request's body, or a GET's text, may have. A body is read no further than one byte past it, and not at all when its <code>Content-Length</code> says it is over</td>
+<td><code>413</code> <code>{"error": "the request is over 4096 bytes"}</code>, and the model isn't asked</td>
+</tr>
+<tr>
+<td><strong>Per minute</strong> (<code>rateLimitPerMinute</code>)</td>
+<td>How many requests a minute it answers, every client together, counted over the last 60 seconds</td>
+<td><code>429</code> <code>{"error": "over 60 requests a minute; try again in 12 s"}</code>, with <code>Retry-After: 12</code></td>
+</tr>
+</tbody>
+</table>
+<p>They are checked origin, method, key, per minute, then size: a request without the key uses up none of the
+minute, an oversized one does. A request turned away is logged in the console without its text, is never written to <code>incoming.jsonl</code>, and
+counts as <strong>refused</strong> in the header's tooltip. With a key set, <strong>Copy curl</strong> sends it:</p>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://127.0.0.1:8765/models/intents/predict<span class="w"> </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">'Authorization: Bearer 3q2-7wEAAAB9pY1vX0dYb1JnS2hRcFdN'</span><span class="w"> </span>-d<span class="w"> </span><span class="s1">'{"text": "turn the lights on"}'</span>
+</code></pre></div>
+<p>The key is kept in <code>serving.json</code> as it is, on this machine: Publish never sends it, and neither do the model's
+versions. Anyone who can read the AMP folder can read it, so a key guards the port, not the files. A new key, or
+none, applies after <strong>Stop</strong> and <strong>Listen</strong>, as every setting does.</p>
+<h2 id="the-http-contract">The HTTP contract<a class="headerlink" href="#the-http-contract" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Request</th>
+<th>Answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST &lt;path&gt;/predict</code> with <code>{"text": "…"}</code> or a plain-text body</td>
+<td><code>200</code> <code>{"model": "intents", "predictions": [{"label": "lights", "score": 0.97}, …]}</code>, best first</td>
+</tr>
+<tr>
+<td><code>GET &lt;path&gt;/predict?text=…</code></td>
+<td>the same</td>
+</tr>
+<tr>
+<td>a model with a <strong>Min score</strong> whose best score reaches it</td>
+<td>the same, with <code>"abstained": false</code></td>
+</tr>
+<tr>
+<td>a model with a <strong>Min score</strong> whose best score is under it</td>
+<td><code>200</code> <code>{"model": "intents", "predictions": [{"label": "unknown", "score": 0.75}], "abstained": true, "ranking": […]}</code>: the Fallback label scored at the min score, or <code>[]</code> without one, and the model's own scores under <code>ranking</code></td>
+</tr>
+<tr>
+<td>no text (empty body, no <code>text</code> key, no <code>?text=</code>)</td>
+<td><code>400</code> <code>{"error": "send text as {\"text\": \"...\"}, a plain-text body or ?text="}</code></td>
+</tr>
+<tr>
+<td>a method not in the model's <strong>Methods</strong> list</td>
+<td><code>405</code> <code>{"error": "PUT not allowed, use [POST, GET]"}</code></td>
+</tr>
+<tr>
+<td>with <strong>Access</strong> set: a browser page not in <strong>Origins</strong>, no key, too big, too many</td>
+<td><code>403</code>, <code>401</code>, <code>413</code>, <code>429</code> (<a href="#who-may-ask-and-how-much">above</a>)</td>
+</tr>
+<tr>
+<td>with <strong>Origins</strong> set: a browser's preflight <code>OPTIONS</code> from a page on the list</td>
+<td><code>204</code> with the CORS headers</td>
+</tr>
+<tr>
+<td>the model threw while answering</td>
+<td><code>500</code> <code>{"error": "…"}</code>, and the page's <strong>errors</strong> count goes up</td>
+</tr>
+<tr>
+<td>nothing listens on the port</td>
+<td>the connection is refused (no HTTP answer at all)</td>
+</tr>
+<tr>
+<td><code>POST</code>, <code>DELETE</code>, <code>GET &lt;path&gt;/teach</code> and <code>POST</code>, <code>GET &lt;path&gt;/retrain</code></td>
+<td>the lessons: <a href="#teaching-a-model-while-it-listens">Teaching a model while it listens</a>; a method not in that route's list is <code>405</code></td>
+</tr>
+</tbody>
+</table>
+<p>Every answer is <code>application/json</code>, and one from a model whose module says its version carries it (<code>"version": 2</code>,
+the head that answered). The path is <code>/models/&lt;name&gt;/predict</code> unless <strong>Path</strong> was changed. <code>/predict</code>, <code>/teach</code>
+and <code>/retrain</code> are always appended, so a Path of <code>/intents</code> serves <code>/intents/predict</code>, <code>/intents/teach</code> and
+<code>/intents/retrain</code>.</p>
+<h2 id="from-a-script">From a script<a class="headerlink" href="#from-a-script" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="kd">val</span><span class="w"> </span><span class="nv">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">serve</span><span class="p">(</span><span class="s">"intents"</span><span class="p">,</span><span class="w"> </span><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">8765</span><span class="p">)</span><span class="w">          </span><span class="c1">// null when it could not start; the console says why</span>
+<span class="n">log</span><span class="p">(</span><span class="n">url</span><span class="w"> </span><span class="o">?:</span><span class="w"> </span><span class="s">"not started"</span><span class="p">)</span>
+<span class="n">stopServing</span><span class="p">(</span><span class="s">"intents"</span><span class="p">)</span>
+<span class="n">serve</span><span class="p">(</span><span class="s">"intents"</span><span class="p">,</span><span class="w"> </span><span class="n">minScore</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.75</span><span class="p">,</span><span class="w"> </span><span class="n">fallbackLabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"unknown"</span><span class="p">)</span><span class="w">   </span><span class="c1">// abstains under 0.75</span>
+<span class="n">accessLog</span><span class="p">(</span><span class="s">"intents"</span><span class="p">,</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="p">)</span><span class="w">                    </span><span class="c1">// its last five access log lines, printed and returned</span>
+</code></pre></div>
+<p><code>serve("name")</code> with no other argument reuses what the page saved in <code>serving.json</code>; a port, host, path, methods,
+min score or fallback given here are saved there too, and the access settings saved on the page stay as they are. <code>minScore = 0.0</code> turns a saved gate off, as emptying Min score
+on the page does, and <code>fallbackLabel = ""</code> takes a saved fallback away. The full example with the request code and
+every error handled is in the <a href="../cookbook/#12-serve-a-model-and-call-it-over-http">Cookbook</a>. Four reasons a start
+fails, each one Error line in the console: a min score outside 0 to 1, the model cannot be loaded, the port is
+already taken by another program, or the path is already served by another model on that port.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
