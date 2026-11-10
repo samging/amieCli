@@ -45,6 +45,7 @@ amie [options] [script.kts [args] | -c code | command ...]
 | `huggingFace`, `importModel` | A model of the Hub; one by its path. An encoder and decoder pair opens as `.encoder` and `.decoder` ([pairs](learn.md#pairs)) |
 | `serve`, `stopServing` | A model over HTTP |
 | `ortClosable`, `ortStatic`, `ortRequired`, `ortLimited`, `ortAsync` | How long what a block opens lives |
+| `quietly` | A block without the console line of each model answer, to measure a model on thousands of texts |
 | `database`, `shell`, `shellScript` | Postgres; the login shell |
 | `implementation`, `environment` | A Maven package into the env; the env to run in |
 | `coroutineTemplate`, `template`, `input`, `output` | A template in the background, and the two ends of its conversation |

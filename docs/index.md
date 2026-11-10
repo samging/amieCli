@@ -24,6 +24,7 @@ mkdocs build                        # static site in build/docs-site/
 | Know every function a script can call | [Scripting API](sandbox-scripting.md) |
 | Run scripts from the terminal with `amie`, chapter by chapter | [Learn amie](learn.md) |
 | Look up an `amie` command, option or exit code | [amie reference](amie-reference.md) |
+| See a whole project, from the data to a served model, with its results | [Out-of-scope detection on CLINC150](../examples/clinc-oos/README.md) |
 | Train a model and look at its metrics | [Models and metrics](models.md) |
 | Teach a trained model a new label, or go back to an earlier version | [Fine-tuning](models.md#fine-tuning-teaching-a-model-more), [Versions](models.md#versions-and-rollback) |
 | Try a model on a sentence, correct its wrong answers and fine-tune on them, from the page | [Models page: Try and Improve](models-page.md#models) |

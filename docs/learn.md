@@ -698,6 +698,17 @@ A block decides how long what it opens lives:
 [greeting, lights]
 ```
 
+Every answer a model gives is a console line of its own, which is what you want for a few questions and too much when a script asks thousands to measure a model. `quietly { }` runs its block without those lines; the script's own `log` lines show as always, and the session logs still record every answer:
+
+```
+>>> val right = quietly {
+...     val m = sessionMod("intents")
+...     sourceFile("intents-test.csv").second.values.count { (text, label) -> m.predict(text) == label }
+... }
+>>> log("$right right")
+412 right
+```
+
 ### Data and the shell
 
 A Postgres database named in `AMP/databases.json` is one call away, and so is the login shell:

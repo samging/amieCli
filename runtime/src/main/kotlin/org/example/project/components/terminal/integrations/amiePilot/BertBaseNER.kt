@@ -20,6 +20,7 @@ import org.example.project.components.terminal.window.controller.modules.ModuleM
 import org.example.project.components.terminal.window.controller.modules.modulesDir
 import org.example.project.components.terminal.window.controller.modules.readModule
 import org.example.project.components.terminal.window.controller.runtime.textForLog
+import org.example.project.components.terminal.window.controller.runtime.AnswersQuiet
 import java.io.File
 import java.util.concurrent.CancellationException
 import org.jetbrains.kotlin.fir.scopes.impl.overrides
@@ -356,7 +357,7 @@ internal fun headModel(name: String, manifest: ModuleManifest, openHead: () -> M
                 val score = entry.substringAfterLast(':').toDoubleOrNull()
                 return if (score == null) entry else "$label ${"%.3f".format(java.util.Locale.US, score)}"
             }
-            logInternal(
+            if (!AnswersQuiet.now) logInternal(
                 "$name ${textForLog(text, manifest.keepTexts)} -> " + if (ask == Ask.PREDICT) res.firstOrNull()?.let(::pretty).orEmpty() else res.joinToString(transform = ::pretty),
                 LogLevel.DATA,
             )

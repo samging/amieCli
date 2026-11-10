@@ -38,6 +38,27 @@ object TextsWithheld {
     }
 }
 
+/**
+ * The console line each model answer writes ("intents "turn it on" -> lights 0.981") left out on this thread while
+ * [during] runs, for a script that asks a model thousands of times to measure it: `quietly { ... }`. The session logs
+ * still record every answer, and the script's own log lines show as always
+ */
+object AnswersQuiet {
+    private val on = ThreadLocal.withInitial { false }
+
+    val now: Boolean get() = on.get()
+
+    fun <T> during(block: () -> T): T {
+        val was = on.get()
+        on.set(true)
+        try {
+            return block()
+        } finally {
+            on.set(was)
+        }
+    }
+}
+
 /** One line of a session's log: when, what kind of event (open, run, error, close) and the text */
 data class SessionLogEntry(val at: Instant, val kind: String, val text: String) {
     val time: String get() = TIME.format(at)

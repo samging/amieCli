@@ -607,6 +607,13 @@ Das Haus ist wunderbar.</pre>
 ... }
 ...
 [greeting, lights]</pre>
+<p>Every answer a model gives is a console line of its own, which is what you want for a few questions and too much when a script asks thousands to measure a model. <code>quietly { }</code> runs its block without those lines; the script's own <code>log</code> lines show as always, and the session logs still record every answer:</p>
+<pre>&gt;&gt;&gt; val right = quietly {
+...     val m = sessionMod("intents")
+...     sourceFile("intents-test.csv").second.values.count { (text, label) -&gt; m.predict(text) == label }
+... }
+&gt;&gt;&gt; log("$right right")
+412 right</pre>
 <h3>Data and the shell</h3>
 <p>A Postgres database named in <code>AMP/databases.json</code> is one call away, and so is the login shell:</p>
 <pre>&gt;&gt;&gt; val db = database("main")

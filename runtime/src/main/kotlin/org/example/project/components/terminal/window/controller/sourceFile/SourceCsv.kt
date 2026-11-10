@@ -5,16 +5,18 @@ import org.example.project.components.terminal.window.controller.LogLevel
 import org.example.project.components.terminal.window.controller.console.logInternal
 import java.io.File
 
-// Reads a source file by its extension into (row count, rows by index), the shape context/model builders consume
+/**
+ * Reads a source file by its extension into (row count, rows by index), the shape context/model builders consume. The
+ * file is looked for as source() looks: as given, in AMP/, then in AMP/pluginDir/
+ */
 fun readSourceFile(path: String, column: String = ""): Pair<Int, Map<Int, List<String>>> {
-    val file = File(path)
-    if (!file.exists()) {
-        logInternal("sourceFile: file not found $path", LogLevel.ERROR)
+    val file = DataSource.locate(path) ?: run {
+        logInternal(DataSource.notFound(path).replaceFirst("source:", "sourceFile:"), LogLevel.ERROR)
         return Pair(0, emptyMap())
     }
     return try {
         when (file.extension.lowercase()) {
-            "csv" -> SourceCsv(path)[column]
+            "csv" -> SourceCsv(file.path)[column]
             else -> {
                 logInternal("sourceFile: unsupported type .${file.extension}", LogLevel.ERROR)
                 Pair(0, emptyMap())
@@ -38,12 +40,15 @@ class SourceCsv(
         }
     }
 
-    // read["column name"]; empty column returns whole rows
+    /**
+     * read["column name"]; empty column returns whole rows. Read as source() reads a csv: a quoted field keeps its
+     * commas, quotes and line breaks, and a file whose every line is quoted whole is read as the rows inside
+     */
     operator fun get(column: String = ""): Pair<Int, Map<Int, List<String>>> {
-        val lines = File(path).readLines().filter { it.isNotBlank() }
+        val lines = unwrapQuotedLines(parseCsv(File(path).readText()).filter { row -> row.any { it.isNotBlank() } })
         if (lines.isEmpty()) return Pair(0, emptyMap())
 
-        val headers = lines[0].split(",").map { it.trim() }
+        val headers = lines[0].map { it.trim() }
 
         val columnIndex = if (column.isEmpty()) -1 else headers.indexOf(column)
         if (column.isNotEmpty() && columnIndex < 0) {
@@ -52,7 +57,7 @@ class SourceCsv(
         }
 
         val data = lines.drop(1).mapIndexed { index, line ->
-            val row = line.split(",").map { it.trim() }
+            val row = line.map { it.trim() }
             index to if (columnIndex < 0) row else listOf(row.getOrElse(columnIndex) { "" })
         }.toMap()
 

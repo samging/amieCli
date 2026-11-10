@@ -240,6 +240,11 @@ interface ScriptLogger {
      */
     fun <T> ortClosable(name: String = "closable", block: () -> T): T = OrtScopes.closable(name, block)
     /**
+     * Runs the block without the console line each model answer writes, for asking a model thousands of times to
+     * measure it; the script's own log lines show as always. Returns the block's value
+     */
+    fun <T> quietly(block: () -> T): T = org.example.project.components.terminal.window.controller.runtime.AnswersQuiet.during(block)
+    /**
      * ortClosable run in the background: the block runs on a thread of its own and the call returns a job at once.
      * What the block opens is closed when it ends, however it ends, and a template started in it ends with it. The job
      * ends with the script, however that ends, and with an ortClosable block around the call: .await() is the block's
