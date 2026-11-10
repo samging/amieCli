@@ -333,10 +333,25 @@ relate(train, "intents-test.csv")          // optional: a test file to validate 
 val built = modelBuilder("intents", train)  // embeds with BERT, trains a small head, exports ONNX
 built.modelStatus()                         // precision, recall, F1 for each label</pre>
 <p>A file named in a script is looked up as given, then in the AMP folder, then in <code>AMP/pluginDir</code>.</p>
+<p><code>log(source("x.csv"))</code>, <code>logInfo(source("x.csv"))</code> or <code>source("x.csv").info()</code> shows what a file holds before a model trains on it, laid out as pandas' <code>df.info()</code>: each column with how many rows fill it, its type and whether amie reads it as the text or the label, then the labels with their rows. No <code>!!</code> is needed: a file that wasn't found prints a line saying so.</p>
+<pre>&gt;&gt;&gt; log(source("demo.csv"))
+&lt;class 'DataSource'&gt; demo.csv
+RangeIndex: 5 entries, 0 to 4
+Data columns (total 4 columns):
+ #   Column  Non-Null Count  Dtype    Role
+---  ------  --------------  -----    ----
+ 0   id      5 non-null      int64
+ 1   text    5 non-null      object   text
+ 2   label   5 non-null      object   label
+ 3   score   4 non-null      float64
+dtypes: float64(1), int64(1), object(2)
+file size: 135 bytes
+labels (3): greet 2, bye 2, time 1</pre>
 <h3>Look at what was built</h3>
 <pre>$ amie model list
 intent    intents    3 labels    v1
 $ amie model validate intents
+$ amie model metric intents --last
 $ amie model info intents
 $ amie model remove intents</pre>
 <p><code>validate</code> prints the stored validation again; <code>info</code> the labels, the encoder, the version, how it was trained, the groups it is in and where it is served, if anywhere. In script, <code>validateMetrics("intents")</code>, <code>confusionMatrix("intents")</code> and <code>mistakes("intents")</code> show the same as tables.</p>
@@ -624,7 +639,7 @@ Das Haus ist wunderbar.</pre>
 <h3>The commands</h3>
 <table>
   <tr><th>Command</th><th>Actions</th></tr>
-  <tr><td><code>model</code></td><td><code>list</code>, <code>build &lt;csv&gt; --name n [--test csv]</code>, <code>validate &lt;n&gt;</code>, <code>serve &lt;n&gt; [--port]</code>, <code>info &lt;n&gt;</code></td></tr>
+  <tr><td><code>model</code></td><td><code>list</code>, <code>build &lt;csv&gt; --name n [--test csv]</code>, <code>validate &lt;n&gt;</code>, <code>metric &lt;n&gt; [--last] [--file]</code>, <code>serve &lt;n&gt; [--port]</code>, <code>info &lt;n&gt;</code></td></tr>
   <tr><td><code>group</code></td><td><code>list</code>, <code>add &lt;group&gt; &lt;models&gt;</code>, <code>remove &lt;group&gt; [model]</code>, <code>open &lt;group&gt; [texts]</code>; <code>--env</code> for another env</td></tr>
   <tr><td><code>package</code></td><td><code>list</code>, <code>add &lt;jar&gt;</code>, <code>maven &lt;coordinate&gt;</code>, <code>test &lt;jar&gt;</code>, <code>info &lt;jar&gt;</code></td></tr>
   <tr><td><code>env</code></td><td><code>list</code>, <code>new &lt;name&gt;</code>, <code>use &lt;name&gt;</code>, <code>show &lt;name&gt;</code></td></tr>

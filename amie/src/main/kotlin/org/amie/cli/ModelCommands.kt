@@ -62,6 +62,7 @@ object ModelsCommand : Command("model", "The models of the AMP folder: built int
         "model build <data.csv> [--name <name>] [--test <test.csv>]" to "trains an intent model on the labeled rows, as modelBuilder does; the name is the file's unless given",
         "model validate <name>" to "the model's last stored validation: accuracy, macro F1 and each label's figures",
         "model serve <name> [--port <n>] [--host <h>] [--path <p>]" to "serves the model over HTTP until stopped",
+        "model metric <name> [--last] [--file]" to "the model's metrics.json as it is stored, one entry per build: accuracy, macro F1, each label's precision, recall, F1 and support; --last only the latest build, --file only where the file is",
         "model info <name>" to "what is known of the model: its labels, encoder, version, how it was trained",
         "model remove <name>" to "removes the model's folder from AMP/models, whatever its kind (intent, text, speech or imported); a session of it open here is closed first, and its serving stopped",
     )
@@ -112,6 +113,19 @@ object ModelsCommand : Command("model", "The models of the AMP folder: built int
                     append("modelBuilder(${name.quoted()}, data)\n")
                 }
                 Output.withInternalShown { ScriptRun.runCode(code, options.env, "build") }
+            }
+            "metric" -> {
+                val name = flags.requireWord(0, "the model's name") ?: return Amie.EXIT_USAGE
+                if (!moduleExists(name)) return fail("No built model '$name'; model list names them")
+                val file = java.io.File(org.example.project.components.terminal.window.controller.modules.moduleDir(name), "metrics.json")
+                if (flags.has("--file")) { println(file.path); return Amie.EXIT_OK }
+                if (!file.isFile) return fail("'$name' has no metrics.json yet: it is written when the model is built")
+                if (!flags.has("--last")) { println(file.readText().trimEnd()); return Amie.EXIT_OK }
+                val json = kotlinx.serialization.json.Json { prettyPrint = true }
+                val runs = (json.parseToJsonElement(file.readText()) as? kotlinx.serialization.json.JsonObject)?.get("runs") as? kotlinx.serialization.json.JsonArray
+                val last = runs?.lastOrNull() ?: return fail("${file.path} holds no build yet")
+                println(json.encodeToString(kotlinx.serialization.json.JsonElement.serializer(), last))
+                Amie.EXIT_OK
             }
             "validate" -> {
                 val name = flags.requireWord(0, "the model's name") ?: return Amie.EXIT_USAGE

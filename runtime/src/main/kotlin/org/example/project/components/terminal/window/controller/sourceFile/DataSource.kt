@@ -51,6 +51,48 @@ class DataSource internal constructor(
         return this
     }
 
+    /**
+     * The file as pandas' `df.info()` lays a DataFrame out: the entries, each column with its non-null count and dtype
+     * (int64, float64, bool or object, read off its values) and the role amie gave it, the dtypes, the size, and the
+     * labels with their rows. What `log(source("x.csv"))` prints
+     */
+    fun info(): String {
+        val textAt = headers.indexOf(structure.textColumn)
+        val labelAt = headers.indexOf(structure.labelColumn)
+        val dtypes = headers.indices.map { i -> dtype(rows.mapNotNull { it.getOrNull(i)?.trim()?.takeIf(String::isNotEmpty) }) }
+        val table = listOf(listOf(" #", "Column", "Non-Null Count", "Dtype", "Role"), listOf("---", "------", "--------------", "-----", "----")) +
+            headers.mapIndexed { i, h ->
+                val filled = rows.count { it.getOrNull(i)?.isNotBlank() == true }
+                listOf(" $i", h, "$filled non-null", dtypes[i], when (i) { textAt -> "text"; labelAt -> "label"; else -> "" })
+            }
+        val widths = table[0].indices.map { c -> table.maxOf { it[c].length } }
+        val counts = samples().groupingBy { it.label }.eachCount().entries.sortedByDescending { it.value }
+        return buildList {
+            add("<class 'DataSource'> $name")
+            add("RangeIndex: ${rows.size} entries" + if (rows.isEmpty()) "" else ", 0 to ${rows.size - 1}")
+            add("Data columns (total ${headers.size} columns):")
+            table.forEach { r -> add(r.mapIndexed { c, v -> v.padEnd(widths[c]) }.joinToString("  ").trimEnd()) }
+            add("dtypes: " + dtypes.groupingBy { it }.eachCount().entries.sortedBy { it.key }.joinToString(", ") { "${it.key}(${it.value})" })
+            add("file size: ${size(file.length())}")
+            add("labels (${counts.size}): " + counts.joinToString(", ") { "${it.key} ${it.value}" })
+            related?.let { add("test file: ${it.name} (${it.rows.size} entries)") }
+        }.joinToString("\n")
+    }
+
+    private fun dtype(values: List<String>): String = when {
+        values.isEmpty() -> "object"
+        values.all { it.toLongOrNull() != null } -> "int64"
+        values.all { it.toDoubleOrNull() != null } -> "float64"
+        values.all { it.equals("true", true) || it.equals("false", true) } -> "bool"
+        else -> "object"
+    }
+
+    private fun size(bytes: Long): String = when {
+        bytes < 1024 -> "$bytes bytes"
+        bytes < 1024 * 1024 -> "%.1f KB".format(bytes / 1024.0)
+        else -> "%.1f MB".format(bytes / (1024.0 * 1024))
+    }
+
     override fun toString() = "$name [text=${structure.textColumn}, label=${structure.labelColumn}, ${rows.size} rows${related?.let { ", test=${it.name}" } ?: ""}]"
 
     companion object {
@@ -64,7 +106,7 @@ class DataSource internal constructor(
                 logInternal("source: unsupported type .${file.extension}", LogLevel.ERROR)
                 return null
             }
-            val lines = parseCsv(file.readText()).filter { row -> row.any { it.isNotBlank() } }
+            val lines = unwrapQuotedLines(parseCsv(file.readText()).filter { row -> row.any { it.isNotBlank() } })
             if (lines.size < 2) {
                 logInternal("source: ${file.name} needs a header and at least one row", LogLevel.ERROR)
                 return null
@@ -147,6 +189,14 @@ class DataSource internal constructor(
     }
 }
 
+private const val NOT_READ = "No data: the file wasn't read (the line above says why)"
+
+/**
+ * The file as pandas' df.info() lays it out, with no !! needed: `source("x.csv").info()`. A file that wasn't read (not
+ * found, no text or label column) says so instead. Every script imports it
+ */
+fun DataSource?.info(): String = this?.info() ?: NOT_READ
+
 private val labelHints = listOf("label", "labels", "class", "intent", "target", "category", "tag", "y")
 private val textHints = listOf("text", "sentence", "utterance", "content", "message", "input", "query", "x")
 
@@ -171,6 +221,16 @@ fun inferStructure(headers: List<String>, rows: List<List<String>>): DataStructu
         ?: stats.filter { it.key != label }.maxByOrNull { (_, s) -> s.second }?.key
         ?: return null
     return DataStructure(headers[text], headers[label])
+}
+
+/**
+ * A file whose every line is quoted whole, as some spreadsheet exports write it ("text,label" then "the floor is
+ * dirty,clean"), reads as one column; each line is read again as the row it holds. A real one-column file is kept.
+ */
+internal fun unwrapQuotedLines(rows: List<List<String>>): List<List<String>> {
+    if (rows.isEmpty() || rows.any { it.size != 1 } || !rows[0][0].contains(',')) return rows
+    val unwrapped = rows.map { parseCsv(it[0]).firstOrNull().orEmpty() }
+    return if (unwrapped.all { it.size == unwrapped[0].size }) unwrapped else rows
 }
 
 // RFC 4180: quoted fields may hold commas, quotes ("") and newlines

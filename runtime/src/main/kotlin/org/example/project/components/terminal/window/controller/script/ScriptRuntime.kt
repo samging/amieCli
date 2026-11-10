@@ -106,12 +106,14 @@ internal val consoleErrorAsks = MutableStateFlow(0)
 private val importDirective = Regex("""^\s*import\s+[\w.]+(\.\*)?(\s+as\s+\w+)?\s*(//.*)?$""")
 
 /**
- * In scope in every script without an import line: the console levels for log("…", LogLevel.DATA), and Tensor for
- * m.run(mapOf("x" to Tensor.of(values, 1, 3))) on a model from a file
+ * In scope in every script without an import line: the console levels for log("…", LogLevel.DATA), Tensor for
+ * m.run(mapOf("x" to Tensor.of(values, 1, 3))) on a model from a file, and info() of a data source with no !!:
+ * source("x.csv").info()
  */
 private val defaultImports = listOf(
     "org.example.project.components.terminal.window.controller.LogLevel",
     "org.example.project.components.terminal.integrations.amiePilot.Tensor",
+    "org.example.project.components.terminal.window.controller.sourceFile.info",
 )
 
 /** The lines of [code] that assembleScript moves up to the top of the header, in the header's order */

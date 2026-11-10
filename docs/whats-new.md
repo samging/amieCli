@@ -9,7 +9,9 @@
   [Templates grouped into a project](learn.md#projects).
 - **Every command is singular.** `amie model`, `group`, `package`, `env`, `template`, `project`, `session` and
   `example`; at the prompt `:session`. The plural names are gone.
+- **`amie model metric <name>`** prints the model's `metrics.json`, one entry per build; `--last` the latest build only, `--file` where it is.
 - **`:docs` opens the book**, `amie docs` from the shell; `:learn` and `amie learn` are gone.
+- **`log(source("x.csv"))` lays the file out as pandas' `df.info()` does**: each column's non-null count, dtype and role, the labels with their rows. `logInfo(source(...))` and `source(...).info()` do the same, and neither needs `!!`.
 
 ## 1.1.0: encoders and decoders, projects, and the templates' three verbs
 

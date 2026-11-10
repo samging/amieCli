@@ -186,7 +186,7 @@ signatures, and [docs/sandbox-scripting.md](../../docs/sandbox-scripting.md) in 
 | Call | What it does |
 |---|---|
 | `log(x)`, `info`, `error`, `data` | A console line at that level; a list, a map or a model's answer is printed as such |
-| `source("train.csv")`, `relate(train, "test.csv")` | A labeled csv with its text and label columns inferred; a test file for it to validate on |
+| `source("train.csv")`, `relate(train, "test.csv")` | A labeled csv with its text and label columns inferred; a test file for it to validate on. `log(source("train.csv"))`, `logInfo(...)` or `.info()` lays it out as pandas' `df.info()`, no `!!` needed |
 | `modelBuilder("name", data)`, `modelBuilder("name", data, buildOptions(...))` | Trains and exports an intent model to `AMP/models/intents/<name>` |
 | `fineTune("name", data)`, `calibrate("name", data)`, `versions("name")`, `rollback("name", 2)` | Teaches a model more, makes its scores honest, the heads it had |
 | `validateMetrics("name")`, `metricsChart`, `metricsHistory`, `confusionMatrix`, `mistakes`, `suspects` | The stored validation as tables and ASCII charts |
@@ -215,6 +215,7 @@ Every command prints its help with `--help`. `-e`, `--amp` and `-v` go before th
 ./amie model build data.csv --name intents        trains an intent model on the labeled rows (modelBuilder) and prints its validation
 ./amie model build data.csv --test test.csv       validated on the test file instead of a split
 ./amie model validate intents                     the last stored validation: accuracy, macro F1, each label
+./amie model metric intents                       its metrics.json as stored, one entry per build (--last the latest, --file its path)
 ./amie model serve intents --port 8765            serves it over HTTP until Ctrl-C; POST {"text": "hi"} at /models/intents/predict
 ./amie model info intents                         labels, encoder, version, how it was trained, its groups, its serving address
 ./amie model remove intents                       removes the model's folder, whatever its kind; a session of it is closed first

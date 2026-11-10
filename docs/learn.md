@@ -283,12 +283,31 @@ built.modelStatus()                         // precision, recall, F1 for each la
 
 A file named in a script is looked up as given, then in the AMP folder, then in `AMP/pluginDir`.
 
+`log(source("x.csv"))`, `logInfo(source("x.csv"))` or `source("x.csv").info()` shows what a file holds before a model trains on it, laid out as pandas' `df.info()`: each column with how many rows fill it, its type and whether amie reads it as the text or the label, then the labels with their rows. No `!!` is needed: a file that wasn't found prints a line saying so.
+
+```
+>>> log(source("demo.csv"))
+<class 'DataSource'> demo.csv
+RangeIndex: 5 entries, 0 to 4
+Data columns (total 4 columns):
+ #   Column  Non-Null Count  Dtype    Role
+---  ------  --------------  -----    ----
+ 0   id      5 non-null      int64
+ 1   text    5 non-null      object   text
+ 2   label   5 non-null      object   label
+ 3   score   4 non-null      float64
+dtypes: float64(1), int64(1), object(2)
+file size: 135 bytes
+labels (3): greet 2, bye 2, time 1
+```
+
 ### Look at what was built
 
 ```
 $ amie model list
 intent    intents    3 labels    v1
 $ amie model validate intents
+$ amie model metric intents --last
 $ amie model info intents
 $ amie model remove intents
 ```

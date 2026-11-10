@@ -19,7 +19,7 @@ amie [options] [script.kts [args] | -c code | command ...]
 
 | Command | Actions |
 |---|---|
-| `model` | `list`, `build <csv> --name n [--test csv]`, `validate <n>`, `serve <n> [--port]`, `info <n>` |
+| `model` | `list`, `build <csv> --name n [--test csv]`, `validate <n>`, `metric <n> [--last] [--file]`, `serve <n> [--port]`, `info <n>` |
 | `group` | `list`, `add <group> <models>`, `remove <group> [model]`, `open <group> [texts]`; `--env` for another env |
 | `package` | `list`, `search [query]`, `add <jar>`, `maven <coordinate>`, `test <jar>`, `info <jar>`, `config [jar] [key=value]`, `setup <jar>` |
 | `env` | `list`, `new <name>`, `use <name>`, `show <name>` |
@@ -35,7 +35,7 @@ amie [options] [script.kts [args] | -c code | command ...]
 | Call | What it does |
 |---|---|
 | `log`, `info`, `error`, `data` | A console line at that level; lists, maps and answers printed as such |
-| `source`, `relate` | A labeled csv; a test file for it |
+| `source`, `relate` | A labeled csv; a test file for it. `log(source("x.csv"))` or `.info()` says what it holds, as pandas' `df.info()`: columns, their types and roles, labels and their rows |
 | `modelBuilder`, `buildOptions` | Trains and exports an intent model, with options |
 | `fineTune`, `calibrate`, `versions`, `rollback` | Teaches a model more, makes its scores honest, the heads it had |
 | `validateMetrics`, `confusionMatrix`, `mistakes`, `suspects` | The stored validation as tables |

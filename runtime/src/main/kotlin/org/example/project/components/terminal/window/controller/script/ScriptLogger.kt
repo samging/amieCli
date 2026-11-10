@@ -13,6 +13,7 @@ import org.example.project.components.terminal.window.controller.envBuilder.Sett
 import org.example.project.components.terminal.window.controller.sourceFile.readSourceFile
 import java.time.Instant
 import org.example.project.components.terminal.window.controller.sourceFile.DataSource
+import org.example.project.components.terminal.window.controller.sourceFile.info
 import org.example.project.components.terminal.window.controller.modelLoaders.OrtSessions
 import org.example.project.components.terminal.window.controller.modelLoaders.builderImplement.openOnnxModel
 import org.example.project.components.terminal.window.controller.modelLoaders.imported.ImportedModels
@@ -364,6 +365,8 @@ interface ScriptLogger {
     fun sourceFile(it: String, column: String = ""): Pair<Int, Map<Int, List<String>>> = readSourceFile(it, column)
     /** Labeled data file with its text/label columns inferred: val train = amie.source("train.csv") */
     fun source(path: String): DataSource? = DataSource.read(path)
+    /** Logs the file as pandas' df.info() lays it out: `logInfo(source("x.csv"))`, the same as `log(source("x.csv"))` */
+    fun logInfo(source: DataSource?) = log(source.info(), if (source == null) LogLevel.ERROR else LogLevel.INFO)
     /** Gives the model a test file to validate on after training on train: amie.relate(train, "test.csv") */
     fun relate(train: DataSource?, test: String): DataSource? = train?.relate(test)
         ?: null.also { logInternal("relate: no training source to relate $test to", LogLevel.ERROR) }
@@ -634,9 +637,13 @@ interface ScriptLogger {
     fun output(value: Any?) = output(consoleText(value))
 }
 
-/** What the console shows of a value: a string as it is, a list, a set, a sequence or an array one element a line, a map key: value, null as null */
+/**
+ * What the console shows of a value: a string as it is, a data source as pandas' info() lays it out, a list, a set, a
+ * sequence or an array one element a line, a map key: value, null as null
+ */
 internal fun consoleText(value: Any?): String = when {
     value is String -> value
+    value is DataSource -> value.info()
     value is Map<*, *> -> value.entries.joinToString("\n") { "${consoleText(it.key)}: ${consoleText(it.value)}" }
     value is Iterable<*> -> value.joinToString("\n") { consoleText(it) }
     value is Sequence<*> -> value.joinToString("\n") { consoleText(it) }
