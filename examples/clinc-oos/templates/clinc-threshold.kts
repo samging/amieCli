@@ -1,10 +1,6 @@
-import java.io.File
-import org.example.project.getDirectory
-
-// Below the threshold the model says "out of scope" instead of picking one of the 150 intents
+// Below the threshold the model says "out of scope" instead of picking one of the 150 intents.
+// main.kts calls it as a function: it answers the threshold and the three test numbers on one line
 fun rows(file: String) = sourceFile(file).second.values.map { it[0] to it[1] }
-
-val results = File(getDirectory().toString(), "clinc-oos").apply { mkdirs() }
 
 // quietly: 8,600 answers without a console line each
 quietly { sessionMod("clinc") {
@@ -33,10 +29,5 @@ quietly { sessionMod("clinc") {
         log("  %.1f        %.3f     %.3f".format(t, inScope(testIn, t), oosRecall(testOos, t)))
     }
 
-    File(results, "threshold.properties").writeText(
-        "threshold=$threshold\n" +
-        "test.inScope.noThreshold=${inScope(testIn, 0.0)}\n" +
-        "test.inScope=${inScope(testIn, threshold)}\n" +
-        "test.oosRecall=${oosRecall(testOos, threshold)}\n"
-    )
+    output("$threshold ${inScope(testIn, 0.0)} ${inScope(testIn, threshold)} ${oosRecall(testOos, threshold)}")
 } }

@@ -15,10 +15,12 @@ save "$@" template save clinc-errors templates/clinc-errors.kts --description "T
 save "$@" template save clinc-oos-class templates/clinc-oos-class.kts --description "Out of scope as a 151st intent by fine-tuning, kept only when validation says it is better"
 save "$@" template save clinc-serve templates/clinc-serve.kts --description "The model over HTTP, answering oos under the threshold, asked three times"
 
+# The project runs data, train and errors in order; its main.kts calls threshold, oos-class and serve like functions
 if ! "$AMIE" "$@" project show clinc-oos >/dev/null 2>&1; then
-    "$AMIE" "$@" new clinc-oos clinc-data clinc-train clinc-threshold clinc-errors clinc-oos-class clinc-serve >/dev/null
+    "$AMIE" "$@" new clinc-oos clinc-data clinc-train clinc-errors >/dev/null
 fi
-# The project's main.kts: the results table, printed after the six templates
+for called in clinc-threshold clinc-oos-class clinc-serve; do "$AMIE" "$@" project remove clinc-oos "$called" >/dev/null 2>&1 || true; done
+# The project's main.kts
 "$AMIE" "$@" -c "java.io.File(org.example.project.getDirectory().toString(), \"projects/clinc-oos/main.kts\").writeText(java.io.File(\"$PWD/main.kts\").readText())"
 
 "$AMIE" "$@" project show clinc-oos

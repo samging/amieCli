@@ -1,8 +1,8 @@
 <img width="1756" height="662" alt="gitImg" src="https://github.com/user-attachments/assets/eba3d2c0-9d15-42f0-9058-6af7adf9d311" />
 
-An interpreter for Kotlin scripts that train, ask, group and serve intent models, at a terminal. It is the
-script engine of the amie pilot desktop app without its window: the same `main.kts` functions (`initMod`,
-`group`, `modelBuilder`, `database`, `log`, ...), the same AMP folder, no Compose on its class path.
+An interpreter for Kotlin scripts that train, ask, group and serve neural network models on your own machine, at a
+terminal. Scripts call one API (`modelBuilder`, `initMod`, `group`, `serve`, `template`, `database`, `log`, ...),
+open models in ONNX, TorchScript or TensorFlow, import them from Hugging Face, and extend amie with package jars.
 
 Free software under the GNU General Public License, version 3 or later: see [LICENSE](LICENSE).
 
@@ -62,10 +62,7 @@ amie/        the interpreter: the command line, the prompt, the commands (module
 runtime/     the engine: the script runtime, models, groups, packages, envs, templates, serving (module :runtime)
 scripts/     setup.sh, which downloads the encoder and voice models into the AMP folder
 bin/amie     builds and runs amie from the checkout
-docs/        the documentation written for the desktop app; docs/sandbox-scripting.md is the scripting guide
+docs/        the documentation; docs/sandbox-scripting.md is the scripting guide
 examples/    whole projects: clinc-oos, out-of-scope detection on CLINC150; google-assistant, a model routing to packages
 voice/       the voice scripts: talk to amie through its intent models and a text model
 ```
-
-The desktop app itself, with its Compose window, lives in its own repository and depends on the same `runtime`
-module. amie was split out of it in November 2026.
